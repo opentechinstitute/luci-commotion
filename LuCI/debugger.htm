@@ -1,0 +1,82 @@
+<%+header%>
+
+<head>
+  <script>
+	function download_warning()
+	{
+	var x;
+	var r=confirm("The information you are about to download contains private information about this device and the network it is connected to. Only give this information to people you trust. Do you understand?");
+	if (r==true)
+	{
+	return true;
+	}
+	else (r==false)
+	{
+	return false;
+	}
+	}
+
+	function formSubmit()
+	{
+	document.getElementById("debug").submit();
+	}
+  </script>
+<%-
+	 local debugurl = luci.dispatcher.build_url('commotion', 'debug', 'submit')
+-%>
+</head>
+
+<body>
+  
+<!--  <form id="debug" method="post" action="<%=debugurl%>" enctype="multipart/form-data">
+	<!-- enctype required for sending vales to server--><!--
+	  <h2><a id="content" name="content"><%:Commotion Bug Info%></a></h2>	  
+		<br />
+		<div style="width:30%; float:left; text-align:left;">
+		  <input type="radio" name="buginfo" value="network"> Mesh Network Information<br>
+		  <input type="radio" name="buginfo" value="state"> Router Status<br>
+		  <input type="radio" name="buginfo" value="rules"> Router Traffic Routing Rules<br>
+		  <input type="radio" name="buginfo" value="all"> All Info<br>
+		  <input type="button" value="Create Bug Info File:" onclick="download_warning() ? formSubmit() : null;" />
+		</div>	  
+		<br style="clear:both" /><br />
+  </form>
+-->
+
+
+  <form id="debug" method="post" action="<%=debugurl%>" enctype="multipart/form-data">
+	<!-- enctype required for sending vales to server-->
+	  <h2><a id="content" name="content"><%:Commotion Bug Info%></a></h2>	  
+
+	  <div style="float:left; text-align:left;">
+		<h5>Name:</h5>
+		<input type="text" name="name"><br />
+		<h5>Contact Info:</h5>
+		<input type="text" name="contact"><br />
+
+		<div><h5>What were you doing on the device right before and when the error occurred?</h5>
+		  <textarea name="whatYouDo" cols="60" rows="5"></textarea><br />
+		</div>
+
+		<div><h5>Please describe what behavior you expected:  </h5>
+		  <textarea name="behaviorExpected" cols="60" rows="5"></textarea><br />
+		</div>
+
+		<div><h5>Please describe what behavior you experienced that you believe is wrong: </h5>
+		  <textarea name="badBehavior" cols="60" royws="5"></textarea><br />
+		</div>
+		<br />
+<h3>Debugging Info:</h3>
+		<input type="radio" name="buginfo" value="network"> Mesh Network Information<br>
+		  <input type="radio" name="buginfo" value="state"> Router Status<br>
+		  <input type="radio" name="buginfo" value="rules"> Router Traffic Routing Rules<br>
+		  <input type="radio" name="buginfo" value="all"> All Info<br /><br /><br />
+		  <input type="button" value="Create Bug Info File:" onclick="download_warning() ? formSubmit() : null;" />
+		</div>	  
+		<br style="clear:both" /><br />
+  </form>
+
+</body>  
+
+
+<%+footer%> 

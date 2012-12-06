@@ -21,35 +21,7 @@
 
 #==================PreDefined Values=================
 FILE=/tmp/debug.info
-#======================Check Input=================
-
-#Check to see if -o flag is given
-while getopts "o:" OPTION
-do
-	    case $OPTION in
-			    o)
-				        FILE="$OPTARG"
-						    ;;
-			    [?])
-				        echo "Usage: $0 [-o outfile] [OBJECT]" >&2
-        exit 1
-    ;;
-    esac
-done
-shift $(($OPTIND-1))
-
-if [ $# -ne 1 ]; then
-	    echo "Usage: $0 [-o outfile] [OBJECT]" >&2
-    exit 1
-fi
-OBJECT="$1"
-
-
-#If no commands are given show the usage info.
-if [ $# -eq 0 ]; then
-	usage
-	exit 1
-fi
+APPEND=prep
 
 #=========================FUNCTION========================= 
 # Name: Usage
@@ -58,7 +30,7 @@ fi
 
 usage()
 {
-	cat <<EOF
+	cat <<- EOF
 
 A debugging information collection script. Default output is sent to a file /tmp/debug.info
 
@@ -66,6 +38,7 @@ Usage: $0 [options] [OBJECT]
 
 Options:
     -o|output    Define where the output file is located.
+    -a|append    Append out to an existing file.
 
 Objects:
     network    Outputs network related data from a node.
@@ -75,6 +48,44 @@ Objects:
 
 EOF
 }
+
+#======================Check Input=================
+
+#Check to see if -o flag is given
+while getopts "o:a" OPTION
+do
+	    case $OPTION in
+			o)
+				FILE="$OPTARG"
+				;;
+			 a)
+				APPEND=append
+				;;
+			[?])
+				usage
+				exit 1
+				;;
+			
+    esac
+done
+shift $(($OPTIND-1))
+
+if [ $# -ne 1 ]; then
+	usage
+    exit 1
+fi
+
+OBJECT="$1"
+
+
+#If no commands are given show the usage info.
+if [ $# -eq 0 ]; then
+	usage
+	exit 1
+fi
+
+
+
 #=====================================================================================
 # PREPERATION AND FORMATTING
 #=====================================================================================
@@ -89,16 +100,17 @@ prep()
 {
 	date>$FILE
 }
-
+append()
+{
+	date>>$FILE
+	flair "BEGIN DEBUGGIN INFO"
+}
 #===================================================================
 # MAIN FUNCTION
 #===================================================================
 
 network()
-{
-#============================STILL NEED UCI IWINFO STUFFS================================
-	
-	echo "network"
+{	
 	flair "IP Routing Table: (route -n)"
 	route -n >> $FILE
 	
@@ -122,7 +134,6 @@ network()
 
 rules()
 {
-		echo "rules"
 	flair "IP Filter Tables: (iptables -nvL)"
 	iptables -nvL >> $FILE
 	
@@ -147,7 +158,6 @@ rules()
 
 state()
 {
-	echo "State"
 	flair "Kernal Buffer Log: (dmesg)"
 	dmesg >> $FILE
 	
@@ -174,7 +184,6 @@ state()
 #=======================================================
 radio()
 {
-		echo "radio"
 	i=1
 	while [ $? -eq 0 ]
 	do
@@ -194,17 +203,12 @@ radio()
 
 all()
 {
-		echo "all"
 	network
 	rules
 	state
 }
 
-
 #=====================================================The Actual Program================
-	echo "prep"
-prep
-	echo "start"
+$APPEND
 $1
-	echo "exits"
 exit 0
