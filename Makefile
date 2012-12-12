@@ -24,19 +24,19 @@ endef
 
 define Build/Prepare
 	mkdir -p $(PKG_BUILD_DIR)
-endif
+endef
 
 define Package/$(MODULE_NAME)-debug-helper/description
 	Commotion debugging data collection helper. Includes a LuCI user interface.
-endif
+endef
 
-define Package/$(MODULE_NAME)-debug-helper/install
+define Package/commotion-debug-helper/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/cdh.sh $(1)/usr/sbin/
-	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/controller/$(MODULE_NAME)
-	$(CP) -a ./luasrc/controller/* $(1)/usr/lib/lua/luci/controller/$(MODULE_NAME)/  2>/dev/null || true
-	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/view/$(MODULE_NAME)
-	$(CP) -a ./luasrc/view/* $(1)/usr/lib/lua/luci/view/ 2>/dev/null || true
-endif
+#	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/controller/$(MODULE_NAME)
+#	$(CP) -a ./luasrc/controller/* $(1)/usr/lib/lua/luci/controller/$(MODULE_NAME)/  2>/dev/null || true
+#	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/view/$(MODULE_NAME)
+#	$(CP) -a ./luasrc/view/* $(1)/usr/lib/lua/luci/view/ 2>/dev/null || true
+endef
 
-$(eval(call BuildPackage,$(MODULE_NAME)-debug-helper))
+$(eval $(call BuildPackage,$(MODULE_NAME)-debug-helper))
