@@ -158,19 +158,25 @@ body {
     color: #4d4d4d;
     font: 15px/18px "Asap", Helvetica, Arial, sans-serif;
     margin: 0;
-    padding-top: 58px;
+    padding: 0;
 }
-.container {
+header,
+footer,
+section {
     margin-left: auto;
     margin-right: auto;
-    max-width: 940px;
+    max-width: 500px;
     width: 100%;
 }
-.container:before, .container:after {
+header:before, header:after,
+footer:before, footer:after,
+section:before, section:after {
     content: "";
     display: table;
 }
-.container:after {
+header:after,
+footer:after,
+section:after {
     clear: both;
 }
 a {
@@ -542,19 +548,13 @@ table tbody th {
 }
 header {
     color: #BFBFBF;
-    height: 40px;
-    left: 0;
     overflow: visible;
-    position: fixed;
-    right: 0;
-    top: 0;
-    z-index: 10000;
 }
 header a {
     color: #ff6699;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }
-header h3 a:hover, header .brand:hover, header ul .active > a {
+header h3 a:hover, header .brand a:hover, header ul .active > a {
     background-color: rgba(255, 255, 255, 0.05);
     color: #FFFFFF;
     text-decoration: none;
@@ -576,11 +576,8 @@ header p {
     line-height: 40px;
     margin: 0;
 }
-header .fill {
-	background-image: url(header.png);
-	background-repeat: no-repeat;
-	background-position: left;
-    background-color: #222222;
+header .nav {
+  background: black;
 }
 header div > ul, .nav {
     display: block;
@@ -829,28 +826,28 @@ footer {
     margin-top: 17px;
     padding-top: 17px;
 }
-.btn.danger, .alert-message.danger, .btn.danger:hover, .alert-message.danger:hover, .btn.error, .alert-message.error, .btn.error:hover, .alert-message.error:hover, .btn.success, .alert-message.success, .btn.success:hover, .alert-message.success:hover, .btn.info, .alert-message.info, .btn.info:hover, .alert-message.info:hover {
+.btn.danger, .alert.danger, .btn.danger:hover, .alert.danger:hover, .btn.error, .alert.error, .btn.error:hover, .alert.error:hover, .btn.success, .alert.success, .btn.success:hover, .alert.success:hover, .btn.info, .alert.info, .btn.info:hover, .alert.info:hover {
     color: #FFFFFF;
 }
-.btn .close, .alert-message .close {
+.btn .close, .alert .close {
     font-family: Arial,sans-serif;
     line-height: 18px;
 }
-.btn.danger, .alert-message.danger, .btn.error, .alert-message.error {
+.btn.danger, .alert.danger, .btn.error, .alert.error {
     background-color: #C43C35;
     background-image: -moz-linear-gradient(center top , #EE5F5B, #C43C35);
     background-repeat: repeat-x;
     border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }
-.btn.success, .alert-message.success {
+.btn.success, .alert.success {
     background-color: #57A957;
     background-image: -moz-linear-gradient(center top , #62C462, #57A957);
     background-repeat: repeat-x;
     border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }
-.btn.info, .alert-message.info {
+.btn.info, .alert.info {
     background-color: #339BB9;
     background-image: -moz-linear-gradient(center top , #5BC0DE, #339BB9);
     background-repeat: repeat-x;
@@ -952,7 +949,7 @@ footer {
     background-position: 7px 4px;
     padding: 3px 9px 3px 27px;
 }
-:root .alert-message, *:root .btn {
+:root .alert, *:root .btn {
 }
 button.btn::-moz-focus-inner, input.btn[type="submit"]::-moz-focus-inner {
     border: 0 none;
@@ -972,7 +969,7 @@ button.btn::-moz-focus-inner, input.btn[type="submit"]::-moz-focus-inner {
     opacity: 0.4;
     text-decoration: none;
 }
-.alert-message {
+.alert {
     background-color: #EEDC94;
     background-image: -moz-linear-gradient(center top , #FCEEC1, #EEDC94);
     background-repeat: repeat-x;
@@ -987,28 +984,28 @@ button.btn::-moz-focus-inner, input.btn[type="submit"]::-moz-focus-inner {
     position: relative;
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 }
-.alert-message .close {
+.alert .close {
     margin-top: 1px;
 }
-.alert-message a {
+.alert a {
     color: #404040;
     font-weight: bold;
 }
-.alert-message.danger p a, .alert-message.error p a, .alert-message.success p a, .alert-message.info p a {
+.alert.danger p a, .alert.error p a, .alert.success p a, .alert.info p a {
     color: #FFFFFF;
 }
-.alert-message h5 {
+.alert h5 {
     line-height: 18px;
 }
-.alert-message p {
+.alert p {
     margin-bottom: 0;
 }
-.alert-message div {
+.alert div {
     line-height: 28px;
     margin-bottom: 2px;
     margin-top: 5px;
 }
-.alert-message .btn {
+.alert .btn {
     box-shadow: 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 .label {
