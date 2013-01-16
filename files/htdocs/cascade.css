@@ -652,7 +652,7 @@ a.menu:after, .dropdown-toggle:after {
   border-left: 4px solid transparent;
   border-right: 4px solid transparent;
   border-top: 4px solid #FFFFFF;
-  content: "&darr;
+  content: "&darr;";
   display: inline-block;
   height: 0;
   margin-left: 4px;
