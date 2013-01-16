@@ -1,3 +1,79 @@
+@font-face {
+    font-family: 'AsapRegular';
+    src: url('./fonts/asap/Asap-Regular-webfont.eot');
+    src: url('./fonts/asap/Asap-Regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('./fonts/asap/Asap-Regular-webfont.woff') format('woff'),
+         url('./fonts/asap/Asap-Regular-webfont.ttf') format('truetype'),
+         url('./fonts/asap/Asap-Regular-webfont.svg#AsapRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'AsapItalic';
+    src: url('./fonts/asap/Asap-Italic-webfont.eot');
+    src: url('./fonts/asap/Asap-Italic-webfont.eot?#iefix') format('embedded-opentype'),
+         url('./fonts/asap/Asap-Italic-webfont.woff') format('woff'),
+         url('./fonts/asap/Asap-Italic-webfont.ttf') format('truetype'),
+         url('./fonts/asap/Asap-Italic-webfont.svg#AsapItalic') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'AsapBold';
+    src: url('./fonts/asap/Asap-Bold-webfont.eot');
+    src: url('./fonts/asap/Asap-Bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('./fonts/asap/Asap-Bold-webfont.woff') format('woff'),
+         url('./fonts/asap/Asap-Bold-webfont.ttf') format('truetype'),
+         url('./fonts/asap/Asap-Bold-webfont.svg#AsapBold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'AsapBoldItalic';
+    src: url('./fonts/asap/Asap-BoldItalic-webfont.eot');
+    src: url('./fonts/asap/Asap-BoldItalic-webfont.eot?#iefix') format('embedded-opentype'),
+         url('./fonts/asap/Asap-BoldItalic-webfont.woff') format('woff'),
+         url('./fonts/asap/Asap-BoldItalic-webfont.ttf') format('truetype'),
+         url('./fonts/asap/Asap-BoldItalic-webfont.svg#AsapBoldItalic') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Asap';
+    src: url('./fonts/asap/Asap-Italic-webfont.eot');
+    src: url('./fonts/asap/Asap-Italic-webfont.eot?#iefix') format('embedded-opentype'),
+         url('./fonts/asap/Asap-Italic-webfont.woff') format('woff'),
+         url('./fonts/asap/Asap-Italic-webfont.ttf') format('truetype'),
+         url('./fonts/asap/Asap-Italic-webfont.svg#AsapItalic') format('svg');
+    font-weight: normal;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Asap';
+    src: url('./fonts/asap/Asap-Bold-webfont.eot');
+    src: url('./fonts/asap/Asap-Bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('./fonts/asap/Asap-Bold-webfont.woff') format('woff'),
+         url('./fonts/asap/Asap-Bold-webfont.ttf') format('truetype'),
+         url('./fonts/asap/Asap-Bold-webfont.svg#AsapBold') format('svg');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Asap';
+    src: url('./fonts/asap/Asap-BoldItalic-webfont.eot');
+    src: url('./fonts/asap/Asap-BoldItalic-webfont.eot?#iefix') format('embedded-opentype'),
+         url('./fonts/asap/Asap-BoldItalic-webfont.woff') format('woff'),
+         url('./fonts/asap/Asap-BoldItalic-webfont.ttf') format('truetype'),
+         url('./fonts/asap/Asap-BoldItalic-webfont.svg#AsapBoldItalic') format('svg');
+    font-weight: bold;
+    font-style: italic;
+}
 
 html, body {
     margin: 0;
@@ -79,11 +155,8 @@ textarea {
 }
 body {
     background-color: #FFFFFF;
-    color: #404040;
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-    font-size: 13px;
-    font-weight: normal;
-    line-height: 18px;
+    color: #4d4d4d;
+    font: 15px/18px "Asap", Helvetica, Arial, sans-serif;
     margin: 0;
     padding-top: 58px;
 }
@@ -822,11 +895,11 @@ footer {
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }
 .cbi-button-up {
-    background-image: url("../resources/cbi/up.gif"), -moz-linear-gradient(center top , #FFFFFF, #FFFFFF 25%, #E6E6E6);
+    background-image: url("./resources/cbi/up.gif"), -moz-linear-gradient(center top , #FFFFFF, #FFFFFF 25%, #E6E6E6);
     background-position: center center;
 }
 .cbi-button-down {
-    background-image: url("../resources/cbi/down.gif"), -moz-linear-gradient(center top , #FFFFFF, #FFFFFF 25%, #E6E6E6);
+    background-image: url("./resources/cbi/down.gif"), -moz-linear-gradient(center top , #FFFFFF, #FFFFFF 25%, #E6E6E6);
     background-position: center center;
 }
 .btn.active, .btn:active {
@@ -855,27 +928,27 @@ footer {
     padding: 7px 9px;
 }
 .Startup .cbi-section-table input.cbi-input-apply, .Startup .cbi-section-table input.cbi-button-apply {
-    background-image: url("../resources/cbi/apply.gif");
+    background-image: url("./resources/cbi/apply.gif");
     background-position: 7px 4px;
     padding: 3px 9px 3px 27px;
 }
 .Processes .cbi-section-table input.cbi-input-reload, .Startup .cbi-section-table input.cbi-input-reload {
-    background-image: url("../resources/cbi/reload.gif");
+    background-image: url("./resources/cbi/reload.gif");
     background-position: 7px 4px;
     padding: 3px 9px 3px 27px;
 }
 .Processes .cbi-section-table input.cbi-input-remove, .Processes .cbi-section-table div.cbi-section-remove input, .Startup .cbi-section-table input.cbi-input-remove, .Startup .cbi-section-table div.cbi-section-remove input {
-    background-image: url("../resources/cbi/remove.gif");
+    background-image: url("./resources/cbi/remove.gif");
     background-position: 7px 4px;
     padding: 3px 9px 3px 27px;
 }
 .Processes .cbi-section-table input.cbi-input-reset, .Processes .cbi-section-table input.cbi-button-reset, .Startup .cbi-section-table input.cbi-input-reset, .Startup .cbi-section-table input.cbi-button-reset {
-    background-image: url("../resources/cbi/reset.gif");
+    background-image: url("./resources/cbi/reset.gif");
     background-position: 7px 4px;
     padding: 3px 9px 3px 27px;
 }
 .Startup .cbi-section-table input.cbi-input-save, .Startup .cbi-section-table input.cbi-button-save {
-    background-image: url("../resources/cbi/save.gif");
+    background-image: url("./resources/cbi/save.gif");
     background-position: 7px 4px;
     padding: 3px 9px 3px 27px;
 }
