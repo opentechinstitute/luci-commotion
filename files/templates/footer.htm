@@ -22,18 +22,19 @@ You may obtain a copy of the License at
 
 	local categories = disp.node_childs(tree)
 %>
-   <footer><a href="http://luci.subsignal.org/">Powered by <%= luci.__appname__ .. " (" .. luci.__version__ .. ")" %></a>
+    <footer>
+      <a href="http://luci.subsignal.org/">Powered by <%= luci.__appname__ .. " (" .. luci.__version__ .. ")" %></a>
 
-    <%=luci.version.distversion%>
+      <%=luci.version.distversion%>
 
-    <% if #categories > 1 then %>
-     <ul class="breadcrumb pull-right" id="modemenu">
-	    <% for i, r in ipairs(categories) do %>
-		    <li<% if request[1] == r then %> class="active"<%end%>><a href="<%=controller%>/<%=r%>/"><%=striptags(translate(tree.nodes[r].title))%></a> <span class="divider">|</span></li>
-	    <% end %>
-     </ul>
-    <% end %>
-   </footer>
- </body>
+      <% if #categories > 1 then %>
+      <ul class="breadcrumb pull-right" id="modemenu">
+        <% for i, r in ipairs(categories) do %>
+        <li<% if request[1] == r then %> class="active"<%end%>><a href="<%=controller%>/<%=r%>/"><%=striptags(translate(tree.nodes[r].title))%></a> <span class="divider">|</span></li>
+        <% end %>
+      </ul>
+      <% end %>
+    </footer>
+  </body>
 </html>
 
