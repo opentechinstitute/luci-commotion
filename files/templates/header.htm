@@ -112,55 +112,57 @@ You may obtain a copy of the License at
 
   <body class="lang_<%=luci.i18n.context.lang%> <%- if node then %><%= striptags( node.title ) %><%- end %>">
     <header>
-      <ul class="nav">
-        <%-
-        local function submenu(prefix, node)
-        local childs = disp.node_childs(node)
-        if #childs > 0 then
-        %>
-        <ul class="dropdown-menu">
+      <nav>
+        <ul>
           <%-
-          for i, r in ipairs(childs) do
-          local nnode = node.nodes[r]
-          local href  = controller .. prefix .. r ..
-          (nnode.query and http.build_querystring(nnode.query) or "")
+          local function submenu(prefix, node)
+          local childs = disp.node_childs(node)
+          if #childs > 0 then
           %>
+          <ul class="dropdown-menu">
+            <%-
+            for i, r in ipairs(childs) do
+            local nnode = node.nodes[r]
+            local href  = controller .. prefix .. r ..
+            (nnode.query and http.build_querystring(nnode.query) or "")
+            %>
+            <li>
+              <a href="<%=pcdata(href)%>"><%=pcdata(striptags(translate(nnode.title)))%></a>
+            </li>
+            <%-
+            end
+            %>
+          </ul>
+          <%-
+          end
+          end
+
+          childs = disp.node_childs(cattree)
+
+          if #childs > 0 then
+          for i, r in ipairs(childs) do
+          local nnode = cattree.nodes[r]
+          local href  = controller .. "/" .. category .. "/" .. r ..
+          (nnode.query and http.build_querystring(k.query) or "")
+          local grandchildren = disp.node_childs(nnode)
+
+          if #grandchildren > 0 then
+          %>
+          <li class="dropdown">
+            <a class="menu" href="<%=pcdata(href)%>"><%=pcdata(striptags(translate(nnode.title)))%></a>
+            <%- submenu("/" .. category .. "/" .. r .. "/", nnode) %>
+          </li>
+          <% else %>
           <li>
             <a href="<%=pcdata(href)%>"><%=pcdata(striptags(translate(nnode.title)))%></a>
           </li>
-          <%-
+          <%
+          end
+          end
           end
           %>
         </ul>
-        <%-
-        end
-        end
-
-        childs = disp.node_childs(cattree)
-
-        if #childs > 0 then
-        for i, r in ipairs(childs) do
-        local nnode = cattree.nodes[r]
-        local href  = controller .. "/" .. category .. "/" .. r ..
-        (nnode.query and http.build_querystring(k.query) or "")
-        local grandchildren = disp.node_childs(nnode)
-
-        if #grandchildren > 0 then
-        %>
-        <li class="dropdown">
-          <a class="menu" href="<%=pcdata(href)%>"><%=pcdata(striptags(translate(nnode.title)))%></a>
-          <%- submenu("/" .. category .. "/" .. r .. "/", nnode) %>
-        </li>
-        <% else %>
-        <li>
-          <a href="<%=pcdata(href)%>"><%=pcdata(striptags(translate(nnode.title)))%></a>
-        </li>
-        <%
-        end
-        end
-        end
-        %>
-      </ul>
+      </nav>
 
       <%
       -- calculate the number of unsaved changes
@@ -175,19 +177,23 @@ You may obtain a copy of the License at
       end
       end
       %>
-      <div class="pull-right">
-        <% if ucichanges > 0 then %>
-        <a class="label notice" href="<%=controller%>/<%=category%>/uci/changes"><%:Unsaved Changes%>: <%=ucichanges%></a>
+      <a id="device" href="#"><img src="<%=media%>/commotion_tiny.png" alt="Commotion - toggle header" title="Commotion - toggle header" /></a>
+      <div class="collapsible">
+        <div class="pull-right">
+          <% if ucichanges > 0 then %>
+          <a class="label notice" href="<%=controller%>/<%=category%>/uci/changes"><%:Unsaved Changes%>: <%=ucichanges%></a>
+          <% end %>
+          <span id="xhr_poll_status" style="display:none" onclick="XHR.running() ? XHR.halt() : XHR.run()">
+            <span class="label success" id="xhr_poll_status_on"><%:Auto Refresh%> <%:on%></span>
+            <span class="label" id="xhr_poll_status_off" style="display:none"><%:Auto Refresh%> <%:off%></span>
+          </span>
+        </div>
         <% end %>
-        <span id="xhr_poll_status" style="display:none" onclick="XHR.running() ? XHR.halt() : XHR.run()">
-          <span class="label success" id="xhr_poll_status_on"><%:Auto Refresh%> <%:on%></span>
-          <span class="label" id="xhr_poll_status_off" style="display:none"><%:Auto Refresh%> <%:off%></span>
-        </span>
+        <h1 class="brand"><a href="/">Network name: <%=hostname%></a></h1>
       </div>
-      <% end %>
-      <h1 class="brand"><a href="/"><%=hostname%></a></h1>
     </header>
 
+    <div class="navbar-inners"><div class="color0"></div><div class="color1"></div><div class="color2"></div><div class="color3"></div><div class="color4"></div></div>
 
     <%- if luci.sys.user.getuser("root") and not luci.sys.user.getpasswd("root") then -%>
     <section class="alert warning">

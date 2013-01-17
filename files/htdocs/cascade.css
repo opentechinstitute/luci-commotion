@@ -161,23 +161,39 @@ body {
   padding: 0;
 }
 header,
-footer,
+footer {
+  margin: 0;
+  width: 100%;
+}
+header nav ul,
+header .brand,
+footer .credits,
+footer nav,
 section {
   margin-left: auto;
   margin-right: auto;
   max-width: 500px;
   width: 100%;
 }
+header nav ul:after,
 header:before, header:after,
 footer:before, footer:after,
 section:before, section:after {
   content: "";
   display: table;
 }
+header nav ul:after,
 header:after,
 footer:after,
 section:after {
   clear: both;
+}
+#device {
+  display: block;
+  position: relative;
+  left: 50%;
+  top: -47px;
+  height: 0;
 }
 a {
   color: #ff6699;
@@ -545,93 +561,79 @@ header {
   color: #BFBFBF;
   overflow: visible;
 }
-header a {
-  color: #ff6699;
+.collapsible {
+  overflow: hidden;
 }
-header h3 a:hover, header .brand a:hover, header ul .active > a {
-  background-color: rgba(255, 255, 255, 0.05);
-  color: #FFFFFF;
-  text-decoration: none;
+header h1 {
+  padding: 0;
+  margin: 0 auto;
+  text-align: center;
 }
-header h3 {
-  position: relative;
+header h1 a {
+  color: #4d4d4d;
+  font: 15px/17px AsapRegular;
+  text-transform: uppercase;
 }
-header h3 a, header .brand {
-  color: #FFFFFF;
-  display: block;
-  float: left;
-  font-size: 20px;
-  font-weight: 200;
-  line-height: 1;
-  margin-left: -20px;
-  padding: 8px 20px 12px;
-}
-header p {
-  line-height: 40px;
-  margin: 0;
-}
-header .nav {
+header nav {
   background: black;
-}
-header div > ul, .nav {
   display: block;
-  float: left;
-  left: 0;
-  margin: 0 10px 0 0;
-  position: relative;
+  margin: 0;
+  list-style: none;
 }
-header div > ul > li, .nav > li {
+header nav > ul > li, header nav > ul > li {
   display: block;
   float: left;
 }
-header div > ul a, .nav a {
+header nav > ul a, header nav > ul a {
   display: block;
   float: none;
-  line-height: 19px;
-  padding: 10px 10px 11px;
+  padding: 0;
+  margin: 10px 10px 11px;
   text-decoration: none;
+  text-transform: uppercase;
+  font: 13px/18px AsapRegular;
+  border-bottom: 2px solid black;
+  color: #ffffff;
 }
-header div > ul a:hover, .nav a:hover {
-  color: #FFFFFF;
+header nav > ul a:hover, header nav > ul a:hover {
   text-decoration: none;
+  color: #ffffff;
+  border-bottom: 2px solid #e8ff00;
 }
-header div > ul .active > a, .nav .active > a {
+header nav > ul .active > a, header nav > ul .active > a {
   background-color: rgba(0, 0, 0, 0.5);
 }
-header div > ul.secondary-nav, .nav.secondary-nav {
+header nav > ul.secondary-nav, header nav > ul.secondary-nav {
   float: right;
   margin-left: 10px;
   margin-right: 0;
 }
-header div > ul.secondary-nav .menu-dropdown, .nav.secondary-nav .menu-dropdown, header div > ul.secondary-nav .dropdown-menu, .nav.secondary-nav .dropdown-menu {
+header nav > ul.secondary-nav .menu-dropdown, header nav > ul.secondary-nav .menu-dropdown, header nav > ul.secondary-nav .dropdown-menu, header nav > ul.secondary-nav .dropdown-menu {
   border: 0 none;
   right: 0;
 }
-header div > ul a.menu:hover, .nav a.menu:hover, header div > ul li.open .menu, .nav li.open .menu, header div > ul .dropdown-toggle:hover, .nav .dropdown-toggle:hover, header div > ul .dropdown.open .dropdown-toggle, .nav .dropdown.open .dropdown-toggle {
+header nav > ul a.menu:hover, header nav > ul a.menu:hover, header nav > ul li.open .menu, header nav > ul li.open .menu, header nav > ul .dropdown-toggle:hover, header nav > ul .dropdown-toggle:hover, header nav > ul .dropdown.open .dropdown-toggle, header nav > ul .dropdown.open .dropdown-toggle {
   background: none repeat scroll 0 0 rgba(255, 255, 255, 0.05);
 }
-header div > ul .menu-dropdown, .nav .menu-dropdown, header div > ul .dropdown-menu, .nav .dropdown-menu {
+header nav > ul .menu-dropdown, header nav > ul .menu-dropdown, header nav > ul .dropdown-menu, header nav > ul .dropdown-menu {
   background-color: #333333;
 }
-header div > ul .menu-dropdown a.menu, .nav .menu-dropdown a.menu, header div > ul .dropdown-menu a.menu, .nav .dropdown-menu a.menu, header div > ul .menu-dropdown .dropdown-toggle, .nav .menu-dropdown .dropdown-toggle, header div > ul .dropdown-menu .dropdown-toggle, .nav .dropdown-menu .dropdown-toggle {
+header nav > ul .menu-dropdown a.menu, header nav > ul .menu-dropdown a.menu, header nav > ul .dropdown-menu a.menu, header nav > ul .dropdown-menu a.menu, header nav > ul .menu-dropdown .dropdown-toggle, header nav > ul .menu-dropdown .dropdown-toggle, header nav > ul .dropdown-menu .dropdown-toggle, header nav > ul .dropdown-menu .dropdown-toggle {
   color: #FFFFFF;
 }
-header div > ul .menu-dropdown a.menu.open, .nav .menu-dropdown a.menu.open, header div > ul .dropdown-menu a.menu.open, .nav .dropdown-menu a.menu.open, header div > ul .menu-dropdown .dropdown-toggle.open, .nav .menu-dropdown .dropdown-toggle.open, header div > ul .dropdown-menu .dropdown-toggle.open, .nav .dropdown-menu .dropdown-toggle.open {
+header nav > ul .menu-dropdown a.menu.open, header nav > ul .menu-dropdown a.menu.open, header nav > ul .dropdown-menu a.menu.open, header nav > ul .dropdown-menu a.menu.open, header nav > ul .menu-dropdown .dropdown-toggle.open, header nav > ul .menu-dropdown .dropdown-toggle.open, header nav > ul .dropdown-menu .dropdown-toggle.open, header nav > ul .dropdown-menu .dropdown-toggle.open {
   background: none repeat scroll 0 0 rgba(255, 255, 255, 0.05);
 }
-header div > ul .menu-dropdown li a, .nav .menu-dropdown li a, header div > ul .dropdown-menu li a, .nav .dropdown-menu li a {
+header nav > ul .menu-dropdown li a, header nav > ul .menu-dropdown li a, header nav > ul .dropdown-menu li a, header nav > ul .dropdown-menu li a {
   color: #ff6699;
 }
-header div > ul .menu-dropdown li a:hover, .nav .menu-dropdown li a:hover, header div > ul .dropdown-menu li a:hover, .nav .dropdown-menu li a:hover {
-  background-color: #191919;
-  background-image: -moz-linear-gradient(center top , #292929, #191919);
-  background-repeat: repeat-x;
+header nav > ul .menu-dropdown li a:hover, header nav > ul .menu-dropdown li a:hover, header nav > ul .dropdown-menu li a:hover, header nav > ul .dropdown-menu li a:hover {
   color: #FFFFFF;
 }
-header div > ul .menu-dropdown .active a, .nav .menu-dropdown .active a, header div > ul .dropdown-menu .active a, .nav .dropdown-menu .active a {
+header nav > ul .menu-dropdown .active a, header nav > ul .menu-dropdown .active a, header nav > ul .dropdown-menu .active a, header nav > ul .dropdown-menu .active a {
   color: #ff6699;
 }
-header div > ul .menu-dropdown .divider, .nav .menu-dropdown .divider, header div > ul .dropdown-menu .divider, .nav .dropdown-menu .divider {
+header nav > ul .menu-dropdown .divider, header nav > ul .menu-dropdown .divider, header nav > ul .dropdown-menu .divider, header nav > ul .dropdown-menu .divider {
   background-color: #222222;
   border-color: #444444;
 }
@@ -693,10 +695,6 @@ header .dropdown-menu a, .dropdown-menu a {
   padding: 4px 15px;
 }
 header .dropdown-menu a:hover, .dropdown-menu a:hover, header .dropdown-menu a.hover, .dropdown-menu a.hover {
-  background-color: #DDDDDD;
-  background-image: -moz-linear-gradient(center top , #EEEEEE, #DDDDDD);
-  background-repeat: repeat-x;
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.024) inset, 0 -1px rgba(0, 0, 0, 0.024) inset;
   color: #404040;
   text-decoration: none;
 }
@@ -1180,4 +1178,35 @@ div.cbi-value var, td.cbi-value-field var {
 .uci-change-legend-label var ins, .uci-change-legend-label var del {
   border: medium none;
   line-height: 6px;
+}
+.navbar-inners {
+  width: 100%;
+  margin: 0;
+  height: 4px;
+  background-color: #877AED;
+}
+.navbar-inners div {
+  display: block;
+  height: 4px;
+  margin: 0;
+  float: left;
+}
+.color0 {
+  background-color: #FE739B;
+  width: 5%;
+}
+.color1 {
+  background-color: #00FFCF;
+  width: 43.5%;
+}
+.color2 {
+  width: 3%;
+  background-color: #C7BA38;
+}
+.color3 {
+  background-color: #E8FF00;
+  width: 43.5%;
+}
+.color4 {
+  width: 5%;
 }
