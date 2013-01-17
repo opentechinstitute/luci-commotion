@@ -547,7 +547,6 @@ header {
 }
 header a {
   color: #ff6699;
-  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }
 header h3 a:hover, header .brand a:hover, header ul .active > a {
   background-color: rgba(255, 255, 255, 0.05);
@@ -622,7 +621,6 @@ header div > ul .menu-dropdown a.menu.open, .nav .menu-dropdown a.menu.open, hea
 }
 header div > ul .menu-dropdown li a, .nav .menu-dropdown li a, header div > ul .dropdown-menu li a, .nav .dropdown-menu li a {
   color: #ff6699;
-  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
 }
 header div > ul .menu-dropdown li a:hover, .nav .menu-dropdown li a:hover, header div > ul .dropdown-menu li a:hover, .nav .dropdown-menu li a:hover {
   background-color: #191919;
@@ -693,7 +691,6 @@ header .dropdown-menu a, .dropdown-menu a {
   font-weight: normal;
   line-height: 18px;
   padding: 4px 15px;
-  text-shadow: 0 1px 0 #FFFFFF;
 }
 header .dropdown-menu a:hover, .dropdown-menu a:hover, header .dropdown-menu a.hover, .dropdown-menu a.hover {
   background-color: #DDDDDD;
@@ -803,7 +800,6 @@ header .dropdown-menu a:hover, .dropdown-menu a:hover, header .dropdown-menu a.h
 }
 .breadcrumb li {
   display: inline;
-  text-shadow: 0 1px 0 #FFFFFF;
 }
 .breadcrumb .divider {
   color: #BFBFBF;
@@ -829,21 +825,18 @@ footer {
   background-image: -moz-linear-gradient(center top , #EE5F5B, #C43C35);
   background-repeat: repeat-x;
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }
 .btn.success, .alert.success {
   background-color: #57A957;
   background-image: -moz-linear-gradient(center top , #62C462, #57A957);
   background-repeat: repeat-x;
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }
 .btn.info, .alert.info {
   background-color: #339BB9;
   background-image: -moz-linear-gradient(center top , #5BC0DE, #339BB9);
   background-repeat: repeat-x;
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }
 .btn, .cbi-button {
   -moz-border-bottom-colors: none;
@@ -864,7 +857,6 @@ footer {
   font-size: 13px;
   line-height: normal;
   padding: 5px 14px 6px;
-  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
 }
 .btn:hover, .cbi-button:hover {
   color: #333333;
@@ -879,7 +871,6 @@ footer {
   background-repeat: repeat-x;
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
   color: #FFFFFF;
-  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }
 .cbi-button-up {
   background-image: url("./resources/cbi/up.gif"), -moz-linear-gradient(center top , #FFFFFF, #FFFFFF 25%, #E6E6E6);
@@ -951,7 +942,6 @@ button.btn::-moz-focus-inner, input.btn[type="submit"]::-moz-focus-inner {
   font-weight: bold;
   line-height: 13.5px;
   opacity: 0.25;
-  text-shadow: 0 1px 0 #FFFFFF;
 }
 .close:hover {
   color: #000000;
@@ -970,7 +960,6 @@ button.btn::-moz-focus-inner, input.btn[type="submit"]::-moz-focus-inner {
   margin-bottom: 18px;
   padding: 7px 15px;
   position: relative;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 .alert .close {
   margin-top: 1px;
@@ -1002,7 +991,6 @@ button.btn::-moz-focus-inner, input.btn[type="submit"]::-moz-focus-inner {
   font-size: 9.75px;
   font-weight: bold;
   padding: 1px 3px 2px;
-  text-shadow: none;
   text-transform: uppercase;
   white-space: nowrap;
 }
@@ -1095,7 +1083,6 @@ table.cbi-section-table td.cbi-section-table-cell {
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
   margin: 0 10px;
   text-align: center;
-  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
   white-space: nowrap;
 }
 .ifacebox .ifacebox-head {
@@ -1113,7 +1100,6 @@ table.cbi-section-table td.cbi-section-table-cell {
   display: inline-block;
   margin-left: 2px;
   padding: 2px;
-  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
   white-space: nowrap;
 }
 .ifacebadge-active {
@@ -1125,7 +1111,6 @@ table.cbi-section-table td.cbi-section-table-cell {
   cursor: pointer;
   display: inline-block;
   padding: 2px;
-  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
   white-space: nowrap;
 }
 .zonebadge em, .zonebadge strong {
