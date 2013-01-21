@@ -100,6 +100,7 @@ You may obtain a copy of the License at
 <html lang="<%=luci.i18n.context.lang%>">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
     <title><%=striptags( hostname .. ( (node and node.title) and ' - ' .. translate(node.title) or '')) %> - LuCI</title>
     <!--[if lt IE 9]><script src="<%=media%>/html5.js"></script><![endif]-->
     <link rel="stylesheet" href="<%=media%>/cascade.css">
@@ -164,6 +165,8 @@ You may obtain a copy of the License at
         </ul>
       </nav>
 
+      <a id="device" href="/"><img src="<%=media%>/commotion_tiny.png" alt="Commotion - toggle header" title="Commotion - toggle header" /></a>
+
       <%
       -- calculate the number of unsaved changes
       if tree.nodes[category] and tree.nodes[category].ucidata then
@@ -177,7 +180,6 @@ You may obtain a copy of the License at
       end
       end
       %>
-      <a id="device" href="#"><img src="<%=media%>/commotion_tiny.png" alt="Commotion - toggle header" title="Commotion - toggle header" /></a>
       <div class="collapsible">
         <div class="pull-right">
           <% if ucichanges > 0 then %>

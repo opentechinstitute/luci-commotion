@@ -195,6 +195,9 @@ section:after {
   top: -47px;
   height: 0;
 }
+#device img {
+  margin-left: -28px;
+}
 a {
   color: #ff6699;
   font-weight: inherit;
@@ -215,18 +218,20 @@ p, .cbi-map-descr, .cbi-section-descr {
   font-size: 13px;
   font-weight: normal;
   line-height: 18px;
-  margin-bottom: 9px;
 }
 p small {
   color: #BFBFBF;
   font-size: 11px;
 }
 h1, h2, h3, h4, h5, h6 {
-  color: #ff6699;
+  color: black;
   font-weight: bold;
 }
 h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
   color: #404040;
+}
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
+  color: black;
 }
 h1 {
   font-size: 30px;
@@ -237,7 +242,7 @@ h1 small {
   font-size: 18px;
 }
 h2 {
-  font-size: 24px;
+  font-size: 25px;
   line-height: 36px;
 }
 h2 small {
@@ -352,14 +357,16 @@ form {
 fieldset {
   margin-bottom: 9px;
   padding-top: 9px;
+  text-align: center;
 }
 fieldset legend {
-  color: #ff6699;
+  font-size: 20px;
+  color: black;
   display: block;
 	text-transform: uppercase;
-  font-size: 19.5px;
+  font-size: 15px;
   line-height: 1;
-  padding-top: 20px;
+  padding: 40px 0 0 0;
 }
 form .clearfix, form .cbi-value {
   margin-bottom: 18px;
@@ -375,17 +382,10 @@ label, input, select, textarea {
   font-weight: normal;
   line-height: normal;
 }
-form .input, form .cbi-value-field {
-  margin-left: 150px;
-}
 form .cbi-value label.cbi-value-title {
-  color: #404040;
-  float: left;
-  font-size: 13px;
-  line-height: 18px;
-  padding-top: 6px;
-  text-align: right;
-  width: 130px;
+  color: black;
+  font-size: 20px;
+  line-height: 22px;
 }
 input[type="checkbox"], input[type="radio"] {
   cursor: pointer;
@@ -394,11 +394,12 @@ input, textarea, select, .uneditable-input {
   border: 1px solid #CCCCCC;
   color: #808080;
   display: inline-block;
-  font-size: 13px;
+  font-size: 20px;
   height: 18px;
   line-height: 18px;
-  padding: 4px;
-  width: 210px;
+  padding: 10px 5px;
+  margin: 10px 0 5px 0;
+  width: 97%;
 }
 select {
 }
@@ -419,8 +420,8 @@ input[type="button"], input[type="reset"], input[type="submit"] {
   width: auto;
 }
 select, input[type="file"] {
-  height: 27px;
-  line-height: 27px;
+  height: 45px;
+  line-height: 45px;
 }
 select[multiple] {
   background-color: #FFFFFF;
@@ -572,7 +573,6 @@ header h1 {
 header h1 a {
   color: #4d4d4d;
   font: 15px/17px AsapRegular;
-  text-transform: uppercase;
 }
 header nav {
   background: black;
@@ -580,19 +580,22 @@ header nav {
   margin: 0;
   list-style: none;
 }
+header nav ul {
+  text-align: center;
+  padding-bottom: 28px;
+}
 header nav > ul > li, header nav > ul > li {
-  display: block;
-  float: left;
+  display: inline-block;
 }
 header nav > ul a, header nav > ul a {
   display: block;
   float: none;
   padding: 0;
-  margin: 10px 10px 11px;
+  margin: 4px;
   text-decoration: none;
   text-transform: uppercase;
   font: 13px/18px AsapRegular;
-  border-bottom: 2px solid black;
+  border-bottom: 2px solid transparent;
   color: #ffffff;
 }
 header nav > ul a:hover, header nav > ul a:hover {
@@ -608,78 +611,63 @@ header nav > ul.secondary-nav, header nav > ul.secondary-nav {
   margin-left: 10px;
   margin-right: 0;
 }
-header nav > ul.secondary-nav .menu-dropdown, header nav > ul.secondary-nav .menu-dropdown, header nav > ul.secondary-nav .dropdown-menu, header nav > ul.secondary-nav .dropdown-menu {
+header nav > ul.secondary-nav .dropdown-menu, header nav > ul.secondary-nav .dropdown-menu {
   border: 0 none;
   right: 0;
 }
 header nav > ul a.menu:hover, header nav > ul a.menu:hover, header nav > ul li.open .menu, header nav > ul li.open .menu, header nav > ul .dropdown-toggle:hover, header nav > ul .dropdown-toggle:hover, header nav > ul .dropdown.open .dropdown-toggle, header nav > ul .dropdown.open .dropdown-toggle {
   background: none repeat scroll 0 0 rgba(255, 255, 255, 0.05);
 }
-header nav > ul .menu-dropdown, header nav > ul .menu-dropdown, header nav > ul .dropdown-menu, header nav > ul .dropdown-menu {
+header nav > ul .dropdown-menu, header nav > ul .dropdown-menu {
   background-color: #333333;
 }
-header nav > ul .menu-dropdown a.menu, header nav > ul .menu-dropdown a.menu, header nav > ul .dropdown-menu a.menu, header nav > ul .dropdown-menu a.menu, header nav > ul .menu-dropdown .dropdown-toggle, header nav > ul .menu-dropdown .dropdown-toggle, header nav > ul .dropdown-menu .dropdown-toggle, header nav > ul .dropdown-menu .dropdown-toggle {
+header nav > ul .dropdown-menu a.menu, header nav > ul .dropdown-menu a.menu, header nav > ul .dropdown-menu .dropdown-toggle, header nav > ul .dropdown-menu .dropdown-toggle {
   color: #FFFFFF;
 }
-header nav > ul .menu-dropdown a.menu.open, header nav > ul .menu-dropdown a.menu.open, header nav > ul .dropdown-menu a.menu.open, header nav > ul .dropdown-menu a.menu.open, header nav > ul .menu-dropdown .dropdown-toggle.open, header nav > ul .menu-dropdown .dropdown-toggle.open, header nav > ul .dropdown-menu .dropdown-toggle.open, header nav > ul .dropdown-menu .dropdown-toggle.open {
+header nav > ul .dropdown-menu a.menu.open, header nav > ul .dropdown-menu a.menu.open, header nav > ul .dropdown-menu .dropdown-toggle.open, header nav > ul .dropdown-menu .dropdown-toggle.open {
   background: none repeat scroll 0 0 rgba(255, 255, 255, 0.05);
 }
-header nav > ul .menu-dropdown li a, header nav > ul .menu-dropdown li a, header nav > ul .dropdown-menu li a, header nav > ul .dropdown-menu li a {
+header nav > ul .dropdown-menu li a, header nav > ul .dropdown-menu li a {
   color: #ff6699;
 }
-header nav > ul .menu-dropdown li a:hover, header nav > ul .menu-dropdown li a:hover, header nav > ul .dropdown-menu li a:hover, header nav > ul .dropdown-menu li a:hover {
+header nav > ul .dropdown-menu li a:hover, header nav > ul .dropdown-menu li a:hover {
   color: #FFFFFF;
 }
-header nav > ul .menu-dropdown .active a, header nav > ul .menu-dropdown .active a, header nav > ul .dropdown-menu .active a, header nav > ul .dropdown-menu .active a {
+header nav > ul .dropdown-menu .active a, header nav > ul .dropdown-menu .active a {
   color: #ff6699;
 }
-header nav > ul .menu-dropdown .divider, header nav > ul .menu-dropdown .divider, header nav > ul .dropdown-menu .divider, header nav > ul .dropdown-menu .divider {
+header nav > ul .dropdown-menu .divider, header nav > ul .dropdown-menu .divider {
   background-color: #222222;
   border-color: #444444;
 }
-header ul .menu-dropdown li a, header ul .dropdown-menu li a {
-  padding: 4px 15px;
+header ul .dropdown-menu li a {
+  padding: 2px 4px;
 }
 li.menu, .dropdown {
   position: relative;
+  z-index: 100;
 }
-a.menu:after, .dropdown-toggle:after {
-  border-left: 4px solid transparent;
-  border-right: 4px solid transparent;
-  border-top: 4px solid #FFFFFF;
-  content: "&darr;";
-  display: inline-block;
-  height: 0;
-  margin-left: 4px;
-  margin-top: 8px;
-  opacity: 0.5;
-  text-indent: -99999px;
-  vertical-align: top;
-  width: 0;
-}
-.menu-dropdown, .dropdown-menu {
+.dropdown-menu {
+  text-align: left;
   background-clip: padding-box;
   background-color: #FFFFFF;
   border-color: rgba(0, 0, 0, 0.2);
   border-style: solid;
   border-width: 0 1px 1px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  display: none;
-  float: left;
-  margin-left: 0;
-  margin-right: 0;
   max-width: 220px;
   min-width: 160px;
   padding: 6px 0;
   position: absolute;
-  top: 40px;
+  top: 24px;
+  left: -9999px;
   z-index: 900;
 }
-.menu-dropdown li, .dropdown-menu li {
+.dropdown-menu li {
   display: block;
   float: none;
 }
-.menu-dropdown .divider, .dropdown-menu .divider {
+.dropdown-menu .divider {
   background-color: #EEEEEE;
   border-bottom: 1px solid #FFFFFF;
   height: 1px;
@@ -698,15 +686,10 @@ header .dropdown-menu a:hover, .dropdown-menu a:hover, header .dropdown-menu a.h
   color: #404040;
   text-decoration: none;
 }
-.open .menu, .dropdown.open .menu, .open .dropdown-toggle, .dropdown.open .dropdown-toggle {
-  background: none repeat scroll 0 0 rgba(0, 0, 0, 0.3);
-  color: #FFFFFF;
-}
-.open .menu-dropdown, .dropdown.open .menu-dropdown, .open .dropdown-menu, .dropdown.open .dropdown-menu {
-  display: block;
-}
-.dropdown:hover ul.dropdown-menu {
-  display: block;
+.dropdown:hover ul.dropdown-menu,
+.dropdown ul.dropdown-menu.focus,
+.dropdown:focus ul.dropdown-menu {
+  left: 0 !important;
 }
 .dropdown-menu .dropdown-menu {
   left: 159px;
@@ -766,7 +749,7 @@ header .dropdown-menu a:hover, .dropdown-menu a:hover, header .dropdown-menu a.h
   color: #808080;
   cursor: default;
 }
-.tabs .menu-dropdown, .tabs .dropdown-menu, .cbi-tabmenu .menu-dropdown, .cbi-tabmenu .dropdown-menu {
+.tabs .dropdown-menu, .cbi-tabmenu .dropdown-menu {
   border-width: 1px;
   top: 35px;
 }
