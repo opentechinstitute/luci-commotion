@@ -686,9 +686,9 @@ header .dropdown-menu a:hover, .dropdown-menu a:hover, header .dropdown-menu a.h
   color: #404040;
   text-decoration: none;
 }
-.dropdown:hover ul.dropdown-menu,
-.dropdown ul.dropdown-menu.focus,
-.dropdown:focus ul.dropdown-menu {
+.dropdown:hover .dropdown-menu,
+.dropdown .dropdown-menu.focus,
+.dropdown:focus .dropdown-menu {
   left: 0 !important;
 }
 .dropdown-menu .dropdown-menu {

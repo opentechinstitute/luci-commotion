@@ -8,7 +8,7 @@ $(document).ready(function() {
 $.extend($.fn, {
   setup_navigation: function(settings) {
     settings = $.extend({
-      menuHoverClass: 'focus',
+      menuHoverClass: 'focus'
     }, settings);
 
     // Set tabIndex to -1 so that links can't receive focus until menu is open
