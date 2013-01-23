@@ -3,6 +3,7 @@
 
 $(document).ready(function() {
   $('header nav > ul').setup_navigation();
+  selectnav('navtoselect');
 });
 
 $.extend($.fn, {

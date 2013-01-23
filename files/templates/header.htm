@@ -114,7 +114,7 @@ You may obtain a copy of the License at
   <body class="lang_<%=luci.i18n.context.lang%> <%- if node then %><%= striptags( node.title ) %><%- end %>">
     <header>
       <nav>
-        <ul>
+        <ul id="navtoselect">
           <%-
           local function submenu(prefix, node)
           local childs = disp.node_childs(node)

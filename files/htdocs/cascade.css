@@ -194,6 +194,7 @@ section:after {
   left: 50%;
   top: -47px;
   height: 0;
+  width: 0;
 }
 #device img {
   margin-left: -28px;
@@ -357,7 +358,6 @@ form {
 fieldset {
   margin-bottom: 9px;
   padding-top: 9px;
-  text-align: center;
 }
 fieldset legend {
   font-size: 20px;
@@ -568,7 +568,6 @@ header {
 header h1 {
   padding: 0;
   margin: 0 auto;
-  text-align: center;
 }
 header h1 a {
   color: #4d4d4d;
@@ -660,19 +659,12 @@ li.menu, .dropdown {
   padding: 6px 0;
   position: absolute;
   top: 24px;
-  left: -9999px;
-  z-index: 900;
+  display: none;
+  z-index: 90;
 }
 .dropdown-menu li {
   display: block;
   float: none;
-}
-.dropdown-menu .divider {
-  background-color: #EEEEEE;
-  border-bottom: 1px solid #FFFFFF;
-  height: 1px;
-  margin: 5px 0;
-  overflow: hidden;
 }
 header .dropdown-menu a, .dropdown-menu a {
   clear: both;
@@ -690,6 +682,7 @@ header .dropdown-menu a:hover, .dropdown-menu a:hover, header .dropdown-menu a.h
 .dropdown .dropdown-menu.focus,
 .dropdown:focus .dropdown-menu {
   left: 0 !important;
+  display: block;
 }
 .dropdown-menu .dropdown-menu {
   left: 159px;
@@ -1192,4 +1185,17 @@ div.cbi-value var, td.cbi-value-field var {
 }
 .color4 {
   width: 5%;
+}
+.selectnav { display: none; }
+@media screen and (max-width: 600px) {
+  #device {
+    top: auto;
+    height: auto;
+  }
+  .js #navtoselect {
+    display: none;
+  }
+  .js .selectnav {
+    display: block;
+  }
 }
