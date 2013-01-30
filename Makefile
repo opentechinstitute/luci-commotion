@@ -31,6 +31,8 @@ define Package/luci-theme-$(THEME_NAME)/install
 	$(CP) -a ./files/htdocs/* $(1)/www/luci-static/$(THEME_NAME)/ 2>/dev/null || true
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/view/themes/$(THEME_NAME)
 	$(CP) -a ./files/templates/* $(1)/usr/lib/lua/luci/view/themes/$(THEME_NAME)/ 2>/dev/null || true
+	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/view/cbi
+	$(CP) -a ./luasrc/view/cbi/* $(1)/usr/lib/lua/luci/view/cbi/ 2>/dev/null || true
 endef
 
 define Package/luci-theme-$(THEME_NAME)/postinst
