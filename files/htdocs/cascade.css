@@ -7,7 +7,6 @@
        url('./fonts/asap/Asap-Regular-webfont.svg#AsapRegular') format('svg');
   font-weight: normal;
   font-style: normal;
-
 }
 
 @font-face {
@@ -42,6 +41,18 @@
   font-weight: normal;
   font-style: normal;
 }
+
+@font-face {
+  font-family: 'Asap';
+  src: url('./fonts/asap/Asap-Regular-webfont.eot');
+  src: url('./fonts/asap/Asap-Regular-webfont.eot?#iefix') format('embedded-opentype'),
+       url('./fonts/asap/Asap-Regular-webfont.woff') format('woff'),
+       url('./fonts/asap/Asap-Regular-webfont.ttf') format('truetype'),
+       url('./fonts/asap/Asap-Regular-webfont.svg#AsapRegular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
 @font-face {
   font-family: 'Asap';
   src: url('./fonts/asap/Asap-Italic-webfont.eot');
@@ -839,6 +850,9 @@ footer {
 }
 .btn, .cbi-button {
 }
+.cbi-button-remove {
+  float: right;
+}
 .btn:hover, .cbi-button:hover {
   color: #333333;
   text-decoration: none;
@@ -1052,6 +1066,8 @@ table.cbi-section-table td.cbi-section-table-cell {
 }
 .cbi-value-description {
   display: inline;
+  font: normal 12px/14px Asap;
+  color: black;
 }
 .cbi-value-description img {
   vertical-align: middle;
@@ -1194,6 +1210,9 @@ div.cbi-value var, td.cbi-value-field var {
 }
 .selectnav { display: none; }
 @media screen and (max-width: 600px) {
+  #maincontent {
+    padding: 0 5px;
+  }
   #device {
     top: auto;
     height: auto;
