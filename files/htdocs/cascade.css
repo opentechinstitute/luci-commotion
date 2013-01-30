@@ -602,22 +602,28 @@ table {
   width: 100%;
 }
 table th, table td {
-  line-height: 18px;
-  padding: 10px 10px 9px;
+  font: normal 13px/16px Asap;
+  padding: 15px 5px;
   text-align: left;
+  background: #ccffff;
 }
 table th {
   font-weight: bold;
-  padding-top: 9px;
+  padding: 5px;
   vertical-align: middle;
 }
+.cbi-section-table-titles th {
+  font: normal 20px/22px Asap;
+  border-bottom: 1px solid black;
+}
 table td {
-  border-top: 1px solid #DDDDDD;
   vertical-align: top;
 }
 table tbody th {
-  border-top: 1px solid #DDDDDD;
   vertical-align: top;
+  font-weight: bold;
+  background: white;
+  border: 0;
 }
 header {
   color: #BFBFBF;
@@ -633,7 +639,7 @@ header h1 {
 }
 header h1 a {
   color: #4d4d4d;
-  font: 15px/17px AsapRegular;
+  font: 15px/17px Asap;
 }
 header nav {
   background: black;
@@ -1034,8 +1040,9 @@ a.label:hover {
   background-color: #00ffcc;
 
 }
-.label.notice {
-  background-color: #62CFFC;
+a.label.notice {
+  background-color: #66ccff;
+  color: black;
 }
 .hidden {
   display: none;
@@ -1063,13 +1070,12 @@ header .pull-right {
   width: 100%;
 }
 .cbi-section-table tbody tr:nth-child(2n+1) td, .cbi-section-table tbody tr:nth-child(2n+1) th {
-  background-color: #F9F9F9;
+  background-color: white;
 }
 .cbi-section-table tbody tr:hover td, .cbi-section-table tbody tr:hover th {
   background-color: #F5F5F5;
 }
 .cbi-section-table tr.cbi-section-table-descr th {
-  font-weight: normal;
 }
 .left {
   text-align: left !important;
@@ -1239,6 +1245,10 @@ div.cbi-value var, td.cbi-value-field var {
   width: 5%;
 }
 .selectnav { display: none; }
+.messages {
+  text-align: center;
+  margin-bottom: 5px;
+}
 @media screen and (max-width: 600px) {
   #maincontent {
     padding: 0 5px;
