@@ -79,7 +79,7 @@ You may obtain a copy of the License at
 				end
                 if level > 2 then
 		%>
-			<li class="tabmenu-item-<%=v%><%- if nnode._menu_selected or (node.leaf and v == leaf) then -%> active<% end %>">
+			<li class="tabmenu-item-<%=v%> <%- if nnode._menu_selected or (node.leaf and v == leaf) then -%> active<% end %>">
 			    <a href="<%=nodeurl(prefix, v, nnode.query)%>"><%=striptags(translate(nnode.title))%></a>
 			</li>
 		<%      end
@@ -167,30 +167,35 @@ You may obtain a copy of the License at
 
       <a id="device" href="/"><img src="<%=media%>/commotion_tiny.png" alt="Commotion - toggle header" title="Commotion - toggle header" /></a>
 
-      <%
-      -- calculate the number of unsaved changes
-      if tree.nodes[category] and tree.nodes[category].ucidata then
-      local ucichanges = 0
-
-      for i, j in pairs(require("luci.model.uci").cursor():changes()) do
-      for k, l in pairs(j) do
-      for m, n in pairs(l) do
-      ucichanges = ucichanges + 1;
-      end
-      end
-      end
-      %>
       <div class="collapsible">
         <div class="pull-right">
-          <% if ucichanges > 0 then %>
-          <a class="label notice" href="<%=controller%>/<%=category%>/uci/changes"><%:Unsaved Changes%>: <%=ucichanges%></a>
-          <% end %>
+          <%
+          -- calculate the number of unsaved changes
+          if tree.nodes[category] and tree.nodes[category].ucidata then
+            local ucichanges = 0
+
+            for i, j in pairs(require("luci.model.uci").cursor():changes()) do
+            for k, l in pairs(j) do
+            for m, n in pairs(l) do
+            ucichanges = ucichanges + 1;
+            end
+            end
+            end
+
+            if ucichanges > 0 then
+            %>
+              <a class="label notice" href="<%=controller%>/<%=category%>/uci/changes"><%:Unsaved Changes%>: <%=ucichanges%></a>
+            <%
+            end
+            %>
+          <%
+          end
+          %>
           <span id="xhr_poll_status" style="display:none" onclick="XHR.running() ? XHR.halt() : XHR.run()">
             <span class="label success" id="xhr_poll_status_on"><%:Auto Refresh%> <%:on%></span>
             <span class="label" id="xhr_poll_status_off" style="display:none"><%:Auto Refresh%> <%:off%></span>
           </span>
         </div>
-        <% end %>
         <h1 class="brand"><a href="/">Network name: <%=hostname%></a></h1>
       </div>
     </header>
