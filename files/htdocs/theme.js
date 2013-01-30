@@ -2,6 +2,14 @@
 
 
 $(document).ready(function() {
+  // example:
+  //$('.cbi-value-title').eq(0).addClass('tippable').data('tip', 'This is a tooltip');
+  $('.cbi-value-title').each(function(el) {
+    if($(this).data('tip')) {
+      $(this).after('<p class="tip">' + $(this).data('tip') + '</p>')
+    }
+  });
+  $('.tippable').on('click', function(ev) { $(this).next('p').toggle() });
   $('header nav > ul').setup_navigation();
   selectnav('navtoselect');
 });

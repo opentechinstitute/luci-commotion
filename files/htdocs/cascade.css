@@ -418,6 +418,36 @@ form .cbi-value label.cbi-value-title {
   font-size: 20px;
   line-height: 22px;
 }
+form .cbi-value label.cbi-value-title.tippable {
+  display: block;
+  width: 100%;
+  background: url(help.png) no-repeat center right;
+}
+.tip {
+  position: relative;
+  background: #E6E6E6;
+  color: black;
+  font: italic 14px/16px Asap;
+  padding: 5px;
+  margin: 10px 0 0 0;
+  display: none;
+}
+.tip:after {
+  bottom: 100%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+.tip:after {
+  border-color: white;
+  border-bottom-color: #E6E6E6;
+  border-width: 5px;
+  right: 4px;
+  margin-left: -5px;
+}
 input[type="checkbox"], input[type="radio"] {
   cursor: pointer;
 }
