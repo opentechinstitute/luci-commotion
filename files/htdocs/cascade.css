@@ -116,6 +116,9 @@ a:hover, a:active {
 article, aside, details, figcaption, figure, footer, header, hgroup, nav, section {
   display: block;
 }
+#maincontent {
+  padding-top: 10px;
+}
 sub, sup {
   font-size: 75%;
   line-height: 0;
@@ -144,7 +147,22 @@ button::-moz-focus-inner, input::-moz-focus-inner {
   padding: 0;
 }
 button, input[type="button"], input[type="reset"], input[type="submit"] {
+  background-color: #cccccc;
+  background-image: -moz-linear-gradient(center top , #FFFFFF, #FFFFFF 25%, #E6E6E6);
+  background-repeat: no-repeat;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
+  color: black;
   cursor: pointer;
+  display: inline-block;
+  font-size: 13px;
+  font-weight: bold;
+  line-height: normal;
+  padding: 5px 14px 6px;
+  border: 0;
+}
+button:hover, input[type="button"]:hover, input[type="reset"]:hover, input[type="submit"]:hover {
+  color: white;
+  background: black;
 }
 input[type="search"] {
   -moz-box-sizing: content-box;
@@ -360,13 +378,15 @@ fieldset {
   padding-top: 9px;
 }
 fieldset legend {
-  font-size: 20px;
-  color: black;
+  color: #8073cb;
   display: block;
 	text-transform: uppercase;
   font-size: 15px;
+  font-weight: bold;
   line-height: 1;
   padding: 40px 0 0 0;
+  border-bottom: 3px solid #8073cb;
+  width: 100%;
 }
 form .clearfix, form .cbi-value {
   margin-bottom: 18px;
@@ -566,6 +586,7 @@ header {
   overflow: hidden;
 }
 header h1 {
+  text-align: center;
   padding: 0;
   margin: 0 auto;
 }
@@ -712,20 +733,25 @@ header .dropdown-menu a:hover, .dropdown-menu a:hover, header .dropdown-menu a.h
 .tabs, .cbi-tabmenu {
   border-color: #DDDDDD;
   border-style: solid;
-  border-width: 0 0 1px;
+  border-width: 0 0 3px;
 }
 .tabs > li, .cbi-tabmenu > li {
-  margin-bottom: -1px;
+  margin-bottom: -3px;
   position: relative;
 }
 .tabs > li > a, .cbi-tabmenu > li > a {
-  border: 1px solid transparent;
-  line-height: 34px;
+  border: 3px solid transparent;
+  font: normal 15px/23px Asap;
+  color: #6e6e6e;
   margin-right: 2px;
-  padding: 0 15px;
+  padding: 0 9px;
 }
-.tabs > li > a:hover, .cbi-tabmenu > li > a:hover {
-  background-color: #EEEEEE;
+.cbi-tab > a:hover {
+  text-decoration: none;
+}
+.tabs > li > a:hover, .cbi-tab-disabled > a:hover {
+  background-color: #00ffcf;
+  color: black;
   border-color: #EEEEEE #EEEEEE #DDDDDD;
   text-decoration: none;
 }
@@ -735,15 +761,14 @@ header .dropdown-menu a:hover, .dropdown-menu a:hover, header .dropdown-menu a.h
   -moz-border-left-colors: none;
   -moz-border-right-colors: none;
   -moz-border-top-colors: none;
-  background-color: #FFFFFF;
-  border-color: #DDDDDD #DDDDDD transparent;
+  border-color: #DDDDDD #DDDDDD white;
   border-style: solid;
-  border-width: 1px;
-  color: #808080;
+  border-width: 3px;
   cursor: default;
+  color: black;
 }
 .tabs .dropdown-menu, .cbi-tabmenu .dropdown-menu {
-  border-width: 1px;
+  border-width: 3px;
   top: 35px;
 }
 .tabs a.menu:after, .tabs .dropdown-toggle:after, .cbi-tabmenu a.menu:after, .cbi-tabmenu .dropdown-toggle:after {
@@ -813,24 +838,6 @@ footer {
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 }
 .btn, .cbi-button {
-  -moz-border-bottom-colors: none;
-  -moz-border-image: none;
-  -moz-border-left-colors: none;
-  -moz-border-right-colors: none;
-  -moz-border-top-colors: none;
-  background-color: #E6E6E6;
-  background-image: -moz-linear-gradient(center top , #FFFFFF, #FFFFFF 25%, #E6E6E6);
-  background-repeat: no-repeat;
-  border-color: #CCCCCC #CCCCCC #BBBBBB;
-  border-style: solid;
-  border-width: 1px;
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
-  color: #333333;
-  cursor: pointer;
-  display: inline-block;
-  font-size: 13px;
-  line-height: normal;
-  padding: 5px 14px 6px;
 }
 .btn:hover, .cbi-button:hover {
   color: #333333;
@@ -840,11 +847,10 @@ footer {
   outline: 1px dotted #666666;
 }
 .btn.primary, .cbi-page-actions .cbi-button-apply, .cbi-page-actions .cbi-button-save {
-  background-color: #ff6699;
-  background-image: -moz-linear-gradient(center top , #ff6699, #000000);
+  background-color: #00ffcf;
+  background-image: -moz-linear-gradient(center top , #00ffcf, #000000);
   background-repeat: repeat-x;
-  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-  color: #FFFFFF;
+  color: black;
 }
 .cbi-button-up {
   background-image: url("./resources/cbi/up.gif"), -moz-linear-gradient(center top , #FFFFFF, #FFFFFF 25%, #E6E6E6);
