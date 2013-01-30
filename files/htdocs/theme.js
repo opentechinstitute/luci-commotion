@@ -15,6 +15,7 @@ $(document).ready(function() {
 });
 
 $.extend($.fn, {
+  // via http://simplyaccessible.com/examples/css-menu/option-3/
   setup_navigation: function(settings) {
     settings = $.extend({
       menuHoverClass: 'focus'
