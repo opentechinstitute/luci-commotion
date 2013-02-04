@@ -52,4 +52,3 @@ function data()
         	f:close()
 		end
 end
-												 

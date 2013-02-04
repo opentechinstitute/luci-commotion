@@ -1,42 +1,45 @@
-##################################################
-# OpenWRT Makefile for Commotion De-Bugging Helper 
-##################################################
-
+# Copyright (C) 2010 Commotion
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
 include $(TOPDIR)/rules.mk
 
-MODULE_NAME:=commotion
-MODULE_TITLE:=Commotion
-
-PKG_NAME:=$(MODULE_NAME)-debug-helper
-PKG_VERSION:=1
+PKG_NAME:=commotion-debug-helper
 PKG_RELEASE:=1
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
+PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/$(MODULE_NAME)-debug-helper
+define Package/commotion-debug-helper
   SECTION:=commotion
   CATEGORY:=Commotion
-  TITLE:=Commotion De-Bugging Helper
-  DEPENDS:=+commotionbase +luci
-  URL:=http://commotionwireless.net/
+  TITLE:=Commotion Debug System
+  DEPENDS:=+commotionbase
+  URL:=http://commotionwireless.net
 endef
 
 define Build/Prepare
 	mkdir -p $(PKG_BUILD_DIR)
 endef
 
-define Package/$(MODULE_NAME)-debug-helper/description
-	Commotion debugging data collection helper. Includes a LuCI user interface.
+define Build/Configure
+endef
+
+define Build/Compile
+endef
+
+define Package/commotion-debug-helper/description
+  Commotion rapid-deployment infrastructure
 endef
 
 define Package/commotion-debug-helper/install
+	echo "Testing"
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/cdh.sh $(1)/usr/sbin/
-#	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/controller/$(MODULE_NAME)
-#	$(CP) -a ./luasrc/controller/* $(1)/usr/lib/lua/luci/controller/$(MODULE_NAME)/  2>/dev/null || true
-#	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/view/$(MODULE_NAME)
-#	$(CP) -a ./luasrc/view/* $(1)/usr/lib/lua/luci/view/ 2>/dev/null || true
+	$(CP) ./files/cdh.sh $(1)/usr/sbin/cdh || true
+	$(CP) -a  ./luasrc/controller/* $(1)/usr/lib/lua/luci/controller/$(PKG_NAME)/ || true
+	$(CP) -a ./luasrc/view/* $(1)/usr/lib/lua/luci/view/$(PKG_NAME)/ || true
 endef
 
-$(eval $(call BuildPackage,$(MODULE_NAME)-debug-helper))
+$(eval $(call BuildPackage,commotion-debug-helper))

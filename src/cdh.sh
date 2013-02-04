@@ -1,22 +1,11 @@
 #!/bin/sh
 
 #================================================================
-# Unicorn Wizard Debugger
+# Commotion Bug Info
 #================================================================
 #
-# 
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
+#Commotion Bug Info run a series of scripts to gather information about a node.
+#This is a simple way to automate data collection from new or inexperienced node owners.
 #
 
 #==================PreDefined Values=================
