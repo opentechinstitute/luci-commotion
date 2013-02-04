@@ -24,20 +24,16 @@ You may obtain a copy of the License at
 %>
     </section>
     <footer>
-      <div class="credits">
-        <a href="http://luci.subsignal.org/">Powered by <%= luci.__appname__ .. " (" .. luci.__version__ .. ")" %></a>
-        <%=luci.version.distversion%>
-      </div>
-
-      <% if #categories > 1 then %>
       <nav>
-        <ul class="breadcrumb pull-right" id="modemenu">
-          <% for i, r in ipairs(categories) do %>
-          <li<% if request[1] == r then %> class="active"<%end%>><a href="<%=controller%>/<%=r%>/"><%=striptags(translate(tree.nodes[r].title))%></a> <span class="divider">|</span></li>
-          <% end %>
+        <div class="pointydown"></div>
+        <ul id="footermenu">
+          <li class="admin"><a href="<%=controller%>/admin/"><%:Administration%></a></li>
         </ul>
       </nav>
-      <% end %>
+      <p class="credits">
+        <a href="http://luci.subsignal.org/">Powered by <%= luci.__appname__ .. " (" .. luci.__version__ .. ")" %></a>
+        <%=luci.version.distversion%>
+      </p>
     </footer>
   </body>
   <script>document.write('<script src=<%=media%>/' + ('__proto__' in {} ? 'zepto' : 'jquery') + '.min.js><\/script>')</script>
