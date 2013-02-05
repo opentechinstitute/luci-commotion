@@ -859,9 +859,7 @@ footer .pointydown {
 }
 footer .credits {
   clear: both;
-}
-footer p, footer a {
-  font-weight: bold;
+  text-align: center;
 }
 footer a:link, footer a:visited {
   color: black;
@@ -872,7 +870,7 @@ footer a:active, footer a:hover {
 }
 #footermenu {
   list-style: none;
-  margin: 20px auto;
+  margin: 20px auto 50px;
   text-align: center;
 }
 #footermenu li {
@@ -883,6 +881,7 @@ footer a:active, footer a:hover {
   display: inline-block;
   background: transparent url(advanced.png) no-repeat top center;
   padding: 62px 0 0 0;
+  font-weight: bold;
 }
 .btn.danger, .alert.danger, .btn.danger:hover, .alert.danger:hover, .btn.error, .alert.error, .btn.error:hover, .alert.error:hover, .btn.success, .alert.success, .btn.success:hover, .alert.success:hover, .btn.info, .alert.info, .btn.info:hover, .alert.info:hover {
   color: #FFFFFF;
