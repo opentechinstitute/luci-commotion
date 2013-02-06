@@ -452,14 +452,12 @@ input, textarea, select, .uneditable-input {
   border: 1px solid #CCCCCC;
   color: #808080;
   display: inline-block;
-  font-size: 20px;
+  font-size: 17px;
   height: 18px;
   line-height: 18px;
   padding: 10px 5px;
   margin: 10px 0 5px 0;
   width: 97%;
-}
-select {
 }
 input[type="checkbox"], input[type="radio"] {
   border: medium none;
@@ -604,25 +602,19 @@ table th, table td {
   text-align: left;
   background-color: whitesmoke;
 }
-table th {
-  background-color: white;
-}
 .cbi-section-table tbody tr:nth-child(2n+1) td {
   background: #ccffff;
 }
 .cbi-section-table tbody tr:hover td, .cbi-section-table tbody tr:hover th {
   background-color: white;
 }
-.cbi-section-table tr.cbi-section-table-descr th {
-}
-
 table th {
   font-weight: bold;
+  background-color: white;
   padding: 5px;
   vertical-align: middle;
 }
 .cbi-section-table-titles th {
-  font: normal 20px/22px Asap;
   border-bottom: 1px solid black;
 }
 table td {
@@ -1276,6 +1268,9 @@ div.cbi-value var, td.cbi-value-field var {
 @media screen and (max-width: 600px) {
   #maincontent {
     padding: 0;
+  }
+  header nav {
+    padding: 5px 0;
   }
   header nav ul, header .brand, footer .credits, footer nav, section {
     margin-left: 5px;

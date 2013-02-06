@@ -11,7 +11,9 @@ $(document).ready(function() {
   });
   $('.tippable').on('click', function(ev) { $(this).next('p').toggle() });
   $('header nav > ul').setup_navigation();
-  selectnav('navtoselect');
+  if ($('#navtoselect li').length > 0) {
+    selectnav('navtoselect');
+  }
 });
 
 $.extend($.fn, {
@@ -37,7 +39,7 @@ $.extend($.fn, {
 
     // Hide menu if click or focus occurs outside of navigation
     $(this).find('a').last().keydown(function(e) {
-      if(e.keyCode == 9) {
+      if (e.keyCode == 9) {
         // If the user tabs out of the navigation hide all menus
         $('.'+settings.menuHoverClass).removeClass(settings.menuHoverClass).find('a').attr('tabIndex',-1);
       }
