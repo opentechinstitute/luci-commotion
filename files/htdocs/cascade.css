@@ -97,7 +97,7 @@ h1, h2, h3, h4, h5, h6, p, pre, a, abbr, acronym, code, del, em, img, q, s, smal
   font-style: normal;
   font-weight: normal;
   line-height: 1;
-  margin: 0;
+  margin: 5 0;
   padding: 0;
 }
 abbr[title], acronym[title] {
