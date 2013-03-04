@@ -19,54 +19,50 @@ limitations under the License.
 
 local netmod = luci.model.network
 
-local _, p
-for _, p in ipairs({"meshif", "apif", "plugif"}) do
+local p = "commotionif"
 
-	local proto = netmod:register_protocol(p)
+local proto = netmod:register_protocol(p)
 
-	function proto.get_i18n(self)
-		if p == "meshif" then
-			return luci.i18n.translate("Commotion Mesh Backhaul")
-		elseif p == "apif" then
-			return luci.i18n.translate("Commotion Auto-AP")
-		elseif p == "plugif" then
-			return luci.i18n.translate("Commotion Wired Interface")
-		end
-	end
-
-	function proto.ifname(self)
-		return p .. "-" .. self.sid
-	end
-
-	function proto.opkg_package(self)
-		if p == "meshif" or p == "apif" or p == "plugif" then
-			return commotionbase
-		end
-	end
-
-	function proto.is_installed(self)
-		return nixio.fs.access("/lib/network/commotion.sh")
-	end
-
-	function proto.is_virtual(self)
-		return true
-	end
-
-	function proto.get_interfaces(self)
-		if self:is_floating() then
-			return nil
-		else
-			return netmod.protocol.get_interfaces(self)
-		end
-	end
-
-	function proto.contains_interface(self, ifc)
-		if self:is_floating() then
-			return (netmod:ifnameof(ifc) == self:ifname())
-		else
-			return netmod.protocol.contains_interface(self, ifc)
-		end
-	end
-
-	netmod:register_pattern_virtual("^%s-%%w" % p)
+function proto.get_i18n(self)
+   if p == "commotionif" then
+	  return luci.i18n.translate("Commotion Interface")
+   end
 end
+
+function proto.ifname(self)
+   return p .. "-" .. self.sid
+end
+
+-- The Following function is disabled until we have a package the interface relies on
+--function proto.opkg_package(self)
+--   if p == "commotionif" then
+--	  return commotionbase
+--   end
+--end
+
+-- The following function is disabled because it refers to depreciated shell script
+--function proto.is_installed(self)
+--   return nixio.fs.access("/lib/network/commotion.sh")
+--end
+
+function proto.is_virtual(self)
+   return true
+end
+
+function proto.get_interfaces(self)
+   if self:is_floating() then
+	  return nil
+   else
+	  return netmod.protocol.get_interfaces(self)
+   end
+end
+
+function proto.contains_interface(self, ifc)
+   if self:is_floating() then
+	  return (netmod:ifnameof(ifc) == self:ifname())
+   else
+	  return netmod.protocol.contains_interface(self, ifc)
+   end
+end
+
+netmod:register_pattern_virtual("^%s-%%w" % p)
