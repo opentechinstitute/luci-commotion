@@ -17,12 +17,12 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ]]--
 
-module("luci.controller.debug.debugger", package.seeall)
+module("luci.controller.commotion-debug-helper.debugger", package.seeall)
 
 require "luci.sys"
 require "luci.fs"
 function index()
-    entry({"commotion", "debug"}, template("debug/debugger"), "Commotion Debugging Helper")
+    entry({"commotion", "debug"}, template("commotion-debug-helper/debugger"), "Commotion Debugging Helper")
 	page = entry({"commotion","debug", "submit"}, call("debug"), nil)
 	page.leaf=true
 	end
@@ -43,7 +43,7 @@ end
 
 function data()
 		 value = luci.http.formvalue("buginfo")
-		 if luci.sys.call("/bin/cdh.sh -a " .. value) == 0 then
+		 if luci.sys.call("/usr/sbin/cdh -a " .. value) == 0 then
 		 	local f = io.open("/tmp/debug.info")
 			luci.http.prepare_content("application/force-download")
 			luci.http.header("Content-Disposition", "attachment; filename=debug.info")
