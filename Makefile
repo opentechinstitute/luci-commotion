@@ -22,7 +22,7 @@ define Package/commotion-debug-helper
   SECTION:=commotion
   CATEGORY:=Commotion
   TITLE:=Commotion Debug System
-  DEPENDS:=+commotionbase +luci-commotion +luci-theme-commotion
+  DEPENDS:=+luci-commotion +luci-theme-commotion
   URL:=https://commotionwireless.net
 endef
 
