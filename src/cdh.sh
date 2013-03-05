@@ -107,11 +107,12 @@ network()
 	ip route list table all >> $FILE
 	
 	flair "JSON INFO:(wget http://localhost:2006)"
-	wget -q http://localhost:2006 -O /tmp/json.info
+	if (wget -q http://localhost:2006 -O /tmp/json.info 2>/dev/null); then
 	cat /tmp/json.info >> $FILE
 	wait
 	rm /tmp/json.info
-	wait	
+	wait
+	fi	
 	flair "IP Routing Table's for Smart Gateway:(ip route ls table [224 & 223])"
 	echo -e "---------------OLSRd Standard Default Route---------------------" >> $FILE
 	ip route ls table 223 >> $FILE
@@ -155,7 +156,8 @@ state()
 	
 	
 	flair "UCI info: (uci show)"
-	uci show >> $FILE
+	uci -q show >> "$FILE" 
+
 	
 	
 	flair "Current Processes: (ps -w)"
