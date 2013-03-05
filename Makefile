@@ -21,7 +21,7 @@ define Package/luci-$(MODULE_NAME)
   SECTION:=luci
   CATEGORY:=LuCI
   SUBMENU:=2. Modules
-  DEPENDS:=+commotionbase
+#  DEPENDS:=+commotionbase
   TITLE:=LuCI Module - $(MODULE_TITLE)
   URL:=https://commotionwireless.net/
 endef
@@ -38,23 +38,23 @@ endef
 
 define Package/luci-$(MODULE_NAME)/install
 	$(INSTALL_DIR) $(1)/etc/uci-defaults
-	$(CP) -a ./files/etc/uci-defaults/* $(1)/etc/uci-defaults/ 2>/dev/null || true
+	$(CP) $(PKG_BUILD_DIR)/files/etc/uci-defaults/* $(1)/etc/uci-defaults/ 2>/dev/null || true
 	$(INSTALL_DIR) $(1)/usr/share/commotion/files
-	$(CP) -a ./files/usr/share/commotion/files/* $(1)/usr/share/commotion/files/ 2>/dev/null || true
+	$(CP) $(PKG_BUILD_DIR)/files/usr/share/commotion/files/* $(1)/usr/share/commotion/files/ 2>/dev/null || true
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/controller/$(MODULE_NAME)
-	$(CP) -a ./luasrc/controller/$(MODULE_NAME)/* $(1)/usr/lib/lua/luci/controller/$(MODULE_NAME)/ 2>/dev/null || true
+	$(CP) $(PKG_BUILD_DIR)/luasrc/controller/$(MODULE_NAME)/* $(1)/usr/lib/lua/luci/controller/$(MODULE_NAME)/ 2>/dev/null || true
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/model/cbi/$(MODULE_NAME)
-	$(CP) -a ./luasrc/model/cbi/$(MODULE_NAME)/* $(1)/usr/lib/lua/luci/model/cbi/$(MODULE_NAME)/ 2>/dev/null || true
+	$(CP) $(PKG_BUILD_DIR)/luasrc/model/cbi/$(MODULE_NAME)/* $(1)/usr/lib/lua/luci/model/cbi/$(MODULE_NAME)/ 2>/dev/null || true
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/model/cbi/admin_network
-	$(CP) -a ./luasrc/model/cbi/admin_network/* $(1)/usr/lib/lua/luci/model/cbi/admin_network/ 2>/dev/null || true
+	$(CP) $(PKG_BUILD_DIR)/luasrc/model/cbi/admin_network/* $(1)/usr/lib/lua/luci/model/cbi/admin_network/ 2>/dev/null || true
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/model/network
-	$(CP) -a ./luasrc/model/network/* $(1)/usr/lib/lua/luci/model/network/ 2>/dev/null || true
+	$(CP) $(PKG_BUILD_DIR)/luasrc/model/network/* $(1)/usr/lib/lua/luci/model/network/ 2>/dev/null || true
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/view/$(MODULE_NAME)
-	$(CP) -a ./luasrc/view/$(MODULE_NAME)/* $(1)/usr/lib/lua/luci/view/$(MODULE_NAME)/ 2>/dev/null || true
+	$(CP) $(PKG_BUILD_DIR)/luasrc/view/$(MODULE_NAME)/* $(1)/usr/lib/lua/luci/view/$(MODULE_NAME)/ 2>/dev/null || true
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/view/cbi
-	$(CP) -a ./luasrc/view/cbi/* $(1)/usr/lib/lua/luci/view/cbi/ 2>/dev/null || true
+	$(CP) $(PKG_BUILD_DIR)/luasrc/view/cbi/* $(1)/usr/lib/lua/luci/view/cbi/ 2>/dev/null || true
 	$(INSTALL_DIR) $(1)/www/luci-static/resources/
-	$(CP) -a ./htdocs/luci-static/* $(1)/www/luci-static/ 2>/dev/null || true
+	$(CP) $(PKG_BUILD_DIR)/htdocs/luci-static/* $(1)/www/luci-static/ 2>/dev/null || true
 endef
 
 define Package/luci-$(MODULE_NAME)/postinst
