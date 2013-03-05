@@ -36,11 +36,11 @@ define Package/luci-theme-$(THEME_NAME)/install
 	$(INSTALL_DIR) $(1)/etc/uci-defaults
 	echo "uci set luci.themes.$(THEME_TITLE)=/luci-static/$(THEME_NAME); uci set luci.main.mediaurlbase=/luci-static/$(THEME_NAME); uci commit luci" > $(1)/etc/uci-defaults/luci-theme-$(THEME_NAME)
 	$(INSTALL_DIR) $(1)/www/luci-static/$(THEME_NAME)
-	$(CP) -a ./files/htdocs/* $(1)/www/luci-static/$(THEME_NAME)/ 2>/dev/null || true
+	$(CP) $(PKG_BUILD_DIR)/files/htdocs/* $(1)/www/luci-static/$(THEME_NAME)/ 2>/dev/null || true
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/view/themes/$(THEME_NAME)
-	$(CP) -a ./files/templates/* $(1)/usr/lib/lua/luci/view/themes/$(THEME_NAME)/ 2>/dev/null || true
+	$(CP) $(PKG_BUILD_DIR)/files/templates/* $(1)/usr/lib/lua/luci/view/themes/$(THEME_NAME)/ 2>/dev/null || true
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/view/cbi
-	$(CP) -a ./luasrc/view/cbi/* $(1)/usr/lib/lua/luci/view/cbi/ 2>/dev/null || true
+	$(CP) $(PKG_BUILD_DIR)/luasrc/view/cbi/* $(1)/usr/lib/lua/luci/view/cbi/ 2>/dev/null || true
 endef
 
 define Package/luci-theme-$(THEME_NAME)/postinst
