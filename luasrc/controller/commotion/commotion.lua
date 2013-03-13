@@ -32,7 +32,6 @@ function index()
  
   entry({"commotion"}, alias("commotion", "index"), i18n("Commotion"), 10)
 	entry({"commotion", "index"}, alias("commotion", "index", "index"), i18n("Overview"), 10).index = true
-	entry({"commotion", "index", "index"}, template("commotion/splash"), i18n("Front Page"), 10).ignoreindex = true
     entry({"commotion", "index", "olsr-viz"}, template("olsr-viz/olsr-viz"), _("OLSR-Viz"), 90)
   
 
@@ -42,7 +41,6 @@ function index()
 	config.index = true
 
 	entry({"admin", "commotion", "meshprofile"}, cbi("commotion/meshprofile"), i18n("Mesh Configuration (Profile)"), 10)
-	entry({"admin", "commotion", "frontpage"}, cbi("commotion/frontpage"), i18n("Front Page"), 30)
 	entry({"admin", "commotion", "upgrade"}, cbi("commotion/upgrade"), i18n("Remote Upgrade"), 40)
 end
 
