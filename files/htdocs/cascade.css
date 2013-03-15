@@ -869,12 +869,19 @@ footer a:active, footer a:hover {
   display: inline-block;
   padding: 0 5px;
 }
-#footermenu li a {
+#footermenu li.admin a {
   display: inline-block;
   background: transparent url(advanced.png) no-repeat top center;
   padding: 62px 0 0 0;
   font-weight: bold;
 }
+#footermenu li.QS a {
+  display: inline-block;
+  background: transparent url(quickstart.png) no-repeat top center;
+  padding: 62px 0 0 0;
+  font-weight: bold;
+}
+
 .btn.danger, .alert.danger, .btn.danger:hover, .alert.danger:hover, .btn.error, .alert.error, .btn.error:hover, .alert.error:hover, .btn.success, .alert.success, .btn.success:hover, .alert.success:hover, .btn.info, .alert.info, .btn.info:hover, .alert.info:hover {
   color: #FFFFFF;
 }

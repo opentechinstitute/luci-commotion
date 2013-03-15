@@ -27,6 +27,10 @@ You may obtain a copy of the License at
       <nav>
         <div class="pointydown"></div>
         <ul id="footermenu">
+		  <%-local uci = luci.model.uci.cursor()
+			 if uci:get('quickstart', 'options', 'complete') ~= 'true' then-%>
+		  <li class="QS"><a href="<%=controller%>/QuickStart/"><%:QuickStart%></a></li>
+		  <%end%>
           <li class="admin"><a href="<%=controller%>/admin/"><%:Administration%></a></li>
         </ul>
       </nav>
