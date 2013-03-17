@@ -5,7 +5,7 @@ The commotion-openwrt-theme was designed for the Commotion Wireless Project's op
 
 Design changes should follow the Human Interface Guidelines described on the main project site.
 
-This theme appears as luci-commotion-theme in Commotion-OpenWRT's menuconfig options
+This theme appears as luci-theme-commotion in Commotion-OpenWRT's menuconfig options
 
 ## Links
 
