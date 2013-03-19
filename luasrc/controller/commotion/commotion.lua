@@ -41,7 +41,7 @@ function index()
 	config.sysauth_authenticator = "htmlauth"
 	config.index = true
 
-	entry({"admin", "commotion", "meshprofile"}, cbi("commotion/meshprofile"), i18n("Mesh Configuration (Profile)"), 10)
+	entry({"admin", "commotion", "meshprofile"}, template("commotion/meshprofile"), i18n("Mesh Configuration (Profile)"), 10)
 	entry({"admin", "commotion", "upgrade"}, cbi("commotion/upgrade"), i18n("Remote Upgrade"), 40)
 end
 
