@@ -1,38 +1,39 @@
-<%#
+<%+header%>
+<!--
 LuCI - Lua Configuration Interface
 
-Copyright 2013 Open Technology Institute (https://commotionwireless.net/contact)
+Copyright 2011 Josh King <joshking at newamerica dot net>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
 http://www.apache.org/licenses/LICENSE-2.0
--%>
+-->
 
-<%+header%>
 <h1>Node Profiles</h1>
 
-<p>If your node includes confiugration profiles for multiple Commotion
-networks, this form allows you to set your defaults.
+<p>If your node includes configuration profiles for multiple Commotion 
+networks, this form allows you to set your defaults. 
 We recommend that you reboot your node after changing these settings.</p>
 
 <form id="profiles">
-	<h2>Select an Interface</h2>
+	<h2>Select an interface</h2>
 	<select name="interfaces">
 		<!-- Generate programmatically? -->
-		<option id="none" value="none" selected="selected">&nbsp;</option>
 		<option id="mesh" value="mesh">Mesh</option>
 		<option id="ap" value="ap">Wifi Access Point</option>
 		<option id="sec" value="sec">Password-protected Wifi Access Point</option>
 		<option id="plug" value="plug">Wired Connection</option>
 	</select>
-
+	
 	<h2>Select a profile to apply</h2>
 	<select name="profiles">
-		<!-- Generate list of available profiles -->
-		<!-- Apply selected="selected" to profile in use -->
-		<option id="upload" value="upload">Upload a profile...</option>
+		<% for _,p in ipairs(profiles) do %>
+			<option id="<%=p%>" value="<%=p%>"><%=p%></option>
+		<% end %>
+		<option id="upload">Upload</option>
 	</select>
 </form>
+
 <%+footer%>

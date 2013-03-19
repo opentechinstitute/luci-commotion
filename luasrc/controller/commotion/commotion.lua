@@ -36,12 +36,13 @@ function index()
     entry({"commotion", "index", "olsr-viz"}, template("olsr-viz/olsr-viz"), _("OLSR-Viz"), 90)
   
 
-	local config   = entry({"admin", "commotion"}, alias("admin", "commotion", "meshprofile"), i18n("Commotion"), 10)
+	local config   = entry({"admin", "commotion"}, alias("admin", "commotion", "upgrade"), i18n("Commotion"), 10)
 	config.sysauth = "root"
 	config.sysauth_authenticator = "htmlauth"
 	config.index = true
 
-	entry({"admin", "commotion", "meshprofile"}, template("commotion/meshprofile"), i18n("Mesh Configuration (Profile)"), 10)
+	--entry({"admin", "commotion", "meshprofile"}, cbi("commotion/meshprofile"), i18n("Mesh Configuration (Profile)"), 10)
+--	entry({"admin", "commotion", "meshprofile"}, template("commotion/meshprofile"), i18n("New Mesh Profile Page"), 10)
 	entry({"admin", "commotion", "upgrade"}, cbi("commotion/upgrade"), i18n("Remote Upgrade"), 40)
 end
 
