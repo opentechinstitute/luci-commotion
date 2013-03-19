@@ -121,12 +121,14 @@ function uploadParser()
         end
 end
 
-function restartCommotion()
-	luci.sys.call("/etc/init.d/commotiond restart")
-	luci.sys.call("sleep 2; /etc/init.d/network restart")
-	return true
-end	
 ]]--	
+function finish()
+   -- applyreboot module should probably be made core --
+   luci.template.render("QS/module/applyreboot", {redirect_location=("http://"..luci.http.getenv("SERVER_NAME").."/cgi-bin/luci/admin/commotion/meshprofile")})
+   luci.http.close()
+   return({'complete'})
+end
+
 function log(msg)                                                                                                                                                                
 	if (type(msg) == "table") then                                                                                                                                                
         	for key, val in pairs(msg) do                                                                                                                                          
