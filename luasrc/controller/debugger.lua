@@ -1,3 +1,4 @@
+
 --[[
 
 appSplash - LuCI based debugging tool.
@@ -23,7 +24,7 @@ require "luci.sys"
 require "luci.fs"
 function index()
    	entry({"admin", "commotion", "debug"}, template("commotion-debug-helper/debugger"), "Commotion Debugging Helper", 50)
-	page = entry({"admin" "commotion","debug", "submit"}, call("debug"), nil)
+	page = entry({"admin", "commotion","debug", "submit"}, call("debug"), nil)
 	page.leaf=true
 	end
 
