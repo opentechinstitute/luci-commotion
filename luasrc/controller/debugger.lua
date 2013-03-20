@@ -22,7 +22,7 @@ module("luci.controller.commotion-debug-helper.debugger", package.seeall)
 require "luci.sys"
 require "luci.fs"
 function index()
-   	entry({"admin", "commotion", "debug"}, template("commotion-debug-helper/debugger"), i18n("Commotion Debugging Helper"), 50)
+   	entry({"admin", "commotion", "debug"}, template("commotion-debug-helper/debugger"), "Commotion Debugging Helper", 50)
 	page = entry({"admin" "commotion","debug", "submit"}, call("debug"), nil)
 	page.leaf=true
 	end
