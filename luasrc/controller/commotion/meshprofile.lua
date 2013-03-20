@@ -58,20 +58,19 @@ function ifprocess()
 	local values = luci.http.formvalue()
 	local tif = values["interfaces"]
 	local p = values["profiles"]
-	-- Apply template to interface --
 	local uci = luci.model.uci.cursor()
-	-- Bonus: Show current interfaces and profiles --		
-	-- Call finish function --
 	log("Applying " .. p .. " to " .. tif)
+	uci:set('network', tif, "profile", p)
+	uci:commit('network')
+	uci:save('network')
+	finish()
 end
 
 function finish()
-   luci.sys.call("/etc/init.d/commotiond restart")
-   luci.sys.call("sleep 2; /etc/init.d/network restart")
-   -- applyreboot module should probably be made core --
-   
    luci.template.render("QS/module/applyreboot", {redirect_location=("http://"..luci.http.getenv("SERVER_NAME").."/cgi-bin/luci/admin/commotion/meshprofile")})
    luci.http.close()
+   luci.sys.call("/etc/init.d/commotiond restart")
+   luci.sys.call("sleep 2; /etc/init.d/network restart")
    return({'complete'})
 end
 
