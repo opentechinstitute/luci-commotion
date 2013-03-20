@@ -43,20 +43,20 @@ function main()
 end
 
 function ifprocess()
-	log("PROCESSING MEAT")
-	finish()
-end
-
-function checkPage()
-   local returns = luci.http.formvalue()
-   errors = parseSubmit(returns)
-   return errors
+	log("Processing profile application...")
+	local values = luci.http.formvalue()
+	local tif = values["interfaces"]
+	local p = values["profiles"]
+	log("Applying " .. p .. " to " .. tif)
+	-- Apply template to interface --
+	-- Call finish function --
 end
 
 function finish()
    luci.sys.call("/etc/init.d/commotiond restart")
    luci.sys.call("sleep 2; /etc/init.d/network restart")
    -- applyreboot module should probably be made core --
+   
    luci.template.render("QS/module/applyreboot", {redirect_location=("http://"..luci.http.getenv("SERVER_NAME").."/cgi-bin/luci/admin/commotion/meshprofile")})
    luci.http.close()
    return({'complete'})
