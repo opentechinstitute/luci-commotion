@@ -17,14 +17,14 @@ http://www.apache.org/licenses/LICENSE-2.0
 networks, this form allows you to set your defaults. 
 We recommend that you reboot your node after changing these settings.</p>
 
-<form id="profiles">
+<form method="post" action="<%=REQUEST_URI%>_submit" enctype="multipart/form-data" id="profiles">
 	<h2>Select an interface</h2>
 	<select name="interfaces">
 		<!-- Generate programmatically? -->
-		<option id="mesh" value="mesh">Mesh</option>
-		<option id="ap" value="ap">Wifi Access Point</option>
-		<option id="sec" value="sec">Password-protected Wifi Access Point</option>
-		<option id="plug" value="plug">Wired Connection</option>
+		<option id="mesh" value="mesh">Mesh (Ad-Hoc)</option>
+		<option id="ap" value="ap">Wifi Access Point (AP)</option>
+		<option id="sec" value="sec">Password-protected Wifi Access Point (Secure AP)</option>
+		<option id="plug" value="plug">Wired Connection (Plug)</option>
 	</select>
 	
 	<h2>Select a profile to apply</h2>
@@ -33,7 +33,8 @@ We recommend that you reboot your node after changing these settings.</p>
 			<option id="<%=p%>" value="<%=p%>"><%=p%></option>
 		<% end %>
 	</select>
-	
+
+	<input type="submit" name="submit" value="Apply &amp; Save" />	
 </form>
 
 <%+footer%>
