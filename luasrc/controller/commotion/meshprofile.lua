@@ -70,31 +70,30 @@ function finish()
    return({'complete'})
 end
 
-function log(msg)                                                                                                                                                                
-	if (type(msg) == "table") then                                                                                                                                                
-        	for key, val in pairs(msg) do                                                                                                                                          
-        		if type(key) == 'boolean' then                                                                                                                                  
-        			log('{')                                                                                                                                                 
-        			log(tostring(key))                                                                                                                            
-        			log(':')                                                                                                                                                 
-        			log(val)                                                                                                                                                 
-        			log('}')                                                                                                                                                 
-        		elseif type(val) == 'boolean' then                                                                                                                              
-        			log('{')                                                                                                                                                 
-        			log(key)                                                                                                                                                 
-        			log(':')                                                                                                                                                 
-        			log(tostring(val))                                                                                                                                       
-        			log('}')                                                                                                                                                 
-        		else                                                                                                                                                            
-        			log('{')                                                                                                                                                 
-        			log(key)                                                                                                                                                 
-        			log(':')                                                                                                                                                 
-        			log(val)                                                                                                                                                 
-        			log('}')                                                                                                                                                 
-        		end                                                                                                                                                                                         
-        	end                                                                                                                                                         
-        else                                                                                                                                                                          
-        	luci.sys.exec("logger -t luci " .. msg)                                                                                                                                
-        end                                                                                                                                                                           
-end               
-
+function log(msg)
+	if (type(msg) == "table") then
+        	for key, val in pairs(msg) do
+        		if type(key) == 'boolean' then
+        			log('{')
+        			log(tostring(key))
+        			log(':')
+        			log(val)
+        			log('}')
+        		elseif type(val) == 'boolean' then
+        			log('{')
+        			log(key)
+        			log(':')
+        			log(tostring(val))
+        			log('}')
+        		else
+        			log('{')
+        			log(key)
+        			log(':')
+        			log(val)
+        			log('}')
+        		end
+        	end
+        else
+        	luci.sys.exec("logger -t luci " .. msg)
+        end
+end
