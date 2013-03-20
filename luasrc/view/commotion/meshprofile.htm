@@ -19,12 +19,19 @@ We recommend that you reboot your node after changing these settings.</p>
 
 <form method="post" action="<%=REQUEST_URI%>_submit" enctype="multipart/form-data" id="profiles">
 	<h2>Select an interface</h2>
+		<ul>
+		</ul>
 	<select name="interfaces">
-		<!-- Generate programmatically? -->
+		<!-- Generate programmatically?
 		<option id="mesh" value="mesh">Mesh (Ad-Hoc)</option>
 		<option id="ap" value="ap">Wifi Access Point (AP)</option>
 		<option id="sec" value="sec">Password-protected Wifi Access Point (Secure AP)</option>
 		<option id="plug" value="plug">Wired Connection (Plug)</option>
+			-->
+			
+		<% for _,w in ipairs(available) do %>
+			<option id="<%=w[1]%>" value="<%=w[1]%>" (Using <%=w[2]%>)"><%=w[1]%> (Using <%=w[2]%>)</option>	
+		<% end %>
 	</select>
 	
 	<h2>Select a profile to apply</h2>

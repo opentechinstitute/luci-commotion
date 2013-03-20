@@ -28,7 +28,18 @@ function index()
 end
 
 function main()
+	local uci = luci.model.uci.cursor()
 	local rawProfiles = luci.fs.dir(profileDir)	
+	local available = {}
+	uci:get_all('network')
+	uci:foreach('network', 'interface',
+		function(s)
+			if s['.name'] and s.profile then
+				log(s.profile)
+				table.insert(available, {s['.name'], s.profile})
+				log(s['.name'] .. " uses " .. s.profile)
+			end
+		end)
 	local profiles = {}
 	for i,p in ipairs(rawProfiles) do
 		log("checking " .. p)
@@ -39,7 +50,7 @@ function main()
 	end	
 	log("profiles contains "..tostring(profiles))
 	luci.http.prepare_content("text/html")
-	luci.template.render("commotion/meshprofile", {profiles = profiles})
+	luci.template.render("commotion/meshprofile", {available = available, profiles = profiles})
 end
 
 function ifprocess()
@@ -47,9 +58,11 @@ function ifprocess()
 	local values = luci.http.formvalue()
 	local tif = values["interfaces"]
 	local p = values["profiles"]
-	log("Applying " .. p .. " to " .. tif)
 	-- Apply template to interface --
+	local uci = luci.model.uci.cursor()
+	-- Bonus: Show current interfaces and profiles --		
 	-- Call finish function --
+	log("Applying " .. p .. " to " .. tif)
 end
 
 function finish()
