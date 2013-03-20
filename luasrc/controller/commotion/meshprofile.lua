@@ -24,7 +24,7 @@ function index()
 	local i18n = luci.i18n.translate
 
 	entry({"admin", "commotion", "meshprofile_submit"}, call("ifprocess"))
-	entry({"admin", "commotion", "meshprofile"}, call("main"), "Mesh Profile (New)", 20).dependent=false
+	entry({"admin", "commotion", "meshprofile"}, call("main"), "Mesh Profile", 20).dependent=false
 end
 
 function main()
@@ -35,20 +35,16 @@ function main()
 	uci:foreach('network', 'interface',
 		function(s)
 			if s['.name'] and s.profile then
-				log(s.profile)
 				table.insert(available, {s['.name'], s.profile})
 				log(s['.name'] .. " uses " .. s.profile)
 			end
 		end)
 	local profiles = {}
 	for i,p in ipairs(rawProfiles) do
-		log("checking " .. p)
 		if not string.find(p, "^%.*$") then		
 			table.insert(profiles, p)
-			log("adding "..p.." to table")
 		end
 	end	
-	log("profiles contains "..tostring(profiles))
 	luci.http.prepare_content("text/html")
 	luci.template.render("commotion/meshprofile", {available = available, profiles = profiles})
 end
