@@ -92,7 +92,7 @@ prep()
 append()
 {
 	date>>$FILE
-	flair "BEGIN DEBUGGIN INFO"
+	flair "BEGIN DEBUGGING INFO"
 }
 #===================================================================
 # MAIN FUNCTION
@@ -148,7 +148,7 @@ rules()
 
 state()
 {
-	flair "Kernal Buffer Log: (dmesg)"
+	flair "Kernel Buffer Log: (dmesg)"
 	dmesg >> $FILE
 	
 	flair "Device Logs: (logread)"
