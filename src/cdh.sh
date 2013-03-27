@@ -4,7 +4,7 @@
 # Commotion Bug Info
 #================================================================
 #
-#Commotion Bug Info run a series of scripts to gather information about a node.
+#Commotion Bug Info runs a series of scripts to gather information about a node.
 #This is a simple way to automate data collection from new or inexperienced node owners.
 #
 
