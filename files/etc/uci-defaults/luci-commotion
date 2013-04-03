@@ -53,4 +53,9 @@ If you like the network, please consider contributing!
 By clicking on <em>###ACCEPT###</em>, you gain access to the network for ###LEASETIME### hour(s). Then you will be directed to this splash page again.
 </p>
 EOF
+
+[ -f "/www/index.html" ] && { \
+sed -i s/"\/cgi-bin\/luci"/"\/luci"/g /www/index.html 
+}
+
 exit 0
