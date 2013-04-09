@@ -54,8 +54,4 @@ By clicking on <em>###ACCEPT###</em>, you gain access to the network for ###LEAS
 </p>
 EOF
 
-[ -f "/www/index.html" ] && { \
-sed -i s/"\/cgi-bin\/luci"/"\/luci"/g /www/index.html 
-}
-
 exit 0
