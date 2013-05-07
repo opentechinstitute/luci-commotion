@@ -17,7 +17,7 @@ local util = require "luci.util"
 
 
 m = Map("wireless", translate("Configuration"), translate("This configuration wizard will assist you in setting up your router " ..
-	"for a Commotion network. It is suggested to reboot your node after changing these settings."))
+	"for a Commotion network."))
 
 sctAP = m:section(NamedSection, "quickstartAP", "wifi-iface", "Access Point")
 sctAP.optional = true
