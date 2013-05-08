@@ -38,7 +38,7 @@ function log(msg)
 end
 
 function is_ip4addr(str)
-	i,j, _1, _2, _3, _4 = string.find(str, '^(%d%d?%d?)\.(%d%d?%d?)\.(%d%d?%d?)\.(%d%d?%d?)$')
+	local i,j, _1, _2, _3, _4 = string.find(str, '^(%d%d?%d?)\.(%d%d?%d?)\.(%d%d?%d?)\.(%d%d?%d?)$')
 	if (i and 
 	    (tonumber(_1) >= 0 and tonumber(_1) <= 255) and
 	    (tonumber(_2) >= 0 and tonumber(_2) <= 255) and
@@ -46,6 +46,20 @@ function is_ip4addr(str)
 	    (tonumber(_4) >= 0 and tonumber(_4) <= 255)) then
 		return true
 	end
+	return false
+end
+
+function is_ip4addr_cidr(str)
+	local i,j, _1, _2 = string.find(str, '^(.+)/(%d+)$')
+	if i and is_ip4addr(_1) and tonumber(_2) >= 0 and tonumber(_2) <= 32 then
+		return true
+	end
+	return false
+end
+
+function is_macaddr(str)
+  local i,j, _1, _2, _3, _4, _5, _6 = string.find(str, '^(%x%x):(%x%x):(%x%x):(%x%x):(%x%x):(%x%x)$')
+	if i then return true end
 	return false
 end
 
@@ -68,6 +82,20 @@ function table.contains(table, element)
 		end
 	end
 	return false
+end
+
+function list_ifaces()
+  local uci = luci.model.uci.cursor()
+  local r = {zone_to_iface = {}, iface_to_zone = {}}
+  uci:foreach("network", "interface", 
+    function(zone)
+      if zone['.name'] == 'loopback' then return end
+      local iface = luci.sys.exec("ubus call network.interface." .. zone['.name'] .. " status |grep '\"device\"' | cut -d '\"' -f 4"):gsub("%s$","")
+      r.zone_to_iface[zone['.name']]=iface
+      r.iface_to_zone[iface]=zone['.name']
+    end
+  )
+  return r
 end
 
 html_replacements = {
