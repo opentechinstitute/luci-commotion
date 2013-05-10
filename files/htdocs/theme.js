@@ -54,4 +54,4 @@ $.extend($.fn, {
   }
 });
 
-})this.Zepto;
+})(Zepto);
