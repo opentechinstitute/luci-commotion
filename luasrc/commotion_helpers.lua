@@ -38,7 +38,7 @@ function log(msg)
 end
 
 function is_ip4addr(str)
-	local i,j, _1, _2, _3, _4 = string.find(str, '^(%d%d?%d?)\.(%d%d?%d?)\.(%d%d?%d?)\.(%d%d?%d?)$')
+	local i,j, _1, _2, _3, _4 = string.find(str, '^(%d%d?%d?)%.(%d%d?%d?)%.(%d%d?%d?)%.(%d%d?%d?)$')
 	if (i and 
 	    (tonumber(_1) >= 0 and tonumber(_1) <= 255) and
 	    (tonumber(_2) >= 0 and tonumber(_2) <= 255) and
@@ -55,6 +55,45 @@ function is_ip4addr_cidr(str)
 		return true
 	end
 	return false
+end
+
+function is_ssid(str)
+   -- SSID can have almost anything in it
+   if #tostring(str) < 32 then
+	  return tostring(str):match("[%w%p]+[%s]*[%w%p]*]*")
+   else
+	  return nil
+   end
+end
+
+function is_mode(str)
+   -- Modes are simple, but also match the "-" in Ad-Hoc
+   return tostring(str):match("[%w%-]*")
+end
+
+function is_chan(str)
+   -- Channels are plain digits
+   return tonumber(string.match(str, "[%d]+"))
+end
+
+function is_bitRate(br)
+   -- Bitrate can start with a space and we want to display Mb/s
+   return br:match("[%s]?[%d%.]*[%s][%/%a]+")
+end
+
+function is_email(email)
+   return tostring(email):match("[A-Za-z0-9%.%%%+%-]+@[A-Za-z0-9%.%%%+%-]+%.%w%w%w?%w?")
+end
+
+
+function is_hostname(str)
+--alphanumeric and hyphen Less than 63 chars
+--cannot start or end with a hyphen
+   if #tostring(str) < 63 then
+	  return tostring(str):match("^%w[%w%-]*%w$")
+   else
+	  return nil
+   end
 end
 
 function is_macaddr(str)
