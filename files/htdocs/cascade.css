@@ -29,7 +29,8 @@ q:before, q:after, blockquote:before, blockquote:after {
 }
 html {
   font-size: 100%;
-  overflow-y: scroll;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 a:focus {
   outline: thin dotted;
@@ -101,6 +102,7 @@ body {
   font: 15px/18px Helvetica, Arial, sans-serif;
   margin: 0;
   padding: 0;
+  max-width: 97%;
 }
 header,
 footer {
@@ -302,7 +304,7 @@ fieldset {
 fieldset legend {
   color: #8073cb;
   display: block;
-	text-transform: uppercase;
+    text-transform: uppercase;
   font-size: 15px;
   font-weight: bold;
   line-height: 1;
