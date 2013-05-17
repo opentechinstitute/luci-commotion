@@ -1,0 +1,31 @@
+--- wifi.lua.orig	2013-05-17 16:21:56.712967654 -0400
++++ wifi.lua	2013-05-17 16:18:08.879076509 -0400
+@@ -673,8 +673,8 @@ cipher:depends({encryption="wpa-mixed"})
+ cipher:depends({encryption="psk-mixed"})
+ cipher:value("auto", translate("auto"))
+ cipher:value("ccmp", translate("Force CCMP (AES)"))
+-cipher:value("tkip", translate("Force TKIP"))
+-cipher:value("tkip+ccmp", translate("Force TKIP and CCMP (AES)"))
++--cipher:value("tkip", translate("Force TKIP"))
++--cipher:value("tkip+ccmp", translate("Force TKIP and CCMP (AES)"))
+ 
+ function encr.cfgvalue(self, section)
+ 	local v = tostring(ListValue.cfgvalue(self, section))
+@@ -717,8 +717,6 @@ end
+ 
+ 
+ encr:value("none", "No Encryption")
+-encr:value("wep-open",   translate("WEP Open System"), {mode="ap"}, {mode="sta"}, {mode="ap-wds"}, {mode="sta-wds"}, {mode="adhoc"}, {mode="ahdemo"}, {mode="wds"})
+-encr:value("wep-shared", translate("WEP Shared Key"),  {mode="ap"}, {mode="sta"}, {mode="ap-wds"}, {mode="sta-wds"}, {mode="adhoc"}, {mode="ahdemo"}, {mode="wds"})
+ 
+ if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
+ 	local supplicant = fs.access("/usr/sbin/wpa_supplicant")
+@@ -730,7 +728,7 @@ if hwtype == "atheros" or hwtype == "mac
+ 
+ 	if hostapd and supplicant then
+ 		encr:value("psk", "WPA-PSK", {mode="ap"}, {mode="sta"}, {mode="ap-wds"}, {mode="sta-wds"})
+-		encr:value("psk2", "WPA2-PSK", {mode="ap"}, {mode="sta"}, {mode="ap-wds"}, {mode="sta-wds"})
++		encr:value("psk2", "WPA2-PSK", {mode="ap"}, {mode="sta"}, {mode="ap-wds"}, {mode="adhoc"}, {mode="sta-wds"})
+ 		encr:value("psk-mixed", "WPA-PSK/WPA2-PSK Mixed Mode", {mode="ap"}, {mode="sta"}, {mode="ap-wds"}, {mode="sta-wds"})
+ 		if has_ap_eap and has_sta_eap then
+ 			encr:value("wpa", "WPA-EAP", {mode="ap"}, {mode="sta"}, {mode="ap-wds"}, {mode="sta-wds"})
