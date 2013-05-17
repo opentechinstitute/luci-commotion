@@ -1213,3 +1213,16 @@ div.cbi-value var, td.cbi-value-field var {
     display: block;
   }
 }
+
+.notice {
+  background: none repeat scroll 0 0 #FFBDD3;
+  border: 2px solid #FF6699;
+  border-radius: 5px 5px 5px 5px;
+  margin: 5px 0;
+  padding: 5px;
+}
+
+.error {                                       
+  color: #FF6699;                                                          
+  font-weight: bold;                                                  
+}
