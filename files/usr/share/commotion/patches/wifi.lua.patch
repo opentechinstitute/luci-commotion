@@ -20,7 +20,7 @@
  
  if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
  	local supplicant = fs.access("/usr/sbin/wpa_supplicant")
-@@ -730,7 +728,7 @@ if hwtype == "atheros" or hwtype == "mac
+@@ -730,7 +728,7 @@ 
  
  	if hostapd and supplicant then
  		encr:value("psk", "WPA-PSK", {mode="ap"}, {mode="sta"}, {mode="ap-wds"}, {mode="sta-wds"})
