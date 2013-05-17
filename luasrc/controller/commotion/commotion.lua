@@ -41,6 +41,5 @@ function index()
 	config.index = true
 	
 	entry({"admin", "commotion", "meshconfig"}, cbi("commotion/meshconfig"), i18n("Mesh Configuration (Manual)"), 20)
-	entry({"admin", "commotion", "upgrade"}, cbi("commotion/upgrade"), i18n("Remote Upgrade"), 40)
 end
 
