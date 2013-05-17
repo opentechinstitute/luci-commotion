@@ -19,12 +19,12 @@ limitations under the License.
 
 local netmod = luci.model.network
 
-local p = "commotionif"
+local p = "commotion"
 
 local proto = netmod:register_protocol(p)
 
 function proto.get_i18n(self)
-   if p == "commotionif" then
+   if p == "commotion" then
 	  return luci.i18n.translate("Commotion Interface")
    end
 end
@@ -35,7 +35,7 @@ end
 
 -- The Following function is disabled until we have a package the interface relies on
 --function proto.opkg_package(self)
---   if p == "commotionif" then
+--   if p == "commotion" then
 --	  return commotionbase
 --   end
 --end
