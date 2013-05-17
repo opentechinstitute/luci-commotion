@@ -29,8 +29,7 @@ q:before, q:after, blockquote:before, blockquote:after {
 }
 html {
   font-size: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: scroll;
 }
 a:focus {
   outline: thin dotted;
@@ -102,7 +101,7 @@ body {
   font: 15px/18px Helvetica, Arial, sans-serif;
   margin: 0;
   padding: 0;
-  max-width: 97%;
+  max-width: 100%;
 }
 header,
 footer {
@@ -1156,6 +1155,7 @@ div.cbi-value var, td.cbi-value-field var {
 }
 .navbar-inners div {
   display: block;
+  width: 100%;
   height: 4px;
   margin: 0;
   float: left;
