@@ -1155,7 +1155,6 @@ div.cbi-value var, td.cbi-value-field var {
 }
 .navbar-inners div {
   display: block;
-  width: 100%;
   height: 4px;
   margin: 0;
   float: left;
