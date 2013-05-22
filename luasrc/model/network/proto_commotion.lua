@@ -1,7 +1,7 @@
 --[[
-LuCI - Network model - 3G, PPP, PPtP, PPPoE and PPPoA protocol extension
+LuCI - Network model - Commotion protocol extension
 
-Copyright 2011 Jo-Philipp Wich <xm@subsignal.org>
+Copyright 2013 Josh King <jking@chambana.net>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
