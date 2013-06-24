@@ -1213,6 +1213,16 @@ div.cbi-value var, td.cbi-value-field var {
   }
 }
 
+@media screen and (min-width: 1024px) {                                              
+  header nav ul,                                                                         
+  header .brand,                                                                                                                                                                                    
+  footer .credits,                                                                 
+  footer nav,                  
+  section {                                                               
+    max-width: 900px;                                                                                    
+  }                                            
+}
+
 .notice {
   background: none repeat scroll 0 0 #FFBDD3;
   border: 2px solid #FF6699;
