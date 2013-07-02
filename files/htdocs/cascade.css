@@ -353,7 +353,7 @@ form .cbi-value label.cbi-value-title.tippable {
   pointer-events: none;
 }
 .tip:after {
-  border-color: white;
+  border-color: transparent;
   border-bottom-color: #E6E6E6;
   border-width: 5px;
   right: 4px;
