@@ -1,0 +1,55 @@
+#: luasrc/controller/debugger.lua
+msgid "Commotion Debugging Helper"
+msgstr "translated-string"
+
+#: luasrc/view/debugger.htm
+msgid "The information you are about to download contains private information about this device and the network it is connected to. Only give this information to people you trust. Do you understand?"
+msgstr "translated-string"
+
+#: luasrc/view/debugger.htm
+msgid "Commotion Bug Info"
+msgstr "translated-string"
+
+#: luasrc/view/debugger.htm
+msgid "Name"
+msgstr "translated-string"
+
+#: luasrc/view/debugger.htm
+msgid "Contact Info"
+msgstr "translated-string"
+
+#: luasrc/view/debugger.htm
+msgid "What were you doing on the device when the error occurred?"
+msgstr "translated-string"
+
+#: luasrc/view/debugger.htm
+msgid "Please describe the behavior you expected"
+msgstr "translated-string"
+
+#: luasrc/view/debugger.htm
+msgid "Please describe the behavior you experienced that you believe is wrong"
+msgstr "translated-string"
+
+#: luasrc/view/debugger.htm
+msgid "Debugging Info"
+msgstr "translated-string"
+
+#: luasrc/view/debugger.htm
+msgid "Mesh Network Information"
+msgstr "translated-string"
+
+#: luasrc/view/debugger.htm
+msgid "Router Status"
+msgstr "translated-string"
+
+#: luasrc/view/debugger.htm
+msgid "Router Traffic Routing Rules"
+msgstr "translated-string"
+
+#: luasrc/view/debugger.htm
+msgid "All Info"
+msgstr "translated-string"
+
+#: luasrc/view/debugger.htm
+msgid "Create Bug Info File"
+msgstr "translated-string"
