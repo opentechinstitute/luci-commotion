@@ -38,14 +38,14 @@
 		<p><strong><%:Contact Info%>:</strong><br />
 		<input type="text" name="contact"></p>
 
-		<p><strong><%:What were you doing on the device right before and when the error occurred?:></strong><br />
+		<p><strong><%:What were you doing on the device when the error occurred?:></strong><br />
 		  <textarea name="whatYouDo" cols="60" rows="5"></textarea></p>
 
-		<p><strong><%:Please describe what behavior you expected%>:</strong><br />
+		<p><strong><%:Please describe the behavior you expected%>:</strong><br />
 		  <textarea name="behaviorExpected" cols="60" rows="5"></textarea>
 		</p>
 
-		<p><strong><%:Please describe what behavior you experienced that you believe is wrong%>:</strong><br />
+		<p><strong><%:Please describe the behavior you experienced that you believe is wrong%>:</strong><br />
 		  <textarea name="badBehavior" cols="60" royws="5"></textarea>
 		</p>
 
@@ -54,7 +54,7 @@
 		  <input type="radio" name="buginfo" value="state"> <%:Router Status%><br />
 		  <input type="radio" name="buginfo" value="rules"> <%:Router Traffic Routing Rules%><br />
 		  <input type="radio" name="buginfo" value="all"> <%:All Info%><br />
-		  <input type="button" value="Create Bug Info File:" onclick="download_warning() ? formSubmit() : null;" />
+		  <input type="button" value="<%:Create Bug Info File%>:" onclick="download_warning() ? formSubmit() : null;" />
 		</div>	  
 		<br style="clear:both" /><br />
   </form>
