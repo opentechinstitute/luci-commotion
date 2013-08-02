@@ -16,6 +16,8 @@ PKG_SOURCE_VERSION:=$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_SOURCE_VERSION).tar.gz
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
+PO=commotion-bug-info-i18n
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/commotion-debug-helper
