@@ -24,7 +24,7 @@ function index()
 	local i18n = luci.i18n.translate
 
 	entry({"admin", "commotion", "meshprofile_submit"}, call("ifprocess"))
-	entry({"admin", "commotion", "meshprofile"}, call("main"), "Mesh Profile", 20).dependent=false
+	entry({"admin", "commotion", "meshprofile"}, call("main"), i18n("Mesh Profile"), 20).dependent=false
 end
 
 function main()

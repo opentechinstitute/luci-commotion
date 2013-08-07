@@ -1,4 +1,3 @@
---[[
 LuCI - Lua Configuration Interface
 
 Copyright 2011 Josh King <joshking at newamerica dot net>
@@ -16,21 +15,20 @@ local sys = require "luci.sys"
 local util = require "luci.util"
 
 
-m = Map("wireless", translate("Configuration"), translate("This configuration wizard will assist you in setting up your router " ..
-	"for a Commotion network."))
+m = Map("wireless", translate("Configuration"), translate("This configuration wizard will assist you in setting up your router for a Commotion network."))
 
-sctAP = m:section(NamedSection, "quickstartAP", "wifi-iface", "Access Point")
+sctAP = m:section(NamedSection, "quickstartAP", "wifi-iface", translate("Access Point"))
 sctAP.optional = true
-sctAP:option(Value, "ssid", "Name (SSID)", "The public facing name of this interface")
+sctAP:option(Value, "ssid", translate("Name (SSID)"), translate("The public facing name of this interface"))
 
-sctSecAP = m:section(NamedSection, "quickstartSec", "wifi-iface", "Secure Access Point")
+sctSecAP = m:section(NamedSection, "quickstartSec", "wifi-iface", translate("Secure Access Point"))
 sctSecAP.optional = true
-sctSecAP:option(Value, "ssid", "Name (SSID)", "The public facing name of this interface")
+sctSecAP:option(Value, "ssid", translate("Name (SSID)"), translate("The public facing name of this interface"))
 
-sctMesh = m:section(NamedSection, "quickstartMesh", "wifi-iface", "Mesh Backhaul")
+sctMesh = m:section(NamedSection, "quickstartMesh", "wifi-iface", translate("Mesh Backhaul"))
 sctMesh.optional = true
-sctMesh:option(Value, "ssid", "Name (SSID)", "The public facing name of this interface")
-sctMesh:option(Value, "bssid", "Device Designation (BSSID)", "The device read name of this interface. (Letters A-F, and numbers 0-9 only)") 
+sctMesh:option(Value, "ssid", translate("Name (SSID)"), translate("The public facing name of this interface"))
+sctMesh:option(Value, "bssid", translate("Device Designation (BSSID)"), translate("The device read name of this interface. (Letters A-F, and numbers 0-9 only)")) 
 
 e = m:section(TypedSection, "wifi-device", translate("Network-wide Settings"))
 e.anonymous = true
@@ -59,6 +57,6 @@ m2 = Map("commotiond")
 node = m2:section(TypedSection, "node", translate("Settings specific to this node"))
 node.anonymous = true
 node.optional = true
-node:option(Value, "dhcp_timeout", "DHCP Timeout", "How many seconds to wait on boot for a DHCP lease from the gateway")
+node:option(Value, "dhcp_timeout", translate("DHCP Timeout"), translate("How many seconds to wait on boot for a DHCP lease from the gateway"))
 
 return m, m2
