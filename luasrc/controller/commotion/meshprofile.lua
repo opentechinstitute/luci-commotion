@@ -26,7 +26,7 @@ function index()
 	entry({"admin", "commotion", "meshprofile_submit"}, call("ifprocess"))
 	entry({"admin", "commotion", "meshprofile_down"}, call("down"))
 	entry({"admin", "commotion", "meshprofile_up"}, call("up"))
-	entry({"admin", "commotion", "meshprofile"}, call("main"), "Mesh Profile", 20).dependent=false
+	entry({"admin", "commotion", "meshprofile"}, call("main"), i18n("Mesh Profile"), 20).dependent=false
 end
 
 function main(ERR)
