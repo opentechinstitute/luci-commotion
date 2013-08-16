@@ -4,6 +4,16 @@ function DIE(str)
 	luci.http.close()
 end
 
+
+function check_https(node, env)
+   if string.match(env.REQUEST_URI, node) then
+	  if env.HTTPS ~= "on" then
+		 luci.http.redirect("https://"..env.SERVER_NAME..env.REQUEST_URI)
+	  end
+   end
+end
+
+
 function uci_encode(str)
   if (str) then
     str = string.gsub (str, "([^%w])", function(c) return '_' .. tostring(string.byte(c)) end)
