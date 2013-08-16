@@ -1,4 +1,3 @@
-make <%+header%>
 <!--
 LuCI - Lua Configuration Interface
 
@@ -10,10 +9,11 @@ You may obtain a copy of the License at
 
 http://www.apache.org/licenses/LICENSE-2.0
 -->
+<%+header%>
 
 <%-
 uri = REQUEST_URI
-uri_prefix = string.gsub(b, "meshprofile_.*", "meshprofile")
+uri_prefix, num_post = string.gsub(uri, "meshprofile_.*", "meshprofile")
 -%>
 
 <h1>Node Profiles</h1>
@@ -21,6 +21,10 @@ uri_prefix = string.gsub(b, "meshprofile_.*", "meshprofile")
 <p>If your node includes configuration profiles for multiple Commotion 
 networks, this form allows you to set your defaults. 
 We recommend that you reboot your node after changing these settings.</p>
+
+<%-if ERR then-%>
+<div class="error"><%=ERR%></div>
+<%end%>
 
 <form method="post" action="<%=uri_prefix%>_submit" enctype="multipart/form-data" id="profiles">
 	<h2>Select an interface</h2>
@@ -59,7 +63,6 @@ We recommend that you reboot your node after changing these settings.</p>
 	<div id="zone-content-wrapper">
 	  <div id="zone-content">
 		<input type="hidden" name="moduleName" value="upload">
-		<div class="error"><%=upErr%></div>
 		<div class="cbi-value">
 		  <label class="cbi-value-title tippable" data-tip="Click on the field below to upload a file.">Upload <%=uploadTitle%></label>
 		  <input type="file" name="config" id="media" />

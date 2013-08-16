@@ -29,17 +29,20 @@ function index()
 	entry({"admin", "commotion", "meshprofile"}, call("main"), "Mesh Profile", 20).dependent=false
 end
 
-function main(error)
+function main(ERR)
+   log("main started")
+   if not ERR then
+	  ERR = nil
+   end
    local uci = luci.model.uci.cursor()
    local rawProfiles = luci.fs.dir(profileDir)	
    local available = {}
-   log("main started")
    uci:get_all('network')
    uci:foreach('network', 'interface',
 			   function(s)
 				  if s['.name'] and s.profile then
 					 table.insert(available, {s['.name'], s.profile})
-					 log(s['.name'] .. " uses " .. s.profile)
+					 --log(s['.name'] .. " uses " .. s.profile)
 				  end
 			   end)
    local profiles = {}
@@ -49,7 +52,8 @@ function main(error)
 		end
    end
    luci.http.prepare_content("text/html")
-   luci.template.render("commotion/meshprofile", {available = available, profiles = profiles, error = error})
+   luci.template.render("commotion/meshprofile", {available = available, profiles = profiles, ERR = ERR})
+
 end
 
 function ifprocess()
@@ -78,69 +82,87 @@ function checkFile(file)
 	  Checks the uploaded profile to ensure the required settings are there.
 	  --]=]
 	  log("file check started")
+	  local error = nil
 	  if luci.fs.isfile(file) then
-
-		 error = nil
 		 --required fields for a commotion profile
 		 required = {
-			ip,
-			ipgenerate,
-			netmask,
-			dns,
-			type,
-			mode}
+			"ip",
+			"ipgenerate",
+			"netmask",
+			"dns",
+			"type",
+			"mode"}
 		 --Parse uploaded file for settings
 		 fields = {}
 		 for line in io.lines(file) do
 			setting = line:split("=")
-			if setting[1] ~= "" and setting[1] ~= nil then
+			if setting[2] and setting[1] ~= "" and setting[1] ~= nil then
 			   table.insert(fields, setting[1])
 			end
 		 end
-		 --Check to see if there are missing fields
-		 missing = {}
-		 for i,x in pairs(required) do
-			contained = nil
-			for n,m in pairs(fields) do
-			   if i == n then
-				  contained = 1
+		 if fields ~= {} then
+			--Check to see if there are missing fields
+			missing = {}
+			for _,x in pairs(required) do
+			   contained = nil
+			   for _,m in pairs(fields) do
+				  if x == m then
+					 contained = 1
+				  end
 			   end
-			end
-			if not contained then
-			   table.insert(missing, i)
-			   log("There are missing fields")
+			   if not contained then
+				  table.insert(missing, x)
+				  log("Field "..x.." is missing.")
+			   end
 			end
 		 end
 		 --If missing fields create error
 		 if next(missing) ~= nil then
-			misStr = table.concat(missing, ",")
-			error = "Your profile seem incomplete. You are missing at LEAST the values for "..misStr..". Please edit your profile and re-upload."
+			misStr = table.concat(missing, ", ")
+			error = "Your uploaded profile seem incomplete. You are missing at LEAST the values for "..misStr..". Please edit your profile and re-upload."
 			--remove file because it is BAD
-			luci.sys.call('rm ' .. file)
+			removed = luci.sys.call('rm ' .. file)
+		 else
+			log("Profile seems to be correctly formatted.")
 		 end
 	  else
-		 error=" There does not seem to be a file here..."
+		 error = "There does not seem to be a file here..."
 		 log("File is missing")
 	  end
 	  if error then
 		 return error
+	  else
+		 return nil
 	  end
+	  return nil
 end
+
+function string:split(sep)
+   local sep, fields = sep or ":", {}
+   local pattern = string.format("([^%s]+)", sep)
+   self:gsub(pattern, function(c) fields[#fields+1] = c end)
+   return fields
+end
+
 
 function up()
    --[=[calls the file uploader and checks if the file is a correct config.
    --]=]
    log("up started")
-   error = nil
+   local error = nil
    setFileHandler("/etc/commotion/profiles.d/", "config")
    local values = luci.http.formvalue()
    local ul = values["config"]
-   if ul ~= '' then
+   if ul ~= '' and ul ~= nil then
 	  --TODO add logging to checkfile to identify why it does not work
-	  --TODO check fix to where website pushes to meshprofile_up_up on reupload.
-	  error = checkFile("/etc/commotion/profiles.d/" .. ul)
+	  file = "/etc/commotion/profiles.d/" .. ul
+	  error = checkFile(file)
    end
-   main(error)
+   if error ~= nil then
+	  main(error)
+   else
+	  main(nil)
+   end
 end
 
 function down()
@@ -211,7 +233,6 @@ function setFileHandler(location, input_name, file_name)
 	  local fp
 	  luci.http.setfilehandler(
 		 function(meta, chunk, eof)
-			log("file handler activated")
 		 if not fp then
 			complete = nil
 			if meta and meta.name == input_name then
