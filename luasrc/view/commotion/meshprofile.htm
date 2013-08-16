@@ -1,4 +1,4 @@
-<%+header%>
+make <%+header%>
 <!--
 LuCI - Lua Configuration Interface
 
@@ -11,19 +11,24 @@ You may obtain a copy of the License at
 http://www.apache.org/licenses/LICENSE-2.0
 -->
 
+<%-
+uri = REQUEST_URI
+uri_prefix = string.gsub(b, "meshprofile_.*", "meshprofile")
+-%>
+
 <h1>Node Profiles</h1>
 
 <p>If your node includes configuration profiles for multiple Commotion 
 networks, this form allows you to set your defaults. 
 We recommend that you reboot your node after changing these settings.</p>
 
-<form method="post" action="<%=REQUEST_URI%>_submit" enctype="multipart/form-data" id="profiles">
+<form method="post" action="<%=uri_prefix%>_submit" enctype="multipart/form-data" id="profiles">
 	<h2>Select an interface</h2>
 		<ul>
 		</ul>
 	<select name="interfaces">
 		<% for _,w in ipairs(available) do %>
-			<option id="<%=w[1]%>" value="<%=w[1]%>" (Using <%=w[2]%>)"><%=w[1]%> (Using <%=w[2]%>)</option>	
+			<option id="<%=w[1]%>" value="<%=w[1]%>" (Using <%=w[2]%>)"><%=w[1]%> (Using <%=w[2]%>)</option>
 		<% end %>
 	</select>
 	
@@ -36,5 +41,36 @@ We recommend that you reboot your node after changing these settings.</p>
 
 	<input type="submit" name="submit" value="Apply &amp; Save" />	
 </form>
+
+<br /><br />
+	<h1>Download a Profile</h1>
+	<form method="post" action="<%=uri_prefix%>_down" enctype="multipart/form-data" id="down">
+	<label class="cbi-value-title tippable" data-tip="Choose a profile and click download here.">Choose a profile to download</label>
+	<select name="dl_profile">
+		<% for _,p in ipairs(profiles) do %>
+			<option id="<%=p%>" value="<%=p%>"><%=p%></option>
+		<% end %>
+	</select>
+	<input type="submit" name="submit" value="Download"/>	
+</form>
+
+	<h1>Upload a Profile</h1>
+	<form method="post" action="<%=uri_prefix%>_up" enctype="multipart/form-data" id="up">
+	<div id="zone-content-wrapper">
+	  <div id="zone-content">
+		<input type="hidden" name="moduleName" value="upload">
+		<div class="error"><%=upErr%></div>
+		<div class="cbi-value">
+		  <label class="cbi-value-title tippable" data-tip="Click on the field below to upload a file.">Upload <%=uploadTitle%></label>
+		  <input type="file" name="config" id="media" />
+		  <div class="upload-description">
+			Upload a config file from your own computer.
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<input type="submit" name="submit" value="Upload"/>	
+</form>
+	
 
 <%+footer%>

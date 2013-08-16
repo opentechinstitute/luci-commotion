@@ -85,59 +85,6 @@ function is_email(email)
    return tostring(email):match("[A-Za-z0-9%.%%%+%-]+@[A-Za-z0-9%.%%%+%-]+%.%w%w%w?%w?")
 end
 
-function setFileHandler(location, input_name, file_name)
-   --[=[Uploads a file to a specified location, and possible file name.
-
-	  Use:
-	  add a call to this function within the index entry function called by an submit button  on a luci page.
-	  eg.
-	  function index()
-	      entry({"admin", "commotion", "submit_clicked"}, call("start_upload"))
-	  end
-	  function start_upload()
-	       setFileHandler("/tmp/", "image", "tmp_image.jpg")
-	       local values = luci.http.formvalue()
-	       local dl = values["image"] reload_page()
-	  end
-
-	  Inputs:
-      location: (string) The full path to where the file should be saved.
-	  input_name: (string) The name specified by the input html field. <input type="submit" name="input_name_here" value="whatever you want"/>
-	  file_name: (string, optional) The optional name you would like the file to be saved as. If left blank the file keeps its uploaded name.
-
-	  --]=]
-   local sys = require "luci.sys"
-   local fs = require "luci.fs"
-   local configLoc = location
-   local fp
-   luci.http.setfilehandler(
-	  function(meta, chunk, eof)
-		 log("file handler activated")
-		 if not fp then
-			complete = nil
-			if meta and meta.name == input_name then
-			   if file_name ~= nil then
-				  log("starting download")
-				  fp = io.open(configLoc .. file_name, "w")
-			   else
-				  log("starting download")
-				  fp = io.open(configLoc .. meta.file, "w")
-			   end
-			else
-			   log("file not of specified input type (input name variable)")
-			end
-			if chunk then
-			   fp:write(chunk)
-			end
-			if eof then
-			   fp:close()
-			   log("file downloaded")
-			end
-		 else
-			log("unknown error: File handler activated but not completed")
-		 end
-	  end)
-end
 
 
 function is_hostname(str)
