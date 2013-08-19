@@ -21,10 +21,10 @@ function index()
 	require("luci.i18n").loadc("commotion")
 	local i18n = luci.i18n.translate
 
-	entry({"admin", "commotion", "serval_keyring_new"}, call("new_keyring")).leaf=true
-	entry({"admin", "commotion", "serval_keyring_down"}, call("down")).leaf=true
-	entry({"admin", "commotion", "serval_keyring_up"}, call("up")).leaf=true
-	entry({"admin", "commotion", "serval_keyring"}, call("main"), "Serval Keyring", 20).dependent=false
+	entry({"admin", "commotion", "serval_keyring_new"}, call("new_keyring"))
+	entry({"admin", "commotion", "serval_keyring_down"}, call("down"))
+	entry({"admin", "commotion", "serval_keyring_up"}, call("up"))
+	entry({"admin", "commotion", "serval_keyring"}, call("main"), "Serval Keyring", 20)
 end
 
 function main(Err)
@@ -40,7 +40,16 @@ function new_keyring()
 	local values = luci.http.formvalue()
 	local new = values["new_keyring"]
 	local rm = luci.sys.call("rm "..key_file.."serval.keyring")
-	local new_key = luci.sys.call("SERVALINSTANCE_PATH="..key_file.." servald start && SERVALINSTANCE_PATH="..key_file.." servald stop")
+	--Define the various serval code to run
+	local s_path = "SERVALINSTANCE_PATH="
+	local s_start = s_path..key_file.." servald start"
+	local s_stop = s_path..key_file.." servald stop"
+	--local s_add_key = s_path..key_file.." servald keyring add"
+	--local s_list_key = s_path..key_file.." servald keyring list"
+	local AND = " && "
+	--Run the actual serval command to create a new keyring & key
+	local new_key = luci.sys.call(s_start..AND..s_stop)
+	--log(luci.sys.exec(s_list_key))
 	--If no errors occured in sys calls
 	if rm ~= 1 and new_key ~= 1 then
 	   finish()
@@ -61,11 +70,11 @@ end
 
 ---calls the file uploader and checks if the file is a correct config.
 function up()
-   log("up started")
+   log("uploader started")
    local error = nil
    setFileHandler("/tmp/", "upload", "serval.keyring")
+   --log(luci.sys.exec("md5sum /tmp/serval.keyring"))
    local values = luci.http.formvalue()
-   log(values)
    local ul = values["upload"]
    if ul ~= '' and ul ~= nil then
 	  log("checking file")
@@ -74,7 +83,6 @@ function up()
    --remove file if errors, copy it to correct directory and finish if a keyring
    if error ~= nil then
 	  log("error found")
-	  log(error)
 	  local rm = luci.sys.call("rm /tmp/serval.keyring")
 	  main(error)
    else
@@ -85,10 +93,9 @@ function up()
 end
 
 function checkFile(file)
-   local keyring = luci.sys.exec("SERVALINSTANCE_PATH="..key_file.." servald keyring list")
-   --log("<<<<<keyring return value>>>>")
-   --log(keyring.."    "..tostring(string.len(keyring)))
-   if string.match(keyring, "^%w*::%c$") == nil and string.len(keyring) ~= 67 then
+   local keyring = luci.sys.exec("SERVALINSTANCE_PATH=/tmp/ servald keyring list")
+   local key = string.match(keyring, "^(%w*):%w*:")
+   if key == nil or string.len(key) ~= 64 then
 	  return "The file supplied is not a proper keyring, or is password protected. Please upload another key."
    end
 end
@@ -142,13 +149,13 @@ function setFileHandler(location, input_name, file_name)
 			else
 			   log("file not of specified input type (input name variable)")
 			end
-			if chunk then
-			   fp:write(chunk)
-			end
-			if eof then
-			   fp:close()
-			   log("file downloaded")
-			end
+		 end
+		 if chunk then
+			fp:write(chunk)
+		 end
+		 if eof then
+			fp:close()
+			log("file downloaded")
 		 end
 	  end)
 end
