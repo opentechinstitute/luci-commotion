@@ -1,0 +1,76 @@
+<%+header%>
+<!--
+LuCI - Lua Configuration Interface
+
+Copyright 2011 Josh King <joshking at newamerica dot net>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+-->
+<%-
+   uri = REQUEST_URI
+   uri_prefix, num_post = string.gsub(uri, "serval_keyring_.*", "serval_keyring")
+-%>
+
+<h1><%:Serval Keyring%></h1>
+
+<h2 class="warning"><%=Err%></h2>
+
+<p><%:Serval KeyringServal KeyringServal KeyringServal KeyringServal KeyringServal KeyringServal KeyringServal KeyringServal KeyringServal KeyringServal KeyringServal KeyringServal KeyringServal KeyringServal KeyringServal KeyringServal KeyringServal KeyringServal KeyringServal KeyringServal KeyringServal KeyringServal KeyringServal KeyringServal KeyringServal KeyringServal KeyringServal KeyringServal KeyringServal KeyringServal KeyringServal Keyring%></p>
+
+<br /><br />
+
+<h1><%:Download a Serval Keyring%></h1>
+<form method="post" action="<%=uri_prefix%>_down" enctype="multipart/form-data" id="down">
+  <div id="zone-content-wrapper">
+	<div id="zone-content">
+	  <div class="cbi-value">
+		<label class="cbi-value-title tippable" data-tip="<%:Download your current Serval Keyring%>"><%:Download Serval keyring%></label>
+		<input type="hidden" name="dl_key" value="true" />
+		<div class="upload-description">
+		  <%:Download your current Serval keyring%>
+		</div>
+	  </div>
+	</div>
+  </div>
+  <input type="submit" name="submit" value="<%:Download%>"/>
+</form>
+
+<h1><%:Upload a Serval Keyring%></h1>
+<form method="post" action="<%=uri_prefix%>_up" enctype="multipart/form-data" id="up">
+  <div id="zone-content-wrapper">
+	<div id="zone-content">
+	  <div class="cbi-value">
+		<label class="cbi-value-title tippable" data-tip="<%:Click on the field below to upload a keyring.%>"><%:Upload A Keyring%></label>
+		<input type="file" name="upload" id="media" />
+		<div class="upload-description">
+		  <%:Upload a serval key file file from your own computer.%>
+		</div>
+	  </div>
+	</div>
+  </div>
+  <input type="submit" name="submit" value="<%:Upload%>"/>
+</form>
+
+<h1><%:Create a new Serval Keyring%></h1>
+<form method="post" action="<%=uri_prefix%>_new" enctype="multipart/form-data" id="new_keyring">
+  <div id="zone-content-wrapper">
+	<div id="zone-content">
+	  <div class="cbi-value">
+		<label class="cbi-value-title tippable" data-tip="<%:Click on the button below to create a new keyring. This will DELETE the existing keyring on the device. We highly suggest you download any existing network keyrings you have.%>"><%:New Keyring%></label>
+		<input type="hidden" name="new_keyring" value="true" />
+		<div class="upload-description">
+		  <%:Create a new keyring on this device, replacing the existing keyring.%>
+		</div>
+	  </div>
+	</div>
+  </div>
+  <input type="submit" name="new_keyring" value="<%:Create New Key%>" />
+</form>
+
+
+
+<%+footer%>
