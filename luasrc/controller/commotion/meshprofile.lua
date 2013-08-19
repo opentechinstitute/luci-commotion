@@ -246,13 +246,13 @@ function setFileHandler(location, input_name, file_name)
 			else
 			   log("file not of specified input type (input name variable)")
 			end
-			if chunk then
-			   fp:write(chunk)
-			end
-			if eof then
-			   fp:close()
-			   log("file downloaded")
-			end
+		 end
+		 if chunk then
+			fp:write(chunk)
+		 end
+		 if eof then
+			fp:close()
+			log("file downloaded")
 		 end
 		 end)
 end
