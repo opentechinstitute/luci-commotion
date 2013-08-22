@@ -22,7 +22,7 @@ end
 --- Gives the md5 and sha1 fingerprints of uhttpd server.
 --- Call as such: md5, sha1 = ssl_cert_fingerprints() If you only give one var name it will only give you md5. Call like: _, sha1 = to throw away md5
 -- @return md5 and sha1 hash of uhttpd.
-function ssl_cert_fingerprints():
+function ssl_cert_fingerprints()
    --get cert file from /etc/config/uhttpd
    local uci = luci.model.uci.cursor()
    local cert = uci:get('uhttpd','main','cert')
