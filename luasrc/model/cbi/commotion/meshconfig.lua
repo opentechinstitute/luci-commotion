@@ -55,4 +55,10 @@ else
    end
 end
 
-return m
+m2 = Map("commotiond")                                                                                                                         
+node = m2:section(TypedSection, "node", translate("Settings specific to this node"))
+node.anonymous = true
+node.optional = true
+node:option(Value, "dhcp_timeout", "DHCP Timeout", "How many seconds to wait on boot for a DHCP lease from the gateway")
+
+return m, m2
