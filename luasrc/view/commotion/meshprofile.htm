@@ -11,14 +11,14 @@ You may obtain a copy of the License at
 http://www.apache.org/licenses/LICENSE-2.0
 -->
 
-<h1>Node Profiles</h1>
+<h1><%:Node Profiles%></h1>
 
-<p>If your node includes configuration profiles for multiple Commotion 
+<p><%:If your node includes configuration profiles for multiple Commotion 
 networks, this form allows you to set your defaults. 
-We recommend that you reboot your node after changing these settings.</p>
+We recommend that you reboot your node after changing these settings.%></p>
 
 <form method="post" action="<%=REQUEST_URI%>_submit" enctype="multipart/form-data" id="profiles">
-	<h2>Select an interface</h2>
+	<h2><%:Select an interface%></h2>
 		<ul>
 		</ul>
 	<select name="interfaces">
@@ -27,14 +27,14 @@ We recommend that you reboot your node after changing these settings.</p>
 		<% end %>
 	</select>
 	
-	<h2>Select a profile to apply</h2>
+	<h2><%:Select a profile to apply%></h2>
 	<select name="profiles">
 		<% for _,p in ipairs(profiles) do %>
 			<option id="<%=p%>" value="<%=p%>"><%=p%></option>
 		<% end %>
 	</select>
 
-	<input type="submit" name="submit" value="Apply &amp; Save" />	
+	<input type="submit" name="submit" value="<%:Apply and Save%>" />	
 </form>
 
 <%+footer%>
