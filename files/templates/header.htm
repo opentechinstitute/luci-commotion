@@ -1,3 +1,10 @@
+<%-
+   --If an admin node, then use https.
+   require "commotion_helpers"
+   check_https("/admin/", luci.http.getenv())
+-%>   
+             
+   
 <%#
 LuCI - Lua Configuration Interface
 Copyright 2008 Steven Barth <steven@midlink.org>
