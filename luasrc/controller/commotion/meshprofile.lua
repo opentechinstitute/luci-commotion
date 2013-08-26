@@ -73,9 +73,10 @@ end
 function finish()
    luci.template.render("QS/module/applyreboot", {redirect_location=("http://"..luci.http.getenv("SERVER_NAME").."/cgi-bin/luci/admin/commotion/meshprofile")})
    luci.http.close()
---   luci.sys.call("/etc/init.d/commotiond restart")
---   luci.sys.call("sleep 2; /etc/init.d/network restart")
-   luci.sys.reboot()
+   --luci.sys.call("/etc/init.d/commotiond restart")
+   --luci.sys.call("sleep 2; /etc/init.d/network restart")
+   --In order to ensure that everything works cleanly a restart is required
+   p = luci.sys.reboot()
    return({'complete'})
 end
 
@@ -118,10 +119,7 @@ function flush_wireless_profile(old_profile, new_profile, interface)
    settings = get_commotion_settings(new_profile)
    uci:foreach("wireless", "wifi-iface",
 			   function(s)
-				  log(s['.name'] )
 				  if s['.name'] == old_profile then
-					 --check that they are
-					 log("OLD")
 					 found = true
 					 old_dev = s.device
 					 name = s['.name']
@@ -131,7 +129,7 @@ function flush_wireless_profile(old_profile, new_profile, interface)
 					 error = luci.i18n.translate("You have multiple wireless interfaces on a single network interface. This is not allowed.")
 				  end
 			   end)
-   log(tostring(conflict).." is the conflict level")
+   --log(tostring(conflict).." is the conflict level")
    if error ~= nil then  
 	  return error
    else
@@ -139,8 +137,8 @@ function flush_wireless_profile(old_profile, new_profile, interface)
 	  uci:section('wireless', 'wifi-iface', new_profile,
 				  {device=old_dev,
 				   network=interface,
-				   ssid=settings[ssid],
-				   mode=settings[mode]})
+				   ssid=settings['ssid'],
+				   mode=settings['mode']})
 	  uci:save("wireless")
 	  uci:commit("wireless")
    end
