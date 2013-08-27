@@ -4,7 +4,7 @@ MODULE_NAME:=commotion-dash
 MODULE_TITLE:=Commotion Dashboard Config
 
 PKG_NAME:=luci-$(MODULE_NAME)
-PKG_VERSION:=0.1
+PKG_VERSION:=master
 PKG_RELEASE:=1
 
 PKG_SOURCE_PROTO:=git
