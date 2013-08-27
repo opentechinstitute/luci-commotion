@@ -1,0 +1,35 @@
+#!/bin/sh
+debug=0
+logfile='/var/log/commotion-dash.log'
+curl=$(which curl)
+
+# this needs to get moved into the Luci config
+json_info_host='127.0.0.1'
+json_info_port='9090'
+
+json_info_url="http://$json_info_host:$json_info_port/all/"
+node_json=$(echo "\r\n" |nc "$json_info_host" "$json_info_port")
+
+bb_listener_script_path='bigboard-listener.py'
+
+if [ -f /etc/config/commotion-dash ]; then 
+  grep enabled /etc/config/commotion-dash | grep true > /dev/null
+  if [ $? -eq 0 ];then
+    bb_host=$(grep gatherer /etc/config/commotion-dash |cut -d ' ' -f 3 | sed -e "s/'//g")
+    # bb_listener_url="http://$bb_host/$bb_listener_script_path"
+    bb_listener_url="http://bigboard/$bb_listener_script_path"
+    if [ "$debug" -eq 1 ]; then
+      echo "Bigboard enabled." >> "$logfile"
+      echo "$node_json" >> "$logfile"
+      printf "\n\n" >> "$logfile"
+    fi
+    "$curl" -d "json=$node_json" "$bb_listener_url"
+  fi
+  grep enabled /etc/config/commotion-dash | grep false > /dev/null
+  if [ $? -eq 0 ]; then
+    if [ "$debug" -eq 1 ]; then
+      echo "Bigboard disabled."
+    fi
+  fi
+fi
+
