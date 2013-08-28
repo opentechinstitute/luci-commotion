@@ -11,7 +11,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 
 ]]--
 
-module("luci.controller.commotion.bigboard-conf", package.seeall)
+module("luci.controller.commotion-dash.bigboard-conf", package.seeall)
 
 require "luci.model.uci"
 require "luci.fs"
@@ -64,7 +64,7 @@ config dashboard
 				jsonInfo[s['.name']]['gatherer'] = s.gatherer
 		end)
 	luci.http.prepare_content("text/html")
-	luci.template.render("commotion/bigboard-conf", {jsonInfo = jsonInfo})
+	luci.template.render("commotion-dash/bigboard-conf", {jsonInfo = jsonInfo})
 end
 
 function ifprocess()
