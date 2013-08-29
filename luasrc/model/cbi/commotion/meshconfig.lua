@@ -1,3 +1,4 @@
+--[[
 LuCI - Lua Configuration Interface
 
 Copyright 2011 Josh King <joshking at newamerica dot net>
