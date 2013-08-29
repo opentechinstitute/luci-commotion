@@ -11,6 +11,11 @@ You may obtain a copy of the License at
 http://www.apache.org/licenses/LICENSE-2.0
 -->
 
+<%-
+uri = REQUEST_URI
+uri_prefix, num_post = string.gsub(uri, "bigboard%-conf_.*", "bigboard-conf")
+
+-%>                                 
 
 <script type="text/javascript" language="javascript">
    function toggleVisibility(cb)
@@ -42,11 +47,13 @@ http://www.apache.org/licenses/LICENSE-2.0
 
 <h1>Bigboard Configuration</h1>
 
+<h2 class="warning"><%=ERR%></h2>
+
 <p>Bigboard is a network administration tool designed to give
 network managers a quick view of network status. Use this page to
 turn Bigboard on or off, and to manage Bigboard settings.</p>
 
-<form method="post" action="<%=REQUEST_URI%>_submit" enctype="multipart/form-data" id="bb-power">
+<form method="post" action="<%=uri_prefix%>_submit" enctype="multipart/form-data" id="bb-power">
 	<% for db_name, char in pairs(jsonInfo) do %>
 	<input type="hidden" name="dashName" value="<%=jsonInfo[db_name]['name']%>" />
 <!-- To do: Poll for current settings -->

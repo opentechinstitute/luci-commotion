@@ -46,7 +46,7 @@ function index()
 	end
 end
 
-function main()
+function main(ERR)
 	local jsonInfo={}	
         local uci = luci.model.uci.cursor()
 	
@@ -64,44 +64,48 @@ config dashboard
 				jsonInfo[s['.name']]['gatherer'] = s.gatherer
 		end)
 	luci.http.prepare_content("text/html")
-	luci.template.render("commotion-dash/bigboard-conf", {jsonInfo = jsonInfo})
+	luci.template.render("commotion-dash/bigboard-conf", {jsonInfo = jsonInfo, ERR = ERR})
 end
 
 function ifprocess()
 	local values = luci.http.formvalue()
+	local ERR = nil
 	--[[ sanitize inputs ]]--
 	for k,v in pairs(values) do
+log("sanitizing values: " .. values[k] .. ", " .. v)
 		values[k] = url_encode(v)
 	end
 	
 	--[[ validate destination address ]]--
-	if is_ip4addr(values['gatherer_ip']) == 'false' or 
-		is_ip4addr_cidr(values['gatherer_ip']) == 'false' or 
-		is_hostname(values['gatherer_ip']) == 'false' then
-		
-		--[[ This is a cheap hack. Should return error instead ]]--
-		log('ERROR: commotion-dash: invalid gatherer_ip value' .. values['gatherer_ip'])
-		values['bbOnOff']='false'
-		values['gatherer_ip']='invalid'
+	if is_ip4addr(values['gatherer_ip']) == true or 
+		is_ip4addr_cidr(values['gatherer_ip']) == true or 
+		is_hostname(values['gatherer_ip']) == true then
+	else
+		ERR = 'ERROR: invalid IP or site address' .. values['gatherer_ip']
+		log("validating inputs " .. values['gatherer_ip'])
 	end
-
+	--if bbOnOff does not work during testing try with ~= ''
 	if values['bbOnOff'] ~= nil then
 		log("Commotion-Dashboard: Enabling network stats submission...")
 		log("Commotion-Dashboard: Setting " .. values['gatherer_ip'] .. "as network stats collector")
-		local uci = luci.model.uci.cursor()
+		if ERR == nil then
+			local uci = luci.model.uci.cursor()
 	--[[ To do: Allow people to turn off data collection ]]--
-		uci:set("commotion-dash", values['dashName'], "enabled", values['bbOnOff'])
-		uci:set("commotion-dash", values['dashName'], "gatherer", values['gatherer_ip'])
-		uci:commit('commotion-dash')
-		uci:save('commotion-dash')
+			uci:set("commotion-dash", values['dashName'], "enabled", values['bbOnOff'])
+			uci:set("commotion-dash", values['dashName'], "gatherer", values['gatherer_ip'])
+			uci:commit('commotion-dash')
+			uci:save('commotion-dash')
+		end	
 	else
 		log("Disabling Commotion-Dashboard")
-		uci:set("commotion-dash", values['dashname'], 'enabled', 'false')
-		uci:set("commotion-dash", values['dashname'], 'gatherer', 'x.x.x.x')
+		local uci = luci.model.uci.cursor()
+		uci:set("commotion-dash", values["dashName"], 'enabled', 'false')
+		uci:set("commotion-dash", values["dashName"], 'gatherer', 'x.x.x.x')
 		uci:commit('commotion-dash')
 		uci:save('commotion-dash')
+		ERR = nil
 	end
-	finish()
+	main(ERR)
 end
 
 function getConfType(conf, type)
@@ -111,10 +115,3 @@ function getConfType(conf, type)
 	return ifce
 end
 
-function finish()
-   luci.template.render("QS/module/applyreboot", {redirect_location=("http://"..luci.http.getenv("SERVER_NAME").."/cgi-bin/luci/admin/commotion/bigboard-conf")})
-   luci.http.close()
-   luci.sys.call("/etc/init.d/olsrd restart")
-   luci.sys.call("sleep 2; /etc/init.d/network restart")
-   return({'complete'})
-end
