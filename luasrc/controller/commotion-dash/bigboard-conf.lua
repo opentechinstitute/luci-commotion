@@ -75,12 +75,12 @@ function ifprocess()
 	end
 	
 	--[[ validate destination address ]]--
-	if is_ip4addr(values['gatherer_ip']) == true or 
-		is_ip4addr_cidr(values['gatherer_ip']) == true or 
-		is_hostname(values['gatherer_ip']) == true then
+	if is_ip4addr(values['gatherer_ip']) == 'false' or 
+		is_ip4addr_cidr(values['gatherer_ip']) == 'false' or 
+		is_hostname(values['gatherer_ip']) == 'false' then
 		
 		--[[ This is a cheap hack. Should return error instead ]]--
-		log('ERROR: commotion-dash: invalid gatherer_ip value')
+		log('ERROR: commotion-dash: invalid gatherer_ip value' .. values['gatherer_ip'])
 		values['bbOnOff']='false'
 		values['gatherer_ip']='invalid'
 	end
