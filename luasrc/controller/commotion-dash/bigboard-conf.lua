@@ -72,7 +72,6 @@ function ifprocess()
 	local ERR = nil
 	--[[ sanitize inputs ]]--
 	for k,v in pairs(values) do
-		--log("sanitizing values: " .. values[k] .. ", " .. v)--
 		values[k] = url_encode(v)
 	end
 	
@@ -81,9 +80,9 @@ function ifprocess()
 		is_ip4addr_cidr(values['gatherer_ip']) == true or 
 		is_fqdn(values['gatherer_ip']) ~= nil then
 	else
-		ERR = 'ERROR: invalid IP or site address' .. values['gatherer_ip']
+		ERR = 'ERROR: invalid IP or site address ' .. values['gatherer_ip']
 		log("Error validating inputs " .. values['gatherer_ip'])
-		-- Needs exception to drop out of function: http://lua-users.org/wiki/FinalizedExceptions --
+		main(ERR)
 	end
 	if values['bbOnOff'] ~= nil then
 		log("Commotion-Dashboard: Enabling network stats submission...")
