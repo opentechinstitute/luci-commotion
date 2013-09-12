@@ -133,8 +133,11 @@ function is_hostname(str)
 end
 
 function is_fqdn(str)
+-- alphanumeric and hyphen less than 255 chars
+-- each label must be less than 63 chars
    if #tostring(str) < 255 then
-	return tostring(str):match("[A-Za-z0-9%.%%%+%-]+%.%w%w%w?%w?")
+	-- Should check that each label is < 63 chars --
+	return tostring(str):match("^[%w%.%-]+$")
    else
 	return nil
    end
