@@ -122,8 +122,6 @@ function is_email(email)
    return tostring(email):match("[A-Za-z0-9%.%%%+%-]+@[A-Za-z0-9%.%%%+%-]+%.%w%w%w?%w?")
 end
 
-
-
 function is_hostname(str)
 --alphanumeric and hyphen Less than 63 chars
 --cannot start or end with a hyphen
@@ -131,6 +129,17 @@ function is_hostname(str)
 	  return tostring(str):match("^%w[%w%-]*%w$")
    else
 	  return nil
+   end
+end
+
+function is_fqdn(str)
+-- alphanumeric and hyphen less than 255 chars
+-- each label must be less than 63 chars
+   if #tostring(str) < 255 then
+	-- Should check that each label is < 63 chars --
+	return tostring(str):match("^[%w%.%-]+$")
+   else
+	return nil
    end
 end
 
