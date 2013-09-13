@@ -75,17 +75,17 @@ function ifprocess()
 		values[k] = url_encode(v)
 	end
 	
-	--[[ validate destination address ]]--
-	if is_ip4addr(values['gatherer_ip']) == true or 
-		is_ip4addr_cidr(values['gatherer_ip']) == true or 
-		is_fqdn(values['gatherer_ip']) ~= nil then
-	else
-		ERR = 'ERROR: invalid IP or site address ' .. values['gatherer_ip']
-		log("Error validating inputs " .. values['gatherer_ip'])
-		main(ERR)
-		do return end
-	end
 	if values['bbOnOff'] ~= nil then
+		--[[ validate destination address ]]--
+		if is_ip4addr(values['gatherer_ip']) == true and
+               	   is_ip4addr_cidr(values['gatherer_ip']) == true and
+                   is_fqdn(values['gatherer_ip']) ~= nil then
+                	ERR = 'ERROR: invalid IP or site address ' .. values['gatherer_ip']
+                	log("Error validating inputs " .. values['gatherer_ip'])
+                	main(ERR)
+                	do return end
+        	end
+
 		log("Commotion-Dashboard: Enabling network stats submission...")
 		log("Commotion-Dashboard: Setting " .. values['gatherer_ip'] .. "as network stats collector")
 		if ERR == nil then
