@@ -83,6 +83,7 @@ function ifprocess()
 		ERR = 'ERROR: invalid IP or site address ' .. values['gatherer_ip']
 		log("Error validating inputs " .. values['gatherer_ip'])
 		main(ERR)
+		do return end
 	end
 	if values['bbOnOff'] ~= nil then
 		log("Commotion-Dashboard: Enabling network stats submission...")
