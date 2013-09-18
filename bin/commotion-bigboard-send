@@ -1,7 +1,6 @@
 #!/bin/sh
 # turn off debugging by default, change to 1 for debug log.
 debug=0
-logfile='/var/log/commotion-dash.log'
 
 curl=$(which curl)
 
@@ -24,16 +23,15 @@ if [ $enabled == 'true' ];then
   bb_host=$(echo "$bb_host" | sed -e 's/http:\/\///')
   bb_listener_url="http://$bb_host/$bb_listener_script_path"
   if [ "$debug" -eq 1 ]; then
-    echo "Bigboard enabled." >> "$logfile"
-    echo "$bb_listener_url" >> "$logfile"
-    printf "\n\n" >> "$logfile"
+    logger -t commotion.dash.bigboard-send -s "Bigboard enabled"
+    logger -t commotion.dash.bigboard-send -s "$bb_listener_url"
   fi
   "$curl" -d "json=$node_json" "$bb_listener_url"
   exit 0
 # bigboard isn't enabled. just exit
 else
   if [ "$debug" -eq 1 ]; then
-    echo "Bigboard disabled"
+    logger -t commotion.dash.bigboard-send -s "Bigboard disabled"
   fi
   exit 1
 fi
