@@ -12,11 +12,4 @@ cp -f /usr/share/commotion/files/node-hna-mini.gif /www/luci-static/resources/ol
 cp -f /usr/share/commotion/files/olsr-viz.sh /www/cgi-bin/olsr-viz.sh
 }
 
-[ -f "/usr/bin/patch" ] && { \
-  cd /usr/lib/lua/luci/model/cbi/admin_network/
-  patch -p0 < /usr/share/commotion/patches/wifi.lua.patch
-}
-
-rm -f /tmp/luci-indexcache
-
 exit 0

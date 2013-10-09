@@ -1,0 +1,10 @@
+#!/bin/sh
+
+[ -f "/usr/bin/patch" ] && { \
+  cd /usr/lib/lua/luci/model/cbi/admin_network/
+  patch -p0 < /usr/share/commotion/patches/wifi.lua.patch
+}
+
+rm -f /tmp/luci-indexcache
+
+exit 0
