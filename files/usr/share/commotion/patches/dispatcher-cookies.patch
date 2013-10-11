@@ -1,0 +1,11 @@
+--- dispatcher.lua	2013-10-11 14:46:09.553407012 -0400
++++ dispatcher-cookies.lua	2013-10-11 14:49:51.833402451 -0400
+@@ -382,7 +382,7 @@
+ 						})
+ 						ctx.urltoken.stok = token
+ 					end
+-					luci.http.header("Set-Cookie", "sysauth=" .. sid.."; path="..build_url())
++					luci.http.header("Set-Cookie", "sysauth=" .. sid.."; path="..build_url() .. "; secure; HttpOnly;")
+ 					ctx.authsession = sid
+ 					ctx.authuser = user
+ 				end
