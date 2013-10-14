@@ -161,6 +161,14 @@ function is_port(str)
 	return is_uint(str) and tonumber(str) >= 0 and tonumber(str) <= 65535
 end
 
+function is_valid_uci(str)
+	return str:find("^[%w_]+$")
+end
+
+function pass_to_shell(str)
+	return str:gsub("$(","\\$"):gsub("`","\\`")
+end
+
 function table.contains(table, element)
 	for _, value in pairs(table) do
 		if value == element then
