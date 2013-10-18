@@ -53,7 +53,8 @@ function html_encode(str)
 end
 
 function url_encode(str)
-  return string.gsub(str,"[<>%s]",function(c) return url_replacements[c] or c end)
+  local uri_util = require "uri._util"
+  return uri_util.uri_encode(str,"^A-Za-z0-9%-_.!~*'():/")
 end
 
 function printf(tmpl,t)
@@ -199,11 +200,4 @@ html_replacements = {
    ["\n"] = "&#10;",
    ["\r"] = "&#13;",
    ["\""] = "&quot;"
-   }
-
-url_replacements = {
-   ["<"] = "%3C",
-   [">"] = "%3E",
-   [" "] = "%20",
-   ['"'] = "%22"
    }
