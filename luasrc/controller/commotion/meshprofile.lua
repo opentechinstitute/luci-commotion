@@ -65,7 +65,17 @@ function ifprocess()
 	local uci = luci.model.uci.cursor()
 	log("Applying " .. p .. " to " .. tif)
 	old_prof = uci:get('network', tif, "profile")
-	error = flush_wireless_profile(old_prof, p, tif)
+	local wireless = false
+	uci:foreach('wireless','wifi-iface',
+	    function(iface)
+		if iface.network == tif then
+			wireless = true
+		end
+	    end
+	)
+	if wireless then
+		error = flush_wireless_profile(old_prof, p, tif)
+	end
 	uci:set('network', tif, "profile", p)
 	uci:commit('network')
 	uci:save('network')
@@ -304,8 +314,6 @@ function flush_wireless_profile(old_profile, new_profile, interface)
 end
 
 function get_commotion_settings(file)
-   --[=[ Checks the quickstart settings file and returns a table with setting, value pairs.--]=]
-   local QS = luci.controller.QS.QS
    settings = {}
    for line in io.lines("/etc/commotion/profiles.d/"..file) do
 	  setting = line:split("=")
