@@ -1,0 +1,6 @@
+--! @todo Update all existing code that points to commotion_helpers to use these modules instead.
+
+--! @todo Update all uses of table.contains to point to luci.util.contains
+http://luci.subsignal.org/api/luci/modules/luci.util.html#contains
+
+--! @todo Uses of DIE should be replaced with luci.dispatcher.error500()  
