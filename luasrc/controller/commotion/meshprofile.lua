@@ -175,18 +175,22 @@ function up()
 	  
    else
    -- check for extant profiles with the same name
-	  iterator, is_match = fs.glob("/etc/commotion/profiles.d/" .. ul)
-   end
+   iterator, is_match = fs.glob("/etc/commotion/profiles.d/" .. ul)
    
-   -- if we find a conflict, send an error to the log
-   if is_match > 0 then
-	log("There is a conflict: The profile "..ul.." already exists.")
-	  
-   -- if no conflict exists, copy the new profile to the profiles.d directory
-   else 
-	result = fs.copy("/tmp/" .. ul, "/etc/commotion/profiles.d/" .. ul)
-	main(nil)
-   end
+	  -- if there is a conflict, inform the user
+	  if is_match > 0 then
+	
+	      error = "There is a conflict: The profile "..ul.." already exists."
+	      main(error)
+	
+	      log("There is a conflict: The profile "..ul.." already exists.")
+	
+	  -- if no conflict exists, copy the new profile to etc/commotion/profiles.d
+	  else 
+	      result = fs.copy("/tmp/" .. ul, "/etc/commotion/profiles.d/" .. ul)
+	      main(nil)
+	  end
+    end
 end
 
 function down()
