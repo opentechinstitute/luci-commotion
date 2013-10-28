@@ -91,10 +91,11 @@ function identify.is_email(email)
    return tostring(email):match("^[A-Za-z0-9%.%%%+%-]+@[A-Za-z0-9%.%%%+%-]+%.%w%w%w?%w?$")
 end
 
---! @name
---! @brief
---! @param
---! @return
+--! @name is_hostname
+--! @brief Identifies if a string is a properly formatted hostname.
+--! @param str a string that contains a hostname. 
+--! @return str if it is properly formatted
+--! @return nil if string is not properly formatted
 function identify.is_hostname(str)
 --alphanumeric and hyphen Less than 63 chars
 --cannot start or end with a hyphen
@@ -105,36 +106,37 @@ function identify.is_hostname(str)
    end
 end
 
---! @name
---! @brief
---! @param
---! @return
+--! @name is_macaddr
+--! @brief Identifies if a string is a properly formatted mac address.
+--! @param str a string that contains a  macaddress. 
+--! @return true if str passed is a macaddress
+--! @return false if str in an unproperly formatted mac adress
 function identify.is_macaddr(str)
   local i,j, _1, _2, _3, _4, _5, _6 = string.find(str, '^(%x%x):(%x%x):(%x%x):(%x%x):(%x%x):(%x%x)$')
 	if i then return true end
 	return false
 end
 
---! @name
---! @brief
---! @param
---! @return
+--! @name is_uint
+--! @brief Identifies if a string is a properly formatted unsigned intiger.
+--! @param str str a string that is assumed to be a usigned int
+--! @return the string if it is formatted as an unsigned integer or nil if it is not formatted correctly
 function identify.is_uint(str)
 	return str:find("^%d+$")
 end
 
---! @name
---! @brief
---! @param
---! @return
+--! @name is_hex
+--! @brief Identifies if a string is a properly formatted set of hexidecimal strings.
+--! @param str a string that is assumed to only consists of hexideicmal chars
+--! @return 
 function identify.is_hex(str)
 	return str:find("^%x+$")
 end
 
---! @name
---! @brief
---! @param
---! @return
+--! @name is_port
+--! @brief Identifies if a string of a number is a legitmate port number.
+--! @param str a string that is assumed to be a port
+--! @return returns the port number as a number 
 function identify.is_port(str)
 	return identify.is_uint(str) and tonumber(str) >= 0 and tonumber(str) <= 65535
 end

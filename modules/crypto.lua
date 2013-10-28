@@ -36,6 +36,7 @@ end
 --! @param env A table containing the REQUEST_URI and the SERVER_NAME. Can take full luci.http.getenv()
 --! @return true if page is to be redirected.
 --! @return false if path does not include node or if https is already on.
+--! @example crypto_check_https.htm
 function crypto.check_https(node, env)
    if string.match(env.REQUEST_URI, node) then
 	  if env.HTTPS ~= "on" then

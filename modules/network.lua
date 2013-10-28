@@ -8,10 +8,9 @@ module "luci.commotion.network"
 
 local network = {}
 
---! @name
---! @brief
---! @param
---! @return
+--! @name list_ifaces
+--! @brief iterates over all zones in the network uci config and then uses ubus to gather network interfaces that use that zone. 
+--! @return an array with matched zone names and interface names. Arrays are mirrors of each other with one keyed by interface names and another keyed by zone name.
 function network.list_ifaces()
   local r = {zone_to_iface = {}, iface_to_zone = {}}
   cursor = uci.cursor()

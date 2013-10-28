@@ -7,8 +7,9 @@ module "luci.commotion.debugger"
 
 local debugger = {}
 
---! @brief Outputs a message to logread tagged with the string "luci" 
+
 --! @name log
+--! @brief Outputs a message to logread tagged with the string "luci" 
 --! @param msg A string, number, or table to be logged
 function debugger.log(msg)
 	if (type(msg) == "table") then

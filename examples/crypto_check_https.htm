@@ -1,0 +1,17 @@
+<%-
+--If an admin node, then use https
+local cr = require "luci.commotion.crypto"
+cr.check_https("/admin/", luci.http.getenv())
+-%>
+
+<body>
+I am a page that follows from the admin node.
+My url is something like...
+http://192.168.1.20/cgi-bin/luci/admin/crypto_check_https
+
+When you go to this page the function at the top will redirect you to
+
+https://192.168.1.20/cgi-bin/luci/admin/crypto_check_https
+
+http<b>s</b>://
+</body>
