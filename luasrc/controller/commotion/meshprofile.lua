@@ -16,6 +16,7 @@ require "luci.model.uci"
 require "luci.fs"
 require "luci.sys"
 require "commotion_helpers"
+local fs = require "nixio.fs"
 
 local profileDir = "/etc/commotion/profiles.d/"
 
@@ -110,6 +111,7 @@ function checkFile(file)
 			   table.insert(fields, setting[1])
 			end
 		 end
+		 --on line 113, the if statement that if the file is empty does not have an else statement that says (if the file is empty, pass an error)
 		 if fields ~= {} then
 			--Check to see if there are missing fields
 			missing = {}
@@ -160,17 +162,18 @@ function up()
    --]=]
    log("up started")
    local error = nil
-   setFileHandler("/etc/commotion/profiles.d/", "config")
+   setFileHandler("/tmp/", "config")
    local values = luci.http.formvalue()
    local ul = values["config"]
    if ul ~= '' and ul ~= nil then
 	  --TODO add logging to checkfile to identify why it does not work
-	  file = "/etc/commotion/profiles.d/" .. ul
+	  file = "/tmp/" .. ul
 	  error = checkFile(file)
    end
    if error ~= nil then
 	  main(error)
    else
+	  result = fs.copy("/tmp/" .. ul, "/etc/commotion/profiles.d/" .. ul)
 	  main(nil)
    end
 end
