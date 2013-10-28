@@ -172,9 +172,20 @@ function up()
    end
    if error ~= nil then
 	  main(error)
+	  
    else
-	  result = fs.copy("/tmp/" .. ul, "/etc/commotion/profiles.d/" .. ul)
-	  main(nil)
+   -- check for extant profiles with the same name
+	  iterator, is_match = fs.glob("/etc/commotion/profiles.d/" .. ul)
+   end
+   
+   -- if we find a conflict, send an error to the log
+   if is_match > 0 then
+	log("There is a conflict: The profile "..ul.." already exists.")
+	  
+   -- if no conflict exists, copy the new profile to the profiles.d directory
+   else 
+	result = fs.copy("/tmp/" .. ul, "/etc/commotion/profiles.d/" .. ul)
+	main(nil)
    end
 end
 
