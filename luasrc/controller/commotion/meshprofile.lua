@@ -185,21 +185,28 @@ function up()
    log(overwrite)
       
 	  -- if there is a conflict, inform the user
-	  if is_match > 0 and overwrite ~= "yes" then
-	
-	      error = "There is a conflict: The profile "..ul.." already exists."
+	  if is_match > 0 then
+	      if overwrite == "yes" then
+		  result = fs.copy("/tmp/" .. ul, "/etc/commotion/profiles.d/" .. ul)
+		  main(nil)
+	      end
+	      if overwrite == "no" then
+		  main(nil)
+	      end
+	      if overwrite == nil then
+		  error = "There is a conflict: The profile "..ul.." already exists."
 	      
-	      isDuplicate = true
+		  isDuplicate = true
 	      
-	      main(error, isDuplicate, ul)
+		  main(error, isDuplicate, ul)
 	
-	      log("There is a conflict: The profile "..ul.." already exists.")
-	
+		  log("There is a conflict: The profile "..ul.." already exists.")
+	      end
 	  -- if no conflict exists, copy the new profile to etc/commotion/profiles.d
 	  else 
-	      result = fs.copy("/tmp/" .. ul, "/etc/commotion/profiles.d/" .. ul)
+		 result = fs.copy("/tmp/" .. ul, "/etc/commotion/profiles.d/" .. ul)
+		 main(nil)
 	      
-	      main(nil, nil)
 	  end
        
     end

@@ -26,6 +26,16 @@ We recommend that you reboot your node after changing these settings.</p>
 <div class="error"><%=ERR%></div>
 <%end%>
 
+<%-if isDuplicate == true then-%>
+<form method="post" action="<%=uri_prefix%>_up" enctype="multipart/form-data" id="up">
+<h1> Overwrite existing profile? </h1>
+<input type="hidden" name="config" value="<%=ul%>" >
+<input type="radio" name="overwrite" value="yes">Yes, please overwrite the existing profile<br>
+<input type="radio" name="overwrite" value="no">No, I will rename the file and upload it again<br>
+<input type="submit" name="submit" value="Confirm"/>
+</form> 
+<%end%>
+
 <form method="post" action="<%=uri_prefix%>_submit" enctype="multipart/form-data" id="profiles">
 	<h2><%:Select an interface%></h2>
 		<ul>
