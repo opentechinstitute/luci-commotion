@@ -30,7 +30,7 @@ function index()
 	entry({"admin", "commotion", "meshprofile"}, call("main"), i18n("Mesh Profile"), 20).dependent=false
 end
 
-function main(ERR, OW)
+function main(ERR, isDuplicate, ul)
    log("main started")
    if not ERR then
 	  ERR = nil
@@ -53,7 +53,7 @@ function main(ERR, OW)
 		end
    end
    luci.http.prepare_content("text/html")
-   luci.template.render("commotion/meshprofile", {available = available, profiles = profiles, ERR = ERR, OW = OW})
+   luci.template.render("commotion/meshprofile", {available = available, profiles = profiles, ERR = ERR, isDuplicate = isDuplicate, ul = ul})
 
 end
 
@@ -162,9 +162,12 @@ function up()
    --]=]
    log("up started")
    local error = nil
-   local OW = false
+   local isDuplicate = false
    setFileHandler("/tmp/", "config")
    local values = luci.http.formvalue()
+   
+   local overwrite = values["overwrite"]
+   
    local ul = values["config"]
    if ul ~= '' and ul ~= nil then
 	  --TODO add logging to checkfile to identify why it does not work
@@ -175,25 +178,30 @@ function up()
 	  main(error)
 	  
    else
+     
    -- check for extant profiles with the same name
    iterator, is_match = fs.glob("/etc/commotion/profiles.d/" .. ul)
    
+   log(overwrite)
+      
 	  -- if there is a conflict, inform the user
-	  if is_match > 0 then
+	  if is_match > 0 and overwrite ~= "yes" then
 	
 	      error = "There is a conflict: The profile "..ul.." already exists."
 	      
-	      OW = true
+	      isDuplicate = true
 	      
-	      main(error, OW)
+	      main(error, isDuplicate, ul)
 	
 	      log("There is a conflict: The profile "..ul.." already exists.")
 	
 	  -- if no conflict exists, copy the new profile to etc/commotion/profiles.d
 	  else 
 	      result = fs.copy("/tmp/" .. ul, "/etc/commotion/profiles.d/" .. ul)
-	      main(nil)
+	      
+	      main(nil, nil)
 	  end
+       
     end
 end
 
