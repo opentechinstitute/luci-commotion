@@ -69,10 +69,11 @@ end
 
 function ifprocess()
 	local values = luci.http.formvalue()
+	local encode = require "luci.commotion.encode"
 	local ERR = nil
 	--[[ sanitize inputs ]]--
 	for k,v in pairs(values) do
-		values[k] = url_encode(v)
+		values[k] = encode.url(v)
 	end
 	
 	if values['bbOnOff'] ~= nil then
