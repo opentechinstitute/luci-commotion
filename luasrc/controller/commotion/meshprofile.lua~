@@ -162,7 +162,6 @@ function up()
    --]=]
    log("up started")
    local error = nil
-   local OW = false
    setFileHandler("/tmp/", "config")
    local values = luci.http.formvalue()
    local ul = values["config"]
