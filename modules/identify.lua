@@ -125,6 +125,22 @@ function identify.is_uint(str)
 	return str:find("^%d+$")
 end
 
+--! @name is_fqdn
+--! @brief Identifies if a string is a properly formatted fully qualified domain name.
+--! @param str str a string that is assumed to be a usigned fully qualified domain name
+--! @return the string if it is formatted as a fully qualified domain name or nil if it is not formatted correctly
+function is_fqdn(str)
+-- alphanumeric and hyphen less than 255 chars
+-- each label must be less than 63 chars
+   if #tostring(str) < 255 then
+        -- Should check that each label is < 63 chars --
+        return tostring(str):match("^[%w%.%-]+$")
+   else
+        return nil
+   end
+end
+
+
 --! @name is_hex
 --! @brief Identifies if a string is a properly formatted set of hexidecimal strings.
 --! @param str a string that is assumed to only consists of hexideicmal chars
