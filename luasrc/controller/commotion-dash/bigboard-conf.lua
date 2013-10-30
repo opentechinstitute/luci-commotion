@@ -82,7 +82,7 @@ function ifprocess()
 		--[[ validate destination address ]]--
 		if id.is_ip4addr(values['gatherer_ip']) == true and
                	   id.is_ip4addr_cidr(values['gatherer_ip']) == true and
-                   is_fqdn(values['gatherer_ip']) ~= nil then
+                   id.is_fqdn(values['gatherer_ip']) ~= nil then
                 	ERR = 'ERROR: invalid IP or site address ' .. values['gatherer_ip']
                 	debug.log("Error validating inputs " .. values['gatherer_ip'])
                 	main(ERR)
