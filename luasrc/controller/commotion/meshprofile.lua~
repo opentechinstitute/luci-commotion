@@ -30,7 +30,7 @@ function index()
 	entry({"admin", "commotion", "meshprofile"}, call("main"), i18n("Mesh Profile"), 20).dependent=false
 end
 
-function main(ERR, isDuplicate, ul)
+function main(ERR, OW)
    log("main started")
    if not ERR then
 	  ERR = nil
@@ -53,7 +53,7 @@ function main(ERR, isDuplicate, ul)
 		end
    end
    luci.http.prepare_content("text/html")
-   luci.template.render("commotion/meshprofile", {available = available, profiles = profiles, ERR = ERR, isDuplicate = isDuplicate, ul = ul})
+   luci.template.render("commotion/meshprofile", {available = available, profiles = profiles, ERR = ERR, OW = OW})
 
 end
 
@@ -66,17 +66,7 @@ function ifprocess()
 	local uci = luci.model.uci.cursor()
 	log("Applying " .. p .. " to " .. tif)
 	old_prof = uci:get('network', tif, "profile")
-	local wireless = false
-	uci:foreach('wireless','wifi-iface',
-	    function(iface)
-		if iface.network == tif then
-			wireless = true
-		end
-	    end
-	)
-	if wireless then
-		error = flush_wireless_profile(old_prof, p, tif)
-	end
+	error = flush_wireless_profile(old_prof, p, tif)
 	uci:set('network', tif, "profile", p)
 	uci:commit('network')
 	uci:save('network')
@@ -172,12 +162,8 @@ function up()
    --]=]
    log("up started")
    local error = nil
-   local isDuplicate = false
    setFileHandler("/tmp/", "config")
    local values = luci.http.formvalue()
-   
-   local overwrite = values["overwrite"]
-   
    local ul = values["config"]
    if ul ~= '' and ul ~= nil then
 	  --TODO add logging to checkfile to identify why it does not work
@@ -188,37 +174,25 @@ function up()
 	  main(error)
 	  
    else
-     
    -- check for extant profiles with the same name
    iterator, is_match = fs.glob("/etc/commotion/profiles.d/" .. ul)
    
-   log(overwrite)
-      
 	  -- if there is a conflict, inform the user
 	  if is_match > 0 then
-	      if overwrite == "yes" then
-		  result = fs.copy("/tmp/" .. ul, "/etc/commotion/profiles.d/" .. ul)
-		  main(nil)
-	      end
-	      if overwrite == "no" then
-		  main(nil)
-	      end
-	      if overwrite == nil then
-		  error = "There is a conflict: The profile "..ul.." already exists."
-	      
-		  isDuplicate = true
-	      
-		  main(error, isDuplicate, ul)
 	
-		  log("There is a conflict: The profile "..ul.." already exists.")
-	      end
+	      error = "There is a conflict: The profile "..ul.." already exists."
+	      
+	      OW = true
+	      
+	      main(error, OW)
+	
+	      log("There is a conflict: The profile "..ul.." already exists.")
+	
 	  -- if no conflict exists, copy the new profile to etc/commotion/profiles.d
 	  else 
-		 result = fs.copy("/tmp/" .. ul, "/etc/commotion/profiles.d/" .. ul)
-		 main(nil)
-	      
+	      result = fs.copy("/tmp/" .. ul, "/etc/commotion/profiles.d/" .. ul)
+	      main(nil)
 	  end
-       
     end
 end
 
@@ -351,6 +325,8 @@ function flush_wireless_profile(old_profile, new_profile, interface)
 end
 
 function get_commotion_settings(file)
+   --[=[ Checks the quickstart settings file and returns a table with setting, value pairs.--]=]
+   local QS = luci.controller.QS.QS
    settings = {}
    for line in io.lines("/etc/commotion/profiles.d/"..file) do
 	  setting = line:split("=")
