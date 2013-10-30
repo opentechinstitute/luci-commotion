@@ -15,7 +15,6 @@ module("luci.controller.commotion.meshprofile", package.seeall)
 require "luci.model.uci"
 require "luci.fs"
 require "luci.sys"
-require "commotion_helpers"
 
 local profileDir = "/etc/commotion/profiles.d/"
 
@@ -30,7 +29,8 @@ function index()
 end
 
 function main(ERR)
-   log("main started")
+   local debug = require "luci.commotion.debugger"
+   debug.log("main started")
    if not ERR then
 	  ERR = nil
    end
@@ -42,7 +42,7 @@ function main(ERR)
 			   function(s)
 				  if s['.name'] and s.profile then
 					 table.insert(available, {s['.name'], s.profile})
-					 --log(s['.name'] .. " uses " .. s.profile)
+					 --debug.log(s['.name'] .. " uses " .. s.profile)
 				  end
 			   end)
    local profiles = {}
@@ -57,13 +57,14 @@ function main(ERR)
 end
 
 function ifprocess()
-	log("Processing profile application...")
+   local debug = require "luci.commotion.debugger"
+	debug.log("Processing profile application...")
 	local error = nil
 	local values = luci.http.formvalue()
 	local tif = values["interfaces"]
 	local p = values["profiles"]
 	local uci = luci.model.uci.cursor()
-	log("Applying " .. p .. " to " .. tif)
+	debug.log("Applying " .. p .. " to " .. tif)
 	old_prof = uci:get('network', tif, "profile")
 	local wireless = false
 	uci:foreach('wireless','wifi-iface',
@@ -98,10 +99,11 @@ function finish()
 end
 
 function checkFile(file)
+   local debug = require "luci.commotion.debugger"
    --[=[
 	  Checks the uploaded profile to ensure the required settings are there.
 	  --]=]
-	  log("file check started")
+	  debug.log("file check started")
 	  local error = nil
 	  if luci.fs.isfile(file) then
 		 --required fields for a commotion profile
@@ -132,7 +134,7 @@ function checkFile(file)
 			   end
 			   if not contained then
 				  table.insert(missing, x)
-				  log("Field "..x.." is missing.")
+				  debug.log("Field "..x.." is missing.")
 			   end
 			end
 		 end
@@ -143,11 +145,11 @@ function checkFile(file)
 			--remove file because it is BAD
 			removed = luci.sys.call('rm ' .. file)
 		 else
-			log("Profile seems to be correctly formatted.")
+			debug.log("Profile seems to be correctly formatted.")
 		 end
 	  else
 		 error = "There does not seem to be a file here..."
-		 log("File is missing")
+		 debug.log("File is missing")
 	  end
 	  if error then
 		 return error
@@ -168,7 +170,8 @@ end
 function up()
    --[=[calls the file uploader and checks if the file is a correct config.
    --]=]
-   log("up started")
+   local debug = require "luci.commotion.debugger"
+   debug.log("up started")
    local error = nil
    setFileHandler("/etc/commotion/profiles.d/", "config")
    local values = luci.http.formvalue()
@@ -196,7 +199,7 @@ end
 
 function download(filename)
    --TODO remove the luci.http.status calls and replace them with calls to main(error) with the appropriate text to inform the user of why they cannot download it.
-   log("download started")
+   debug.log("download started")
    -- no file name provided
   if not filename then
     luci.http.status(403, "Forbidden")
@@ -247,6 +250,7 @@ function setFileHandler(location, input_name, file_name)
 	  file_name: (string, optional) The optional name you would like the file to be saved as. If left blank the file keeps its uploaded name.
 
 	  --]=]
+	  local debug = require "luci.commotion.debugger"
 	  local sys = require "luci.sys"
 	  local fs = require "luci.fs"
 	  local configLoc = location
@@ -257,14 +261,14 @@ function setFileHandler(location, input_name, file_name)
 			complete = nil
 			if meta and meta.name == input_name then
 			   if file_name ~= nil then
-				  log("starting download")
+				  debug.log("starting download")
 				  fp = io.open(configLoc .. file_name, "w")
 			   else
-				  log("starting download")
+				  debug.log("starting download")
 				  fp = io.open(configLoc .. meta.file, "w")
 			   end
 			else
-			   log("file not of specified input type (input name variable)")
+			   debug.log("file not of specified input type (input name variable)")
 			end
 		 end
 		 if chunk then
@@ -272,7 +276,7 @@ function setFileHandler(location, input_name, file_name)
 		 end
 		 if eof then
 			fp:close()
-			log("file downloaded")
+			debug.log("file downloaded")
 		 end
 		 end)
 end
@@ -280,6 +284,7 @@ end
 
 function flush_wireless_profile(old_profile, new_profile, interface)
    --TODO need a userspace warning that channel settings will not take effect and need to be done in the settings page.
+   local debug = require "luci.commotion.debugger"
    local uci = luci.model.uci.cursor()
    local found = nil
    local old_dev = nil
@@ -298,7 +303,7 @@ function flush_wireless_profile(old_profile, new_profile, interface)
 					 error = luci.i18n.translate("You have multiple wireless interfaces on a single network interface. This is not allowed.")
 				  end
 			   end)
-   --log(tostring(conflict).." is the conflict level")
+   --debug.log(tostring(conflict).." is the conflict level")
    if error ~= nil then  
 	  return error
    else
