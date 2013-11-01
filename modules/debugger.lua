@@ -21,7 +21,7 @@ function debugger.log(msg)
 			log('}')
 		end
 	else
-	   luci.sys.exec("logger -t luci \"" .. tostring(msg) .. '"')
+	   sys.exec("logger -t luci \"" .. tostring(msg) .. '"')
 	end
 end
 
