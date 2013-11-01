@@ -124,10 +124,15 @@ luci-theme-commotion
 luci-commotion-apps
 luci-commotion-splash
 luci-commotion
-commotion-debug-helper
 
 * search for the use of require "commotion_helpers" in packages to remove dead requirement link.
-
+Done
 * create a package in commotion-feed
+Done
+* ensure that the menuconfig is populated correctly
+Done
+* update dependencies pointing to luci-commotion from other packages to point to the correct luci_helpers functions
+
 * test that package compiles correctly
+
 * test each issue_30 branch to ensure that all fixes work.
