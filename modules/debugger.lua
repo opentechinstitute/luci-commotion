@@ -1,7 +1,7 @@
 --! @file debug
 
 local sys = require "luci.sys"
-local type, tostring = type, tostring
+local type, tostring, pairs = type, tostring, pairs
 
 module "luci.commotion.debugger"
 
