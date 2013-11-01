@@ -179,11 +179,11 @@ function up()
    local overwrite = values["overwrite"]
    
    local ul = values["config"]
-   if ul ~= '' and ul ~= nil then
-	  --TODO add logging to checkfile to identify why it does not work
-	  file = "/tmp/" .. ul
-	  error = checkFile(file)
-   end
+   
+   --TODO add logging to checkfile to identify why it does not work
+   file = "/tmp/" .. ul
+   error = checkFile(file)
+   
    if error ~= nil then
 	  main(error)
 	  
