@@ -1,0 +1,27 @@
+diff --git a/system.lua b/system.lua
+index 5d0c74b..332d533 100644
+--- a/system.lua
++++ b/system.lua
+@@ -314,22 +314,6 @@ function action_flashops()
+ 	end
+ end
+ 
+-function action_passwd()
+-	local p1 = luci.http.formvalue("pwd1")
+-	local p2 = luci.http.formvalue("pwd2")
+-	local stat = nil
+-
+-	if p1 or p2 then
+-		if p1 == p2 then
+-			stat = luci.sys.user.setpasswd("root", p1)
+-		else
+-			stat = 10
+-		end
+-	end
+-
+-	luci.template.render("admin_system/passwd", {stat=stat})
+-end
+-
+ function action_reboot()
+ 	local reboot = luci.http.formvalue("reboot")
+ 	luci.template.render("admin_system/reboot", {reboot=reboot})
