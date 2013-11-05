@@ -13,8 +13,6 @@ http://www.apache.org/licenses/LICENSE-2.0
 
 module("luci.controller.commotion.serval_keyring", package.seeall)
 
-require "commotion_helpers"
-
 local key_file = "/etc/commotion/keys.d/mdp/"
 
 function index()
@@ -36,7 +34,8 @@ function main(Err)
 end
 
 function new_keyring()
-	log("Creating New Keyring...")
+   local debug = require "luci.commotion.debugger"
+	debug.log("Creating New Keyring...")
 	local values = luci.http.formvalue()
 	local new = values["new_keyring"]
 	local rm = luci.sys.call("rm "..key_file.."serval.keyring")
@@ -49,7 +48,7 @@ function new_keyring()
 	local AND = " && "
 	--Run the actual serval command to create a new keyring & key
 	local new_key = luci.sys.call(s_start..AND..s_stop)
-	--log(luci.sys.exec(s_list_key))
+	--debug.log(luci.sys.exec(s_list_key))
 	--If no errors occured in sys calls
 	if rm ~= 1 and new_key ~= 1 then
 	   finish()
@@ -70,19 +69,20 @@ end
 
 ---calls the file uploader and checks if the file is a correct config.
 function up()
-   log("uploader started")
+   local debug = require "luci.commotion.debugger"
+   debug.log("uploader started")
    local error = nil
    setFileHandler("/tmp/", "upload", "serval.keyring")
-   --log(luci.sys.exec("md5sum /tmp/serval.keyring"))
+   --debug.log(luci.sys.exec("md5sum /tmp/serval.keyring"))
    local values = luci.http.formvalue()
    local ul = values["upload"]
    if ul ~= '' and ul ~= nil then
-	  log("checking file")
+	  debug.log("checking file")
 	  error = checkFile("/tmp/serval.keyring")
    end
    --remove file if errors, copy it to correct directory and finish if a keyring
    if error ~= nil then
-	  log("error found")
+	  debug.log("error found")
 	  local rm = luci.sys.call("rm /tmp/serval.keyring")
 	  main(error)
    else
@@ -108,12 +108,13 @@ function down()
 end
 
 function download(filename)
+   local debug = require "luci.commotion.debugger"
    --TODO remove the luci.http.status calls and replace them with calls to main(error) with the appropriate text to inform the user of why they cannot download it.
-   log("download started")
+   debug.log("download started")
   local f = io.open(filename)
   -- file does not exist
   if not f then
-	 log("File Does Not Exist")
+	 debug.log("File Does Not Exist")
 	 luci.http.status(403, "Access denied")
 	 return
   end
@@ -130,6 +131,7 @@ end
 --@param	  input_name: (string) The name specified by the input html field. <input type="submit" name="input_name_here" value="whatever you want"/>
 --@param	 file_name   (string, optional) The optional name you would like the file to be saved as. If left blank the file keeps its uploaded name.
 function setFileHandler(location, input_name, file_name)
+   local debug = require "luci.commotion.debugger"
    local sys = require "luci.sys"
    local fs = require "luci.fs"
    local configLoc = location
@@ -140,14 +142,14 @@ function setFileHandler(location, input_name, file_name)
 			complete = nil
 			if meta and meta.name == input_name then
 			   if file_name ~= nil then
-				  log("starting download")
+				  debug.log("starting download")
 				  fp = io.open(configLoc .. file_name, "w")
 			   else
-				  log("starting download")
+				  debug.log("starting download")
 				  fp = io.open(configLoc .. meta.file, "w")
 			   end
 			else
-			   log("file not of specified input type (input name variable)")
+			   debug.log("file not of specified input type (input name variable)")
 			end
 		 end
 		 if chunk then
@@ -155,7 +157,7 @@ function setFileHandler(location, input_name, file_name)
 		 end
 		 if eof then
 			fp:close()
-			log("file downloaded")
+			debug.log("file downloaded")
 		 end
 	  end)
 end
