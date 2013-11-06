@@ -22,34 +22,42 @@ module("luci.controller.commotion-debug-helper.debugger", package.seeall)
 
 require "luci.sys"
 require "luci.fs"
+
 function index()
-   	entry({"admin", "commotion", "debug"}, template("commotion-debug-helper/debugger"), translate("Commotion Debugging Helper"), 50)
-	page = entry({"admin", "commotion","debug", "submit"}, call("debug"), nil)
-	page.leaf=true
-	end
+   entry({"admin", "commotion", "debug"}, template("commotion-debug-helper/debugger"), translate("Commotion Debugging Helper"), 50)
+   page = entry({"admin", "commotion","debug", "submit"}, call("debug"), nil)
+   page.leaf=true
+end
 
 function debug()
-		 name = luci.http.formvalue("name")
-		 contact = luci.http.formvalue("contact")
-		 whatYouDoing = luci.http.formvalue("whatYouDo")
-		 behaviorExpected = luci.http.formvalue("behaviorExpected")
-		 badBehavior = luci.http.formvalue("badBehavior")
- 		 luci.sys.call("echo '" .. name .. "' >> /tmp/debug.info")
- 		 luci.sys.call("echo '" .. contact .. "' >> /tmp/debug.info")
-		 luci.sys.call("echo '" .. whatYouDoing .. "' >> /tmp/debug.info")
-		 luci.sys.call("echo '" .. behaviorExpected .. "' >> /tmp/debug.info")
-		 luci.sys.call("echo '" .. badBehavior .. "' >> /tmp/debug.info")
-		 data()
+   report = {}
+   report.Name = luci.http.formvalue("name")
+   report.Contact = luci.http.formvalue("contact")
+   report.User_action = luci.http.formvalue("userAction")
+   report.Expected_Behavior = luci.http.formvalue("expectedBehavior")
+   report.Bad_Behavior = luci.http.formvalue("badBehavior")
+   
+   local f = io.open("/tmp/debug.info", "r")
+   for i,x in pairs(report) do
+	  if x then
+		 f:write(string.format("%q", i.." : "..x))
+	  end
+   end
+   f:close()
+   data()
 end
 
 function data()
-		 value = luci.http.formvalue("buginfo")
-		 if luci.sys.call("/usr/sbin/cdh -a " .. value) == 0 then
-		 	local f = io.open("/tmp/debug.info")
-			luci.http.prepare_content("application/force-download")
-			luci.http.header("Content-Disposition", "attachment; filename=debug.info")
-			luci.ltn12.pump.all(luci.ltn12.source.file(f), luci.http.write)
-			luci.fs.unlink("/tmp/debug.info")
-        	f:close()
-		end
+   debug_commands = {"network", "state", "rules", "all"}
+   value = string.format("%q", luci.http.formvalue("buginfo"))
+   if luci.util.contains(debug_commands, value) then
+	  if luci.sys.call("/usr/sbin/cdh -a " .. value) == 0 then
+		 local f = io.open("/tmp/debug.info")
+		 luci.http.prepare_content("application/force-download")
+		 luci.http.header("Content-Disposition", "attachment; filename=debug.info")
+		 luci.ltn12.pump.all(luci.ltn12.source.file(f), luci.http.write)
+		 luci.fs.unlink("/tmp/debug.info")
+		 f:close()
+	  end
+   end
 end
