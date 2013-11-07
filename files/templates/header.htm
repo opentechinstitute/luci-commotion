@@ -1,10 +1,3 @@
-<%-
-   --If an admin node, then use https.
-   require "commotion_helpers"
-   check_https("/admin/", luci.http.getenv())
--%>   
-             
-   
 <%#
 LuCI - Lua Configuration Interface
 Copyright 2008 Steven Barth <steven@midlink.org>
@@ -210,20 +203,6 @@ You may obtain a copy of the License at
     </div>
 
     <div class="navbar-inners"><div class="color0"></div><div class="color1"></div><div class="color2"></div><div class="color3"></div><div class="color4"></div></div>
-
-    <%- if luci.sys.user.getuser("root") and not luci.sys.user.getpasswd("root") then -%>
-    <section class="alerts">
-      <div class="alert warning">
-      <h4><%:No password set!%></h4>
-      <p>
-        <%:There is no password set on this router. Please configure a root password to protect the web interface and enable SSH.%>
-      </p>
-      <p>
-        <a href="<%=pcdata(luci.dispatcher.build_url("admin/system/admin"))%>"><%:Go to password configuration...%></a>
-      </p>
-      </div>
-    </section>
-    <%- end -%>
 
     <section id="maincontent">
 
