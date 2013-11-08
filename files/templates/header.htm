@@ -15,17 +15,18 @@ You may obtain a copy of the License at
    local http = require "luci.http"
    local sys  = require "luci.sys"
    local disp = require "luci.dispatcher"
-
+   local cdisp = require "luci.commotion.dispatch"
+   
    -- send as HTML5
    http.prepare_content("text/html")
 
    hostname = sys.hostname()
 
-   --THE SAME THING (?WHY?)
-   local request  = disp.context.path
+   --The request path (eg. http://ipaddress/cgi-bin/luci/;id-string/THIS/THIS/THIS/)
+   request  = disp.context.path
    local request2 = disp.context.request
 
-   --ROOT NODE
+   --ROOT NODE OF PATH (eg. admin on admin pages)
    category = request[1]
 
    --SAME AGAIN
@@ -39,7 +40,7 @@ You may obtain a copy of the License at
 
    --Show the local node (current menu) on the tree
    local node = disp.context.dispatched
-
+   
    --An Ordered table of node names of this tree's child nodes
    local categories = disp.node_childs(tree)
    
@@ -56,7 +57,7 @@ You may obtain a copy of the License at
    
    --nodeurl was here 
    --subtree was here 
-   -%>   
+   -%>
 <!DOCTYPE html>
 <html lang="<%=luci.i18n.context.lang%>">
   <head>
@@ -75,7 +76,10 @@ You may obtain a copy of the License at
 
   <body class="lang_<%=luci.i18n.context.lang%> <%- if node then %><%= striptags( node.title ) %><%- end %>">
 	<header>
-	  
+
+	  <%if request[2] == "commotion" then%><!--Start "Basic" Menu here -->
+	  <h1>COMMOTION MENU HERE</h1>
+	  <%else%> <!--End "Basic" menu here -->
 	  <%include("themes/commotion/drop_menu", {controller=controller, cattree=cattree, category=category})%>
 	  
 	  <%include("themes/commotion/toggle_header", {hostname=hostname})%>
@@ -83,7 +87,12 @@ You may obtain a copy of the License at
 	
 	  <%include("themes/commotion/unsaved_changes", {tree=tree, controller=controller, category=category})%>
 
-    <div class="navbar-inners"><div class="color0"></div><div class="color1"></div><div class="color2"></div><div class="color3"></div><div class="color4"></div></div>
+	  <%end%> <!--End Regular Menu-->
+    <div class="navbar-inners"><div class="color0"></div><div class="color1"></div><div class="color2"></div><div class="color3"></div><div class="color4"></div></div> <!--Do we want the pretty colors in the new UI? If not move into the last lua statment above.-->
 
+	<% if request[2] == "commotion" then%><!--Start "Basic" SIDEBAR here -->
+	<h1>SIDEBAR HERE</h1>
+	<%end%> <!--End "Basic" SIDEBAR here -->
+	
     <section id="maincontent">
 	  <%include("themes/commotion/subtree", {controller=controller, category=category, cattree=cattree})%>
