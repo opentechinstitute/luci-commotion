@@ -25,7 +25,7 @@ STYLE="width: 100%; height: 83%; border: 1px solid #ccc; margin-left:auto; margi
 <FORM ACTION="">
 <P><B TITLE="Sets the Level of Magnification.">Zoom</B>&#160;<A HREF="javascript:set_scale(scale+0.1)">+</A>&#160;<A HREF="javascript:set_scale(scale-0.1)">&ndash;</A>&#160;<INPUT ID="zoom" NAME="zoom" TYPE="text" VALUE="2.0" SIZE="5" ONCHANGE="set_scale()">&#160;
 | &#160;<B TITLE="Sets the Maximum hop-distance.">Max-Hops</B>&#160;<A HREF="javascript:set_maxmetric(maxmetric+1)">+</A>&#160;<A HREF="javascript:if(0<maxmetric)set_maxmetric(maxmetric-1)">&ndash;</A>&#160;<INPUT ID="maxmetric" NAME="maxmetric" TYPE="text" VALUE="3" SIZE="4" ONCHANGE="set_maxmetric(this.value)">&#160;
-| &#160;<B TITLE="Sets the node auto-spacer.">Auto-Spacer</B><INPUT ID="auto_declump" NAME="auto_declump" TYPE="checkbox" ONCHANGE="set_autodeclump(this.checked)" CHECKED="CHECKED">&#160;
+| &#160;<B TITLE="Sets the node auto-spacer.">Auto-Spacer</B><INPUT ID="auto_declump" NAME="auto_declump" TYPE="checkbox" ONCHANGE="set_autodeclump(this.checked)" >&#160;
 | &#160;<B TITLE="Show Host Names.">Host Names</B><INPUT ID="show_hostnames" NAME="show_hostnames" TYPE="checkbox" ONCHANGE="set_showdesc(this.checked)" CHECKED="CHECKED">&#160;
 | &#160;<A HREF="javascript:viz_save()" TITLE="Saves current settings in a cookie.">Save Settings</A>&#160;
 | &#160;<A HREF="javascript:viz_reset()" TITLE="Resets Visualizer.">Reset</A></P>

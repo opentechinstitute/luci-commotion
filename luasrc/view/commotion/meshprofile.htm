@@ -18,9 +18,9 @@ uri_prefix, num_post = string.gsub(uri, "meshprofile_.*", "meshprofile")
 
 <h1><%:Node Profiles%></h1>
 
-<p>If your node includes configuration profiles for multiple Commotion 
-networks, this form allows you to set your defaults. NOTE: Channel settings must be manually changed.
-We recommend that you reboot your node after changing these settings.</p>
+<p><%:If your node includes configuration profiles for multiple Commotion 
+networks, this form allows you to set your defaults.%> <%:NOTE: Channel settings must be manually changed.%>
+<%:We recommend that you reboot your node after changing these settings.%></p>
 
 <%-if ERR then-%>
 <div class="error"><%=ERR%></div>
@@ -30,8 +30,8 @@ We recommend that you reboot your node after changing these settings.</p>
 <form method="post" action="<%=uri_prefix%>_up" enctype="multipart/form-data" id="up">
 <h1> Overwrite existing profile? </h1>
 <input type="hidden" name="config" value="<%=ul%>" >
-<input type="radio" name="overwrite" value="yes">Yes, please overwrite the existing profile<br>
-<input type="radio" name="overwrite" value="no">No, I will rename the file and upload it again<br>
+<input type="radio" name="overwrite" value="yes"><%:Yes, please overwrite the existing profile%><br>
+<input type="radio" name="overwrite" value="no"><%:No, I will rename the file and upload it again%><br>
 <input type="submit" name="submit" value="Confirm"/>
 </form> 
 <%end%>
@@ -57,9 +57,9 @@ We recommend that you reboot your node after changing these settings.</p>
 </form>
 
 <br /><br />
-	<h1>Download a Profile</h1>
+	<h1><%:Download a Profile%></h1>
 	<form method="post" action="<%=uri_prefix%>_down" enctype="multipart/form-data" id="down">
-	<label class="cbi-value-title tippable" data-tip="Choose a profile and click download here.">Choose a profile to download</label>
+	<label class="cbi-value-title tippable" data-tip="<%:Choose a profile and click download here.%>"><%:Choose a profile to download%></label>
 	<select name="dl_profile">
 		<% for _,p in ipairs(profiles) do %>
 			<option id="<%=p%>" value="<%=p%>"><%=p%></option>
@@ -68,16 +68,16 @@ We recommend that you reboot your node after changing these settings.</p>
 	<input type="submit" name="submit" value="Download"/>	
 </form>
 
-	<h1>Upload a Profile</h1>
+	<h1><%:Upload a Profile%></h1>
 	<form method="post" action="<%=uri_prefix%>_up" enctype="multipart/form-data" id="up">
 	<div id="zone-content-wrapper">
 	  <div id="zone-content">
 		<input type="hidden" name="moduleName" value="upload">
 		<div class="cbi-value">
-		  <label class="cbi-value-title tippable" data-tip="Click on the field below to upload a file.">Upload <%=uploadTitle%></label>
+		  <label class="cbi-value-title tippable" data-tip="<%:Click on the field below to upload a file.%>"><%:Upload%> <%=uploadTitle%></label>
 		  <input type="file" name="config" id="media" />
 		  <div class="upload-description">
-			Upload a config file from your own computer.
+			<%:Upload a config file from your own computer.%>
 		  </div>
 		</div>
 	  </div>
