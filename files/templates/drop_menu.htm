@@ -1,0 +1,55 @@
+  <nav>
+    <ul id="navtoselect">
+      <%-
+		 local util = require "luci.util"
+		 local http = require "luci.http"
+		 local disp = require "luci.dispatcher"
+		 
+         local function submenu(prefix, node)
+         local childs = disp.node_childs(node)
+         if #childs > 0 then
+      %>
+      <ul class="dropdown-menu">
+        <%-
+           for i, r in ipairs(childs) do
+           local nnode = node.nodes[r]
+           local href  = controller .. prefix .. r ..
+           (nnode.query and http.build_querystring(nnode.query) or "")
+           %>
+        <li>
+          <a href="<%=util.pcdata(href)%>"><%=util.pcdata(striptags(translate(nnode.title)))%></a>
+        </li>
+        <%-
+           end
+           %>
+      </ul>
+      <%-
+         end
+         end
+		 
+         childs = disp.node_childs(cattree)
+		 
+         if #childs > 0 then
+      for i, r in ipairs(childs) do
+      local nnode = cattree.nodes[r]
+      local href  = controller .. "/" .. category .. "/" .. r ..
+      (nnode.query and http.build_querystring(k.query) or "") --Where is k defined?
+      local grandchildren = disp.node_childs(nnode)
+	  
+      if #grandchildren > 0 then
+      %>
+      <li class="dropdown">
+        <a class="menu" href="<%=util.pcdata(href)%>"><%=util.pcdata(striptags(translate(nnode.title)))%></a>
+        <%- submenu("/" .. category .. "/" .. r .. "/", nnode) %>
+      </li>
+      <% else %>
+      <li>
+        <a href="<%=util.pcdata(href)%>"><%=util.pcdata(striptags(translate(nnode.title)))%></a>
+      </li>
+      <%
+         end
+         end
+         end
+         %>
+    </ul>
+  </nav>
