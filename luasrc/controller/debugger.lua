@@ -1,4 +1,5 @@
 
+
 --[[
 
 appSplash - LuCI based debugging tool.
@@ -29,6 +30,8 @@ function index()
    page.leaf=true
 end
 
+--! @name debug
+--! @brief checks for user reported text and creates a debug file and adds to it.
 function debug()
    report = {}
    report.Name = luci.http.formvalue("name")
@@ -36,28 +39,41 @@ function debug()
    report.User_action = luci.http.formvalue("userAction")
    report.Expected_Behavior = luci.http.formvalue("expectedBehavior")
    report.Bad_Behavior = luci.http.formvalue("badBehavior")
-   
-   local f = io.open("/tmp/debug.info", "r")
-   for i,x in pairs(report) do
-	  if x then
-		 f:write(string.format("%q", i.." : "..x))
+   if report ~= {} then
+	  local f = io.open("/tmp/debug.info", "w")
+	  for i,x in pairs(report) do
+		 if x then
+			f:write(string.format("%q", i.." : "..x.."\n"))
+		 end
 	  end
+	  f:close()
    end
-   f:close()
    data()
 end
 
+--! @name data
+--! @brief Checks for the buginfo formvalue and then runs the corresponding debug helper function type and returns it to the user.
+--! @note the anon function that re-implements luci.util.contains is for the extra quotes that %q formatting adds in. 
 function data()
+   local http = require "luci.http"
    debug_commands = {"network", "state", "rules", "all"}
    value = string.format("%q", luci.http.formvalue("buginfo"))
-   if luci.util.contains(debug_commands, value) then
+   if function()
+	  for i,x in pairs(debug_commands) do
+		 if value == string.format("%q", x) then
+			return true
+		 end end end
+   then
 	  if luci.sys.call("/usr/sbin/cdh -a " .. value) == 0 then
 		 local f = io.open("/tmp/debug.info")
-		 luci.http.prepare_content("application/force-download")
-		 luci.http.header("Content-Disposition", "attachment; filename=debug.info")
+		 http.prepare_content("application/force-download")
+		 http.header("Content-Disposition", "attachment; filename=debug.info")
 		 luci.ltn12.pump.all(luci.ltn12.source.file(f), luci.http.write)
 		 luci.fs.unlink("/tmp/debug.info")
 		 f:close()
 	  end
    end
+   old_uri = env.REQUEST_URI
+   uri = string.gsub(old_uri, "debug/submit", "debug")
+   http.redirect("https://"..env.SERVER_NAME..uri)
 end
