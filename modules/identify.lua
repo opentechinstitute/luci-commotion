@@ -140,6 +140,13 @@ function identify.is_fqdn(str)
    end
 end
 
+--! @name is_valid_uci
+--! @brief Checks to ensure a value is a valid uci value (e.g letters and underscores only)
+--! @param  string to check
+--! @return string if correct, nil if invalid
+function identify.is_valid_uci(str)
+	return str:find("^[%w_]+$")
+end
 
 --! @name is_hex
 --! @brief Identifies if a string is a properly formatted set of hexidecimal strings.
