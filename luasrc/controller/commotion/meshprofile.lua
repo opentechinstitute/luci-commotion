@@ -15,6 +15,7 @@ module("luci.controller.commotion.meshprofile", package.seeall)
 require "luci.model.uci"
 require "luci.fs"
 require "luci.sys"
+local fs = require "nixio.fs"
 
 local profileDir = "/etc/commotion/profiles.d/"
 
@@ -28,7 +29,7 @@ function index()
 	entry({"admin", "commotion", "meshprofile"}, call("main"), i18n("Mesh Profile"), 20).dependent=false
 end
 
-function main(ERR)
+function main(ERR, isDuplicate, ul)
    local debug = require "luci.commotion.debugger"
    debug.log("main started")
    if not ERR then
@@ -52,7 +53,7 @@ function main(ERR)
 		end
    end
    luci.http.prepare_content("text/html")
-   luci.template.render("commotion/meshprofile", {available = available, profiles = profiles, ERR = ERR})
+   luci.template.render("commotion/meshprofile", {available = available, profiles = profiles, ERR = ERR, isDuplicate = isDuplicate, ul = ul})
 
 end
 
@@ -122,6 +123,7 @@ function checkFile(file)
 			   table.insert(fields, setting[1])
 			end
 		 end
+		 --on line 113, the if statement that if the file is empty does not have an else statement that says (if the file is empty, pass an error)
 		 if fields ~= {} then
 			--Check to see if there are missing fields
 			missing = {}
@@ -173,19 +175,54 @@ function up()
    local debug = require "luci.commotion.debugger"
    debug.log("up started")
    local error = nil
-   setFileHandler("/etc/commotion/profiles.d/", "config")
+   local isDuplicate = false
+   setFileHandler("/tmp/", "config")
    local values = luci.http.formvalue()
+   
+   local overwrite = values["overwrite"]
+   
    local ul = values["config"]
-   if ul ~= '' and ul ~= nil then
-	  --TODO add logging to checkfile to identify why it does not work
-	  file = "/etc/commotion/profiles.d/" .. ul
-	  error = checkFile(file)
-   end
+   
+   --TODO add logging to checkfile to identify why it does not work
+   file = "/tmp/" .. ul
+   error = checkFile(file)
+   
    if error ~= nil then
 	  main(error)
+	  
    else
-	  main(nil)
-   end
+     
+   -- check for extant profiles with the same name
+   iterator, is_match = fs.glob("/etc/commotion/profiles.d/" .. ul)
+   
+   log(overwrite)
+      
+	  -- if there is a conflict, inform the user
+	  if is_match > 0 then
+	      if overwrite == "yes" then
+		  result = fs.copy("/tmp/" .. ul, "/etc/commotion/profiles.d/" .. ul)
+		  main(nil)
+	      end
+	      if overwrite == "no" then
+		  main(nil)
+	      end
+	      if overwrite == nil then
+		  error = "There is a conflict: The profile "..ul.." already exists."
+	      
+		  isDuplicate = true
+	      
+		  main(error, isDuplicate, ul)
+	
+		  log("There is a conflict: The profile "..ul.." already exists.")
+	      end
+	  -- if no conflict exists, copy the new profile to etc/commotion/profiles.d
+	  else 
+		 result = fs.copy("/tmp/" .. ul, "/etc/commotion/profiles.d/" .. ul)
+		 main(nil)
+	      
+	  end
+       
+    end
 end
 
 function down()
