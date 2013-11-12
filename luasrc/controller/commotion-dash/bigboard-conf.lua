@@ -16,11 +16,11 @@ module("luci.controller.commotion-dash.bigboard-conf", package.seeall)
 require "luci.model.uci"
 require "luci.fs"
 require "luci.sys"
-require "commotion_helpers"
 
 local dashConfig = "/etc/config/commotion-dash"
 
 function index()
+    local debug = require "luci.commotion.debugger"
 	require("luci.i18n").loadc("commotion")
 	local i18n = luci.i18n.translate
 	local uci = luci.model.uci.cursor()
@@ -41,7 +41,7 @@ function index()
 			entry({"admin", "commotion", "bigboard-conf_submit"}, call("ifprocess"))
 			entry({"admin", "commotion", "bigboard-conf"}, call("main"), translate("BigBoard Configuration"), 20).dependent=false
 		else
-			log("Can't run Commotion-Dashboard. Install olsrd jsoninfo plugin.")
+			debug.log("Can't run Commotion-Dashboard. Install olsrd jsoninfo plugin.")
 		end
 	end
 end
@@ -68,26 +68,29 @@ config dashboard
 end
 
 function ifprocess()
+   local debug = require "luci.commotion.debugger"
 	local values = luci.http.formvalue()
+	local encode = require "luci.commotion.encode"
+	local id = require "luci.commotion.identify"
 	local ERR = nil
 	--[[ sanitize inputs ]]--
 	for k,v in pairs(values) do
-		values[k] = url_encode(v)
+		values[k] = encode.url(v)
 	end
 	
 	if values['bbOnOff'] ~= nil then
 		--[[ validate destination address ]]--
-		if is_ip4addr(values['gatherer_ip']) == true and
-               	   is_ip4addr_cidr(values['gatherer_ip']) == true and
-                   is_fqdn(values['gatherer_ip']) ~= nil then
+		if id.is_ip4addr(values['gatherer_ip']) == true and
+               	   id.is_ip4addr_cidr(values['gatherer_ip']) == true and
+                   id.is_fqdn(values['gatherer_ip']) ~= nil then
                 	ERR = 'ERROR: invalid IP or site address ' .. values['gatherer_ip']
-                	log("Error validating inputs " .. values['gatherer_ip'])
+                	debug.log("Error validating inputs " .. values['gatherer_ip'])
                 	main(ERR)
                 	do return end
         	end
 
-		log("Commotion-Dashboard: Enabling network stats submission...")
-		log("Commotion-Dashboard: Setting " .. values['gatherer_ip'] .. "as network stats collector")
+		debug.log("Commotion-Dashboard: Enabling network stats submission...")
+		debug.log("Commotion-Dashboard: Setting " .. values['gatherer_ip'] .. "as network stats collector")
 		if ERR == nil then
 			local uci = luci.model.uci.cursor()
 			uci:set("commotion-dash", values['dashName'], "enabled", values['bbOnOff'])
@@ -96,7 +99,7 @@ function ifprocess()
 			uci:save('commotion-dash')
 		end	
 	else
-		log("Disabling Commotion-Dashboard")
+		debug.log("Disabling Commotion-Dashboard")
 		local uci = luci.model.uci.cursor()
 		uci:set("commotion-dash", values["dashName"], 'enabled', 'false')
 		uci:set("commotion-dash", values["dashName"], 'gatherer', 'x.x.x.x')
