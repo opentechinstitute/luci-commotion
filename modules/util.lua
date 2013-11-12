@@ -50,5 +50,12 @@ function util.upload(location, input_name, file_name)
 end
 
 
+--! @name pass_to_shell
+--! @brief A function to sanatize data before it is passed to the shell to execute.
+--! @param String to be cleaned
+function util.pass_to_shell(str)
+	return str:gsub("$(","\\$"):gsub("`","\\`")
+end
+
 return util
 
