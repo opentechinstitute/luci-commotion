@@ -1,7 +1,7 @@
 <%-
    --If an admin node, then use https.
-   require "commotion_helpers"
-   check_https("/admin/", luci.http.getenv())
+   local crypto = require "luci.commotion.crypto"
+   crypto.check_https("/admin/", luci.http.getenv())
 -%>   
              
    
