@@ -72,6 +72,7 @@ m3 = Map("network")
 s_namesrv = m3:section(TypedSection, "_dummy", translate("DNS Servers"),
    translate("Override nameservers defined in Commotion profiles"))
 s_namesrv.optional = true
+s_namesrv.anonymous = true
 
 -- Check /etc/config/network for existing overrides
 local netifs = {}
@@ -80,7 +81,9 @@ uci:foreach("network","interface",
    function(interface)
       if interface["proto"] == "commotion" and interface["dns"] then
          table.insert(netifs, interface[".name"])
-         table.insert(placeholder, interface["dns"])
+         --if table.contains(placeholder, interface["dns"]) then
+            table.insert(placeholder, interface["dns"].." ")
+         --end
       end
    end
 )
@@ -94,17 +97,16 @@ function s_namesrv.cfgsections()
 end
 
 function m3.on_before_commit(map)
+   local datatypes = require "luci.cbi.datatypes"
    if o_dns:formvalue("_dns") then
       dns = o_dns:formvalue("_dns")
       dns = util.split(dns, " ")
       for _, d in ipairs(dns) do
-         if d.datatype ~= "ipaddr" then
-	    m.message = translate("DNS field must use IP address")
---[[
+         if datatypes.host(d) == false then
+	    m.message = translate("DNS field contain valid hostnames or IP addresses separated by spaces")
 	    m.save = false
 	    m2.save = false
 	    m3.save = false
-]]--
 	 end
       end
    end
