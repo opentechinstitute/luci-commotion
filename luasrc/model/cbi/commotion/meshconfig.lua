@@ -77,20 +77,33 @@ s_namesrv.anonymous = true
 -- Check /etc/config/network for existing overrides
 local netifs = {}
 local placeholder={}
+o_dns = s_namesrv:option(Value, "dns", "", 
+   translate("Separate hostnames or IP addresses with spaces"), 
+)
 uci:foreach("network","interface",
    function(interface)
       if interface["proto"] == "commotion" and interface["dns"] then
          table.insert(netifs, interface[".name"])
-         --if table.contains(placeholder, interface["dns"]) then
-            table.insert(placeholder, interface["dns"].." ")
-         --end
+         if #placeholder == 0 then
+            table.insert(placeholder, interface["dns"])
+         elseif #placeholder > 0 and util.contains(placeholder, interface["dns"]) == false then
+            table.insert(placeholder, interface["dns"])
+         end
       end
    end
 )
+o_dns:value(table.concat(placeholder, " "))
+o_dns.rmempty = true
+--[[
 o_dns = s_namesrv:option(Value, "dns", "",
 	translate("Separate hostnames or IP addresses with spaces"))
-o_dns.placeholder = table.concat(placeholder)
-o_dns.rmempty = true
+--o_dns.placeholder = table.concat(placeholder)
+o_dns:value(table.concat(placeholder)) 
+-- hack: o_dns.vallist = {placeholder}
+--[[o_dns.datatype = function(x)
+   return true
+end]]--
+
 
 function s_namesrv.cfgsections()
    return { "_dns" }
