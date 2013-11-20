@@ -1,5 +1,5 @@
 diff --git a/admin.lua b/admin.lua
-index 61f0141..cb9b496 100644
+index 61f0141..6160197 100644
 --- a/admin.lua
 +++ b/admin.lua
 @@ -15,13 +15,33 @@ $Id: admin.lua 8153 2012-01-06 16:42:02Z jow $
@@ -46,7 +46,7 @@ index 61f0141..cb9b496 100644
  
 +function m.on_before_commit(map)
 +	-- if existing password, make sure user has old password
-+	if pw0:formvalue("_pass0") then
++	if _pass0 then
 +		v0 = luci.sys.user.checkpasswd("root", pw0:formvalue("_pass0"))
 +	end
 +
