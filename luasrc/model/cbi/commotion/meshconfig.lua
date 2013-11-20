@@ -14,21 +14,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 local uci = require "luci.model.uci".cursor()
 local sys = require "luci.sys"
 local util = require "luci.util"
---
-function log(msg)
-if (type(msg) == "table") then
-for key, val in pairs(msg) do            
-log('{')                                                                                                                 
-log(key)       
-log(':')
-log(val)          
-log('}')      
-end                            
-else                             
-luci.sys.exec("logger -t luci \"" .. tostring(msg) .. '"')
-end                                    
-end 
---
+
 m = Map("wireless", translate("Configuration"), translate("This configuration wizard will assist you in setting up your router for a Commotion network."))
 
 sctAP = m:section(NamedSection, "quickstartAP", "wifi-iface", translate("Access Point"))
@@ -74,12 +60,13 @@ s_namesrv = m3:section(TypedSection, "_dummy", translate("DNS Servers"),
 s_namesrv.optional = true
 s_namesrv.anonymous = true
 
--- Check /etc/config/network for existing overrides
 local netifs = {}
 local placeholder={}
 o_dns = s_namesrv:option(Value, "dns", "", 
-   translate("Separate hostnames or IP addresses with spaces"), 
-)
+   translate("Separate IP addresses with spaces"))
+o_dns.rmempty = true
+   
+-- Check /etc/config/network for existing overrides
 uci:foreach("network","interface",
    function(interface)
       if interface["proto"] == "commotion" and interface["dns"] then
@@ -92,18 +79,7 @@ uci:foreach("network","interface",
       end
    end
 )
-o_dns:value(table.concat(placeholder, " "))
-o_dns.rmempty = true
---[[
-o_dns = s_namesrv:option(Value, "dns", "",
-	translate("Separate hostnames or IP addresses with spaces"))
---o_dns.placeholder = table.concat(placeholder)
-o_dns:value(table.concat(placeholder)) 
--- hack: o_dns.vallist = {placeholder}
---[[o_dns.datatype = function(x)
-   return true
-end]]--
-
+o_dns.default = table.concat(placeholder, " ")
 
 function s_namesrv.cfgsections()
    return { "_dns" }
@@ -115,8 +91,8 @@ function m3.on_before_commit(map)
       dns = o_dns:formvalue("_dns")
       dns = util.split(dns, " ")
       for _, d in ipairs(dns) do
-         if datatypes.host(d) == false then
-	    m.message = translate("DNS field contain valid hostnames or IP addresses separated by spaces")
+         if datatypes.ipaddr(d) == false then
+	    m.message = translate("DNS field must contain valid IP addresses separated by spaces")
 	    m.save = false
 	    m2.save = false
 	    m3.save = false
