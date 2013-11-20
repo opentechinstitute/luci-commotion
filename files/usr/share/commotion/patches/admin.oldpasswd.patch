@@ -1,60 +1,59 @@
-diff --git a/admin.lua b/admin.lua
-index 61f0141..9757c3e 100644
---- a/admin.lua
-+++ b/admin.lua
-@@ -15,14 +15,34 @@ $Id: admin.lua 8153 2012-01-06 16:42:02Z jow $
+diff --git a/REMOVE-BEFORE-FLIGHT/admin.lua b/REMOVE-BEFORE-FLIGHT/admin.lua
+index 61f0141..6160197 100644
+--- a/REMOVE-BEFORE-FLIGHT/admin.lua
++++ b/REMOVE-BEFORE-FLIGHT/admin.lua
+@@ -15,13 +15,33 @@ $Id: admin.lua 8153 2012-01-06 16:42:02Z jow $
  
  local fs = require "nixio.fs"
  
 -m = Map("system", translate("Router Password"),
 -	translate("Changes the administrator password for accessing the device"))
 +m = Map("system", translate("System Access"),
-+        translate("System functions related to system access"))
++	translate("System functions related to system access"))
 +local v0 = true -- track password success across maps
 +
 +-- Allow incorrect root password to prevent settings change
 +-- Don't prompt for password if none has been set
 +if luci.sys.user.getpasswd("root") then
-+        s0 = m:section(TypedSection, "_dummy", translate("Current Password"),
-+                translate("Current password required to make changes on this page"))
-+        s0.addremove = false
-+        s0.anonymous = true
++	s0 = m:section(TypedSection, "_dummy", translate("Current Password"),
++		translate("Current password required to make changes on this page"))
++	s0.addremove = false
++	s0.anonymous = true
 +
-+        pw0 = s0:option(Value, "pw0", translate("Current Password"))
-+        pw0.password = true
-+        -- fail by default
-+        v0 = false
-+
-+        function s0.cfgsections()
-+                return { "_pass0" }
-+        end
++	pw0 = s0:option(Value, "pw0", translate("Current Password"))
++	pw0.password = true
++	-- fail by default
++	v0 = false
++	
++	function s0.cfgsections()
++		return { "_pass0" }
++	end
 +end
  
 -s = m:section(TypedSection, "_dummy", "")
 +s = m:section(TypedSection, "_dummy", translate("Router Password"),
-+        translate("Changes the administrator password for accessing the device"))
++	translate("Changes the administrator password for accessing the device"))
  s.addremove = false
  s.anonymous = true
- 
--pw1 = s:option(Value, "pw1", translate("Password"))
-+pw1 = s:option(Value, "pw1", translate("New Password"))
+-
++        
+ pw1 = s:option(Value, "pw1", translate("Password"))
  pw1.password = true
  
- pw2 = s:option(Value, "pw2", translate("Confirmation"))
 @@ -32,24 +52,36 @@ function s.cfgsections()
  	return { "_pass" }
  end
  
 +function m.on_before_commit(map)
-+	-- returns true|false
++	-- if existing password, make sure user has old password
 +	if _pass0 then
-+		v0 = luci.sys.user.checkpasswd("root", pw0:formvalue("_pass"))
++		v0 = luci.sys.user.checkpasswd("root", pw0:formvalue("_pass0"))
 +	end
 +
 +	if v0 == false then
 +		m.message = translate("Incorrect password. Changes rejected!")
-+		m.save=v0
-+		m2.save=v0
++		m.save=v0	
++		m2.save=v0	
 +	end
 +end
 +
