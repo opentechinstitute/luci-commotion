@@ -89,14 +89,18 @@ function m3.on_before_commit(map)
    local datatypes = require "luci.cbi.datatypes"
    if o_dns:formvalue("_dns") then
       dns = o_dns:formvalue("_dns")
-      dns = util.split(dns, " ")
-      for _, d in ipairs(dns) do
-         if datatypes.ipaddr(d) == false then
-	    m.message = translate("DNS field must contain valid IP addresses separated by spaces")
-	    m.save = false
-	    m2.save = false
-	    m3.save = false
-	 end
+      if #dns > 0 then
+         dns = util.split(dns, " ")
+         for _, d in ipairs(dns) do
+            if datatypes.ipaddr(d) == false then
+	       m.message = translate("DNS field must contain valid IP addresses separated by spaces")
+	       m.save = false
+	       m2.save = false
+	       m3.save = false
+	    end
+         end
+      else
+         m.message = translate("Removing DNS overrides")
       end
    end
 end
