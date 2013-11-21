@@ -102,6 +102,7 @@ function m3.on_before_commit(map)
 end
 
 function m3.on_commit(map)
+if m.save==true and m2.save==true and m3.save==true then
    local dns1 = o_dns:formvalue("_dns")
    if dns1 ~= nil then
       uci:foreach("network","interface",                                                                                                               
@@ -117,6 +118,7 @@ function m3.on_commit(map)
       end
    end
    uci:commit("network")
+end
 end
 
 m2 = Map("commotiond")                                                                                                                         
