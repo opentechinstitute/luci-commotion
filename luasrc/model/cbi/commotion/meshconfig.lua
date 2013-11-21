@@ -15,7 +15,6 @@ local uci = require "luci.model.uci".cursor()
 local sys = require "luci.sys"
 local util = require "luci.util"
 
-
 m = Map("wireless", translate("Configuration"), translate("This configuration wizard will assist you in setting up your router for a Commotion network."))
 
 sctAP = m:section(NamedSection, "quickstartAP", "wifi-iface", translate("Access Point"))
@@ -54,10 +53,82 @@ else
    end
 end
 
+-- TASK: Add option to manual mesh config to change DNS server
+m3 = Map("network")
+s_namesrv = m3:section(TypedSection, "_dummy", translate("DNS Servers"),
+   translate("Override nameservers defined in Commotion profiles"))
+s_namesrv.optional = true
+s_namesrv.anonymous = true
+
+local netifs = {}
+local placeholder={}
+o_dns = s_namesrv:option(Value, "dns", "", 
+   translate("Separate IP addresses with spaces"))
+o_dns.rmempty = true
+   
+-- Check /etc/config/network for existing overrides
+uci:foreach("network","interface",
+   function(interface)
+      if interface["proto"] == "commotion" and interface["dns"] then
+         table.insert(netifs, interface[".name"])
+         if #placeholder == 0 then
+            table.insert(placeholder, interface["dns"])
+         elseif #placeholder > 0 and util.contains(placeholder, interface["dns"]) == false then
+            table.insert(placeholder, interface["dns"])
+         end
+      end
+   end
+)
+o_dns.default = table.concat(placeholder, " ")
+
+function s_namesrv.cfgsections()
+   return { "_dns" }
+end
+
+function m3.on_before_commit(map)
+   local datatypes = require "luci.cbi.datatypes"
+   if o_dns:formvalue("_dns") then
+      dns = o_dns:formvalue("_dns")
+      if #dns > 0 then
+         dns = util.split(dns, " ")
+         for _, d in ipairs(dns) do
+            if datatypes.ipaddr(d) == false then
+	       m.message = translate("DNS field must contain valid IP addresses separated by spaces")
+	       m.save = false
+	       m2.save = false
+	       m3.save = false
+	    end
+         end
+      else
+         m.message = translate("Removing DNS overrides")
+      end
+   end
+end
+
+function m3.on_commit(map)
+if m.save==true and m2.save==true and m3.save==true then
+   local dns1 = o_dns:formvalue("_dns")
+   if dns1 ~= nil then
+      uci:foreach("network","interface",                                                                                                               
+         function(interface)
+            if interface["proto"] == "commotion" then
+               uci:set("network", interface[".name"], "dns", dns1)
+            end
+         end
+      )
+   else 
+      if interface["dns"] then
+         uci:delete("network", interface[".name"], "dns")
+      end
+   end
+   uci:commit("network")
+end
+end
+
 m2 = Map("commotiond")                                                                                                                         
 node = m2:section(TypedSection, "node", translate("Settings specific to this node"))
 node.anonymous = true
 node.optional = true
 node:option(Value, "dhcp_timeout", translate("DHCP Timeout"), translate("How many seconds to wait on boot for a DHCP lease from the gateway"))
 
-return m, m2
+return m, m3, m2
