@@ -34,7 +34,8 @@ sctMesh:option(Value, "bssid", translate("Device Designation (BSSID)"), translat
 e = m:section(TypedSection, "wifi-device", translate("Network-wide Settings"))
 e.anonymous = true
 
-protocol = uci.get("wireless", "wifi-device", "hwmode")
+local device = uci:get_first("wireless", "wifi-device")
+protocol = uci:get("wireless", device, "hwmode")
 
 if protocol == '11na' then
    c = e:option(ListValue, "channel", translate("5GHz Channel"), translate("The 5GHz backhaul channel of the mesh network, if applicable."))
