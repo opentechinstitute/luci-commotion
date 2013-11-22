@@ -1,4 +1,5 @@
 
+
 --[[
 
 appSplash - LuCI based debugging tool.
@@ -22,34 +23,57 @@ module("luci.controller.commotion-debug-helper.debugger", package.seeall)
 
 require "luci.sys"
 require "luci.fs"
+
 function index()
    entry({"admin", "commotion", "debug"}, template("commotion-debug-helper/debugger"), translate("Commotion Debugging Helper"), 50)
-	page = entry({"admin", "commotion","debug", "submit"}, call("debug"), nil)
-	page.leaf=true
-	end
-
-function debug()
-		 name = luci.http.formvalue("name")
-		 contact = luci.http.formvalue("contact")
-		 whatYouDoing = luci.http.formvalue("whatYouDo")
-		 behaviorExpected = luci.http.formvalue("behaviorExpected")
-		 badBehavior = luci.http.formvalue("badBehavior")
- 		 luci.sys.call("echo '" .. name .. "' >> /tmp/debug.info")
- 		 luci.sys.call("echo '" .. contact .. "' >> /tmp/debug.info")
-		 luci.sys.call("echo '" .. whatYouDoing .. "' >> /tmp/debug.info")
-		 luci.sys.call("echo '" .. behaviorExpected .. "' >> /tmp/debug.info")
-		 luci.sys.call("echo '" .. badBehavior .. "' >> /tmp/debug.info")
-		 data()
+   page = entry({"admin", "commotion","debug", "submit"}, call("debug"), nil)
+   page.leaf=true
 end
 
+--! @name debug
+--! @brief checks for user reported text and creates a debug file and adds to it.
+function debug()
+   report = {}
+   report.Name = luci.http.formvalue("name")
+   report.Contact = luci.http.formvalue("contact")
+   report.User_action = luci.http.formvalue("userAction")
+   report.Expected_Behavior = luci.http.formvalue("expectedBehavior")
+   report.Bad_Behavior = luci.http.formvalue("badBehavior")
+   if report ~= {} then
+	  local f = io.open("/tmp/debug.info", "w")
+	  for i,x in pairs(report) do
+		 if x then
+			f:write(string.format("%q", i.." : "..x.."\n"))
+		 end
+	  end
+	  f:close()
+   end
+   data()
+end
+
+--! @name data
+--! @brief Checks for the buginfo formvalue and then runs the corresponding debug helper function type and returns it to the user.
+--! @note the anon function that re-implements luci.util.contains is for the extra quotes that %q formatting adds in. 
 function data()
-		 value = luci.http.formvalue("buginfo")
-		 if luci.sys.call("/usr/sbin/cdh -a " .. value) == 0 then
-		 	local f = io.open("/tmp/debug.info")
-			luci.http.prepare_content("application/force-download")
-			luci.http.header("Content-Disposition", "attachment; filename=debug.info")
-			luci.ltn12.pump.all(luci.ltn12.source.file(f), luci.http.write)
-			luci.fs.unlink("/tmp/debug.info")
-        	f:close()
-		end
+   local http = require "luci.http"
+   debug_commands = {"network", "state", "rules", "all"}
+   value = string.format("%q", luci.http.formvalue("buginfo"))
+   if function()
+	  for i,x in pairs(debug_commands) do
+		 if value == string.format("%q", x) then
+			return true
+		 end end end
+   then
+	  if luci.sys.call("/usr/sbin/cdh -a " .. value) == 0 then
+		 local f = io.open("/tmp/debug.info")
+		 http.prepare_content("application/force-download")
+		 http.header("Content-Disposition", "attachment; filename=debug.info")
+		 luci.ltn12.pump.all(luci.ltn12.source.file(f), luci.http.write)
+		 luci.fs.unlink("/tmp/debug.info")
+		 f:close()
+	  end
+   end
+   old_uri = env.REQUEST_URI
+   uri = string.gsub(old_uri, "debug/submit", "debug")
+   http.redirect("https://"..env.SERVER_NAME..uri)
 end
