@@ -39,7 +39,10 @@ end
 --! @param str a html address string to be encoded into a properly formatted encoded html address
 --! @return a properly formatted encoded html address, if it was a html address to begin with
 function encode.html(str)
-  return string.gsub(str,"[<>&\n\r\"]",function(c) return html_replacements[c] or c end)
+  if (str) then
+    str = string.gsub(str,"[<>&\n\r\"]",function(c) return html_replacements[c] or c end)
+  end
+  return str
 end
 
 --! @name url
@@ -47,7 +50,10 @@ end
 --! @param str a url string to be made into a properly formatted encoded url
 --! @return a properly formatted encoded url, if it was a url to begin with 
 function encode.url(str)
-  return string.gsub(str,"[<>%s]",function(c) return url_replacements[c] or c end)
+  if (str) then
+    str = string.gsub(str,"[<>%s]",function(c) return url_replacements[c] or c end)
+  end
+  return str
 end
 
 return encode
