@@ -1,4 +1,5 @@
 local QS = require "luci.commotion.quickstart"
+local db = require "luci.commotion.debugger"
 
 --Main title and system config map for hostname value
 local m = Map("system", translate("Basic Configuration"), translate("In this section you'll set the basic required settings for this device, and the basic network settings required to connect this device to a Commotion Mesh network. You will be prompted to save your settings along the way and apply them at the end."))
@@ -11,7 +12,7 @@ local shn = m:section(TypedSection, "system")
 shn.anonymous = true
 
 --Create a value field for hostname
-local hname = shn:option(Value, hostname, translate("Node Name"), translate("The node name (hostname) is a unique name for this device, visible to other devices and users on the network. Name this device in the field provided."))
+local hname = shn:option(Value, "hostname", translate("Node Name"), translate("The node name (hostname) is a unique name for this device, visible to other devices and users on the network. Name this device in the field provided."))
 
 --PASSWORDS
 
@@ -35,11 +36,10 @@ if luci.sys.user.getpasswd("root") then
    end
 end
 
-
 if QS.status() then
-   local pw_text = "This password will be used to make changes to this device after initial setup has been completed. The administration username is “root."
+   pw_text = "This password will be used to make changes to this device after initial setup has been completed. The administration username is “root."
 else
-   local pw_text = "This password is used to make changes to this device. The administration username is “root."
+   pw_text = "This password is used to make changes to this device. The administration username is “root."
 end
    
 s = m:section(TypedSection, "_dummy", translate("Administration Password"), translate(pw_text))
@@ -59,13 +59,13 @@ end
 function m.on_before_commit(map)
 	-- if existing password, make sure user has old password
 	if s0 then
-		v0 = luci.sys.user.checkpasswd("root", pw0:formvalue("_pass0"))
+		v0 = luci.sys.user.checkpasswd("root", formvalue("_pass0"))
 	end
 
 	if v0 == false then
 		m.message = translate("Incorrect password. Changes rejected!")
-		m.save=v0	
-		m2.save=v0	
+		m.save=v0
+		m2.save=v0
 	end
 end
 
