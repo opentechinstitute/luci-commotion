@@ -15,6 +15,20 @@ local uci = require "luci.model.uci".cursor()
 local sys = require "luci.sys"
 local util = require "luci.util"
 
+function log(msg)
+if (type(msg) == "table") then
+for key, val in pairs(msg) do
+log('{')                                                                         
+log(key)
+log(':')
+log(val)
+log('}')
+end
+else
+luci.sys.exec("logger -t luci \"" .. tostring(msg) .. '"')
+end
+end
+
 
 m = Map("wireless", translate("Configuration"), translate("This configuration wizard will assist you in setting up your router for a Commotion network."))
 
@@ -34,10 +48,10 @@ sctMesh:option(Value, "bssid", translate("Device Designation (BSSID)"), translat
 e = m:section(TypedSection, "wifi-device", translate("Network-wide Settings"))
 e.anonymous = true
 
-local device = uci:get_first("wireless", "wifi-device")
-protocol = uci:get("wireless", device, "hwmode")
+local fiveghz = {'11a', '11adt', '11na'}
+protocol = uci:get_first("wireless", "wifi-device", "hwmode")
 
-if protocol == '11na' then
+if util.contains(fiveghz, protocol) then
    c = e:option(ListValue, "channel", translate("5GHz Channel"), translate("The 5GHz backhaul channel of the mesh network, if applicable."))
    c:value(36, "Channel 36 (5.180 GHz)")
    c:value(40, "Channel 40 (5.200 GHz)")
