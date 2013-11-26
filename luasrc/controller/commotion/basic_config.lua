@@ -24,10 +24,16 @@ function index()
    else
 	  --Create regular "Basic Config" menu.
 	  entry({"admin", "commotion", "basic"}, alias({"admin", "commotion", "basic", "node_settings"}), translate("Basic Configuration"), 10).index = true
+	  
 	  entry({"admin", "commotion", "basic", "node_settings"}, cbi("commotion/basic_ns"), translate("Node Settings"), 20)
+
 	  entry({"admin", "commotion", "basic", "network_settings"}, alias({"admin", "commotion", "basic", "mesh_network"}), translate("Network Settings"), 30)
+
 	  entry({"admin", "commotion", "basic", "mesh_network"}, cbi("commotion/basic_mn"), translate("Mesh Network"), 40)
+
 	  entry({"admin", "commotion", "basic", "wireless_network"}, cbi("commotion/basic_wn"), translate("Wireless Network"), 50)
+
 	  entry({"admin", "commotion", "basic", "addtl_net_ifaces"}, cbi("commotion/basic_ani"), translate("Additional Netork Interfaces"), 60)
+
    end
 end
