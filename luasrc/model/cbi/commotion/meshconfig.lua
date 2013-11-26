@@ -15,21 +15,6 @@ local uci = require "luci.model.uci".cursor()
 local sys = require "luci.sys"
 local util = require "luci.util"
 
-function log(msg)
-if (type(msg) == "table") then
-for key, val in pairs(msg) do
-log('{')                                                                         
-log(key)
-log(':')
-log(val)
-log('}')
-end
-else
-luci.sys.exec("logger -t luci \"" .. tostring(msg) .. '"')
-end
-end
-
-
 m = Map("wireless", translate("Configuration"), translate("This configuration wizard will assist you in setting up your router for a Commotion network."))
 
 sctAP = m:section(NamedSection, "quickstartAP", "wifi-iface", translate("Access Point"))
