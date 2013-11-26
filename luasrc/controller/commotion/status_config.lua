@@ -16,4 +16,10 @@ module "luci.controller.commotion.status_config"
 
 function index()
 	  entry({"admin", "commotion", "status"}, template("commotion/status"), translate("Staus"), 1)
+
+	  entry({"admin", "commotion", "status", "nearby_md"}, template("commotion/nearby_md"), translate("Nearby Mesh Devices"))
+	  entry({"admin", "commotion", "status", "mesh_viz"}, template("commotion/mesh_viz"), translate("Mesh Visualizer"))
+	  entry({"admin", "commotion", "status", "conn_clnts"}, template("commotion/conn_clnts"), translate("Connected Clients"))
+	  entry({"admin", "commotion", "status", "dbg_rpt"}, template("commotion/dbg_rpt"), translate("Debug Report"))
+	  
 end

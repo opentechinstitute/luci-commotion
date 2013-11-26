@@ -1,0 +1,43 @@
+<%#-
+--! @param gateway_provided String "Yes" if node is providing gateway to (mesh/ap?) "No" if not providing a gateway.
+--! @param ifaces Table. Looks like this -> {["interface 1 name"] = {["status"]="On/Off", ["sec"]="Secured/Insecure", ["conn"]="## Connections/nil"}, ["interface 2 name"] = {["status"]="On/Off", ["sec"]="Secured/Insecure", ["conn"]="## Connections/nil"}, etc }
+-%>
+
+<%+header%>
+
+<script type="text/javascript"> <!--TODO Place in seperate .js file? -->
+function setURL(url){
+    document.getElementById('iframe').src = url;
+}
+</script>
+<script type="text/javascript" src="<%=media%>/commotion_menu.js"></script> <!--Add css file and classes/id's to style the below -->
+
+<div id="status_bar"> 
+  <div class="info_list">
+	<h3><%:Providing Gateway%><small><%=gateway_provided%></small></h3>
+  </div>  
+  <div>
+<%- for iface,prop in pairs(ifaces) -%>
+	<h3><%=iface%><small><%=prop.status%> <%=prop.sec%> <%=prop.conn%></small></h3>
+  </div>
+</div>
+<%end%>
+<div class="cbi-map">
+  <ul id="tabs" class="cbi-tabmenu">
+	<li class="cbi-tab active">
+	  <a id="nearby_devices" href="javascript:void(0);" onclick="setURL('<%=controller%>/status/nearby_md')"><%:Nearby Mesh Devices%></a>
+	</li>
+	<li class="cbi-tab-disabled">
+	  <a id="mesh_visualizer" href="javascript:void(0);" onclick="setURL('<%=controller%>/status/mesh_viz')"><%:Mesh Visualizer%></a>
+	</li>
+	<li class="cbi-tab-disabled">
+	  <a id="connected_clients" href="javascript:void(0);" onclick="setURL('<%=controller%>/status/conn_clnts')"><%:Connected Clients%></a>
+	</li>
+	<li class="cbi-tab-disabled">
+	  <a id="debug_report" href="javascript:void(0);" onclick="setURL('<%=controller%>/status/dbg_rpt')"><%:Debug Report></a>
+	</li>
+  </ul>
+</div>
+<iframe id="iframe" src="<%=controller%>/status/nearby_md" />
+
+<%+footer%>
