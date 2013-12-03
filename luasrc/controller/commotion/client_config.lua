@@ -20,4 +20,5 @@ function index()
 	  entry({"admin", "commotion", "client", "welcome_page"}, cbi("commotion/client_wp"), translate("Welcome Page"), 30)
 
 	  entry({"admin", "commotion", "client", "bandwidth_controls"}, cbi("commotion/client_bc"), translate("Bandwidth Controls"), 40)
+
 end

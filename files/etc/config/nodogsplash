@@ -1,0 +1,7 @@
+config settings settings
+    option enable '0'
+	option splashtime '32'
+	option splashunit 'hours'
+
+config interfaces interfaces
+	option interface 'quickstartSec'
