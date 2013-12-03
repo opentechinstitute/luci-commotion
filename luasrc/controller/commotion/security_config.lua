@@ -14,7 +14,7 @@ You may obtain a copy of the License at
 ]]--
 module "luci.controller.commotion.security_config"
 
-function index()
+function index()   
 	  entry({"admin", "commotion", "security"}, alias({"admin", "commotion", "security", "passwords"}), translate("Security"), 40).index = true
 
 	  entry({"admin", "commotion", "security", "passwords"}, cbi("commotion/security_pass"), translate("Passwords"), 50)
