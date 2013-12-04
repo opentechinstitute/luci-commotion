@@ -18,6 +18,8 @@ You may obtain a copy of the License at
    local sys  = require "luci.sys"
    local disp = require "luci.dispatcher"
    local cdisp = require "luci.commotion.dispatch"
+   local util = require "luci.util"
+
    
    -- send as HTML5
    http.prepare_content("text/html")
@@ -64,7 +66,7 @@ You may obtain a copy of the License at
 <html lang="<%=luci.i18n.context.lang%>">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=yes" />
     <title><%=striptags( hostname .. ( (node and node.title) and ' - ' .. translate(node.title) or '')) %> - LuCI</title>
     <!--[if lt IE 9]><script src="<%=media%>/html5.js"></script><![endif]-->
     <link rel="stylesheet" href="<%=media%>/cascade.css">
@@ -87,57 +89,121 @@ You may obtain a copy of the License at
 	  <%include("themes/commotion/toggle_header", {hostname=hostname})%>
 	</header>
 	
-	  <%include("themes/commotion/unsaved_changes", {tree=tree, controller=controller, category=category})%>
+	  <!--<%include("themes/commotion/unsaved_changes", {tree=tree, controller=controller, category=category})%>-->
+
 
 	  <%end%> <!--End Regular Menu-->
-    <div class="navbar-inners"><div class="color0"></div><div class="color1"></div><div class="color2"></div><div class="color3"></div><div class="color4"></div></div> <!--Do we want the pretty colors in the new UI? If not move into the last lua statment above.-->
+
+    <div class="navbar-inners"><div class="color0"></div><div class="color1"></div><div class="color2"></div><div class="color3"></div><div class="color4"></div></div>
+		<!--Do we want the pretty colors in the new UI? If not move into the last lua statment above.-->
 
 	<% if request[2] == "commotion" then%><!--Start "Basic" SIDEBAR here -->
 
-		<div class="sidebar">
-			<ul class="sidemenu">
-				<li class ="statusmenu">
-					<h2>Status</h2>
-					<section class="descriptor">
-						<ul><li class=""></li></ul>
-					</section>
-				</li>
-				<li class ="basicmenu">
-					<h2>Status</h2>
-					<section class="descriptor">
-						<ul><li class=""></li></ul>
-					</section>
-				</li>
-				<li class ="clientmenu">
-					<h2>Status</h2>
-					<section class="descriptor">
-						<ul><li class=""></li></ul>
-					</section>
-				</li>			
-				<li class ="appmenu">
-					<h2>Status</h2>
-					<section class="descriptor">
-						<ul><li class=""></li></ul>
-					</section>
-				</li>
-				<li class ="securitymenu">
-					<h2>Status</h2>
-					<section class="descriptor">
-						<ul><li class=""></li></ul>
-					</section>
-				</li>
-				<li class ="advancedmenu">
-					<h2>Status</h2>
-					<section class="descriptor">
-						<ul><li class=""></li></ul>
-					</section>
-				</li>
-			
-			</ul>
-		
-		
-		</div>
+<div class="sb-container">
+<div class="sb-btn"><h1>Status</h1></div>
+<div class="sb-content">
+  <div class="sb-content-inner">
+    <p class="submenutitle">This is the submenu title</p>
+    <ul class="submenu">
+        <li>Cats</li>
+        <li>Cats</li>
+        <li>Cats</li>
+        <li>Meow</li>
+    </ul>
+  </div>
+</div>
 
+<div class="sb-btn"><h1>Basic Config</h1></div>
+<div class="sb-content">
+  <div class="sb-content-inner">
+    <p>Nulla facilisi. Proin sodales dolor</p>
+  </div>
+</div>
+
+<div class="sb-btn"><h1>Client Controls</h1></div>
+<div class="sb-content">
+  <div class="sb-content-inner">
+    <p>Praesent ultricies risus quis magna convallis, ac condimentum tellus laoreet. Donec dictum velit enim, nec hendrerit leo mattis sit amet.</p>
+  </div>
+</div>
+
+<div class="sb-btn"><h1>Applications</h1></div>
+<div class="sb-content">
+  <div class="sb-content-inner">
+    <p>Fusce eget ultricies ante. In augue urna, rhoncus ac tellus non, porta malesuada magna. Nulla tincidunt orci in metus rhoncus, at malesuada quam varius. Mauris sed tincidunt massa, ut cursus magna. Pellentesque cursus sapien turpis, id blandit magna tempus at.</p>
+  </div>
+</div>
+<div class="sb-btn"><h1>Security</h1></div>
+<div class="sb-content">
+  <div class="sb-content-inner">
+    <p>Fusce eget ultricies ante. In augue urna, rhoncus ac tellus non, porta malesuada magna. Nulla tincidunt orci in metus rhoncus, at malesuada quam varius.</p>
+  </div>
+</div>
+
+<div class="sb-btn"><h1>Advanced</h1></div>
+<div class="sb-content">
+  <div class="sb-content-inner">
+    <p>Fusce eget ultricies ante. In augue urna, rhoncus ac tellus non, porta malesuada magna. Nulla tincidunt orci in metus rhoncus, at malesuada quam varius. Mauris sed tincidunt massa, ut cursus magna. Pellentesque cursus sapien turpis, id blandit magna tempus at.</p>
+  </div>
+</div>
+</div>
+
+
+  <nav>
+    <ul id="navtoselect">
+      <%-
+		 local util = require "luci.util"
+		 local http = require "luci.http"
+		 local disp = require "luci.dispatcher"
+		 
+         local function submenu(prefix, node)
+         local childs = disp.node_childs(node)
+         if #childs > 0 then
+      %>
+      <ul class="dropdown-menu">
+        <%-
+           for i, r in ipairs(childs) do
+           local nnode = node.nodes[r]
+           local href  = controller .. prefix .. r ..
+           (nnode.query and http.build_querystring(nnode.query) or "")
+           %>
+        <li>
+          <a href="<%=util.pcdata(href)%>"><%=util.pcdata(striptags(translate(nnode.title)))%></a>
+        </li>
+        <%-
+           end
+           %>
+      </ul>
+      <%-
+         end
+         end
+		 
+         childs = disp.node_childs(cattree)
+		 
+         if #childs > 0 then
+      for i, r in ipairs(childs) do
+      local nnode = cattree.nodes[r]
+      local href  = controller .. "/" .. category .. "/" .. r ..
+      (nnode.query and http.build_querystring(k.query) or "") --Where is k defined?
+      local grandchildren = disp.node_childs(nnode)
+	  
+      if #grandchildren > 0 then
+      %>
+      <li class="dropdown">
+        <a class="menu" href="<%=util.pcdata(href)%>"><%=util.pcdata(striptags(translate(nnode.title)))%></a>
+        <%- submenu("/" .. category .. "/" .. r .. "/", nnode) %>
+      </li>
+      <% else %>
+      <li>
+        <a href="<%=util.pcdata(href)%>"><%=util.pcdata(striptags(translate(nnode.title)))%></a>
+      </li>
+      <%
+         end
+         end
+         end
+         %>
+    </ul>
+  </nav>
 
 
 	<%end%> <!--End "Basic" SIDEBAR here -->
