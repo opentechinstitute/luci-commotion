@@ -20,14 +20,28 @@ local utils = require "luci.util"
 local cnw = require "luci.commotion.network"
 local db = require "luci.commotion.debugger"
 local http = require "luci.http"
-
+local QS = require "luci.commotion.quickstart"
 --local db = require "luci.commotion.debugger"
---local QS = require "luci.commotion.quickstart"
+
 
 local m = Map("wireless", translate("Network Interfaces"), translate("Every Commotion node must have one mesh network connection or interface. Commotion can mesh over wireless or wired interfaces."))
 
+--when this map is committed make sure that the commotionMesh default interface is also created so that there is always a default profile applied. If still in quickstart, make sure that there is a default template for the wifi-iface section
+function m.on_commit()
+   if QS.status() then 
+	  cnw.commotion_set("commotionMesh", {values="mapvalues here"}) --TODO make commotion set actually work
+	  if not uci:get("wireless", "quickstartMesh") then
+		 uci:section("wireless", "wifi-iface", "quickstartMesh")
+		 uci:save("wireless")
+		 uci:commit("wireless")
+	  end
+   end
+end
+
 s = m:section(TypedSection, "wifi-iface")
-s.addremove = true
+if not QS.status() then --if not quickstart then allow for adding and removal
+   s.addremove = true
+end
 s.optional = false
 s.anonymous = true
 
@@ -40,15 +54,16 @@ end
 s.valuefooter = "cbi/full_valuefooter"
 s.template_addremove = "cbi/commotion/addMesh" --This template controls the addremove form for adding a new access point so that it has better wording.
 
---Default Mode (don't render this. Just add it so that it gets added to UCI when created)
-mode = s:option(DummyValue, "mode")
-mode.default = "adhoc"
-mode.render = function() end
+dflts = s:option(DummyValue,  "_dummy_val01")
+dflts.anonymous = true
 
---Default Commotion AP Profile (don't render this. Just add it so that it gets added to UCI when created)
-ntwk = s:option(DummyValue, "network")
-ntwk.default = "commotionMesh"
-ntwk.render = function() end
+function dflts.parse(self, section)
+   if not uci:get("wireless", "wifi-iface", section) then
+	  uci:section("wireless", "wifi-iface", section, {mode="adhoc"})
+	  uci:save("wireless")
+	  uci:commit("wireless")
+   end
+end
 
 name = s:option(Value, "ssid",  translate("Mesh Network Name"), translate("Commotion networks share a network-wide name. This must be the same across all devices on the same mesh."))
 name.default = "commotionwireless.net"

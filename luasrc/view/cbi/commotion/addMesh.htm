@@ -1,6 +1,7 @@
 <legend class="cbi-value-title"><%:Mesh Network%></legend>
 <div class="cbi-section-descr"><%:Click here to add a new mesh network interface.%></div>
 <div class="cbi-section-create">
+  <%if self.map.changed ~= true then %>
   <% if self.anonymous then -%>
   <input type="submit" class="cbi-button cbi-button-add" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>.<%=section%>" value="<%:Add%>" />
   <%- else -%>
@@ -10,6 +11,7 @@
 	<input type="submit" class="cbi-button cbi-button-add" onclick="this.form.cbi_state='add-section'; return true" value="<%:Add%>" />
 	<% if self.invalid_cts then -%>
 	<br /><%:Invalid%></div>
+  <%- end %>
   <%- end %>
   <%- end %>
 </div>

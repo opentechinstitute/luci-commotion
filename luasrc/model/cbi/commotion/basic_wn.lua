@@ -20,20 +20,25 @@ local utils = require "luci.util"
 local cnw = require "luci.commotion.network"
 local db = require "luci.commotion.debugger"
 local http = require "luci.http"
+local QS = require "luci.commotion.quickstart"
 
 local m = Map("wireless", translate("Wireless Network"), translate("Turning on an Access Point provides a wireless network for people to connect to using a laptop or other wireless devices."))
 
---when this map is committed make sure that the commotionAP default interface is also created so that there is always a default profile applied.
-function m.on_commit()
-   if not uci:get("network", "commotionAP") then
-	  uci:section("network", "interface", "commotionAP", {proto="commotion"})
-	  uci:save("network")
-	  uci:commit("network")
+function m.on_parse()
+   if QS.status() then 
+	  if not uci:get("wireless", "quickstartAP") then
+		 uci:section("wireless", "wifi-iface", "quickstartAP")
+		 uci:save("wireless")
+		 uci:commit("wireless")
+	  end
    end
 end
 
+
 s = m:section(TypedSection, "wifi-iface", translate("Access Point"), translate("Turning on an Access Point provides a wireless network for people to connect to using a laptop or other wireless devices."))
-s.addremove = true
+if not QS.status() then --if not quickstart then allow for adding and removal
+   s.addremove = true
+end
 s.optional = false
 s.anonymous = true
 function s:filter(section)
@@ -41,21 +46,22 @@ function s:filter(section)
    return mode == "ap" or mode == nil
 end
 
+dflts = s:option(DummyValue,  "_dummy_val01")
+dflts.anonymous = true
+
+function dflts.parse(self, section)
+   if not uci:get("wireless", "wifi-iface", section) then
+	  uci:section("wireless", "wifi-iface", section, {mode="ap", network="client"})
+	  uci:save("wireless")
+	  uci:commit("wireless")
+   end
+end
+
 s.valuefooter = "cbi/full_valuefooter"
 s.template_addremove = "cbi/commotion/addAP" --This template controls the addremove form for adding a new access point so that it has better wording.
 
---Default Mode (don't render this. Just add it so that it gets added to UCI when created)
-mode = s:option(DummyValue, "mode")
-mode.default = "ap"
-mode.render = function() end
-
---Default Commotion AP Profile (don't render this. Just add it so that it gets added to UCI when created)
-ntwk = s:option(DummyValue, "network")
-ntwk.default = "commotionAP"
-ntwk.render = function() end
-
 name = s:option(Value, "ssid", translate("Name"), translate("The access point name (SSID) is the name that people will look for when connecting to this device."))
-name.default = "PINEAPPLE"
+name.default = "CommotionWireless"
 
 local wifi_dev = {}
 uci.foreach("wireless", "wifi-device",
