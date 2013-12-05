@@ -62,7 +62,7 @@ end
 
 					s += String.format(
 						'<tr class="cbi-section-table-row cbi-rowstyle-'+(1 + (idx % 2))+'">' +
-							'<td class="cbi-section-table-cell" style="background-color:%s"><a href="http://%s/cgi-bin-status.html">%s</a></td>',
+udoadsfasdfasdasdf						'<td class="cbi-section-table-cell" style="background-color:%s"><a href="http://%s/cgi-bin-status.html">%s</a></td>',
 						neigh.dfgcolor, neigh.rip, neigh.rip
 						);
 					if (neigh.hn) {
@@ -104,12 +104,9 @@ end
 	<table class="cbi-section-table">
 		<thead>
 			<tr class="cbi-section-table-titles">
-				<th class="cbi-section-table-cell"><%:Neighbour IP%></th>
 				<th class="cbi-section-table-cell"><%:Hostname%></th>
-				<th class="cbi-section-table-cell"><%:Local interface IP%></th>
-				<th class="cbi-section-table-cell"><%:Device%></th>
-				<th class="cbi-section-table-cell">LQ</th>
-				<th class="cbi-section-table-cell">NLQ</th>
+				<th class="cbi-section-table-cell"><%:IP Address%></th>
+				<th class="cbi-section-table-cell">RX Signal</th>
 				<th class="cbi-section-table-cell">ETX</th>
 			</tr>
 		</thead>
@@ -125,12 +122,10 @@ end
 			end
 		%>
 		<tr class="cbi-section-table-row cbi-rowstyle-<%=i%>">
-			<td class="cbi-section-table-cell" style="background-color:<%=defaultgw_color%>"><a href="http://<%=link["Remote IP"]%>/cgi-bin-status.html"><%=link["Remote IP"]%></a></td>
 			<td class="cbi-section-table-cell" style="background-color:<%=defaultgw_color%>"><a href="http://<%=link["Hostname"]%>/cgi-bin-status.html"><%=link["Hostname"]%></a></td>
-			<td class="cbi-section-table-cell" style="background-color:<%=defaultgw_color%>"><%=link["Local IP"]%></td>
-			<td class="cbi-section-table-cell" style="background-color:<%=defaultgw_color%>"><%=link["Local Device"]%></td>
+			<td class="cbi-section-table-cell" style="background-color:<%=defaultgw_color%>"><a href="http://<%=link["Remote IP"]%>/cgi-bin-status.html"><%=link["Remote IP"]%></a></td>
+<!-- link.LQ still needs to be changed to RX Signal -->
 			<td class="cbi-section-table-cell" style="background-color:<%=defaultgw_color%>"><%=link.LQ%></td>
-			<td class="cbi-section-table-cell" style="background-color:<%=defaultgw_color%>"><%=link.NLQ%></td>
 			<td class="cbi-section-table-cell" style="background-color:<%=color%>"><%=string.format("%.3f", link.Cost)%></td>
 		</tr>
 		<% 
