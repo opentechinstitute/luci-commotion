@@ -35,9 +35,9 @@ function index()
 	entry({"commotion", "index", "index"}, template("commotion/splash"), i18n("Front Page"), 10).ignoreindex = true
     entry({"commotion", "index", "olsr-viz"}, template("olsr-viz/olsr-viz"), _("OLSR-Viz"), 90)
 
-	entry({"commotion", "about"}, template("commotion", "about"), i18n("About"), 10)
-	entry({"commotion", "help"}, template("commotion", "help"), i18n("Help"), 10)
-	entry({"commotion", "license"}, template("commotion", "license"), i18n("License"), 10)
+	entry({"commotion", "about"}, template("commotion/about"), i18n("About"), 10)
+	entry({"commotion", "help"}, template("commotion/help"), i18n("Help"), 10)
+	entry({"commotion", "license"}, template("commotion/license"), i18n("License"), 10)
 
   
 	local config   = entry({"admin", "commotion"}, alias("admin", "commotion", "meshconfig"), i18n("Commotion"), 10)
