@@ -65,8 +65,8 @@ debug.log('beginning action_neigh')
                 luci.template.render("status-olsr/error_olsr")
                 return nil
         end
-                                                                                                                                                                        
-        table.sort(data.Links, compare_links)
+-- table.sort currently breaks nearby_md
+--        table.sort(data.Links, compare_links)
 
                                                                                                                                                                         
         luci.template.render("commotion/nearby_md", {links=data.Links})
