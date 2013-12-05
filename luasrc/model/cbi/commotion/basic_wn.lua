@@ -23,6 +23,7 @@ local http = require "luci.http"
 
 local m = Map("wireless", translate("Wireless Network"), translate("Turning on an Access Point provides a wireless network for people to connect to using a laptop or other wireless devices."))
 
+--when this map is committed make sure that the commotionAP default interface is also created so that there is always a default profile applied.
 function m.on_commit()
    if not uci:get("network", "commotionAP") then
 	  uci:section("network", "interface", "commotionAP", {proto="commotion"})
@@ -34,17 +35,27 @@ end
 s = m:section(TypedSection, "wifi-iface", translate("Access Point"), translate("Turning on an Access Point provides a wireless network for people to connect to using a laptop or other wireless devices."))
 s.addremove = true
 s.optional = false
-s.template_addremove = "cbi/commotion/addAP" --This template controls the form for adding a new access point.
+s.anonymous = true
+function s:filter(section)
+   mode = self.map:get(section, "mode")
+   return mode == "ap" or mode == nil
+end
 
---Default Mode
+s.valuefooter = "cbi/full_valuefooter"
+s.template_addremove = "cbi/commotion/addAP" --This template controls the addremove form for adding a new access point so that it has better wording.
+
+--Default Mode (don't render this. Just add it so that it gets added to UCI when created)
 mode = s:option(DummyValue, "mode")
 mode.default = "ap"
 mode.render = function() end
 
---Default Commotion AP Profile
+--Default Commotion AP Profile (don't render this. Just add it so that it gets added to UCI when created)
 ntwk = s:option(DummyValue, "network")
 ntwk.default = "commotionAP"
 ntwk.render = function() end
+
+name = s:option(Value, "ssid", translate("Name"), translate("The access point name (SSID) is the name that people will look for when connecting to this device."))
+name.default = "PINEAPPLE"
 
 local wifi_dev = {}
 uci.foreach("wireless", "wifi-device",
@@ -55,18 +66,14 @@ uci.foreach("wireless", "wifi-device",
 			end
 )
 
-local this_dev = nil
 --Check for more than one radio, and if not don't offer to change radio's.
 if #wifi_dev > 1 then
-   radios = s:option(ListValue, "device",  translate("wifi-device"), translate("Wireless Interface"), translate("Select the wireless network interface to use for your access point."))
-   for _,dev in pairs(wifi_dev) do
+   radios = s:option(ListValue, "device",  translate("wifi-device"), translate("Select the wireless network interface to use for your access point."))
+   for _,dev in ipairs(wifi_dev) do
 	  local freq = cnw.get_channels(dev[2], true)
-
-	  radios:value(dev[1].." "..freq, {dev[1]})
-	  
-	  local channels = s:option(ListValue, "channel", translate("Channel"), translate("The channel of this wireless interface."))
-	  channels.depends("radios", dev[1])
-	  
+	  radios:value(dev[1], dev[1].." "..freq)
+	  local channels = s:option(ListValue, "channel_"..dev[1], translate("Channel"), translate("The channel of this wireless interface."))
+	  channels:depends("device", dev[1])
 	  --adds the values to the list based on frequency
 	  for _,x in pairs((cnw.get_channels(dev[2]))) do
 		 channels:value(x[1], x[2])
@@ -77,7 +84,7 @@ if #wifi_dev > 1 then
 	  end
    end
 else
-   --Default radio
+   --Default radio (don't render this. Just add it so that it gets added to UCI when created)
    radio = s:option(DummyValue, "device")
    radio.default = wifi_dev[1][1]
    radio.render = function() end
@@ -96,18 +103,21 @@ enc = s:option(Flag, "encryption", translate("Require a Password?"), translate("
 enc.disabled = "none"
 enc.enabled = "psk2"
 enc.rmempty = true
+enc.default = "none" --default must == disabled value for rmempty to work
 
-function enc.remove(self, section) --TODO fix this so that when enc is removed the key is also removed.
-   for i,x in pairs(enc) do db.log(tostring(i)..":"..tostring(x)) end
+--Have enc flag also remove the encryption key when deleted
+function enc.remove(self, section)
    local key = self.map:del(section, "key")
    local enc = self.map:del(section, self.option)
    return key and enc or false
 end
 
+--dummy value set to not reveal password
 pw1 = s:option(Value, "_pw1", translate("Password"), translate("Enter the password people should use to connect to this access point. Commotion uses WPA2 security for Access Point passwords."))
 pw1.password = true
 pw1:depends("encryption", "psk2")
 
+--password should write to the key, not to the dummy value
 function pw1.write(self, section, value)
    return self.map:set(section, "key", value)
 end
@@ -115,11 +125,13 @@ end
 pw2 = s:option(Value, "_dummy")
 pw2.password = true
 pw2:depends("encryption", "psk2")
+
+--Don't actually write this value, just return success
 function pw2.write(self, section, value)
    return true
 end
 
-
+--make sure passwords are equal
 function pw1.validate(self, value, section)
    local v1 = value
    local v2 = pw2:formvalue(section)
