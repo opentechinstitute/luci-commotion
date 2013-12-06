@@ -13,12 +13,7 @@ You may obtain a copy of the License at
 
 ]]--
 module ("luci.controller.commotion.status_config", package.seeall)
-debug = require "luci.commotion.debugger"
---[[
-  To do:
-	* Make template a function argument
-]]--
--- 
+
 function index()
 	if not nixio.fs.access("/etc/config/olsrd") then
 		return
@@ -59,7 +54,6 @@ function index()
 end
 
 function action_neigh(json)
-debug.log('beginning action_neigh')
         local data = fetch_txtinfo("links")
         if not data or not data.Links then
                 luci.template.render("status-olsr/error_olsr")
@@ -73,7 +67,6 @@ debug.log('beginning action_neigh')
 end
 
 local function compare_links(a, b)
-debug.log('comparing links')
         local c = tonumber(a.Cost)
         local d = tonumber(b.Cost)
 
@@ -89,7 +82,6 @@ end
 
 -- Internal
 function fetch_txtinfo(otable)
-debug.log('beginning txtinfo')
 	require("luci.sys")
 	local uci = require "luci.model.uci".cursor_state()
 	local resolve = uci:get("luci_olsr", "general", "resolve")
