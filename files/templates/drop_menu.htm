@@ -16,9 +16,9 @@
            local href  = controller .. prefix .. r ..
            (nnode.query and http.build_querystring(nnode.query) or "")
            %>
-        <div class="sb-btn">
+        <li class="sbmenutitle">
           <a href="<%=util.pcdata(href)%>"><%=util.pcdata(striptags(translate(nnode.title)))%></a>
-        </div>
+        </li>
         <%-
            end
            %>
@@ -35,15 +35,17 @@
       local href  = controller .. "/" .. category .. "/" .. r ..
       (nnode.query and http.build_querystring(k.query) or "") --Where is k defined? 
       local grandchildren = disp.node_childs(nnode)
-	  
+	  --Logic for choosing main menu to use for commotion will go here
       if #grandchildren > 0 then
       %>
-	<ul class="submenu">
-      <li>
-        <a href="<%=util.pcdata(href)%>"><%=util.pcdata(striptags(translate(nnode.title)))%></a>
+	  <div>
+		<h3 class="sb-btn">
+          <a href="<%=util.pcdata(href)%>"><%=util.pcdata(striptags(translate(nnode.title)))%></a></h3>
+		  <%#Logic for choosing deeper submenu for commotion will go here%>
+		  <ul>
         <%- submenu("/" .. category .. "/" .. r .. "/", nnode) %>
-      </li>
-	</ul>
+		</ul>
+	 </div>
       <% else %>
 	<ul class="submenu">
       <li>
