@@ -21,8 +21,32 @@ local db = require "luci.commotion.debugger"
 local http = require "luci.http"
 local QS = require "luci.commotion.quickstart"
 
+m = Map("network", translate("Internet Gateway"), translate("If desired, you can configure your gateway interface  here."))
 
-m = Map("wireless", translate("Additional Network Interfaces"), translate("Commotion's Setup Wizard has detected additional un-configured network interfaces on this device. If desired, you can configure them here."))
+p = m:section(NamedSection, "plug")
+p.anonymous = true
+
+advtz = p:option(Flag, "advertised", translate("Advertise your gateway to the mesh."))
+advtz.default = "true"
+advtz.enabled = "true"
+advtz.disabled = "false"
+
+advtz = p:option(Flag, "meshing", translate("Will you be meshing with other Commotion devices over the ethernet interface?"))
+advtz.default = "true"
+advtz.enabled = "true"
+advtz.disabled = "false"
+
+config = p:option(ListValue, "configuration", translate("Gateway Configurations"))
+config:value("auto", "Automatically configure gateway on boot.")
+config:value("client", "We have an upstream device that provides DHCP leases")
+config:value("host", "This device should provide DHCP leases to clients.")
+
+
+
+
+
+
+
 
 --[[
 
