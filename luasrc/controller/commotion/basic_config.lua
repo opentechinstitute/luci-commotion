@@ -12,13 +12,20 @@ You may obtain a copy of the License at
 	http://www.apache.org/licenses/LICENSE-2.0
 
 ]]--
-module "luci.controller.commotion.basic_config"
+module ("luci.controller.commotion.basic_config", package.seeall)
+local db = require "luci.commotion.debugger"
 
 function index()
    local QS = require "luci.commotion.quickstart"
-
+   local redir = luci.http.formvalue("redir", true) or
+	  luci.dispatcher.build_url(unpack(luci.dispatcher.context.request)) 
+   
+   entry({"admin", "commotion", "confirm"}, call("action_changes"), translate("Confirm"), 40).query = {redir=redir}
+   entry({"admin", "commotion", "revert"}, call("action_revert")).query = {redir=redir}
+   entry({"admin", "commotion", "saveapply"}, call("action_apply")).query = {redir=redir}
+   
    if QS.status() then
-	  local confirm = {on_success_to={"admin", "commotion", "quickstart", "confirm"}}
+	  local confirm = {on_success_to={"admin", "commotion", "confirm"}}
 	  entry({"admin", "commotion", "confirm_config"}, cbi("commotion/confirm_config"), translate("Confirm your Changes"))
 	  entry({"admin", "commotion", "quickstart"}, cbi("commotion/quickstart", confirm), translate("Basic Configuration"), 15)
    else
@@ -32,23 +39,13 @@ function index()
    end
 end
 
-function index()
-	local redir = luci.http.formvalue("redir", true) or
-	  luci.dispatcher.build_url(unpack(luci.dispatcher.context.request))
-
-	entry({"admin", "commotion", "quickstart", "confirm"}, call("action_changes"), _("Changes"), 40).query = {redir=redir}
-	entry({"admin", "uci", "revert"}, call("action_revert"), _("Revert"), 30).query = {redir=redir}
-	entry({"admin", "uci", "apply"}, call("action_apply"), _("Apply"), 20).query = {redir=redir}
-	entry({"admin", "uci", "saveapply"}, call("action_apply"), _("Save &#38; Apply"), 10).query = {redir=redir}
-end
-
 function action_changes()
-	local uci = luci.model.uci.cursor()
-	local changes = uci:changes()
-
-	luci.template.render("admin_uci/changes", {
-		changes = next(changes) and changes
-	})
+   local uci = require "luci.model.uci".cursor()
+   local changes = uci:changes()
+   
+   luci.template.render("commotion/confirm", {
+						   changes = next(changes) and changes
+   })
 end
 
 function action_apply()
@@ -84,7 +81,7 @@ function action_revert()
 		uci:unload(r)
 	end
 
-	luci.template.render("admin_uci/revert", {
+	luci.template.render("commotion/revert", {
 		changes = next(changes) and changes
 	})
 end

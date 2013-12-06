@@ -25,22 +25,35 @@ local QS = require "luci.commotion.quickstart"
 
 
 local m = Map("wireless", translate("Network Interfaces"), translate("Every Commotion node must have one mesh network connection or interface. Commotion can mesh over wireless or wired interfaces."))
+m.flow.hideapplybtn = true
+m.flow.hideresetbtn = true
 
 --when this map is committed make sure that the commotionMesh default interface is also created so that there is always a default profile applied. If still in quickstart, make sure that there is a default template for the wifi-iface section
-function m.on_commit()
-   if QS.status() then 
-	  cnw.commotion_set("commotionMesh", {values="mapvalues here"}) --TODO make commotion set actually work
-	  if not uci:get("wireless", "quickstartMesh") then
-		 uci:section("wireless", "wifi-iface", "quickstartMesh")
-		 uci:save("wireless")
-		 uci:commit("wireless")
+if not QS.status() then
+   function m.on_after_save(self)
+	  for i,x in pairs(self) do db.log(tostring(i).." "..tostring(x)) end
+	  if self.save and self.changed then
+		 http.redirect(luci.dispatcher.build_url("admin", "commotion", "confirm"))
 	  end
+   end
+end
+
+function m.on_before_commit()
+   if QS.status() then
+	  cnw.commotion_set("commotionMesh", {values="mapvalues here"}) --TODO make commotion set actually work
    end
 end
 
 s = m:section(TypedSection, "wifi-iface")
 if not QS.status() then --if not quickstart then allow for adding and removal
    s.addremove = true
+
+   dflts = s:option(DummyValue,  "_dummy_val01") --also add defaults if not in qs
+   dflts.anonymous = true
+   
+   function dflts.write(self, section, value)
+	  return self.map:set(section, "mode", "adhoc")
+   end
 end
 s.optional = false
 s.anonymous = true
@@ -51,19 +64,10 @@ function s:filter(section)
 end
 
 
+
 s.valuefooter = "cbi/full_valuefooter"
 s.template_addremove = "cbi/commotion/addMesh" --This template controls the addremove form for adding a new access point so that it has better wording.
 
-dflts = s:option(DummyValue,  "_dummy_val01")
-dflts.anonymous = true
-
-function dflts.parse(self, section)
-   if not uci:get("wireless", "wifi-iface", section) then
-	  uci:section("wireless", "wifi-iface", section, {mode="adhoc"})
-	  uci:save("wireless")
-	  uci:commit("wireless")
-   end
-end
 
 name = s:option(Value, "ssid",  translate("Mesh Network Name"), translate("Commotion networks share a network-wide name. This must be the same across all devices on the same mesh."))
 name.default = "commotionwireless.net"
@@ -91,7 +95,9 @@ if #wifi_dev > 1 then
 	  end
 	  channels.default = uci:get("wireless", dev[1], "channel")
 	  function channels:write(section, value)
-		 return self.map:set(dev[1], "channel", value)
+		 local enable = self.map:set(dev[1], "disabled", "0") -- enable the radio
+		 local set_chan = self.map:set(dev[1], "channel", value)
+		 return set_chan and enable or false
 	  end
    end
 else

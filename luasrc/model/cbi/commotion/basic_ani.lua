@@ -26,36 +26,18 @@ m = Map("network", translate("Internet Gateway"), translate("If desired, you can
 p = m:section(NamedSection, "plug")
 p.anonymous = true
 
-advtz = p:option(Flag, "advertised", translate("Advertise your gateway to the mesh."))
-advtz.default = "true"
-advtz.enabled = "true"
-advtz.disabled = "false"
+msh = p:option(Flag, "meshability", translate("Will you be meshing with other Commotion devices over the ethernet interface?"))
+msh.enabled = "true"
+msh.disabled = "false"
 
-advtz = p:option(Flag, "meshing", translate("Will you be meshing with other Commotion devices over the ethernet interface?"))
-advtz.default = "true"
-advtz.enabled = "true"
-advtz.disabled = "false"
+ance = p:option(Flag, "announceability", translate("Advertise your gateway to the mesh."))
+ance.enabled = "true"
+ance.disabled = "false"
+ance:depends("meshability", "false")
 
-config = p:option(ListValue, "configuration", translate("Gateway Configurations"))
-config:value("auto", "Automatically configure gateway on boot.")
-config:value("client", "We have an upstream device that provides DHCP leases")
-config:value("host", "This device should provide DHCP leases to clients.")
-
-
-
-
-
-
-
-
---[[
-
-droption text: Internet Gateway
-dropdown box: gateway configurations allowed (need list of types for ui text review)
-option title: Advertise
-checkbox
-option help text: Advertise your gateway to the mesh network.
-
-]]--
+config = p:option(ListValue, "plugability", translate("Gateway Configuration"))
+config:value("auto", translate("Automatically configure gateway on boot."))
+config:value("client", translate("This device should try and acquire a DHCP lease"))
+config:value("host", translate("This device should provide DHCP leases to clients."))
 
 return m

@@ -24,37 +24,26 @@ local QS = require "luci.commotion.quickstart"
 
 local m = Map("wireless", translate("Wireless Network"), translate("Turning on an Access Point provides a wireless network for people to connect to using a laptop or other wireless devices."))
 
-function m.on_parse()
-   if QS.status() then 
-	  if not uci:get("wireless", "quickstartAP") then
-		 uci:section("wireless", "wifi-iface", "quickstartAP")
-		 uci:save("wireless")
-		 uci:commit("wireless")
-	  end
+s = m:section(TypedSection, "wifi-iface", translate("Access Point"), translate("Turning on an Access Point provides a wireless network for people to connect to using a laptop or other wireless devices."))
+s.optional = false
+s.anonymous = true
+ --if not quickstart then allow for adding and removal and default addition
+if not QS.status() then
+   s.addremove = true
+
+   dflts = s:option(DummyValue,  "_dummy_val01")
+   dflts.anonymous = true
+
+   function dflts.write(self, section, value)
+	  first = self.map:set(section, "mode", "adhoc")
+	  second = self.map:set(section, "network", "client")
+	  return first and second or false
    end
 end
 
-
-s = m:section(TypedSection, "wifi-iface", translate("Access Point"), translate("Turning on an Access Point provides a wireless network for people to connect to using a laptop or other wireless devices."))
-if not QS.status() then --if not quickstart then allow for adding and removal
-   s.addremove = true
-end
-s.optional = false
-s.anonymous = true
 function s:filter(section)
    mode = self.map:get(section, "mode")
    return mode == "ap" or mode == nil
-end
-
-dflts = s:option(DummyValue,  "_dummy_val01")
-dflts.anonymous = true
-
-function dflts.parse(self, section)
-   if not uci:get("wireless", "wifi-iface", section) then
-	  uci:section("wireless", "wifi-iface", section, {mode="ap", network="client"})
-	  uci:save("wireless")
-	  uci:commit("wireless")
-   end
 end
 
 s.valuefooter = "cbi/full_valuefooter"
