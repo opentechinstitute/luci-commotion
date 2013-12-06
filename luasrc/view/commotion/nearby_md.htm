@@ -13,6 +13,7 @@ You may obtain a copy of the License at
 -%>
 
 <%
+local debug = require "luci.commotion.debugger"
 local olsrtools = require "luci.tools.olsr"
 local i = 1
 
@@ -62,12 +63,12 @@ end
 
 					s += String.format(
 						'<tr class="cbi-section-table-row cbi-rowstyle-'+(1 + (idx % 2))+'">' +
-udoadsfasdfasdasdf						'<td class="cbi-section-table-cell" style="background-color:%s"><a href="http://%s/cgi-bin-status.html">%s</a></td>',
+udoadsfasdfasdasdf						'<td class="cbi-section-table-cell" style="background-color:%s"><a href="http://%s/cgi-bin/admin/commotion/status.html">%s</a></td>',
 						neigh.dfgcolor, neigh.rip, neigh.rip
 						);
 					if (neigh.hn) {
 						s += String.format(					
-							'<td class="cbi-section-table-cell" style="background-color:%s"><a href="http://%s/cgi-bin-status.html">%s</a></td>',
+							'<td class="cbi-section-table-cell" style="background-color:%s"><a href="http://%s/cgi-bin/admin/commotion/status.html">%s</a></td>',
 							neigh.dfgcolor, neigh.hn, neigh.hn
 							);
 						}
@@ -106,8 +107,8 @@ udoadsfasdfasdasdf						'<td class="cbi-section-table-cell" style="background-co
 			<tr class="cbi-section-table-titles">
 				<th class="cbi-section-table-cell"><%:Hostname%></th>
 				<th class="cbi-section-table-cell"><%:IP Address%></th>
-				<th class="cbi-section-table-cell">RX Signal</th>
 				<th class="cbi-section-table-cell">ETX</th>
+				<th class="cbi-section-table-cell"><%:Gateway%></th>
 			</tr>
 		</thead>
 		<tbody id="olsr_neigh_table">
@@ -121,12 +122,14 @@ udoadsfasdfasdasdf						'<td class="cbi-section-table-cell" style="background-co
 				defaultgw_color = "#ffff99"
 			end
 		%>
+<% debug.log('MEAT')
+debug.log(link)%>
 		<tr class="cbi-section-table-row cbi-rowstyle-<%=i%>">
-			<td class="cbi-section-table-cell" style="background-color:<%=defaultgw_color%>"><a href="http://<%=link["Hostname"]%>/cgi-bin-status.html"><%=link["Hostname"]%></a></td>
-			<td class="cbi-section-table-cell" style="background-color:<%=defaultgw_color%>"><a href="http://<%=link["Remote IP"]%>/cgi-bin-status.html"><%=link["Remote IP"]%></a></td>
-<!-- link.LQ still needs to be changed to RX Signal -->
-			<td class="cbi-section-table-cell" style="background-color:<%=defaultgw_color%>"><%=link.LQ%></td>
+			<td class="cbi-section-table-cell" style="background-color:<%=defaultgw_color%>"><% if link["Hostname"] then %><a href="http://<%=link["Hostname"]%>/cgi-bin/admin/commotion/status.html"><%=link["Hostname"]%></a><% else %>?<% end %></td>
+			<td class="cbi-section-table-cell" style="background-color:<%=defaultgw_color%>"><a href="http://<%=link["Remote IP"]%>/cgi-bin/admin/commotion/status.html"><%=link["Remote IP"]%></a></td>
+
 			<td class="cbi-section-table-cell" style="background-color:<%=color%>"><%=string.format("%.3f", link.Cost)%></td>
+			<td class="cbi-section-table-cell" style="background-color:<%=defaultgw_color%>"><%  if link.defaultgw == 1 then %>Yes<% else %>&nbsp;<% end %></td>
 		</tr>
 		<% 
 			i = ((i % 2) + 1)
