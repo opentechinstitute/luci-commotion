@@ -15,7 +15,7 @@ You may obtain a copy of the License at
 module "luci.controller.commotion.application_config"
 
 function index()
-	  entry({"admin", "commotion", "basic"}, alias({"admin", "commotion", "application", "list"}), translate("Applications"), 30).index = true
+	  entry({"admin", "commotion", "basic"}, alias("admin", "commotion", "application", "list"), translate("Applications"), 30).index = true
 
 	  entry({"admin", "commotion", "application", "list"}, cbi("commotion/application_list"), translate("List"), 40)
 	  

@@ -15,10 +15,9 @@ You may obtain a copy of the License at
 module "luci.controller.commotion.client_config"
 
 function index()
-	  entry({"admin", "commotion", "client"}, alias({"admin", "commotion", "client", "welcome_page"}), translate("Client Controls"), 20).index = true
-	  
-	  entry({"admin", "commotion", "client", "welcome_page"}, cbi("commotion/client_wp"), translate("Welcome Page"), 30)
-
-	  entry({"admin", "commotion", "client", "bandwidth_controls"}, cbi("commotion/client_bc"), translate("Bandwidth Controls"), 40)
+   entry({"admin", "commotion"}, alias("admin", "commotion", "client"), translate("Client Controls"), 20)
+   entry({"admin", "commotion", "client"}, alias("admin", "commotion", "client", "welcome_page"), translate("Client Controls"), 20)
+   entry({"admin", "commotion", "client", "welcome_page"}, cbi("commotion/client_wp"), translate("Welcome Page"), 30).index = true
+   entry({"admin", "commotion", "client", "bandwidth_controls"}, cbi("commotion/client_bc"), translate("Bandwidth Controls"), 40)
 
 end
