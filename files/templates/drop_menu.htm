@@ -1,5 +1,5 @@
-  <nav>
-    <ul id="navtoselect">
+<div class="sb-container">
+    <div class="">
       <%-
 		 local util = require "luci.util"
 		 local http = require "luci.http"
@@ -9,20 +9,20 @@
          local childs = disp.node_childs(node)
          if #childs > 0 then
       %>
-      <ul class="dropdown-menu">
+      <!--<div class="">-->
         <%-
            for i, r in ipairs(childs) do
            local nnode = node.nodes[r]
            local href  = controller .. prefix .. r ..
            (nnode.query and http.build_querystring(nnode.query) or "")
            %>
-        <li>
+        <div class="sb-btn">
           <a href="<%=util.pcdata(href)%>"><%=util.pcdata(striptags(translate(nnode.title)))%></a>
-        </li>
+        </div>
         <%-
            end
            %>
-      </ul>
+      <!-- </div> -->
       <%-
          end
          end
@@ -33,23 +33,26 @@
       for i, r in ipairs(childs) do
       local nnode = cattree.nodes[r]
       local href  = controller .. "/" .. category .. "/" .. r ..
-      (nnode.query and http.build_querystring(k.query) or "") --Where is k defined?
+      (nnode.query and http.build_querystring(k.query) or "") --Where is k defined? 
       local grandchildren = disp.node_childs(nnode)
 	  
       if #grandchildren > 0 then
       %>
-      <li class="dropdown">
-        <a class="menu" href="<%=util.pcdata(href)%>"><%=util.pcdata(striptags(translate(nnode.title)))%></a>
+	<ul class="submenu">
+      <li>
+        <a href="<%=util.pcdata(href)%>"><%=util.pcdata(striptags(translate(nnode.title)))%></a>
         <%- submenu("/" .. category .. "/" .. r .. "/", nnode) %>
       </li>
+	</ul>
       <% else %>
+	<ul class="submenu">
       <li>
         <a href="<%=util.pcdata(href)%>"><%=util.pcdata(striptags(translate(nnode.title)))%></a>
       </li>
+	</ul>
       <%
          end
          end
          end
          %>
-    </ul>
-  </nav>
+<!-- end of "sb-container" is in header.htm, to allow inclusion of Advanced menu button -->

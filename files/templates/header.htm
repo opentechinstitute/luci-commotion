@@ -3,6 +3,8 @@ LuCI - Lua Configuration Interface
 Copyright 2008 Steven Barth <steven@midlink.org>
 Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
 Copyright 2012 David Menting <david@nut-bolt.nl>
+Copyright 2013 Griffin Boyce <griffin@opentechinstitute.org>
+Copyright 2013 Seamus Tuohy <s2e@opentechinstitute.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,6 +18,7 @@ You may obtain a copy of the License at
    local sys  = require "luci.sys"
    local disp = require "luci.dispatcher"
    local cdisp = require "luci.commotion.dispatch"
+
    
    -- send as HTML5
    http.prepare_content("text/html")
@@ -62,7 +65,7 @@ You may obtain a copy of the License at
 <html lang="<%=luci.i18n.context.lang%>">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=yes" />
     <title><%=striptags( hostname .. ( (node and node.title) and ' - ' .. translate(node.title) or '')) %> - LuCI</title>
     <!--[if lt IE 9]><script src="<%=media%>/html5.js"></script><![endif]-->
     <link rel="stylesheet" href="<%=media%>/cascade.css">
@@ -78,21 +81,32 @@ You may obtain a copy of the License at
 	<header>
 
 	  <%if request[2] == "commotion" then%><!--Start "Basic" Menu here -->
-	  <h1>COMMOTION MENU HERE</h1>
-	  <%else%> <!--End "Basic" menu here -->
-	  <%include("themes/commotion/drop_menu", {controller=controller, cattree=cattree, category=category})%>
-	  
-	  <%include("themes/commotion/toggle_header", {hostname=hostname})%>
+
+	  <!--Name:  <%include("themes/commotion/toggle_header", {hostname=hostname})%> -->
+
+      <!-- <div class="nodeinfo"><h2>Node name: <%=hostname%></h2> <h2> Mesh IP: </h2></div> -->
+	  <%else%> <!--End "Basic" menu here -->	  
+
 	</header>
 	
 	  <%include("themes/commotion/unsaved_changes", {tree=tree, controller=controller, category=category})%>
 
-	  <%end%> <!--End Regular Menu-->
-    <div class="navbar-inners"><div class="color0"></div><div class="color1"></div><div class="color2"></div><div class="color3"></div><div class="color4"></div></div> <!--Do we want the pretty colors in the new UI? If not move into the last lua statment above.-->
+
+	  <%end%> <!--End Regular Menu--> <!-- ??? Regular vs Basic ??? -->
+
+    <div class="navbar-inners"><div class="color0"></div><div class="color1"></div><div class="color2"></div><div class="color3"></div><div class="color4"></div></div>
+		<!--Do we want the pretty colors in the new UI? If not move into the last lua statment above.-->
 
 	<% if request[2] == "commotion" then%><!--Start "Basic" SIDEBAR here -->
-	<h1>SIDEBAR HERE</h1>
+
+	  <%include("themes/commotion/drop_menu", {controller=controller, cattree=cattree, category=category})%>
+
+
 	<%end%> <!--End "Basic" SIDEBAR here -->
-	
+
+	<div class="sb-btn"><h3><a href="<%=controller%>/admin/status/overview">Advanced</a></h3></div>
+
+</div> <!-- End of "sb-container" div. Place "Advanced" button above this end or there will be layout badness -->
+
     <section id="maincontent">
 	  <%include("themes/commotion/subtree", {controller=controller, category=category, cattree=cattree})%>
