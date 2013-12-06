@@ -46,6 +46,22 @@ end
 
 <%+header%>
 
+<table id="node_info">
+        <tr>
+                <td><strong>Gateway Available:</strong> ???</td>
+                <td><strong>AP:</strong> (on) (secured) (# connections)</td>
+        </tr>
+        <tr>
+                <td><strong>Gateway IP:</strong> x.x.x.x</td>
+                <td><strong>Ethernet:</strong> (on) (secured) (# connections)</td>
+        </tr>
+        <tr>
+                <td>&nbsp;</td>
+                <td><strong>Mesh:</strong> (on) (secured) (# connections)</td>
+        </tr>
+</table>
+<hr /><!-- page divider -->
+
 <script type="text/javascript" src="<%=resource%>/cbi.js"></script>
 <script type="text/javascript">//<![CDATA[
 
@@ -96,21 +112,6 @@ udoadsfasdfasdasdf						'<td class="cbi-section-table-cell" style="background-co
 //]]></script>
 
 
-<table id="node_info">
-	<tr>
-		<td><strong>Gateway Available:</strong> ???</td>
-		<td><strong>AP:</strong> (on) (secured) (# connections)</td>
-	</tr>
-	<tr>
-		<td><strong>Gateway IP:</strong> x.x.x.x</td>
-		<td><strong>Ethernet:</strong> (on) (secured) (# connections)</td>
-	</tr>
-	<tr>
-		<td>&nbsp;</td>
-		<td><strong>Mesh:</strong> (on) (secured) (# connections)</td>
-	</tr>
-</table>
-<hr /><!-- page divider -->
 <h2><a id="content" name="content"><%:OLSR connections%></a></h2>
 
 <fieldset class="cbi-section">
@@ -154,7 +155,7 @@ udoadsfasdfasdasdf						'<td class="cbi-section-table-cell" style="background-co
 
 <h3><%:Legend%>:</h3>
 <ul>
-	<li><strong>ETX: </strong><%:Expected retransmission count%></li>
+	<li><strong>ETX: </strong><%:Expected retransmission count - the expected number of retransmission attempts that are required for a packet to travel to and from a destination.%></li>
 	<li><strong><span style="color:#00cc00"><%:Green%></span></strong>:<%:Very good (ETX < 2)%></li> 
 	<li><strong><span style="color:#ffcb05"><%:Yellow%></span></strong>:<%:Good (2 < ETX < 4)%></li> 
 	<li><strong><span style="color:#ff6600"><%:Orange%></span></strong>:<%:Still usable (4 < ETX < 10)%></li> 
