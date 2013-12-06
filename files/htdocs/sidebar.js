@@ -2,18 +2,18 @@ $(document).ready(function(){
   var animTime = 250,
       clickPolice = false;
   
-  $(document).on('touchstart click', '.acc-btn', function(){
+  $(document).on('touchstart click', '.sb-btn', function(){
     if(!clickPolice){
        clickPolice = true;
       
-      var currIndex = $(this).index('.acc-btn'),
-          targetHeight = $('.acc-content-inner').eq(currIndex).outerHeight();
+      var currIndex = $(this).index('.sb-btn'),
+          targetHeight = $('.sb-content-inner').eq(currIndex).outerHeight();
    
-      $('.acc-btn').removeClass('selected');
+      $('.sb-btn').removeClass('selected');
       $(this).addClass('selected');
       
-      $('.acc-content').stop().animate({ height: 0 }, animTime);
-      $('.acc-content').eq(currIndex).stop().animate({ height: targetHeight }, animTime);
+      $('.sb-content').stop().animate({ height: 0 }, animTime);
+      $('.sb-content').eq(currIndex).stop().animate({ height: targetHeight }, animTime);
 
       setTimeout(function(){ clickPolice = false; }, animTime);
     }

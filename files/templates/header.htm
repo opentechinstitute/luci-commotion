@@ -18,7 +18,6 @@ You may obtain a copy of the License at
    local sys  = require "luci.sys"
    local disp = require "luci.dispatcher"
    local cdisp = require "luci.commotion.dispatch"
-   local util = require "luci.util"
 
    
    -- send as HTML5
@@ -90,7 +89,7 @@ You may obtain a copy of the License at
 
 	</header>
 	
-	  <!--<%include("themes/commotion/unsaved_changes", {tree=tree, controller=controller, category=category})%>-->
+	  <%include("themes/commotion/unsaved_changes", {tree=tree, controller=controller, category=category})%>
 
 
 	  <%end%> <!--End Regular Menu--> <!-- ??? Regular vs Basic ??? -->
