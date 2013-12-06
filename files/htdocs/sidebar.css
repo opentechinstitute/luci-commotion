@@ -5,13 +5,14 @@
   box-sizing:border-box;
 }
 
-.acc-container {
+.sb-container {
+  width: 20%;
   max-width:260px;
   margin:10px auto auto 10px;
   overflow:hidden;
 }
 
-.acc-btn { 
+.sb-btn { 
   width:100%;
   margin:0 auto;
   padding:5px 5px;
@@ -20,7 +21,7 @@
   border-bottom:5px solid #ffffff;
 }
 
-.acc-content {
+.sb-content {
   height: 0;
   width:100%;
   margin:0 auto;
@@ -28,7 +29,7 @@
   background:#ffffff;
 }
 
-.acc-content-inner {
+.sb-content-inner {
   padding:0px;
   padding-left: 20px;
   padding-bottom: 20px;
@@ -40,7 +41,7 @@
   background: #ffffff;
 }
 
-h1 {
+.sb-btn h3 {
   font: 26px 'Helvetica', 'Arial', sans-serif;
   color:#000000;
   font-weight: bold;
