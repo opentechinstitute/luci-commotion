@@ -12,9 +12,17 @@ local function submenu(prefix, node)
 		 local nnode = node.nodes[r]
 		 local href  = controller .. prefix .. r ..
 			(nnode.query and http.build_querystring(nnode.query) or "")%>
-			<li class="sbmenutitle">
+			<%if nnode.subsection then%>
+				  </ul class="submenu">
+				  <p class="submenutitle">
+				  <a href="<%=util.pcdata(href)%>"><%=util.pcdata(striptags(translate(nnode.title)))%></a>
+				  </p>
+				  <ul class="submenu">
+			   <%else%>
+			<li>
 			<a href="<%=util.pcdata(href)%>"><%=util.pcdata(striptags(translate(nnode.title)))%></a>
-        </li><%-
+        </li>
+			<%end
 	  end
    end
 end
@@ -42,8 +50,8 @@ if #top_level > 0 then
 				  </div>
 				  <%-
 			   if l2_obj._menu_selected == true then
-				-%><ul><%-
-			       submenu("/" .. category .. "/" .. l2_name .. "/", l2_obj)
+				-%><ul class="submenu"><%-
+			       submenu("/" .. category .. "/".. section .."/" .. "/" .. l2_name .. "/", l2_obj)
 				-%></ul><%-
 			   end
 				  -%>

@@ -85,9 +85,8 @@ You may obtain a copy of the License at
     <div class="navbar-inners"><div class="color0"></div><div class="color1"></div><div class="color2"></div><div class="color3"></div><div class="color4"></div></div>
 	</header>
 
-
     <section id="maincontent">
-		<%if request[2] == "commotion" then%><!--Start "Basic" SIDEBAR here -->
+		<%if request[2] == "commotion" then%>
 		<%include("themes/commotion/basic_menu", {controller=controller, cattree=cattree, category=category, node=node, section=section})%>
 		<%else%>
 		<%include("themes/commotion/adv_menu", {controller=controller, cattree=cattree, category=category, node=node, section=section})%>
