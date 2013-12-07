@@ -1,6 +1,6 @@
 <div class="sb-container">
-   <div class="">
-<%-
+   <div>
+	 <%-
 local util = require "luci.util"
 local http = require "luci.http"
 local disp = require "luci.dispatcher"
@@ -12,42 +12,66 @@ local function submenu(prefix, node)
 		 local nnode = node.nodes[r]
 		 local href  = controller .. prefix .. r ..
 			(nnode.query and http.build_querystring(nnode.query) or "")%>
-			<li class="sbmenutitle">
-			<a href="<%=util.pcdata(href)%>"><%=util.pcdata(striptags(translate(nnode.title)))%></a>
-        </li><%-
+<li>
+  <a href="<%=util.pcdata(href)%>"><%=util.pcdata(striptags(translate(nnode.title)))%></a>
+</li>
+<%-
 	  end
    end
 end
 
 childs = disp.node_childs(cattree)
 
-if #childs > 0 then
+if #childs > 0 and category == "admin" then
    for i, r in ipairs(childs) do
-	  --Logic for choosing main menu to use for commotion will go here interacting with the r value which == commotion on commotion menu's and the value section
       local nnode = cattree.nodes[r]
+			if nnode.title ~= "Commotion" then
 	  local href  = controller .. "/" .. category .. "/" .. r ..
-		 (nnode.query and http.build_querystring(k.query) or "")
+		 (nnode.query and http.build_querystring(nnode.query) or "")
 	  local grandchildren = disp.node_childs(nnode)
 	  if #grandchildren > 0 then%>
-			<div><h3 class="sb-btn">
-			<a href="<%=util.pcdata(href)%>"><%=util.pcdata(striptags(translate(nnode.title)))%></a>
-			</h3>
-			<ul>
-			<%-
-			   if nnode._menu_selected == true then
-			       submenu("/" .. category .. "/" .. r .. "/", nnode)
-			   end
-			-%>
-			</ul>
-			</div>
-		 <% else %>
-			   <div>
-			   <h3 class="sb-btn">
-			   <a href="<%=util.pcdata(href)%>"><%=util.pcdata(striptags(translate(nnode.title)))%></a>
-			   </h3>
-			   </div><%-
+      <div>
+      <%if nnode._menu_selected == true then%>
+	  <div class="sb-btn" id="selected">
+	  <%else%>
+	  <div class="sb-btn">
+	  <%end%>
+	  <h3><a href="<%=util.pcdata(href)%>"><%=util.pcdata(striptags(translate(nnode.title)))%></a>
+	  </h3>
+	  </div>
+	  <%-
+		 if nnode._menu_selected == true then
+		-%><ul class="submenu"><%-
+		 submenu("/" .. category .. "/" .. r .. "/", nnode)
 		 end
-   end
-end%>
-   <div class="sb-btn"><h3><a href="<%=controller%>/admin/status/overview">Advanced</a></h3></div>
+		-%></ul><%-
+	  -%>
+	 </div>
+		 <% else %>
+		 <div>
+		   <%if nnode._menu_selected == true then%>
+		   <div class="sb-btn" id="selected">
+			 <%else%>
+			 <div class="sb-btn">
+			   <%end%>
+			  <h3><a href="<%=util.pcdata(href)%>"><%=util.pcdata(striptags(translate(nnode.title)))%></a>
+		   </h3>
+		 </div><%-
+			end
+		end
+   end%>
+				  <div class="sb-btn">
+   <h3>
+	 <a href="<%=controller%>/admin/commotion/basic"><%:Basic Menu%></a>
+   </h3>
    </div>
+   </div>
+		 </div>
+	  </div>
+	  <div class="body-content">
+		<%else%>
+		</div>
+	  	  </div>
+   <div class="login">
+
+<%end%>

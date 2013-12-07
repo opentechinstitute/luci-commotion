@@ -77,19 +77,25 @@ You may obtain a copy of the License at
     <script src="<%=resource%>/xhr.js"></script>
     <script src="<%=media%>/zepto.min.js"></script>
   </head>
-
+		
   <body class="lang_<%=luci.i18n.context.lang%> <%- if node then %><%= striptags( node.title ) %><%- end %>">
 	<header>
+	  <nav><ul><li></li></ul></nav>
+    <a id="device" href="/"><img src="<%=media%>/commotion_tiny.png" alt="Commotion - toggle header" title="Commotion - toggle header" /></a>	  
+	<div class="collapsible">
+      <h1 class="brand"><a href="/">Node name: <%=hostname%></a></h1>
+    </div>
+
 	  <%include("themes/commotion/unsaved_changes", {tree=tree, controller=controller, category=category})%>
 
     <div class="navbar-inners"><div class="color0"></div><div class="color1"></div><div class="color2"></div><div class="color3"></div><div class="color4"></div></div>
 	</header>
 
     <section id="maincontent">
-		<%if request[2] == "commotion" then%>
+ 		<%if request[2] == "commotion"  then%> <%# TODO Clean and combine these two menu templates after R1 push %>
 		<%include("themes/commotion/basic_menu", {controller=controller, cattree=cattree, category=category, node=node, section=section})%>
+		<div class="body-content">
 		<%else%>
 		<%include("themes/commotion/adv_menu", {controller=controller, cattree=cattree, category=category, node=node, section=section})%>
 		<%include("themes/commotion/subtree", {controller=controller, category=category, cattree=cattree})%>
 	<%end%>
-<div class="body_content">

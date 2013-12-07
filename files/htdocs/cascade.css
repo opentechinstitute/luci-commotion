@@ -41,7 +41,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, nav, sectio
   display: block;
 }
 #maincontent {
-  padding-top: 10px;
+	padding-top: 10px;
 }
 sub, sup {
   font-size: 75%;
@@ -214,7 +214,7 @@ h6 {
   text-transform: uppercase;
 }
 ul, ol {
-  margin: 0 0 18px 25px;
+  margin: 0 0 10px 25px;
 }
 ul ul, ul ol, ol ol, ol ul {
   margin-bottom: 0;
@@ -685,12 +685,14 @@ header .dropdown-menu a:hover, .dropdown-menu a:hover, header .dropdown-menu a.h
 }
 .tabs:after, .cbi-tabmenu:after {
   clear: both;
+  height: 0px;
+  overflow: hidden;
 }
 .tabs > li, .cbi-tabmenu > li {
   float: left;
 }
 .tabs > li > a, .cbi-tabmenu > li > a {
-  display: block;
+	display: block;
 }
 .tabs, .cbi-tabmenu {
   border-color: #DDDDDD;
@@ -1188,7 +1190,7 @@ div.cbi-value var, td.cbi-value-field var {
 }
 @media screen and (max-width: 1500px) {
   #maincontent {
-    padding: 0;
+      padding: 0;
   }
   header nav {
     padding: 5px 0;
@@ -1200,10 +1202,6 @@ div.cbi-value var, td.cbi-value-field var {
   .tabs, .cbi-tabmenu,
   input, textarea, select, .uneditable-input {
     width: 96%;
-  }
-  #device {
-    top: auto;
-    height: auto;
   }
   .js #navtoselect {
     display: none;
