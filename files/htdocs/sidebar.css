@@ -6,20 +6,16 @@
 }
 
 .sb-container {
-  width: 20%;
-  max-width:260px;
-  margin:10px auto auto 10px;
+  width: 30%;
+  max-width:220px;
+  margin:10px 10px 10px 10px;
   overflow:hidden;
 }
 
-.sb-btn { 
-  width:100%;
-  margin:0 auto;
-  padding:5px 5px;
-  cursor:pointer;
-  background:#00ffcf;
-  border-bottom:5px solid #ffffff;
+.body_content {
+	margin:10px auto auto auto;
 }
+
 
 .sb-content {
   height: 0;
@@ -39,10 +35,23 @@
   height: auto;
   padding: 15px;
   background: #ffffff;
+
+}
+
+.sb-btn {
+  width:100%;
+  margin:0 auto;
+  padding:5px 5px;
+  cursor:pointer;
+  border-bottom:5px solid #ffffff;
+  background:#00ffcf;
+}
+
+#selected {
+  background: #877AED;
 }
 
 .sb-btn h3 {
-  font: 26px 'Helvetica', 'Arial', sans-serif;
   color:#000000;
   font-weight: bold;
   text-align: center;
@@ -59,9 +68,6 @@ p {
   color: #877AED;
 }
 
-.selected {
-  background: #877AED;
-}
 
 .selected h1 {
   color:#fff;
