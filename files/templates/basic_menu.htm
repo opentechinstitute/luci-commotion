@@ -31,6 +31,7 @@ top_level = disp.node_childs(cattree)
 if #top_level > 0 then
    for _,tl_name in ipairs(top_level) do
       local tl_obj = cattree.nodes[tl_name]
+	  if tl_obj.title == "Commotion" then
 	  local l2_level = disp.node_childs(tl_obj)
 	  if #l2_level > 0 then
 		 for _,l2_name in ipairs(l2_level) do
@@ -59,6 +60,7 @@ if #top_level > 0 then
 				  <%-
 			end
 		 end
+	  end
 	  end
    end
 end%>
