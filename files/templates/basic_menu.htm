@@ -1,0 +1,57 @@
+BASIC MENU
+<%for i, r in pairs(cattree.nodes.commotion.nodes.client.nodes.welcome_page) do%>
+	  <!--<p><%=i%> : <%=r%></p>-->
+<%end%>
+<div class="sb-container">
+   <div class="">
+<%-
+local util = require "luci.util"
+local http = require "luci.http"
+local disp = require "luci.dispatcher"
+
+local function submenu(prefix, node)
+   local childs = disp.node_childs(node)
+   if #childs > 0 then
+	  for i, r in ipairs(childs) do
+		 local nnode = node.nodes[r]
+		 local href  = controller .. prefix .. r ..
+			(nnode.query and http.build_querystring(nnode.query) or "")%>
+			<li class="sbmenutitle">
+			<a href="<%=util.pcdata(href)%>"><%=util.pcdata(striptags(translate(nnode.title)))%></a>
+        </li><%-
+	  end
+   end
+end
+
+top_level = disp.node_childs(cattree)
+
+if #top_level > 0 then
+   for _,tl_name in ipairs(top_level) do
+      local tl_obj = cattree.nodes[tl_name]
+	  local l2_level = disp.node_childs(tl_obj)
+	  if #l2_level > 0 then
+		 for _,l2_name in ipairs(l2_level) do
+			local l2_obj = tl_obj.nodes[l2_name]
+			local href  = controller .. "/" .. category .. "/".. section .."/" .. l2_name ..
+			   (l2_obj.query and http.build_querystring(l2_obj.query) or "")
+			local l3_level = disp.node_childs(l2_obj)
+			if #l3_level > 0 then%>
+				  <div><h3 class="sb-btn">
+				  <a href="<%=util.pcdata(href)%>"><%=util.pcdata(striptags(translate(l2_obj.title)))%></a>
+				  </h3>
+				  <ul>
+				  <%-
+			   if l2_obj._menu_selected == true then
+			       submenu("/" .. category .. "/" .. l2_name .. "/", l2_obj)
+			   end
+				  -%>
+				  </ul>
+				  </div>
+				  <%-
+			end
+		 end
+	  end
+   end
+end%>
+   <div class="sb-btn"><h3><a href="<%=controller%>/admin/status/overview">Advanced</a></h3></div>
+   </div>

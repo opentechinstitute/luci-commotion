@@ -31,6 +31,7 @@ You may obtain a copy of the License at
 
    --ROOT NODE OF PATH (eg. admin on admin pages)
    category = request[1]
+   section = request[2]
 
    --SAME AGAIN
    cattree  = category and disp.node(category)
@@ -42,7 +43,7 @@ You may obtain a copy of the License at
    tree = disp.node()
 
    --Show the local node (current menu) on the tree
-   local node = disp.context.dispatched
+   node = disp.context.dispatched
    
    --An Ordered table of node names of this tree's child nodes
    local categories = disp.node_childs(tree)
@@ -80,34 +81,22 @@ You may obtain a copy of the License at
 
   <body class="lang_<%=luci.i18n.context.lang%> <%- if node then %><%= striptags( node.title ) %><%- end %>">
 	<header>
-
-	  <%if request[2] == "commotion" then%><!--Start "Basic" Menu here -->
-
 	  <!--Name:  <%include("themes/commotion/toggle_header", {hostname=hostname})%> -->
-
       <!-- <div class="nodeinfo"><h2>Node name: <%=hostname%></h2> <h2> Mesh IP: </h2></div> -->
-	  <%else%> <!--End "Basic" menu here -->	  
-
-	</header>
-	
 	  <%include("themes/commotion/unsaved_changes", {tree=tree, controller=controller, category=category})%>
-
-
-	  <%end%> <!--End Regular Menu--> <!-- ??? Regular vs Basic ??? -->
 
     <div class="navbar-inners"><div class="color0"></div><div class="color1"></div><div class="color2"></div><div class="color3"></div><div class="color4"></div></div>
 		<!--Do we want the pretty colors in the new UI? If not move into the last lua statment above.-->
+	<%=request[2]%>
+	<%if request[2] == "commotion" then%><!--Start "Basic" SIDEBAR here -->
 
-	<% if request[2] == "commotion" then%><!--Start "Basic" SIDEBAR here -->
+	<%include("themes/commotion/basic_menu", {controller=controller, cattree=cattree, category=category, node=node, section=section})%>
 
-	  <%include("themes/commotion/drop_menu", {controller=controller, cattree=cattree, category=category})%>
-
-
+	<%else%>
+	<%include("themes/commotion/adv_menu", {controller=controller, cattree=cattree, category=category, node=node, section=section})%>
+	
 	<%end%> <!--End "Basic" SIDEBAR here -->
-
-	<div class="sb-btn"><h3><a href="<%=controller%>/admin/status/overview">Advanced</a></h3></div>
-
-</div> <!-- End of "sb-container" div. Place "Advanced" button above this end or there will be layout badness -->
+	</header>
 
     <section id="maincontent">
 	  <%include("themes/commotion/subtree", {controller=controller, category=category, cattree=cattree})%>
