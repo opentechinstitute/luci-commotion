@@ -786,16 +786,28 @@ footer a:active, footer a:hover {
   padding: 0 5px;
 }
 #footermenu li.admin a {
-  display: inline-block;
-  background: transparent url(advanced.png) no-repeat top center;
-  padding: 62px 0 0 0;
-  font-weight: bold;
+	display: inline-block;
+	background: transparent url(advanced_point.png) no-repeat top center;
+	padding: 62px 0 0 0;
+	font-weight: bold;
 }
-#footermenu li.QS a {
-  display: inline-block;
-  background: transparent url(quickstart.png) no-repeat top center;
-  padding: 62px 0 0 0;
-  font-weight: bold;
+#footermenu li.about a {
+	display: inline-block;
+	background: transparent url(about_point.png) no-repeat top center;
+	padding: 62px 10px 0 10px;
+	font-weight: bold;
+}
+#footermenu li.help a {
+	display: inline-block;
+	background: transparent url(help_point.png) no-repeat top center;
+	padding: 62px 10px 0 10px;
+	font-weight: bold;
+}
+#footermenu li.license a {
+	display: inline-block;
+	background: transparent url(license_point.png) no-repeat top center;
+	padding: 62px 10px 0 10px;
+	font-weight: bold;
 }
 
 .btn.danger, .alert.danger, .btn.danger:hover, .alert.danger:hover, .btn.error, .alert.error, .btn.error:hover, .alert.error:hover, .btn.success, .alert.success, .btn.success:hover, .alert.success:hover, .btn.info, .alert.info, .btn.info:hover, .alert.info:hover {
