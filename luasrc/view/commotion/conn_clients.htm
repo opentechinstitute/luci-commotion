@@ -1,0 +1,109 @@
+<%#
+Copyright (C) 2013 Seamus Tuohy 
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+   
+   This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+   
+   You should have received a copy of the GNU General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
+%>
+
+<script>
+function setHelp(text) {
+    document.getElementById("table_help").innerHTML = text;
+}
+</script>
+<%-
+local util = require "luci.util"
+
+--Rip open assets table to get its sweet innards (need this because of the open ended include)
+for name,obj in pairs(assets) do
+   _G[name] = obj
+end
+
+colors = {default="", grn="#00cc00", yellow="#ffcb05", orange="#ff6600", red="#bb3333" }
+
+headers = {{title="IP-Address", help="HELP TEXT NEEDED", var="ip"},
+		   {title="Time Connected", help="HELP TEXT NEEDED", var="duration"},
+		   {title="Bandwidth Used", help="HELP TEXT NEEDED", var="bnd_wdth"},
+		   {title="Average Speed", help="HELP TEXT NEEDED", var="avg_spd"},
+		   {title="Currently Active", help="HELP TEXT NEEDED", var="curr_conn"}}
+
+if #clients > 0 then
+   for i in util.execi("iw dev wlan0 station dump") do
+	  string.gsub(i, "^Station%s(.-)%s%(",
+				  function(mac)
+					 for _,dossier in ipairs(clients) do
+						local c_idx = util.contains(dossier, mac)
+						if c_idx then
+						   clients[c_idx].curr_conn = true
+						end
+					 end
+				  end)
+   end
+end
+
+function create_table_header(values)
+   for _,x in ipairs(values) do
+	  row_title = translate(x.title)
+		 -%><th class="cbi-section-table-cell"><%=row_title%><%-
+		 if x.help then
+			   -%>
+			   <span class="cbi-value-helpicon">
+			   <img alt="help" src="<%=media%>/help.png" onmouseover="setHelp('<%=x.help%>')" onmouseout="setHelp('')"/>
+			   </span></th>
+				<%-
+		 else
+			-%></th><%-
+		 end
+   end
+end
+
+function create_table(values, data, colors)
+   i = 1
+   for _,curr in ipairs(data) do
+	  i = ((i % 2) + 1)
+		 -%><tr class="cbi-section-table-row cbi-rowstyle-<%=i%>"><%-
+	  for _,val in pairs(values) do
+		 if curr[val.var] then
+			result = curr[val.var]
+		 else
+			result = "N/A"
+		 end
+		 if curr.color then
+			color = curr.color(colors) --The color var should point to an anonymous function to run over the color table which returns a color from that table (or anywhere else really).
+		 else
+			color=colors.default
+		 end
+			-%><td class="cbi-section-table-cell" style="background-color:<%=color%>"><%=result%></td><%-
+	  end
+   end
+end
+
+
+if #clients > 0 then
+--Actually create the table below here.
+%>
+   
+<table class="cbi-section-table">
+  <thead>
+    <tr class="cbi-section-table-titles">
+      <%create_table_header(headers)%>
+   </tr>
+   <tr id="table_help" class="help-alert"></tr>
+  </thead>
+  <tbody id="client_table">
+    <%create_table(headers, clients, colors)%>
+  </tbody>
+</table>
+<%else%>
+	  <p class="error"><%:No clients found!%></p>
+	  <p><%:NEED HELP TEXT NEED HELP TEXT NEED HELP TEXT NEED HELP TEXT NEED HELP TEXT NEED HELP TEXT NEED HELP TEXT NEED HELP TEXTNEED HELP TEXT NEED HELP TEXT%></p>
+<%end%>

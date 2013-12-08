@@ -1,69 +1,101 @@
 --[[
-LuCI - Lua Development Framework
+Copyright (C) 2013 Seamus Tuohy 
 
-Copyright 2013 - Seamus Tuohy <s2e@opentechinstitute.org>
-
-With Thanks to the niu suite built by Steven Barth <steven@midlink.org>
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-	http://www.apache.org/licenses/LICENSE-2.0
-
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+   
+   This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+   
+   You should have received a copy of the GNU General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
 ]]--
 module ("luci.controller.commotion.status_config", package.seeall)
-
+local sys = require "luci.sys"
+local util = require "luci.util"
 function index()
-	if not nixio.fs.access("/etc/config/olsrd") then
-		return
-	end
 
-        local page  = node("admin", "commotion", "status")                                                    
-        page.target = template("commotion/status")                                                                      
-        page.title  = _(translate("Commotion Status"))
-        page.subindex = true                                           
-                                                                                 
-        local page  = node("admin", "commotion", "status", "nearby_md")       
-        page.target = call("action_neigh")                                     
-	-- template("nearby_md")
-        page.title  = _(translate("Nearby Mesh Devices"))
-        page.subindex = true                                                                 
-        page.order  = 5
+   entry({"admin", "commotion", "status"}, alias("admin", "commotion", "status", "nearby_md"), translate("Status"), 10)
+	entry({"admin", "commotion", "status", "nearby_md"}, call("action_neigh")).hidden = true
+	entry({"admin", "commotion", "status", "mesh_viz"}, call("viz")).hidden = true
+	entry({"admin", "commotion", "status", "conn_clnts"}, call("conn_clnts")).hidden = true
+	if sys.exec("opkg list-installed | grep luci-commotion-debug") then
+	   entry({"admin", "commotion", "status", "dbg_rpt"}, call("dbg_rpt")).hidden = true
+	end	
+end
 
-        local page  = node("admin", "commotion", "status", "mesh_viz")
-        page.target = call("action_neigh")                                                           
-        -- template("mesh_viz")                                                                     
-        page.title  = _(translate("Mesh Visualizer"))
-        page.subindex = true                                                                                                                                            
-        page.order  = 10
 
-        local page  = node("admin", "commotion", "status", "conn_clnts")
-        page.target = call("action_neigh")                                                           
-        -- template("conn_clnts")                                                                     
-        page.title  = _(translate("Connected Clients"))
-        page.subindex = true                                                                                                                                            
-        page.order  = 5
+function status_builder(page, assets, active_tab)
+   ifaces = {{name="interface one",
+			  status="On",
+			  sec="Secured",
+			  conn="22"}}
+   gw = "Yes"
+   luci.template.render("commotion/status", {ifaces=ifaces, gateway_provided=gw, page=page, assets=assets, active_tab=active_tab})
+end
 
-        local page  = node("admin", "commotion", "status", "dbg_rpt")
-        page.target = call("action_neigh")                                                           
-        -- template("dbg_rpt")                                                                     
-        page.title  = _(translate("Debug Report"))
-        page.subindex = true                                                                                                                                            
-        page.order  = 5
+function viz()
+   status_builder("commotion/viz", nil, "mesh_visualizer")
+end
+
+function conn_clnts()
+--[[
+client_id=0
+ip=103.114.207.62
+mac=10:0b:a9:ca:7b:14
+added=1386540225
+active=1386540231
+duration=6
+token=f9b38643
+state=Authenticated
+downloaded=2
+avg_down_speed=3.212
+uploaded=1
+avg_up_speed=1.54133
+]]--
+   local convert = function(x)
+	  return tostring(tonumber(x)*60).." "..translate(minutes)
+   end
+   local function total_kB(a, b) return tostring(a+b).." kByte" end
+   local function total_kb(a, b) return tostring(a+b).." kbit/s" end
+   local clients = {}
+   i = 0
+   for line in util.execi("ndsctl status") do
+	  if string.match(line, "^%d*$") then
+		 i = i + 1
+	  end
+	  string.gsub(i, "^(.-)=(.*)$",
+			   function(key, val)
+				  clients[i][key] = val
+			   end)
+	  if clients[i] ~= nil then
+		 clients[i].curr_conn=false
+		 clients[i].duration = convert(clients[i].duration)
+		 clients[i].bnd_wdth = total_kB(clients[i].downloaded, clients[i].uploaded)
+		 clients[i].avg_spd = total_kb(clients[i].avg_down_speed, clients[i].avg_up_speed)
+	  end
+   end
+   status_builder("commotion/conn_clients", {clients=clients}, "connected_clients")
+end
+
+function dbg_rpt()
+   status_builder("commotion/debug", nil, "debug_report")
 end
 
 function action_neigh(json)
         local data = fetch_txtinfo("links")
         if not data or not data.Links then
-                luci.template.render("status-olsr/error_olsr")
+                status_builder("commotion/error_olsr", nil, "nearby_devices")
                 return nil
         end
 -- table.sort currently breaks nearby_md
 --        table.sort(data.Links, compare_links)
-
-                                                                                                                                                                        
-        luci.template.render("commotion/nearby_md", {links=data.Links})
+		
+        status_builder("commotion/nearby_md", {links=data.Links}, "nearby_devices")
 end
 
 local function compare_links(a, b)

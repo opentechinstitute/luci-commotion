@@ -12,6 +12,13 @@ You may obtain a copy of the License at
 
 -%>
 
+<%-
+   --Rip open assets table to get its sweet innards
+   for name,obj in pairs(assets) do
+   _G[name] = obj
+   end
+-%>
+
 <%
 local olsrtools = require "luci.tools.olsr"
 local i = 1
@@ -43,8 +50,6 @@ if luci.http.formvalue("status") == "1" then
 	return
 end
 %>
-
-<%+header%>
 
 <script type="text/javascript" src="<%=resource%>/cbi.js"></script>
 <script type="text/javascript">//<![CDATA[
@@ -146,4 +151,3 @@ udoadsfasdfasdasdf						'<td class="cbi-section-table-cell" style="background-co
 	<li><strong><span style="color:#bb3333"><%:Red%></span></strong>:<%:Bad (ETX > 10)%></li> 
 </ul>
 </fieldset>
-<%+footer%>
