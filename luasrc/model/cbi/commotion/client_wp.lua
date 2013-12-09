@@ -19,8 +19,13 @@ local utils = require "luci.util"
 local db = require "luci.commotion.debugger"
 local uci = require "luci.model.uci".cursor()
 local fs = require "nixio.fs"
+local cdisp = require "luci.commotion.dispatch"
 
 m = Map("nodogsplash", translate("Welcome Page"))
+
+--redirect on saved and changed to check changes.
+m.on_after_save = cdisp.conf_page
+
 
 enable = m:section(TypedSection, "settings", translate("On/Off"), translate("Users can be redirected to a “welcome page” when they first connect to this node."))
 enable.anonymous = true
@@ -89,24 +94,28 @@ end
 uploader = splshtxt:option(FileUpload, "_upload", "UPLOADER TEXT HERE")
 
 function m.on_parse(self)
-   if luci.http.formvalue("cbid.nodogsplash._page._page") ~= "Edit" then
+   local b_press = luci.http.formvalue("cbid.nodogsplash._page._page")
+   if b_press ~= "Edit" then
 	  function t.render() return nil end
 	  function help.render() return nil end
    end
-   if luci.http.formvalue("cbid.nodogsplash._page._page") ~= "Upload" then
+   if b_press ~= "Upload" then
 	  function uploader.render() return nil end
    end
    uploaded = "/lib/uci/upload/cbid.nodogsplash._page._upload"
    if luci.fs.isfile(uploaded) then
 	  local nfs = require "nixio.fs"
 	  nfs.move(uploaded, splashtextfile)
+	  m.message = "file uploaded!" 
    end
    text = luci.http.formvalue("cbid.nodogsplash._page.text")
-   if text then
+   if text and not b_press then
 	  if text ~= "" then
 		 fs.writefile(splashtextfile, text:gsub("\r\n", "\n"))
+		 m.message = "Splashpage updated successfully!"
 	  else
 		 fs.unlink(splashtextfile)
+		 m.message ="Default Splash page selected!"
 	  end
    end
    return true
