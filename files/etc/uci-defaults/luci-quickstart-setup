@@ -1,0 +1,11 @@
+#!/bin/sh
+
+. /etc/functions.sh
+#set up all interfaces needed for the quickstart process
+config_load wireless
+uci_add wireless wifi-iface quickstartAP
+uci_set wireless quickstartAP mode ap
+uci_set wireless quickstartAP network client
+uci_add wireless wifi-iface quickstartMesh
+uci_set wireless quickstartAP mode adhoc
+uci_commit wireless
