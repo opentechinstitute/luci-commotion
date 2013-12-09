@@ -1,9 +1,23 @@
 --[[
-LuCI - Lua Development Framework Modifications
+Copyright (C) 2013 Seamus Tuohy 
 
-Copyright 2013 - Seamus Tuohy <s2e@opentechinstitute.org>
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+   
+   This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+   
+   You should have received a copy of the GNU General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-With Thanks to the niu suite built by Steven Barth <steven@midlink.org>
+HUGE Thanks to the niu suite!!!
+]]--
+--[[
+   Copyright (C) 2008 Steven Barth <steven@midlink.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,26 +30,38 @@ module ("luci.controller.commotion.basic_config", package.seeall)
 local db = require "luci.commotion.debugger"
 
 function index()
+   entry({"admin", "commotion"}, alias("admin", "commotion", "basic"), translate("Commotion"), 20)
    local QS = require "luci.commotion.quickstart"
    local redir = luci.http.formvalue("redir", true) or
-	  luci.dispatcher.build_url(unpack(luci.dispatcher.context.request)) 
-   
-   entry({"admin", "commotion", "confirm"}, call("action_changes"), translate("Confirm"), 40).query = {redir=redir}
-   entry({"admin", "commotion", "revert"}, call("action_revert")).query = {redir=redir}
-   entry({"admin", "commotion", "saveapply"}, call("action_apply")).query = {redir=redir}
+	  luci.dispatcher.build_url(unpack(luci.dispatcher.context.request))
+
+   cnfm = entry({"admin", "commotion", "confirm"}, call("action_changes"), translate("Confirm"), 40)
+   cnfm.query = {redir=redir}
+   cnfm.hidden = true
+
+   rvt = entry({"admin", "commotion", "revert"}, call("action_revert"))
+   rvt.query = {redir=redir}
+   rvt.hidden = true
+
+   sva = entry({"admin", "commotion", "saveapply"}, call("action_apply"))
+   sva.query = {redir=redir}
+   sva.hidden = true
    
    if QS.status() then
 	  local confirm = {on_success_to={"admin", "commotion", "confirm"}}
-	  entry({"admin", "commotion", "confirm_config"}, cbi("commotion/confirm_config"), translate("Confirm your Changes"))
-	  entry({"admin", "commotion", "quickstart"}, cbi("commotion/quickstart", confirm), translate("Basic Configuration"), 15)
+	  entry({"admin", "commotion", "quickstart"}, cbi("commotion/quickstart", confirm), translate("Basic Configuration"), 15).hidden=true
    else
 	  --Create regular "Basic Config" menu.
 	  entry({"admin", "commotion", "basic"}, alias("admin", "commotion", "basic", "node_settings"), translate("Basic Configuration"), 10).index = true
-	  entry({"admin", "commotion", "basic", "node_settings"}, cbi("commotion/basic_ns"), translate("Node Settings"), 20)
-	  entry({"admin", "commotion", "basic", "network_settings"}, alias("admin", "commotion", "basic", "mesh_network"), translate("Network Settings"), 30)
-	  entry({"admin", "commotion", "basic", "mesh_network"}, cbi("commotion/basic_mn"), translate("Mesh Network"), 40)
-	  entry({"admin", "commotion", "basic", "wireless_network"}, cbi("commotion/basic_wn"), translate("Wireless Network"), 50)
-	  entry({"admin", "commotion", "basic", "addtl_net_ifaces"}, cbi("commotion/basic_ani"), translate("Additional Netork Interfaces"), 60)
+	  
+	  --No Subsection for Node Settings?
+	  entry({"admin", "commotion", "basic", "node_settings"}, cbi("commotion/basic_ns", {hideapplybtn=true, hideresetbtn=true}), translate("Node Settings"), 20).subsection=true
+	  
+	  --Subsection Network Settings
+	  entry({"admin", "commotion", "basic", "network_settings"}, alias("admin", "commotion", "basic", "mesh_network"), translate("Network Settings"), 30).subsection=true
+	  entry({"admin", "commotion", "basic", "mesh_network"}, cbi("commotion/basic_mn", {hideapplybtn=true, hideresetbtn=true}), translate("Mesh Network"), 40)
+	  entry({"admin", "commotion", "basic", "wireless_network"}, cbi("commotion/basic_wn", {hideapplybtn=true, hideresetbtn=true}), translate("Wireless Network"), 50)
+	  entry({"admin", "commotion", "basic", "addtl_net_ifaces"}, cbi("commotion/basic_ani", {hideapplybtn=true, hideresetbtn=true}), translate("Additional Netork Interfaces"), 60)
    end
 end
 

@@ -15,11 +15,8 @@ You may obtain a copy of the License at
 module "luci.controller.commotion.application_config"
 
 function index()
-	  entry({"admin", "commotion", "basic"}, alias("admin", "commotion", "application", "list"), translate("Applications"), 30).index = true
-
-	  entry({"admin", "commotion", "application", "list"}, cbi("commotion/application_list"), translate("List"), 40)
-	  
-	  entry({"admin", "commotion", "application", "add"}, cbi("commotion/application_add"), translate("Add"), 50)
-	  
-	  entry({"admin", "commotion", "application", "settings"}, cbi("commotion/application_set"), translate("Settings"), 60)
+--	  entry({"admin", "commotion", "basic"}, alias("admin", "commotion", "application", "list"), translate("Applications"), 30).index = true
+   --	  entry({"admin", "commotion", "application", "list"}, cbi("commotion/application_list", {hideapplybtn=true, hideresetbtn=true}), translate("List"), 40).subsection=true
+--	  entry({"admin", "commotion", "application", "add"}, cbi("commotion/application_add", {hideapplybtn=true, hideresetbtn=true}), translate("Add"), 50).subsection=true
+--	  entry({"admin", "commotion", "application", "settings"}, cbi("commotion/application_set", {hideapplybtn=true, hideresetbtn=true}), translate("Settings"), 60).subsection=true
 end

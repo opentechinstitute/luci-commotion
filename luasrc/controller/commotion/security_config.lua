@@ -14,10 +14,10 @@ You may obtain a copy of the License at
 ]]--
 module "luci.controller.commotion.security_config"
 
-function index()   
+function index()
 	  entry({"admin", "commotion", "security"}, alias("admin", "commotion", "security", "passwords"), translate("Security"), 40).index = true
 
-	  entry({"admin", "commotion", "security", "passwords"}, cbi("commotion/security_pass"), translate("Passwords"), 50)
+	  entry({"admin", "commotion", "security", "passwords"}, cbi("commotion/security_pass", {hideapplybtn=true, hideresetbtn=true}), translate("Passwords"), 50).subsection=true
 
-	  entry({"admin", "commotion", "security", "shared_mesh_keychain"}, cbi("commotion/security_smk"), translate("Shared Mesh Keychain"), 60)
+	  entry({"admin", "commotion", "security", "shared_mesh_keychain"}, cbi("commotion/security_smk", {hideapplybtn=true, hideresetbtn=true}), translate("Shared Mesh Keychain"), 60).subsection=true
 end
