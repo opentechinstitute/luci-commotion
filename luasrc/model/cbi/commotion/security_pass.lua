@@ -1,5 +1,12 @@
 local db = require "luci.commotion.debugger"
+local http = require "luci.http"
+local cdisp = require "luci.commotion.dispatch"
+
 local m = Map("wireless", translate("Passwords"), translate("Commotion basic security settings places all the passwords and other security features in one place for quick configuration. "))
+
+--redirect on saved and changed to check changes.
+m.on_after_save = cdisp.conf_page
+
 
 --PASSWORDS
 local v0 = true -- track password success across maps
@@ -94,10 +101,10 @@ for i,iface in ipairs(interfaces) do
    end
 end
 
-function m.on_before_commit(map)
+function m.on_before_save(map)
 	-- if existing password, make sure user has old password
 	if s0 then
-		v0 = luci.sys.user.checkpasswd("root", formvalue("_pass0"))
+		v0 = luci.sys.user.checkpasswd("root", http.formvalue("_pass0"))
 	end
 
 	if v0 == false then
@@ -107,7 +114,7 @@ function m.on_before_commit(map)
 	end
 end
 
-function m.on_commit(map)
+function m.on_save(map)
    local v1 = pw1:formvalue("_pass")
    local v2 = pw2:formvalue("_pass")
 	if v0 == true and v1 and v2 and #v1 > 0 and #v2 > 0 then

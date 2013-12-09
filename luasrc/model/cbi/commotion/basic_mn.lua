@@ -21,21 +21,14 @@ local cnw = require "luci.commotion.network"
 local db = require "luci.commotion.debugger"
 local http = require "luci.http"
 local QS = require "luci.commotion.quickstart"
---local db = require "luci.commotion.debugger"
+local cdisp = require "luci.commotion.dispatch"
 
 
 local m = Map("wireless", translate("Network Interfaces"), translate("Every Commotion node must have one mesh network connection or interface. Commotion can mesh over wireless or wired interfaces."))
-m.flow.hideapplybtn = true
-m.flow.hideresetbtn = true
 
---when this map is committed make sure that the commotionMesh default interface is also created so that there is always a default profile applied. If still in quickstart, make sure that there is a default template for the wifi-iface section
+--redirect on saved and changed to check changes.
 if not QS.status() then
-   function m.on_after_save(self)
-	  for i,x in pairs(self) do db.log(tostring(i).." "..tostring(x)) end
-	  if self.save and self.changed then
-		 http.redirect(luci.dispatcher.build_url("admin", "commotion", "confirm"))
-	  end
-   end
+   m.on_after_save = cdisp.conf_page
 end
 
 function m.on_before_commit()

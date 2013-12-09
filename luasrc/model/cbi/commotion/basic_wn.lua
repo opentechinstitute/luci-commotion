@@ -21,8 +21,14 @@ local cnw = require "luci.commotion.network"
 local db = require "luci.commotion.debugger"
 local http = require "luci.http"
 local QS = require "luci.commotion.quickstart"
+local cdisp = require "luci.commotion.dispatch"
 
 local m = Map("wireless", translate("Wireless Network"), translate("Turning on an Access Point provides a wireless network for people to connect to using a laptop or other wireless devices."))
+
+--redirect on saved and changed to check changes.
+if not QS.status() then
+   m.on_after_save = cdisp.conf_page
+end
 
 s = m:section(TypedSection, "wifi-iface", translate("Access Point"), translate("Turning on an Access Point provides a wireless network for people to connect to using a laptop or other wireless devices."))
 s.optional = false
