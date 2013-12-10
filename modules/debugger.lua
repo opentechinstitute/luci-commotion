@@ -14,11 +14,11 @@ local debugger = {}
 function debugger.log(msg)
 	if (type(msg) == "table") then
 		for key, val in pairs(msg) do
-			log('{')
-			log(key)
-			log(':')
-			log(val)
-			log('}')
+			debugger.log('{')
+			debugger.log(key)
+			debugger.log(':')
+			debugger.log(val)
+			debugger.log('}')
 		end
 	else
 	   sys.exec("logger -t luci \"" .. tostring(msg) .. '"')
