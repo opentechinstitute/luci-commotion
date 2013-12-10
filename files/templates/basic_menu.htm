@@ -57,6 +57,15 @@ if #top_level > 0 then
 			   end
 				  -%>
 				  </div>
+				  <%else%>
+			   <%if l2_obj._menu_selected == true then%>
+			      <div class="sb-btn" id="selected">
+			   <%else%>
+				  <div class="sb-btn">
+			   <%end%>
+				  <h3><a href="<%=util.pcdata(href)%>"><%=util.pcdata(striptags(translate(l2_obj.title)))%></a>
+				  </h3>
+				  </div>
 				  <%-
 			end
 		 end
