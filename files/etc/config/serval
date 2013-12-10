@@ -1,0 +1,7 @@
+config settings settings
+	option enabled 'true'
+	option primary_keyring '/etc/serval'
+	option olsrd_mdp_keyring '/etc/commotion/keys.d/mdp'
+	option update_primary_keyring 'false'
+	option update_mdp_keyring 'false'
+	option new_mdp_keyring 'false'

@@ -1,0 +1,46 @@
+#!/bin/sh /etc/rc.common
+# UCI file to allow basic serval modifications through LuCI with proper UI feel 
+
+. /lib/functions/commotion.sh
+. /lib/config/uci.sh
+
+START=19
+STOP=91
+
+reload() {
+	local upload=cbid.serval.settings._upload
+	local update_mdp=$(uci_get serval settings update_mdp_keyring)
+	echo $update_mdp
+	local mdp_keyring=$(uci_get serval settings olsrd_mdp_keyring)
+	local update_primary=$(uci_get serval settings update_primary_keyring)
+	local primary_keyring=$(uci_get serval settings primary_keyring)
+	local new_mdp=$(uci_get serval settings new_mdp_keyring)
+	echo $new_mdp
+	if [ "$update_mdp" == "true" ]; then
+	     echo $upload
+	   	 mv /lib/uci/upload/$upload $mdp_keyring/serval.keyring || return 1
+	   	 export SERVALINSTANCE_PATH=$mdp_keyring 
+	   	 servald stop && sleep 1 
+	   	 servald start || return 1
+	elif [ -e "/lib/uci/upload/$upload" ]; then
+		rm /lib/uci/upload/$upload || return 1
+	fi
+	uci_set serval settings update_mdp_keyring 'false'
+	if [ "$update_mdp" == "true" ]; then
+	   mv /lib/uci/upload/$upload $primary_keyring/serval.keyring || return 1
+	   export SERVALINSTANCE_PATH=$primary_keyring
+	   servald stop && sleep 1
+	   servald start
+	elif [ -e "/lib/uci/upload/$upload" ]; then
+		rm /lib/uci/upload/$upload || return 1
+	fi
+	if [ "$new_mdp" == "true" ]; then
+	   echo $new_mdp
+	   rm $mdp_keyring/serval.keyring || return 1
+	   export SERVALINSTANCE_PATH=$mdp_keyring
+	   servald stop && sleep 1
+	   servald start
+	fi
+	uci_set serval settings new_mdp_keyring 'false'
+	uci_commit serval
+}
