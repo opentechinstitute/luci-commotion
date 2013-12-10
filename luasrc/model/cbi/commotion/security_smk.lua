@@ -58,6 +58,18 @@ uploader = s:option(FileUpload, "_upload", translate("Upload Shared Mesh Keychai
 uploader:depends("enabled", "true")
 uploader.anonymous = true
 
+--! TODO test this function to ensure that it checks for a good key and then writes the new_mdp_keyring value to true if so.
+function uploader.write(self, section, value)
+   local keyring = luci.sys.exec("SERVALINSTANCE_PATH=/lib/uci/upload/ servald keyring list")
+   local key = string.match(keyring, "^(%w*):%w*:")
+   if key == nil or string.len(key) ~= 64 then
+	  self:add_error(section, translate("The file supplied is not a proper keyring, or is password protected. Please upload another key."))
+   else
+	  return self.map:set(section, "new_mdp_keyring", "true")
+   end
+end
+
+
 dwnld = s:option(Button, "_dummy", translate("Download Shared Mesh Keychain"), translate("Download a copy of this device's existing Shared Mesh Keychain. Use this feature to make a backup of this file, or to share it with people putting up new devices on your Commotion mesh network."))
 dwnld.anonymous = true
 dwnld:depends("enabled", "true")
