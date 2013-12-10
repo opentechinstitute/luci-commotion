@@ -14,11 +14,14 @@ You may obtain a copy of the License at
 
 -%>
 <%
+   local crypto = require "luci.commotion.crypto"   
    local http = require "luci.http"
    local sys  = require "luci.sys"
    local disp = require "luci.dispatcher"
    local cdisp = require "luci.commotion.dispatch"
 
+   -- ensure that client is running https
+   crypto.check_https("/admin/", luci.http.getenv())
    
    -- send as HTML5
    http.prepare_content("text/html")
@@ -81,7 +84,7 @@ You may obtain a copy of the License at
   <body class="lang_<%=luci.i18n.context.lang%> <%- if node then %><%= striptags( node.title ) %><%- end %>">
 	<header>
 	  <nav><ul><li></li></ul></nav>
-    <a id="device" href="/"><img src="<%=media%>/commotion_tiny.png" alt="Commotion - toggle header" title="Commotion - toggle header" /></a>	  
+    <a id="device" href="/"><img src="<%=media%>/commotion_tiny.png" alt="Commotion - toggle header" title="Commotion - toggle header" /></a>
 	<div class="collapsible">
       <h1 class="brand"><a href="/">Node name: <%=hostname%></a></h1>
     </div>
