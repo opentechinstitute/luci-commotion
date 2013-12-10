@@ -117,10 +117,23 @@ enc.default = "none" --default must == disabled value for rmempty to work
 
 --Have enc flag also remove the encryption key when deleted
 function enc.remove(self, section)
-   local key = self.map:del(section, "key")
-   local enc = self.map:del(section, self.option)
-   return key and enc or false
+   value = self.map:get(section, self.option)
+   if value ~= self.disabled then
+	  local key = self.map:del(section, "key")
+	  local enc = self.map:del(section, self.option)
+	  self.section.changed = true
+	  return key and enc or false
+   end
 end
+
+function enc.write(self, section, fvalue)
+   value = self.map:get(section, self.option)
+   if value ~= fvalue then
+	  self.section.changed = true
+	  return self.map:set(section, self.option, fvalue)
+   end
+end
+
 
 --dummy value set to not reveal password
 pw1 = s:option(Value, "_pw1", translate("Mesh Encryption Password"), translate("To encrypt data between devices, each device must share a common mesh encryption password."))

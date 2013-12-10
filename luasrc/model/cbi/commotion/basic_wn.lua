@@ -106,11 +106,23 @@ enc.enabled = "psk2"
 enc.rmempty = true
 enc.default = "none" --default must == disabled value for rmempty to work
 
---Have enc flag also remove the encryption key when deleted
+--Have enc flag also remove the encryption key when deleted and mark as changed.
 function enc.remove(self, section)
-   local key = self.map:del(section, "key")
-   local enc = self.map:del(section, self.option)
-   return key and enc or false
+   value = self.map:get(section, self.option)
+   if value ~= self.disabled then
+	  local key = self.map:del(section, "key")
+	  local enc = self.map:del(section, self.option)
+	  self.section.changed = true
+	  return key and enc or false
+   end
+end
+--have a flag to mark enc as changed when changed.
+function enc.write(self, section, fvalue)
+   value = self.map:get(section, self.option)
+   if value ~= fvalue then
+	  self.section.changed = true
+	  return self.map:set(section, self.option, fvalue)
+   end
 end
 
 --dummy value set to not reveal password

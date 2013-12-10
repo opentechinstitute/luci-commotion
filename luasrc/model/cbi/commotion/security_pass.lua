@@ -7,7 +7,6 @@ local m = Map("wireless", translate("Passwords"), translate("Commotion basic sec
 --redirect on saved and changed to check changes.
 m.on_after_save = cdisp.conf_page
 
-
 --PASSWORDS
 local v0 = true -- track password success across maps
 
@@ -18,7 +17,7 @@ if luci.sys.user.getpasswd("root") then
    s0 = m:section(TypedSection, "_dummy", translate("Current Password"), translate("Current password required to make changes on this page"))
    s0.addremove = false
    s0.anonymous = true
-   pw0 = s0:option(Value, "pw0")
+   pw0 = s0:option(Value, "_pw0")
    pw0.password = true
    -- fail by default
    v0 = false
@@ -42,16 +41,74 @@ uci.foreach("wireless", "wifi-iface",
 --! @name pw_sec_opt
 --! @brief create password options to add to interface passed-
 function pw_sec_opt(pw_s, iface)
+   --section options
    pw_s.addremove = false
    pw_s.anonymous = true
-   pw1 = pw_s:option(Value, (iface.name.."_key"))
+
+   --encryption toggle
+   enc = pw_s:option(Flag, "encryption", translate("Require a Password?"), translate("When people connect to this access point, should a password be required?"))
+   enc.disabled = "none"
+   enc.enabled = "psk2"
+   enc.rmempty = true
+   enc.default = enc.disabled --default must == disabled value for rmempty to work
+
+function enc.remove(self, section)
+   value = self.map:get(section, self.option)
+   if value ~= self.disabled then
+	  local key = self.map:del(section, "key")
+	  local enc = self.map:del(section, self.option)
+	  self.section.changed = true
+	  return key and enc or false
+   end
+end
+
+function enc.write(self, section, fvalue)
+   value = self.map:get(section, self.option)
+   if value ~= fvalue then
+	  self.section.changed = true
+	  return self.map:set(section, self.option, fvalue)
+   end
+end
+
+   --password options
+   pw1 = pw_s:option(Value, (iface.name.."_pass1"))
    pw1.password = true
    pw1.anonymous = true
-   pw2 = pw_s:option(Value, iface.name.."_conf", nil, translate("Confirm Password"))
+   pw1:depends("encryption", "psk2")
+   --confirmation password
+   pw2 = pw_s:option(Value, iface.name.."_pass2", nil, translate("Confirm Password"))
    pw2.password = true
    pw2.anonymous = true
-   function pw_s.cfgsections()
-	  return { "_pass" }
+   pw2:depends("encryption", "psk2")
+   
+   --password should write to the key, not to the dummy value
+   function pw1.write(self, section, value)
+	  return self.map:set(section, "key", value)
+   end
+   
+   function pw2.write() return true end
+
+   --make sure passwords are equal
+   function pw1.validate(self, value, section)
+	  local v1 = value
+	  local v2 = pw2:formvalue(section)
+	  --local v2 = http.formvalue(string.gsub(self:cbid(section), "%d$", "2"))
+	  if v1 and v2 and #v1 > 0 and #v2 > 0 then
+		 if v1 == v2 then
+			if m.message == nil then
+			   m.message = translate("Password successfully changed!")
+			end
+			return value
+		 else
+			m.message = translate("Error, no changes saved. See below.")
+			self:add_error(section, translate("Given password confirmation did not match, password not changed!"))
+			return nil
+		 end
+	  else
+		 m.message = translate("Error, no changes saved. See below.")
+		 self:add_error(section, translate("Unknown Error, password not changed!"))
+		 return nil
+	  end
    end
 end
 
@@ -101,20 +158,37 @@ for i,iface in ipairs(interfaces) do
    end
 end
 
-function m.on_before_save(map)
-	-- if existing password, make sure user has old password
-	if s0 then
-		v0 = luci.sys.user.checkpasswd("root", http.formvalue("_pass0"))
-	end
-
-	if v0 == false then
-		m.message = translate("Incorrect password. Changes rejected!")
-		m.save=v0
-		m2.save=v0
-	end
+function m.on_parse(map)
+   local form = http.formvaluetable("cbid.wireless")
+   local check = nil
+   local conf_pass = nil
+   for field,val in pairs(form) do
+	  string.gsub(field, ".-_pw(%d)$",
+				  function(num)
+					 if tonumber(num) == 0 then
+						conf_pass = val
+					 end
+					 if val then
+						check = true
+					 end
+				  end)
+   end
+   if check ~= nil then
+	  db.log("not nil")
+	  if conf_pass then
+		 v0 = luci.sys.user.checkpasswd("root", conf_pass)
+		 if v0 ~= true then
+			m.message = translate("Incorrect password. Changes rejected!")
+			m.save = false
+			function m.on_after_save() return true end --Don't redirect on error
+		 end
+	  else
+		 m.message = translate("Please enter your old password. Changes rejected!")
+		 m.save = false
+	  end
+   end
 end
-
-function m.on_save(map)
+function m.on_save(self)
    local v1 = pw1:formvalue("_pass")
    local v2 = pw2:formvalue("_pass")
 	if v0 == true and v1 and v2 and #v1 > 0 and #v2 > 0 then
@@ -129,6 +203,7 @@ function m.on_save(map)
 	   end
 	end
 end
+
 
 
 
