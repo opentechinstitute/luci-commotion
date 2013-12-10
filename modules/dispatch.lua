@@ -28,10 +28,13 @@ end
 --! @param self the map object (m.on_after_save = conf_page )
 --! @return nil but redirects a user to the confirmation page)
 function dispatch.conf_page(self)
-   if self.save and self.changed then
+   if self.changed then
 	  http.redirect(disp.build_url("admin", "commotion", "confirm"))
    end
 end
+
+
+				
 
 return dispatch
 
