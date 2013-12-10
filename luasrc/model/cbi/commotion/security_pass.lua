@@ -44,32 +44,34 @@ function pw_sec_opt(pw_s, iface)
    --section options
    pw_s.addremove = false
    pw_s.anonymous = true
-
+   
    --encryption toggle
    enc = pw_s:option(Flag, "encryption", translate("Require a Password?"), translate("When people connect to this access point, should a password be required?"))
    enc.disabled = "none"
    enc.enabled = "psk2"
    enc.rmempty = true
    enc.default = enc.disabled --default must == disabled value for rmempty to work
-
-function enc.remove(self, section)
-   value = self.map:get(section, self.option)
-   if value ~= self.disabled then
-	  local key = self.map:del(section, "key")
-	  local enc = self.map:del(section, self.option)
-	  self.section.changed = true
-	  return key and enc or false
+   
+   --Make enc flag actually check for section.changed and set that flag for the confirmation page to work
+   --TODO make this a commotion function. It is repeated in multiple cbi models.
+   function enc.remove(self, section)
+	  value = self.map:get(section, self.option)
+	  if value ~= self.disabled then
+		 local key = self.map:del(section, "key")
+		 local enc = self.map:del(section, self.option)
+		 self.section.changed = true
+		 return key and enc or false
+	  end
    end
-end
-
-function enc.write(self, section, fvalue)
-   value = self.map:get(section, self.option)
-   if value ~= fvalue then
-	  self.section.changed = true
-	  return self.map:set(section, self.option, fvalue)
+   
+   function enc.write(self, section, fvalue)
+	  value = self.map:get(section, self.option)
+	  if value ~= fvalue then
+		 self.section.changed = true
+		 return self.map:set(section, self.option, fvalue)
+	  end
    end
-end
-
+   
    --password options
    pw1 = pw_s:option(Value, (iface.name.."_pass1"))
    pw1.password = true
@@ -87,7 +89,7 @@ end
    end
    
    function pw2.write() return true end
-
+   
    --make sure passwords are equal
    function pw1.validate(self, value, section)
 	  local v1 = value
@@ -158,6 +160,7 @@ for i,iface in ipairs(interfaces) do
    end
 end
 
+--!brief This map checks for the admin password field and denies all saving and removes the confirmation page redirect if it is there.
 function m.on_parse(map)
    local form = http.formvaluetable("cbid.wireless")
    local check = nil
@@ -174,7 +177,6 @@ function m.on_parse(map)
 				  end)
    end
    if check ~= nil then
-	  db.log("not nil")
 	  if conf_pass then
 		 v0 = luci.sys.user.checkpasswd("root", conf_pass)
 		 if v0 ~= true then
@@ -188,25 +190,24 @@ function m.on_parse(map)
 	  end
    end
 end
+
 function m.on_save(self)
    local v1 = pw1:formvalue("_pass")
    local v2 = pw2:formvalue("_pass")
-	if v0 == true and v1 and v2 and #v1 > 0 and #v2 > 0 then
-	   if v1 == v2 then
-		  if luci.sys.user.setpasswd(luci.dispatcher.context.authuser, v1) == 0 then
-			 m.message = translate("Password successfully changed!")
-		  else
-			 m.message = translate("Unknown Error, password not changed!")
-		  end
-	   else
-		  m.message = translate("Given password confirmation did not match, password not changed!")
-	   end
-	end
+   if v0 == true and v1 and v2 and #v1 > 0 and #v2 > 0 then
+	  if v1 == v2 then
+		 if luci.sys.user.setpasswd(luci.dispatcher.context.authuser, v1) == 0 then
+			--TODO WAIT @critzo/@georgiamoon decide upon administration password experience for confirmation page.
+--			eg. function m.on_after_save() return true end --Don't redirect on admin pw success as it is not a uci value and shows up as nil.
+			m.message = translate("Admin Password successfully changed!")
+		 else
+			m.message = translate("Unknown Error, password not changed!")
+		 end
+	  else
+		 m.message = translate("Given password confirmation did not match, password not changed!")
+	  end
+   end
 end
-
-
-
-
 
 return m
 
