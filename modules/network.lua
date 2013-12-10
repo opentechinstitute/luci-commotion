@@ -33,7 +33,7 @@ end
 --! @returns the frequency name if short flag is passed.
 function network.get_channels(mode, short)
    local five_ghz = {"11a", "11adt", '11na'}
-   if utils.contains(five_ghz, hwm) then
+   if utils.contains(five_ghz, mode) then
 	  freq = "5GHz"
    else
 	  freq = "2.4GHz"
@@ -59,6 +59,27 @@ function network.get_channels(mode, short)
 	  end
    end
 end
+
+--! @name commotion_set
+--! @brief finds, or creates a commotion profile and sets values
+--! param name string name of profile
+--! param options table options in key/value pairs {option="value", option2="value2"}
+--! @return boolean value stating success or failure
+function network.commotion_set(name, options)
+   --if not find_profile(name) then
+   --error = create_profile(name)
+   --if error then return false end
+   --end
+   --for oname,oval in pairs(options) do
+   --error = set_option(name, oname, oval)
+   --if error == "error" then
+   --revert_changes(name)
+   --return false
+   --end
+   --end
+   return true
+end
+
 
 
 
