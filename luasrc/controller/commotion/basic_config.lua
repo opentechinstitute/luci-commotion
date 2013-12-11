@@ -30,8 +30,11 @@ module ("luci.controller.commotion.basic_config", package.seeall)
 local db = require "luci.commotion.debugger"
 
 function index()
+ 
    entry({"admin", "commotion"}, alias("admin", "commotion", "basic"), translate("Commotion"), 20)
+
    local QS = require "luci.commotion.quickstart"
+
    local redir = luci.http.formvalue("redir", true) or
 	  luci.dispatcher.build_url(unpack(luci.dispatcher.context.request))
 
@@ -48,9 +51,21 @@ function index()
    sva.hidden = true
    
    if QS.status() then
+	  local root = node()
+	  root.target = alias("commotion", "setup_wizard")
+	  root.index = true
+
 	  local confirm = {on_success_to={"admin", "commotion", "confirm"}}
-	  entry({"admin", "commotion", "quickstart"}, cbi("commotion/quickstart", confirm), translate("Basic Configuration"), 15).hidden=true
+	  entry({"commotion", "setup_wizard"}, cbi("commotion/setup_wizard", confirm), translate("Basic Configuration"), 15).hidden=true
+
    else
+	  local root = node()
+	  if not root.lock then
+		 root.target = alias("apps")
+		 root.index = true
+	  end
+ 
+	  entry({"commotion"}, alias("apps"))
 	  --Create regular "Basic Config" menu.
 	  entry({"admin", "commotion", "basic"}, alias("admin", "commotion", "basic", "node_settings"), translate("Basic Configuration"), 10).index = true
 	  
@@ -62,6 +77,7 @@ function index()
 	  entry({"admin", "commotion", "basic", "mesh_network"}, cbi("commotion/basic_mn", {hideapplybtn=true, hideresetbtn=true}), translate("Mesh Network"), 40)
 	  entry({"admin", "commotion", "basic", "wireless_network"}, cbi("commotion/basic_wn", {hideapplybtn=true, hideresetbtn=true}), translate("Wireless Network"), 50)
 	  entry({"admin", "commotion", "basic", "addtl_net_ifaces"}, cbi("commotion/basic_ani", {hideapplybtn=true, hideresetbtn=true}), translate("Additional Netork Interfaces"), 60)
+
    end
 end
 
