@@ -53,6 +53,7 @@ stime.anonymous = true
 
 tfield = stime:option(Value, "splashtime")
 tfield.datatype = "uinteger"
+tfield.forcewrite = true
 
 timeopt = stime:option(ListValue, "splashunit")
 timeopt:value("seconds")

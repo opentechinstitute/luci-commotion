@@ -105,6 +105,7 @@ enc.disabled = "none"
 enc.enabled = "psk2"
 enc.rmempty = true
 enc.default = "none" --default must == disabled value for rmempty to work
+enc.write=ccbi.flag_write
 
 --Have enc flag also remove the encryption key when deleted and mark as changed.
 function enc.remove(self, section)
@@ -114,14 +115,6 @@ function enc.remove(self, section)
 	  local enc = self.map:del(section, self.option)
 	  self.section.changed = true
 	  return key and enc or false
-   end
-end
---have a flag to mark enc as changed when changed.
-function enc.write(self, section, fvalue)
-   value = self.map:get(section, self.option)
-   if value ~= fvalue then
-	  self.section.changed = true
-	  return self.map:set(section, self.option, fvalue)
    end
 end
 
