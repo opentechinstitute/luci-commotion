@@ -59,7 +59,6 @@ timeopt:value("seconds")
 timeopt:value("minutes")
 timeopt:value("hours")
 timeopt:value("days")
---TODO apply spashtime to nodogsplash config on apply in seconds.
 
 splshtxt = m:section(TypedSection, "_page", translate("Edit Welcome Page Text"), translate("The welcome page can include terms of service, advertisements, or other information. Edit the welcome page text here or upload an HTML file."))
 splshtxt.cfgsections = function() return { "_page" } end
