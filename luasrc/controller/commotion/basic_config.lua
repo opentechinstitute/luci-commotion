@@ -33,7 +33,7 @@ function index()
  
    entry({"admin", "commotion"}, alias("admin", "commotion", "basic"), translate("Commotion"), 20)
 
-   local QS = require "luci.commotion.quickstart"
+   local QS = require "luci.commotion.setup_wizard"
 
    local redir = luci.http.formvalue("redir", true) or
 	  luci.dispatcher.build_url(unpack(luci.dispatcher.context.request))

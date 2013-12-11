@@ -20,21 +20,21 @@ local utils = require "luci.util"
 local cnw = require "luci.commotion.network"
 local db = require "luci.commotion.debugger"
 local http = require "luci.http"
-local QS = require "luci.commotion.quickstart"
+local SW = require "luci.commotion.setup_wizard"
 local cdisp = require "luci.commotion.dispatch"
 
 local m = Map("wireless", translate("Wireless Network"), translate("Turning on an Access Point provides a wireless network for people to connect to using a laptop or other wireless devices."))
 
 --redirect on saved and changed to check changes.
-if not QS.status() then
+if not SW.status() then
    m.on_after_save = cdisp.conf_page
 end
 
 s = m:section(TypedSection, "wifi-iface", translate("Access Point"), translate("Turning on an Access Point provides a wireless network for people to connect to using a laptop or other wireless devices."))
 s.optional = false
 s.anonymous = true
- --if not quickstart then allow for adding and removal and default addition
-if not QS.status() then
+ --if not setup wizard then allow for adding and removal and default addition
+if not SW.status() then
    s.addremove = true
 
    dflts = s:option(DummyValue,  "_dummy_val01")

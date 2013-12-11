@@ -20,25 +20,25 @@ local utils = require "luci.util"
 local cnw = require "luci.commotion.network"
 local db = require "luci.commotion.debugger"
 local http = require "luci.http"
-local QS = require "luci.commotion.quickstart"
+local SW = require "luci.commotion.setup_wizard"
 local cdisp = require "luci.commotion.dispatch"
 
 
 local m = Map("wireless", translate("Network Interfaces"), translate("Every Commotion node must have one mesh network connection or interface. Commotion can mesh over wireless or wired interfaces."))
 
 --redirect on saved and changed to check changes.
-if not QS.status() then
+if not SW.status() then
    m.on_after_save = cdisp.conf_page
 end
 
 function m.on_before_commit()
-   if QS.status() then
+   if SW.status() then
 	  cnw.commotion_set("commotionMesh", {values="mapvalues here"}) --TODO make commotion set actually work
    end
 end
 
 s = m:section(TypedSection, "wifi-iface")
-if not QS.status() then --if not quickstart then allow for adding and removal
+if not SW.status() then --if not setup wizard then allow for adding and removal
    s.addremove = true
 
    dflts = s:option(DummyValue,  "_dummy_val01") --also add defaults if not in qs

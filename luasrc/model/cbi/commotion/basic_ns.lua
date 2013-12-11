@@ -15,7 +15,7 @@ GNU General Public License for more details.
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 ]]--
 
-local QS = require "luci.commotion.quickstart"
+local SW = require "luci.commotion.setup_wizard"
 local db = require "luci.commotion.debugger"
 local uci = require "luci.model.uci".cursor()
 local cdisp = require "luci.commotion.dispatch"
@@ -24,7 +24,7 @@ local cdisp = require "luci.commotion.dispatch"
 --Main title and system config map for hostname value
 local m = Map("system", translate("Basic Configuration"), translate("In this section you'll set the basic required settings for this device, and the basic network settings required to connect this device to a Commotion Mesh network. You will be prompted to save your settings along the way and apply them at the end."))
 --redirect on saved and changed to check changes.
-if not QS.status() then
+if not SW.status() then
    m.on_after_save = cdisp.conf_page
 end
 
@@ -58,7 +58,7 @@ if luci.sys.user.getpasswd("root") then
    end
 end
 
-if QS.status() then
+if SW.status() then
    pw_text = "This password will be used to make changes to this device after initial setup has been completed. The administration username is “root."
 else
    pw_text = "This password is used to make changes to this device. The administration username is “root."
