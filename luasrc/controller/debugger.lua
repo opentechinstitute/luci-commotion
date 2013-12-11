@@ -19,14 +19,14 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ]]--
 
-module("luci.controller.commotion-debug-helper.debugger", package.seeall)
+module("luci.controller.commotion.debugger", package.seeall)
 
 require "luci.sys"
 require "luci.fs"
 
 function index()
-   entry({"admin", "commotion", "debug"}, template("commotion-debug-helper/debugger"), translate("Commotion Debugging Helper"), 50)
-   page = entry({"admin", "commotion","debug", "submit"}, call("debug"), nil)
+   entry({"admin", "status", "debug"}, template("commotion/debugger"), translate("Commotion Debugging Helper"), 50)
+   page = entry({"admin", "status","debug", "submit"}, call("debug"), nil)
    page.leaf=true
 end
 

@@ -36,8 +36,8 @@ endef
 define Package/commotion-debug-helper/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/cdh.sh $(1)/usr/sbin/cdh || true
-	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/controller/$(PKG_NAME)
-	$(CP) $(PKG_BUILD_DIR)/luasrc/controller/* $(1)/usr/lib/lua/luci/controller/$(PKG_NAME)/ || true
+	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/controller/commotion
+	$(CP) $(PKG_BUILD_DIR)/luasrc/controller/* $(1)/usr/lib/lua/luci/controller/commotion/ || true
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/view/$(PKG_NAME)
 	$(CP) $(PKG_BUILD_DIR)/luasrc/view/* $(1)/usr/lib/lua/luci/view/$(PKG_NAME)/ || true
 endef
