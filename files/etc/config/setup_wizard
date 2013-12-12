@@ -1,0 +1,5 @@
+config settings settings
+	   option enabled = '0'
+
+config uci tracking
+	   option adminPass = 'false'
