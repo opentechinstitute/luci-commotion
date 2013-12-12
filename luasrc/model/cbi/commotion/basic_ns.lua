@@ -19,7 +19,7 @@ local SW = require "luci.commotion.setup_wizard"
 local db = require "luci.commotion.debugger"
 local uci = require "luci.model.uci".cursor()
 local cdisp = require "luci.commotion.dispatch"
-
+local cnet = require "luci.commotion.network"
 
 --Main title and system config map for hostname value
 local m = Map("system", translate("Basic Configuration"), translate("In this section you'll set the basic required settings for this device, and the basic network settings required to connect this device to a Commotion Mesh network. You will be prompted to save your settings along the way and apply them at the end."))
@@ -38,6 +38,11 @@ shn.anonymous = true
 
 --Create a value field for hostname
 local hname = shn:option(Value, "hostname", translate("Node Name"), translate("The node name (hostname) is a unique name for this device, visible to other devices and users on the network. Name this device in the field provided."))
+function hname.write(self, section, value)
+   local node_id = cnet.nodeid()
+   local new_hn = value.."-"..string.sub(node_id, 1, 10)
+   return self.map:set(section, section, new_hn)
+end
 
 --PASSWORDS
 
