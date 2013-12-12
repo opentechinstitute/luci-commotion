@@ -67,8 +67,21 @@ function index()
 	  entry({"commotion", "advanced"}, call("advanced")).hidden = true
 
 
-	  local confirm = {on_success_to={"admin", "commotion", "confirm"}}
+	  local confirm = {on_success_to={"commotion", "confirm"}}
 	  entry({"commotion", "setup_wizard"}, cbi("commotion/setup_wizard", confirm), translate("Basic Configuration"), 15).hidden=true
+
+	  sw_cnfm = entry({"commotion", "confirm"}, call("action_changes"), translate("Confirm"), 40)
+   sw_cnfm.query = {redir=redir}
+   sw_cnfm.hidden = true
+
+   sw_rvt = entry({"commotion", "revert"}, call("action_revert"))
+   sw_rvt.query = {redir=redir}
+   sw_rvt.hidden = true
+
+   sw_sva = entry({"commotion", "saveapply"}, call("action_apply"))
+   sw_sva.query = {redir=redir}
+   sw_sva.hidden = true
+
 
    else
 	  entry({"commotion"}, alias("apps"))
