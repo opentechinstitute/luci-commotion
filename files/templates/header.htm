@@ -95,10 +95,10 @@ You may obtain a copy of the License at
 	</header>
 
     <section id="maincontent">
- 		<%if request[2] == "commotion"  then%> <%# TODO Clean and combine these two menu templates after R1 push %>
+ 		<%if request[2] == "commotion" then%> <%# TODO Clean and combine these two menu templates after R1 push %>
 		<%include("themes/commotion/basic_menu", {controller=controller, cattree=cattree, category=category, node=node, section=section})%>
 		<div class="body-content">
-		<%else%>
+		  <%elseif request[1] ~= "commotion" then%>
 		<%include("themes/commotion/adv_menu", {controller=controller, cattree=cattree, category=category, node=node, section=section})%>
 		<%include("themes/commotion/subtree", {controller=controller, category=category, cattree=cattree})%>
 	<%end%>
