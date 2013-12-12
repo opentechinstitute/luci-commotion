@@ -7,3 +7,5 @@ uci_add ucitrack nodogsplash nodogsplash
 uci_set ucitrack nodogsplash init ucidog
 uci_commit ucitrack
 /etc/init.d/ucidog enable
+
+exit 0

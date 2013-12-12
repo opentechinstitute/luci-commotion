@@ -7,5 +7,7 @@ uci_add wireless wifi-iface commotionAP
 uci_set wireless commotionAP mode ap
 uci_set wireless commotionAP network client
 uci_add wireless wifi-iface commotionMesh
-uci_set wireless commotionAP mode adhoc
+uci_set wireless commotionMesh mode adhoc
 uci_commit wireless
+
+exit 0

@@ -12,3 +12,5 @@ uci_set serval settings update_mdp_keyring false
 uci_set serval settings new_mdp_keyring false
 uci_commit serval
 /etc/init.d/serval enable
+
+exit 0
