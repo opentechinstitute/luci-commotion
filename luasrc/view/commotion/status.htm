@@ -2,6 +2,7 @@
 --! @param gateway_provided String "Yes" if node is providing gateway to (mesh/ap?) "No" if not providing a gateway.
 -%>
 <%
+   sys = require "luci.sys"
    --Sets tabs to select current page
    tabs = {nd = "nearby_devices",
            mv = "mesh_visualizer",
@@ -17,13 +18,6 @@
    %>
 
 <%+header%>
-
-<script type="text/javascript"> <!--TODO Place in seperate .js file? -->
-function setURL(url){
-    document.getElementById('iframe').src = url;
-}
-</script>
-<script type="text/javascript" src="<%=media%>/commotion_menu.js"></script> <!--Add css file and classes/id's to style the below -->
 
 <div id="status_bar">
   <div class="info_list">
@@ -46,7 +40,7 @@ function setURL(url){
 	<li class=<%=tabs.cc%>>
 	  <a id="connected_clients" href="<%=controller%>/admin/commotion/status/conn_clnts"><%:Connected Clients%></a>
 	</li>
-	<% if luci.sys.call("opkg list-installed |grep luci-commotion-debug") then %>
+	<% if sys.exec("opkg list-installed |grep luci-commotion-debug") then %>
 	<li class=<%=tabs.dr%>>
 	  <a id="debug_report" href="<%=controller%>/admin/commotion/status/dbg_rpt"><%:Debug Report%></a>
 	</li>

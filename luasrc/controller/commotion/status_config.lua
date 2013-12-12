@@ -15,17 +15,18 @@ GNU General Public License for more details.
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 ]]--
 module ("luci.controller.commotion.status_config", package.seeall)
+
 local sys = require "luci.sys"
 local util = require "luci.util"
-function index()
 
+function index()
    entry({"admin", "commotion", "status"}, alias("admin", "commotion", "status", "nearby_md"), translate("Status"), 10)
-	entry({"admin", "commotion", "status", "nearby_md"}, call("action_neigh")).hidden = true
-	entry({"admin", "commotion", "status", "mesh_viz"}, call("viz")).hidden = true
-	entry({"admin", "commotion", "status", "conn_clnts"}, call("conn_clnts")).hidden = true
-	if sys.exec("opkg list-installed | grep luci-commotion-debug") then
-	   entry({"admin", "commotion", "status", "dbg_rpt"}, call("dbg_rpt")).hidden = true
-	end	
+   entry({"admin", "commotion", "status", "nearby_md"}, call("action_neigh")).hidden = true
+   entry({"admin", "commotion", "status", "mesh_viz"}, call("viz")).hidden = true
+   entry({"admin", "commotion", "status", "conn_clnts"}, call("conn_clnts")).hidden = true
+   if sys.exec("opkg list-installed | grep luci-commotion-debug") then
+	  entry({"admin", "commotion", "status", "dbg_rpt"}, call("dbg_rpt")).hidden = true
+   end	
 end
 
 
@@ -43,20 +44,6 @@ function viz()
 end
 
 function conn_clnts()
---[[
-client_id=0
-ip=103.114.207.62
-mac=10:0b:a9:ca:7b:14
-added=1386540225
-active=1386540231
-duration=6
-token=f9b38643
-state=Authenticated
-downloaded=2
-avg_down_speed=3.212
-uploaded=1
-avg_up_speed=1.54133
-]]--
    local convert = function(x)
 	  return tostring(tonumber(x)*60).." "..translate(minutes)
    end
