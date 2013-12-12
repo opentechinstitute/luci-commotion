@@ -53,7 +53,12 @@ function status_builder(page, assets, active_tab)
 					 local sec = "Unsecured"
 				  end
 				  local conn = splash_info[zone].connected
-				  table.insert(ifaces, {name=name, status=status, sec=sec, conn=conn})
+				  if name then
+					 table.insert(ifaces, {name=name,
+										   status=status,
+										   sec=sec or "Unsecured",
+										   conn=conn or 0})
+				  end
    end)
 
    --[[
