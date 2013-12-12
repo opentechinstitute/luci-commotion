@@ -31,11 +31,39 @@ end
 
 
 function status_builder(page, assets, active_tab)
+   local uci = require "luci.model.uci".cursor()
+   local cnet = require "luci.commotion.network"
+   ifaces = {}
+   zone_iface = cnet.list_ifaces()
+   splash_info = get_splash_iface_info()
+   uci:foreach("wireless", "wifi-iface",
+			   function(s)
+				  local name = s['.name']
+				  local device = s.device
+				  local status = nil
+				  local zone = zone_iface[s.network]
+				  if uci:get("wireless", "wifi-device", device, "disabled") == '1' then
+					 status = "Off"
+				  else
+					 status = "On"
+				  end
+				  if s.encryption then
+					 local sec = "Secured"
+				  else
+					 local sec = "Unsecured"
+				  end
+				  local conn = splash_info[zone].connected
+				  table.insert(ifaces, {name=name, status=status, sec=sec, conn=conn})
+   end)
+
+   --[[
    ifaces = {{name="interface one",
 			  status="On",
 			  sec="Secured",
 			  conn="22"}}
-   gw = "Yes"
+	  gw = "Yes"]]--
+
+	  
    luci.template.render("commotion/status", {ifaces=ifaces, gateway_provided=gw, page=page, assets=assets, active_tab=active_tab})
 end
 
@@ -44,14 +72,74 @@ function viz()
 end
 
 function conn_clnts()
+   clients = get_client_splash_info()
+   status_builder("commotion/conn_clients", {clients=clients}, "connected_clients")
+end
+
+--! @brief currently only gets number of connected clients... because that is what I needed
+function get_iface_splash_info()
+   local splash = {}
+   local interface = nil
+   for line in util.execi("ndsctl status") do
+	  string.gsub(i, "^(.-):%s(.*)$",
+				  function(key, val)
+					 if key == "Managed interface" then
+						interface = val
+						splash[interface] = {}
+					 end
+					 if key = "Current clients" then
+						splash[interface].connected = val
+					 end
+				  end)
+   end
+   return splash
+   
+   --[[==================
+NoDogSplash Status
+====
+Version: 0.9_beta9.9.6
+Uptime: 826d 6h 44m 26s
+Gateway Name: Commotion
+Managed interface: wlan0
+Managed IP range: 0.0.0.0/0
+Server listening: 103.6.53.1:2050
+Splashpage: /etc/nodogsplash/htdocs/splash.html
+Traffic control: no
+Total download: 0 kByte; avg: 0 kbit/s
+Total upload: 0 kByte; avg: 0 kbit/s
+====
+Client authentications since start: 0
+Httpd request threads created/current: 1/0
+Current clients: 1
+
+Client 0
+  IP: 103.6.53.62 MAC: 10:0b:a9:ca:7b:14
+  Added:   Thu Dec 12 22:38:10 2013
+  Active:  Thu Dec 12 22:38:10 2013
+  Active duration: 0d 0h 0m 0s
+  Added duration:  0d 0h 1m 2s
+  Token: 31707a48
+  State: Preauthenticated
+  Download: 0 kByte; avg: 0 kbit/s
+  Upload:   0 kByte; avg: 0 kbit/s
+
+====
+Blocked MAC addresses: none
+Allowed MAC addresses: N/A
+Trusted MAC addresses: none
+========
+	  ]]--
+end
+
+function get_client_splash_info()
    local convert = function(x)
-	  return tostring(tonumber(x)*60).." "..translate(minutes)
+	  return tostring(tonumber(x)*60).." "..translate("minutes")
    end
    local function total_kB(a, b) return tostring(a+b).." kByte" end
    local function total_kb(a, b) return tostring(a+b).." kbit/s" end
    local clients = {}
    i = 0
-   for line in util.execi("ndsctl status") do
+   for line in util.execi("ndsctl clients") do
 	  if string.match(line, "^%d*$") then
 		 i = i + 1
 	  end
@@ -66,8 +154,9 @@ function conn_clnts()
 		 clients[i].avg_spd = total_kb(clients[i].avg_down_speed, clients[i].avg_up_speed)
 	  end
    end
-   status_builder("commotion/conn_clients", {clients=clients}, "connected_clients")
+   return clients
 end
+
 
 function dbg_rpt()
    status_builder("commotion/debug", nil, "debug_report")
