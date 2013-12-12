@@ -813,6 +813,29 @@ footer a:active, footer a:hover {
 	padding: 62px 10px 0 10px;
 	font-weight: bold;
 }
+#welcome li {
+  display: inline-block;
+  padding: 0 5px;
+}
+#welcome li.setup a {
+	display: inline-block;
+	background: transparent url(setup_wizard.png) no-repeat top center;
+	padding: 62px 0 0 0;
+	font-weight: bold;
+}
+#welcome li.upload a {
+	display: inline-block;
+	background: transparent url(upload_config.png) no-repeat top center;
+	padding: 62px 0 0 0;
+	font-weight: bold;
+}
+#welcome li.advanced a {
+	display: inline-block;
+	background: transparent url(advanced_setup.png) no-repeat top center;
+	padding: 62px 0 0 0;
+	font-weight: bold;
+}
+
 
 .btn.danger, .alert.danger, .btn.danger:hover, .alert.danger:hover, .btn.error, .alert.error, .btn.error:hover, .alert.error:hover, .btn.success, .alert.success, .btn.success:hover, .alert.success:hover, .btn.info, .alert.info, .btn.info:hover, .alert.info:hover {
   color: #FFFFFF;
