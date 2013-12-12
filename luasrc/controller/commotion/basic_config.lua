@@ -30,6 +30,7 @@ module ("luci.controller.commotion.basic_config", package.seeall)
 local db = require "luci.commotion.debugger"
 
 function index()
+   local SW = require "luci.commotion.setup_wizard"
 
    entry({"admin", "commotion"}, alias("admin", "commotion", "basic"), translate("Commotion"), 20)
 
@@ -43,10 +44,7 @@ function index()
    if not root.lock then
 	  root.target = alias("commotion")
 	  root.index = true
-   end
-
-   
-   local QS = require "luci.commotion.setup_wizard"
+   end   
 
    local redir = luci.http.formvalue("redir", true) or
 	  luci.dispatcher.build_url(unpack(luci.dispatcher.context.request))
@@ -63,8 +61,11 @@ function index()
    sva.query = {redir=redir}
    sva.hidden = true
    
-   if QS.status() then
-	  entry({"commotion"}, alias("commotion", "setup_wizard"))
+   if SW.status() then
+	  entry({"commotion"}, alias("commotion", "welcome"))
+	  entry({"commotion", "welcome"}, template("commotion/welcome"), translate("Welcome to Commotion")).hidden = true
+	  entry({"commotion", "advanced"}, call("advanced")).hidden = true
+
 
 	  local confirm = {on_success_to={"admin", "commotion", "confirm"}}
 	  entry({"commotion", "setup_wizard"}, cbi("commotion/setup_wizard", confirm), translate("Basic Configuration"), 15).hidden=true
@@ -85,6 +86,17 @@ function index()
 
    end
 end
+
+function advanced()
+   local uci = require "luci.model.uci".cursor()
+   local disp = require "luci.dispatcher"
+   local http = require "luci.http"
+   
+   uci:set("setup_wizard", "settings", "enabled", "0")
+   adv = disp.build_url("admin", "commotion")
+   http.redirect(adv)
+end
+
 
 function action_changes()
    local uci = require "luci.model.uci".cursor()

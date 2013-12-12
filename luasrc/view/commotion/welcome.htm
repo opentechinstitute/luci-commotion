@@ -1,0 +1,36 @@
+<%#
+Copyright (C) 2013 Seamus Tuohy 
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+   
+   This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+   
+   You should have received a copy of the GNU General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
+%>
+<%+header%>
+<%-
+   local disp = require "luci.dispatcher"
+   local http = require "luci.http"
+   setup = disp.build_url("commotion", "setup_wizard")
+   advanced = disp.build_url("commotion", "advanced")
+
+-%>
+   
+<h1><%:Welcome to Commotion%></h1>
+
+<p><%:This router has not yet been set up. Use the Setup Wizard for step-by-step configuration, upload a configuration file if you have one from a previously configured router, or choose Advanced for manual GUI or CLI configuration.%></p>
+   
+<div>
+  <ul id="welcome">
+    <li class="setup"><a <a href=""></a>="<%=setup%>"><%:Setup Wizard%></a></li>
+	<li class="advanced"><a href="<%=Advanced%>"><%:Advanced%></a></li>
+  </ul>
+</div>
+<%+footer%>
