@@ -15,12 +15,12 @@ GNU General Public License for more details.
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 %>
 <%+header%>
+
 <%-
    local disp = require "luci.dispatcher"
    local http = require "luci.http"
    setup = disp.build_url("commotion", "setup_wizard")
    advanced = disp.build_url("commotion", "advanced")
-
 -%>
    
 <h1><%:Welcome to Commotion%></h1>
@@ -29,8 +29,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
    
 <div>
   <ul id="welcome">
-    <li class="setup"><a <a href=""></a>="<%=setup%>"><%:Setup Wizard%></a></li>
-	<li class="advanced"><a href="<%=Advanced%>"><%:Advanced%></a></li>
+    <li class="setup"><a href="<%=setup%>"><%:Setup Wizard%></a></li>
+	<li class="advanced"><a href="<%=advanced%>"><%:Advanced%></a></li>
   </ul>
 </div>
 <%+footer%>
