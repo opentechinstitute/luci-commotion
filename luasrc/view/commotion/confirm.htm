@@ -47,13 +47,23 @@ $Id: changes.htm 9014 2012-08-14 13:08:18Z jow $
 		</form>
 	</div>
 	<% end %>
-
+	<% SW = require "luci.commotion.setup_wizard"
+	   sw_stat = SW.status()%>
 	<div style="text-align:right">
+	  <%if sw_stat then%>
+		<form class="inline" method="get" action="<%=controller%>/commotion/saveapply">
+	  <%else%>
 		<form class="inline" method="get" action="<%=controller%>/admin/commotion/saveapply">
+	  <%end%>
+
 			<input type="hidden" name="redir" value="<%=pcdata(luci.http.formvalue("redir"))%>" />
 			<input class="cbi-button cbi-button-apply" type="submit" value="<%:Save And Apply%>" />
 		</form>
+		<%if sw_stat then%>
+		<form class="inline" method="get" action="<%=controller%>/commotion/revert">
+	  <%else%>
 		<form class="inline" method="get" action="<%=controller%>/admin/commotion/revert">
+	  <%end%>
 			<input type="hidden" name="redir" value="<%=pcdata(luci.http.formvalue("redir"))%>" />
 			<input class="cbi-button cbi-button-reset" type="submit" value="<%:Revert%>" />
 		</form>

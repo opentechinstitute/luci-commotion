@@ -68,8 +68,8 @@ function index()
 
 
 	  local confirm = {on_success_to={"commotion", "confirm"}}
-	  entry({"commotion", "setup_wizard"}, cbi("commotion/setup_wizard", confirm), translate("Setup Wizard"), 15).hidden=true
-
+	  entry({"commotion", "setup_wizard"}, cbi("commotion/setup_wizard", confirm, {noheader = true}), translate("Setup Wizard"), 15).hidden=true
+	  
 	  sw_cnfm = entry({"commotion", "confirm"}, call("action_changes"), translate("Confirm"), 40)
    sw_cnfm.query = {redir=redir}
    sw_cnfm.hidden = true
@@ -136,7 +136,7 @@ function action_apply()
 		end
 	end
 
-	luci.template.render("admin_uci/apply", {
+	luci.template.render("commotion/apply", {
 		changes = next(changes) and changes,
 		configs = reload
 	})
