@@ -22,6 +22,7 @@ local db = require "luci.commotion.debugger"
 local http = require "luci.http"
 local SW = require "luci.commotion.setup_wizard"
 local cdisp = require "luci.commotion.dispatch"
+local ccbi = require "luci.commotion.ccbi"
 
 local m = Map("wireless", translate("Wireless Network"), translate("Turning on an Access Point provides a wireless network for people to connect to using a laptop or other wireless devices."))
 

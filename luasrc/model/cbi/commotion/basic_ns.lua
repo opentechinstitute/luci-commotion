@@ -26,6 +26,9 @@ local m = Map("system", translate("Basic Configuration"), translate("In this sec
 --redirect on saved and changed to check changes.
 if not SW.status() then
    m.on_after_save = cdisp.conf_page
+else
+   db.log("TODO")
+   --! TODO have network settings section add in a option to end quickstart that will be set in the last step on the confirmation page.
 end
 
 --load up system section

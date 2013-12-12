@@ -30,9 +30,22 @@ module ("luci.controller.commotion.basic_config", package.seeall)
 local db = require "luci.commotion.debugger"
 
 function index()
- 
+
    entry({"admin", "commotion"}, alias("admin", "commotion", "basic"), translate("Commotion"), 20)
 
+   local page  = node()
+   page.lock   = true
+   page.target = alias("commotion")
+   page.subindex = true
+   page.index = false
+
+   local root = node()
+   if not root.lock then
+	  root.target = alias("commotion")
+	  root.index = true
+   end
+
+   
    local QS = require "luci.commotion.setup_wizard"
 
    local redir = luci.http.formvalue("redir", true) or
@@ -51,26 +64,18 @@ function index()
    sva.hidden = true
    
    if QS.status() then
-	  local root = node()
-	  root.target = alias("commotion", "setup_wizard")
-	  root.index = true
+	  entry({"commotion"}, alias("commotion", "setup_wizard"))
 
 	  local confirm = {on_success_to={"admin", "commotion", "confirm"}}
 	  entry({"commotion", "setup_wizard"}, cbi("commotion/setup_wizard", confirm), translate("Basic Configuration"), 15).hidden=true
 
    else
-	  local root = node()
-	  if not root.lock then
-		 root.target = alias("apps")
-		 root.index = true
-	  end
- 
 	  entry({"commotion"}, alias("apps"))
 	  --Create regular "Basic Config" menu.
-	  entry({"admin", "commotion", "basic"}, alias("admin", "commotion", "basic", "node_settings"), translate("Basic Configuration"), 10).index = true
+	  entry({"admin", "commotion", "basic"}, alias("admin", "commotion", "basic", "node_settings"), translate("Basic Configuration"), 25).index = true
 	  
 	  --No Subsection for Node Settings?
-	  entry({"admin", "commotion", "basic", "node_settings"}, cbi("commotion/basic_ns", {hideapplybtn=true, hideresetbtn=true}), translate("Node Settings"), 20).subsection=true
+	  entry({"admin", "commotion", "basic", "node_settings"}, cbi("commotion/basic_ns", {hideapplybtn=true, hideresetbtn=true}), translate("Node Settings"), 25).subsection=true
 	  
 	  --Subsection Network Settings
 	  entry({"admin", "commotion", "basic", "network_settings"}, alias("admin", "commotion", "basic", "mesh_network"), translate("Network Settings"), 30).subsection=true
