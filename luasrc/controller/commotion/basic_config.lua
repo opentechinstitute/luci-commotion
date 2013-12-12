@@ -68,7 +68,7 @@ function index()
 
 
 	  local confirm = {on_success_to={"commotion", "confirm"}}
-	  entry({"commotion", "setup_wizard"}, cbi("commotion/setup_wizard", confirm), translate("Basic Configuration"), 15).hidden=true
+	  entry({"commotion", "setup_wizard"}, cbi("commotion/setup_wizard", confirm), translate("Setup Wizard"), 15).hidden=true
 
 	  sw_cnfm = entry({"commotion", "confirm"}, call("action_changes"), translate("Confirm"), 40)
    sw_cnfm.query = {redir=redir}
