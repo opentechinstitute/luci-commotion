@@ -38,8 +38,8 @@ function index()
 					end
 				end)
 		if flag==true then
-			entry({"admin", "commotion", "bigboard-conf_submit"}, call("ifprocess"))
-			entry({"admin", "commotion", "bigboard-conf"}, call("main"), translate("BigBoard Configuration"), 20).dependent=false
+			entry({"admin", "status", "bigboard-conf_submit"}, call("ifprocess"))
+			entry({"admin", "status", "bigboard-conf"}, call("main"), translate("BigBoard Configuration"), 20).dependent=false
 		else
 			debug.log("Can't run Commotion-Dashboard. Install olsrd jsoninfo plugin.")
 		end
