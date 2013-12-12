@@ -1,4 +1,4 @@
-module "luci.commotion.startup_wizard"
+module "luci.commotion.setup_wizard"
 
 local SW = {}
 
