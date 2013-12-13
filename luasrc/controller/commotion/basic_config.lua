@@ -64,8 +64,8 @@ function index()
    if SW.status() then
 	  entry({"commotion"}, alias("commotion", "welcome"))
 	  entry({"commotion", "welcome"}, template("commotion/welcome"), translate("Welcome to Commotion")).hidden = true
-	  entry({"commotion", "advanced"}, call("advanced")).hidden = true
-
+	  entry({"commotion", "advanced"}, call("advanced")).hidden = true	  
+	  entry({"commotion", "setup_wizard", "start"}, call("start_setup")).hidden = true	  
 
 	  local confirm = {on_success_to={"commotion", "confirm"}}
 	  entry({"commotion", "setup_wizard"}, cbi("commotion/setup_wizard", confirm, {noheader = true}), translate("Setup Wizard"), 15).hidden=true
@@ -108,6 +108,18 @@ function advanced()
    uci:set("setup_wizard", "settings", "enabled", "0")
    adv = disp.build_url("admin", "commotion")
    http.redirect(adv)
+end
+
+function start_setup()
+   local uci = require "luci.model.uci".cursor()
+   local disp = require "luci.dispatcher"
+   local http = require "luci.http"
+   uci:section("wireless", "wifi-iface", "commotionAP", {mode="ap", network="client"})
+   uci:section("wireless", "wifi-iface", "commotionMesh", {mode="adhoc"})
+   uci:save("wireless")
+   uci:commit("wireless")
+   setup = disp.build_url("commotion", "setup_wizard")
+   http.redirect(setup)
 end
 
 
