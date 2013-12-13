@@ -14,12 +14,14 @@ GNU General Public License for more details.
    You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 ]]--
-module ("luci.controller.commotion.status_config", package.seeall)
 
-local sys = require "luci.sys"
 local util = require "luci.util"
 
+module ("luci.controller.commotion.status_config", package.seeall)
+
 function index()
+   local sys = require "luci.sys"
+
    entry({"admin", "commotion", "status"}, alias("admin", "commotion", "status", "nearby_md"), translate("Status"), 10)
    entry({"admin", "commotion", "status", "nearby_md"}, call("action_neigh")).hidden = true
    entry({"admin", "commotion", "status", "mesh_viz"}, call("viz")).hidden = true
@@ -33,6 +35,8 @@ end
 function status_builder(page, assets, active_tab)
    local uci = require "luci.model.uci".cursor()
    local cnet = require "luci.commotion.network"
+   local db = require "luci.commotion.debugger"
+
    local ifaces = {}
    local gw = "No"
    local zone_iface = cnet.list_ifaces()
@@ -42,18 +46,24 @@ function status_builder(page, assets, active_tab)
 				  local name = s['.name']
 				  local device = s.device
 				  local status = nil
+				  local sec = nil
+				  local conn = nil
 				  local zone = zone_iface[s.network]
 				  if uci:get("wireless", "wifi-device", device, "disabled") == '1' then
 					 status = "Off"
 				  else
 					 status = "On"
 				  end
-				  if s.encryption then
-					 local sec = "Secured"
+				  if s.encryption == "psk2" then
+					 sec = "Secured"
 				  else
-					 local sec = "Unsecured"
+					 sec = "Unsecured"
 				  end
-				  local conn = splash_info[zone].connected
+				  for i,x in pairs(splash_info) do
+					 if zone == i then
+						conn = splash_info[zone].connected
+					 end
+				  end
 				  if name then
 					 table.insert(ifaces, {name=name,
 										   status=status,
@@ -82,7 +92,7 @@ function conn_clnts()
 end
 
 --! @brief currently only gets number of connected clients... because that is what I needed
-function get_iface_splash_info()
+function get_splash_iface_info()
    local splash = {}
    local interface = nil
    for line in util.execi("ndsctl status") do
