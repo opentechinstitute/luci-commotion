@@ -26,9 +26,6 @@ local m = Map("system", translate("Basic Configuration"), translate("In this sec
 --redirect on saved and changed to check changes.
 if not SW.status() then
    m.on_after_save = cdisp.conf_page
-else
-   db.log("TODO add option to end quickstart!")
-   --! TODO have network settings section add in a option to end quickstart that will be set in the last step on the confirmation page. Or possibly do this in the last step in case they exit out after this? But, it wont save either way I don't think. Test on restart after this step to see if it does. 
 end
 
 --load up system section
