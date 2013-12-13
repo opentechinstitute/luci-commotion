@@ -33,9 +33,10 @@ end
 function status_builder(page, assets, active_tab)
    local uci = require "luci.model.uci".cursor()
    local cnet = require "luci.commotion.network"
-   ifaces = {}
-   zone_iface = cnet.list_ifaces()
-   splash_info = get_splash_iface_info()
+   local ifaces = {}
+   local gw = "No"
+   local zone_iface = cnet.list_ifaces()
+   local splash_info = get_splash_iface_info()
    uci:foreach("wireless", "wifi-iface",
 			   function(s)
 				  local name = s['.name']
@@ -57,18 +58,17 @@ function status_builder(page, assets, active_tab)
 					 table.insert(ifaces, {name=name,
 										   status=status,
 										   sec=sec or "Unsecured",
-										   conn=conn or 0})
+										   conn=conn or "0"})
 				  end
    end)
-
-   --[[
-   ifaces = {{name="interface one",
-			  status="On",
-			  sec="Secured",
-			  conn="22"}}
-	  gw = "Yes"]]--
-
-	  
+   for line in util.execi("route -n") do
+	  string.gsub(line, "^0%.0%.0%.0%[%s%t]+(%d+%.%d+)%.%d+%.%d)+[%s%t].+eth0$",
+				  function(x)
+					 if string.match(x, "^100%.64^") or string.match(x, "10%.%d+^") then
+						gw = "Yes"
+					 end
+				  end)
+   end
    luci.template.render("commotion/status", {ifaces=ifaces, gateway_provided=gw, page=page, assets=assets, active_tab=active_tab})
 end
 
@@ -86,7 +86,7 @@ function get_iface_splash_info()
    local splash = {}
    local interface = nil
    for line in util.execi("ndsctl status") do
-	  string.gsub(i, "^(.-):%s(.*)$",
+	  string.gsub(line, "^(.-):%s(.*)$",
 				  function(key, val)
 					 if key == "Managed interface" then
 						interface = val
