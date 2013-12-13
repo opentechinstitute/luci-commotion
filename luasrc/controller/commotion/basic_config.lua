@@ -73,20 +73,19 @@ function index()
 	  local confirm = {on_success_to={"commotion", "confirm"}}
 	  --Setup Wizard Delegator
 	  entry({"commotion", "setup_wizard"}, cbi("commotion/setup_wizard", confirm, {noheader = true, sw_page=sw_page}), translate("Setup Wizard"), 15).hidden = true
-	  
+
+	  --Confirmation Pages
 	  sw_cnfm = entry({"commotion", "confirm"}, call("action_changes"), translate("Confirm"), 40)
-   sw_cnfm.query = {redir=redir}
-   sw_cnfm.hidden = true
+	  sw_cnfm.query = {redir=redir}
+	  sw_cnfm.hidden = true
 
-   sw_rvt = entry({"commotion", "revert"}, call("action_revert"))
-   sw_rvt.query = {redir=redir}
-   sw_rvt.hidden = true
+	  sw_rvt = entry({"commotion", "revert"}, call("action_revert"))
+	  sw_rvt.query = {redir=redir}
+	  sw_rvt.hidden = true
 
-   sw_sva = entry({"commotion", "saveapply"}, call("action_apply"))
-   sw_sva.query = {redir=redir}
-   sw_sva.hidden = true
-
-
+	  sw_sva = entry({"commotion", "saveapply"}, call("action_apply"))
+	  sw_sva.query = {redir=redir}
+	  sw_sva.hidden = true
    else
 	  entry({"commotion"}, alias("apps"))
 	  --Create regular "Basic Config" menu.
@@ -99,8 +98,7 @@ function index()
 	  entry({"admin", "commotion", "basic", "network_settings"}, alias("admin", "commotion", "basic", "mesh_network"), translate("Network Settings"), 30).subsection=true
 	  entry({"admin", "commotion", "basic", "mesh_network"}, cbi("commotion/basic_mn", {hideapplybtn=true, hideresetbtn=true}), translate("Mesh Network"), 40)
 	  entry({"admin", "commotion", "basic", "wireless_network"}, cbi("commotion/basic_wn", {hideapplybtn=true, hideresetbtn=true}), translate("Wireless Network"), 50)
-	  entry({"admin", "commotion", "basic", "addtl_net_ifaces"}, cbi("commotion/basic_ani", {hideapplybtn=true, hideresetbtn=true}), translate("Additional Netork Interfaces"), 60)
-
+	  entry({"admin", "commotion", "basic", "addtl_net_ifaces"}, cbi("commotion/basic_ani", {hideapplybtn=true, hideresetbtn=true}), translate("Additional Network Interfaces"), 60)
    end
 end
 
