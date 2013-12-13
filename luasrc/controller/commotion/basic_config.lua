@@ -32,7 +32,7 @@ local db = require "luci.commotion.debugger"
 function index()
    local SW = require "luci.commotion.setup_wizard"
 
-   entry({"admin", "commotion"}, alias("admin", "commotion", "basic"), translate("Commotion"), 20)
+   entry({"admin", "commotion"}, alias("admin", "commotion", "status"), translate("Commotion"), 20)
 
    local page  = node()
    page.lock   = true
@@ -60,7 +60,8 @@ function index()
    sva = entry({"admin", "commotion", "saveapply"}, call("action_apply"))
    sva.query = {redir=redir}
    sva.hidden = true
-   
+
+   --IF Setup Wizard is Active
    if SW.status() then
 	  local sw_page = luci.http.formvalue("sw_page") or nil
 
