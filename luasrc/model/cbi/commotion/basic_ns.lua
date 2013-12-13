@@ -29,9 +29,12 @@ if not SW.status() then
 end
 
 --load up system section
+
 local shn = m:section(TypedSection, "system")
 --Don't display it
 shn.anonymous = true
+--Sure as Sugar don't remove it
+shn.addremove = false
 
 --Create a value field for hostname
 local hname = shn:option(Value, "hostname", translate("Node Name"), translate("The node name (hostname) is a unique name for this device, visible to other devices and users on the network. Name this device in the field provided."))
@@ -39,8 +42,10 @@ local hname = shn:option(Value, "hostname", translate("Node Name"), translate("T
 function hname.write(self, section, value)
    local node_id = cnet.nodeid()
    local new_hn = value.."-"..string.sub(node_id, 1, 10)
+   luci.sys.hostname(new_hn)
    return self.map:set(section, "hostname", new_hn)
 end
+
 
 --PASSWORDS
 
