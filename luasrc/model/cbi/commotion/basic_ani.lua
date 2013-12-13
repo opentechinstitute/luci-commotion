@@ -35,6 +35,7 @@ p.anonymous = true
 msh = p:option(Flag, "meshability", translate("Will you be meshing with other Commotion devices over the ethernet interface?"))
 msh.enabled = "true"
 msh.disabled = "false"
+msh.default = "false"
 
 ance = p:option(Flag, "announceability", translate("Advertise your gateway to the mesh."))
 ance.enabled = "true"
