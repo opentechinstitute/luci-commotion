@@ -65,7 +65,7 @@ end
 --! param cmd string The command to append to commotiond
 --! param err bool true if you want to receive the error code nil if you wan the standard output
 --! @return the standard out of the commotiond call
-local function network.commotiond(cmd, err)
+function network.commotiond(cmd, err)
    if err then
 	  return sys.call("commotiond "..cmd)
    else
@@ -81,7 +81,7 @@ end
 --! @return boolean value stating success or failure and errors if any on failure
 function network.commotion_set(name, options)
    return true --! TODO ALERT this renders this function useless until commotiond functionality is enabled.
-   local function setop(opts, err, pr)
+--[[   local function setop(opts, err, pr)
 	  for i,x in pairs(opts) do
 		 if not network.commotiond("set "..pr.." "..i.." "..x, true) then
 			table.insert(err, {i,x})
@@ -112,7 +112,7 @@ function network.commotion_set(name, options)
    else
 	  return true
    end
-   return true
+   return true]]--
 end
 
 --! @name nodeid
@@ -123,11 +123,11 @@ end
 function network.nodeid(new_id)
    return "abcdefghijklmnopqrstuvwxyznowiknowmyabcs"
    --! TODO ALERT this renders this function useless until commotiond functionality is enabled.
-   if new_id then
+--[[   if new_id then
 	  return network.commotiond("nodeid "..new_id, true)
    else
 	  return network.commotiond("nodeid")
-   end	  
+   end	  ]]--
 end
 
 --[[
