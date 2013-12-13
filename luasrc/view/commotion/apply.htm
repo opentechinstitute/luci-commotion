@@ -18,6 +18,7 @@ $Id: apply.htm 9014 2012-08-14 13:08:18Z jow $
    if SW.status() then
    local uci = require "luci.model.uci".cursor()
    uci:set("setup_wizard", "settings", "enabled", "0")
+   uci:set("setup_wizard", "tracking", "adminPass", "false")
    uci:save("setup_wizard")
    uci:commit("setup_wizard")
    end

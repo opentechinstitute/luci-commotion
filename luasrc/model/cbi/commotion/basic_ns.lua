@@ -104,6 +104,9 @@ function m.on_commit(map)
 	   if v1 == v2 then
 		  if luci.sys.user.setpasswd(luci.dispatcher.context.authuser, v1) == 0 then
 			 m.message = translate("Password successfully changed!")
+			 uci:set("setup_wizard", "tracking", "adminPass", 'true')
+			 uci:save("setup_wizard")
+			 uci:commit("setup_wizard")
 		  else
 			 m.message = translate("Unknown Error, password not changed!")
 		  end
