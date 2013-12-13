@@ -35,10 +35,11 @@ shn.anonymous = true
 
 --Create a value field for hostname
 local hname = shn:option(Value, "hostname", translate("Node Name"), translate("The node name (hostname) is a unique name for this device, visible to other devices and users on the network. Name this device in the field provided."))
+
 function hname.write(self, section, value)
    local node_id = cnet.nodeid()
    local new_hn = value.."-"..string.sub(node_id, 1, 10)
-   return self.map:set(section, section, new_hn)
+   return self.map:set(section, "hostname", new_hn)
 end
 
 --PASSWORDS

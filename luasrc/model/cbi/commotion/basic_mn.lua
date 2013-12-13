@@ -95,7 +95,7 @@ if #wifi_dev > 1 then
    end
 else
    --Default radio (don't render this. Just add it so that it gets added to UCI when created)
-   radio = s:option(DummyValue, "device")
+   radio = s:option(Value, "device")
    radio.default = wifi_dev[1][1]
    radio.render = function() end
 
