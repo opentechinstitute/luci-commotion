@@ -62,13 +62,16 @@ function index()
    sva.hidden = true
    
    if SW.status() then
+	  local sw_page = luci.http.formvalue("sw_page") or nil
+
 	  entry({"commotion"}, alias("commotion", "welcome"))
 	  entry({"commotion", "welcome"}, template("commotion/welcome"), translate("Welcome to Commotion")).hidden = true
-	  entry({"commotion", "advanced"}, call("advanced")).hidden = true	  
-	  entry({"commotion", "setup_wizard", "start"}, call("start_setup")).hidden = true	  
-
+	  entry({"commotion", "advanced"}, call("advanced")).hidden = true
+	  entry({"commotion", "setup_wizard", "start"}, call("start_setup")).hidden = true
+	  
 	  local confirm = {on_success_to={"commotion", "confirm"}}
-	  entry({"commotion", "setup_wizard"}, cbi("commotion/setup_wizard", confirm, {noheader = true}), translate("Setup Wizard"), 15).hidden=true
+	  --Setup Wizard Delegator
+	  entry({"commotion", "setup_wizard"}, cbi("commotion/setup_wizard", confirm, {noheader = true, sw_page=sw_page}), translate("Setup Wizard"), 15).hidden = true
 	  
 	  sw_cnfm = entry({"commotion", "confirm"}, call("action_changes"), translate("Confirm"), 40)
    sw_cnfm.query = {redir=redir}

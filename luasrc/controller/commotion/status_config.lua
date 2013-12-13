@@ -92,7 +92,7 @@ function get_iface_splash_info()
 						interface = val
 						splash[interface] = {}
 					 end
-					 if key = "Current clients" then
+					 if key == "Current clients" then
 						splash[interface].connected = val
 					 end
 				  end)

@@ -2,18 +2,30 @@
 <form method="post" name="cbi" action="<%=REQUEST_URI%>" enctype="multipart/form-data" onreset="return cbi_validate_reset(this)" onsubmit="return cbi_validate_form(this, '<%:Some fields are invalid, cannot save values!%>')">
 	<div>
 		<script type="text/javascript" src="<%=resource%>/cbi.js"></script>
+		<script>
+		  function set_page(page) {
+		  if (page == '') {
+		  $("#pineapple").append("<input type='hidden' name='cbi.delg.back' value='true' />")
+		  $("#pineapple").append("<input type='hidden' name='sw_page' value='<%=self.chain[2]%>' />")
+		  }
+		  else {
+		  $("#pineapple").append("<input type='hidden' name='sw_page' value='"+page+"' />")
+		  }
+		  document.cbi.submit()
+		  }
+		</script>
 		<input type="hidden" name="cbi.submit" value="1" />
 		<input type="submit" value="<%:Save%>" class="hidden" />
 	</div>
-	<div class="sb-container">
+	<div class="sb-container" id="pineapple">
 	  <div class="sb-follow">
-		<% for _, x in ipairs(self.chain) do
+		<% for i, x in ipairs(self.chain) do
 		   local title = translate(x)
 		   -%>
 		<%if x == self.current then%>
 		<div class="sb-btn" id="selected">
 		  <%else%>
-		  <div class="sb-btn">
+		  <div class="sb-btn" onclick="set_page('<%=self.chain[i-1]%>')">
 			<%end%>
 			<h3>"<%=title%>"
 			</h3>

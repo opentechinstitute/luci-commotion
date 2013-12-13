@@ -25,8 +25,9 @@ $Id: changes.htm 9014 2012-08-14 13:08:18Z jow $
 
 -%>
 
+<%SW = require "luci.commotion.setup_wizard"
+  disp = require "luci.dispatcher"%>
 <%+header%>
-<%SW = require "luci.commotion.setup_wizard"%>
 
 <h2><a id="content" name="content"><%:Confirm Configuration%></a></h2>
 
@@ -38,19 +39,21 @@ $Id: changes.htm 9014 2012-08-14 13:08:18Z jow $
 <% else %>
 	<p><strong><%:There are no pending changes!%></strong></p>
 <% end %>
-	<% if SW.status() = true then %>
-	    <a href="<%disp.build_url("commotion","setup_wizard")%>">Start Over.</a>
-	<% end%>
 
 <div class="cbi-page-actions">
-	<% local r = luci.http.formvalue("redir"); if r and #r > 0 then %>
+  	<%sw_stat = SW.status()%>
+	<%if sw_stat then%>
 	<div style="float:left">
+	<form class="inline" method="get" action="<%=controller%>/commotion/setup_wizard">
+	  <input class="cbi-button cbi-button-apply" type="submit" value="<%:Start over%>" />
+	</form>
+	<%end%>
+	<% local r = luci.http.formvalue("redir"); if r and #r > 0 then %>
 		<form class="inline" method="get" action="<%=luci.util.pcdata(r)%>">
 			<input class="cbi-button cbi-button-link" style="float:left; margin:0" type="submit" value="<%:Back%>" />
 		</form>
-	</div>
 	<% end %>
-	<%sw_stat = SW.status()%>
+	</div>
 	<div style="text-align:right">
 	  <%if sw_stat then%>
 		<form class="inline" method="get" action="<%=controller%>/commotion/saveapply">
