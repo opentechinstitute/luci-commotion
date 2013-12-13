@@ -1,3 +1,8 @@
+
+local require = require
+local uci = require "luci.model.uci".cursor()
+local db = require "luci.commotion.debugger"
+
 module "luci.commotion.setup_wizard"
 
 local SW = {}
@@ -7,8 +12,9 @@ local SW = {}
 --! @return true if on, false if completed
 --! @TODO IMPLEMENT THIS: Currently placeholder
 function SW.status()
-   local uci = require "luci.model.cui".cursor()
-   if uci:get("setup_wizard", "settings", "enabled") == "1" then
+   local enabled = uci:get("setup_wizard", "settings", "enabled")
+   db.log(enabled)
+   if enabled == "1" then
 	  return true
    else
 	  return false
