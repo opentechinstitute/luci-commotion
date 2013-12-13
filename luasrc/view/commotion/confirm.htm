@@ -26,7 +26,7 @@ $Id: changes.htm 9014 2012-08-14 13:08:18Z jow $
 -%>
 
 <%+header%>
-
+<%SW = require "luci.commotion.setup_wizard"%>
 
 <h2><a id="content" name="content"><%:Confirm Configuration%></a></h2>
 
@@ -38,6 +38,9 @@ $Id: changes.htm 9014 2012-08-14 13:08:18Z jow $
 <% else %>
 	<p><strong><%:There are no pending changes!%></strong></p>
 <% end %>
+	<% if SW.status() = true then %>
+	    <a href="<%disp.build_url("commotion","setup_wizard")%>">Start Over.</a>
+	<% end%>
 
 <div class="cbi-page-actions">
 	<% local r = luci.http.formvalue("redir"); if r and #r > 0 then %>
@@ -47,8 +50,7 @@ $Id: changes.htm 9014 2012-08-14 13:08:18Z jow $
 		</form>
 	</div>
 	<% end %>
-	<% SW = require "luci.commotion.setup_wizard"
-	   sw_stat = SW.status()%>
+	<%sw_stat = SW.status()%>
 	<div style="text-align:right">
 	  <%if sw_stat then%>
 		<form class="inline" method="get" action="<%=controller%>/commotion/saveapply">

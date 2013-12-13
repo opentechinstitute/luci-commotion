@@ -14,18 +14,22 @@ $Id: revert.htm 9014 2012-08-14 13:08:18Z jow $
 -%>
 
 <%+header%>
+<%SW = require "luci.commotion.setup_wizard"%>
 
-<h2><a id="content" name="content"><%:Configuration%> / <%:Revert%></a></h2>
+<h2><a id="content" name="content"><%:Revert%></a></h2>
 
 <% if changes then %>
 	<%+cbi/apply_xhr%>
 	<%+admin_uci/changelog%>
-
 	<p><strong><%:The following changes have been reverted%>:</strong></p>
 	<%- uci_changelog(changes) -%>
 <% else %>
 	<p><strong><%:There are no pending changes to revert!%></strong></p>
 <% end %>
+<% if SW.status() = true then %>
+<a href="<%disp.build_url("commotion","setup_wizard")%>">Start Over.</a>
+<% end%>
+
 
 <div class="cbi-page-actions">
 	<form class="inline" method="get" action="<%=luci.util.pcdata(luci.http.formvalue("redir"))%>">
