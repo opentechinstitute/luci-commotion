@@ -36,11 +36,13 @@ msh = p:option(Flag, "meshability", translate("Will you be meshing with other Co
 msh.enabled = "true"
 msh.disabled = "false"
 msh.default = "false"
+msh.addremove = true
 
 ance = p:option(Flag, "announceability", translate("Advertise your gateway to the mesh."))
 ance.enabled = "true"
 ance.disabled = "false"
-ance:depends("meshability", "false")
+ance.addremove = true
+--ance:depends("meshability", "false") --!TODO Currently Flags do not have dependance capabilities it seems. I will add and patch in R1.1
 
 config = p:option(ListValue, "plugability", translate("Gateway Configuration"))
 config:value("auto", translate("Automatically configure gateway on boot."))
