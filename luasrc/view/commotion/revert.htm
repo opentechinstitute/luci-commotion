@@ -32,13 +32,14 @@ $Id: revert.htm 9014 2012-08-14 13:08:18Z jow $
   <%if sw_stat then%>
   <div style="float:left">
   <form class="inline" method="get" action="<%=controller%>/commotion/setup_wizard">
-	<input class="cbi-button cbi-button-apply" type="submit" value="<%:Start over%>" />
+	<input class="cbi-button cbi-button-apply" type="submit" value="<%:Start Over%>" />
   </form>
   </div>
-  <%end%>
+  <%else%>
 	<form class="inline" method="get" action="<%=luci.util.pcdata(luci.http.formvalue("redir"))%>">
 		<input class="cbi-button cbi-button-link" style="margin:0" type="submit" value="<%:Back%>" />
 	</form>
+	<%end%>
 </div>
 
 <%+footer%>
