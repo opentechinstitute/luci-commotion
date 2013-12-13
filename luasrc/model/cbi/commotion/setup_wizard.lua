@@ -1,3 +1,4 @@
+local db = require "luci.commotion.debugger"
 local cursor = require "luci.model.uci".cursor()
 
 local d = Delegator()
@@ -20,13 +21,10 @@ d:add("Additional Network Interfaces", "commotion/basic_ani")
 
 function d.parse(self, ...)
    local form = luci.http.formvalue()
-   local db = require "luci.commotion.debugger"
    local page = form.sw_page
    if page ~= nil then
-	  db.log("page["..page.."]")
 	  d.current = page
 	  if page == '' then
-		 db.log("EMPTY")
 		 d.current = nil
 		 s.active = self.chain[1]
 	  end
