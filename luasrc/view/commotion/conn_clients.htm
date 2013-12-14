@@ -91,7 +91,8 @@ end
 if #clients > 0 then
 --Actually create the table below here.
 %>
-   
+  <h3><%:Connected Clients!%></h3>
+   <p>A client is a device that has connected to this node. Information about clients is displayed below.</p>
 <table class="cbi-section-table">
   <thead>
     <tr class="cbi-section-table-titles">
@@ -104,6 +105,6 @@ if #clients > 0 then
   </tbody>
 </table>
 <%else%>
-	  <p class="error"><%:No clients found!%></p>
-	  <p><%:NEED HELP TEXT NEED HELP TEXT NEED HELP TEXT NEED HELP TEXT NEED HELP TEXT NEED HELP TEXT NEED HELP TEXT NEED HELP TEXTNEED HELP TEXT NEED HELP TEXT%></p>
+      <h3 class="error"><%:Connected Clients!%></h3>
+	  <p class="error"><%:No connected clients were found at this time. If a Welcome Page has been enabled, clients must click through it before being displayed here.%></p>
 <%end%>
