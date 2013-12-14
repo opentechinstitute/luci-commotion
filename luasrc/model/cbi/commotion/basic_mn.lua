@@ -38,19 +38,41 @@ function m.on_before_commit()
 end
 
 s = m:section(TypedSection, "wifi-iface")
+s.optional = false
+s.anonymous = true
+
 if not SW.status() then --if not setup wizard then allow for adding and removal
    s.addremove = true
 
-   dflts = s:option(Value,  "_dummy_val01") --also add defaults if not in qs
-   dflts.anonymous = true
-   dflts.default = true
-   
-   function dflts.write(self, section, value)
-	  return self.map:set(section, "mode", "adhoc")
+   md = s:option(Value, "mode")
+   md.default = 'adhoc'
+   md.render = function() end
+   function md:parse(section)
+	  local cvalue = self:cfgvalue(section)
+	  if not cvalue then
+		 self:write(section, self.default)
+	  end
+   end
+
+   nwk = s:option(Value, "network")
+   --! @brief creates a network section and same named commotion profile when creating a mesh interface and assigns it to that mesh interface
+   function nwk:write(section, value)
+	  db.log("starting")
+	  network_name = uci:section("network", "interface", nil, {proto="commotion"})
+	  cnw.commotion_set(network_name)
+	  uci:set("network", network_name, "profile", network_name)
+	  uci:save("network")
+	  return self.map:set(section, self.option, network_name)
+   end
+   nwk.render = function() end
+   function nwk:parse(section)
+	  local cvalue = self:cfgvalue(section)
+	  if not cvalue then
+		 self:write(section, self.default)
+	  end
    end
 end
-s.optional = false
-s.anonymous = true
+
 
 function s:filter(section)
    mode = self.map:get(section, "mode")

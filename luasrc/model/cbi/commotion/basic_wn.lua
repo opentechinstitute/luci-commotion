@@ -37,15 +37,13 @@ s.anonymous = true
 if not SW.status() then
    s.addremove = true
 
-   dflts = s:option(Value,  "_dummy_val01")
-   dflts.anonymous = true
-   dflts.default = true
+   md = s:option(Value, "mode")
+   md.default = 'ap'
+   md.render = function() end
 
-   function dflts.write(self, section, value)
-	  first = self.map:set(section, "mode", "adhoc")
-	  second = self.map:set(section, "network", "client")
-	  return first and second or false
-   end
+   nwk = s:option(Value, "network")
+   nwk.default = "client"
+   nwk.render = function() end
 end
 
 function s:filter(section)
@@ -87,10 +85,6 @@ if #wifi_dev > 1 then
 	  end
    end
 else
-   --Default radio (don't render this. Just add it so that it gets added to UCI when created)
-   radio = s:option(DummyValue, "device")
-   radio.default = wifi_dev[1][1]
-   radio.render = function() end
 
    local channels = s:option(ListValue, "channel", translate("Channel"), translate("The channel of your wireless interface."))
    channels.default = uci:get("wireless", wifi_dev[1][1], "channel")
