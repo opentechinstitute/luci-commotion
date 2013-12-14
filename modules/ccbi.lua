@@ -64,8 +64,8 @@ end
 --! @return nil but redirects a user to the confirmation page)
 function ccbi.conf_page(self)
    FORM_INVALID = -1
-   if self.changed and self.state ~= FORM_INVALID  and not self.proceed then
-	  http.redirect(disp.build_url("admin", "commotion", "confirm"))y
+   if self.changed and self.state ~= FORM_INVALID and not self.proceed then
+	  http.redirect(disp.build_url("admin", "commotion", "confirm"))
    end
 end
 
