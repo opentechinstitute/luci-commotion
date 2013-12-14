@@ -15,14 +15,14 @@ GNU General Public License for more details.
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 ]]--
 
-local cdisp = require "luci.commotion.dispatch"
+local ccbi = require "luci.commotion.ccbi"
 local db = require "luci.commotion.debugger"
 local uci = require "luci.model.uci".cursor()
 
 m = Map("serval", translate("Shared Mesh Keychain"), translate("To ensure that only authorized devices can route traffic on your Commotion mesh network, one Shared Mesh Keychain file can be generated and shared by all devices."))
 
 --redirect on saved and changed to check changes.
-m.on_after_save = cdisp.conf_page
+m.on_after_save = ccbi.conf_page
 
 s = m:section(TypedSection, "settings", translate("Use a Shared Mesh Keychain to sign mesh routes. Yes/No"), translate("Check the box to use a Shared Mesh Keychain on this device. You'll also be required to upload or generate a Shared Mesh Keychain."))
 toggle = s:option(Flag, "enabled")

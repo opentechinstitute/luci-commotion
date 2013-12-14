@@ -19,12 +19,12 @@ local utils = require "luci.util"
 local db = require "luci.commotion.debugger"
 local uci = require "luci.model.uci".cursor()
 local fs = require "nixio.fs"
-local cdisp = require "luci.commotion.dispatch"
+local ccbi = require "luci.commotion.ccbi"
 
 m = Map("nodogsplash", translate("Welcome Page"))
 
 --redirect on saved and changed to check changes.
-m.on_after_save = cdisp.conf_page
+m.on_after_save = ccbi.conf_page
 
 
 enable = m:section(TypedSection, "settings", translate("On/Off"), translate("Users can be redirected to a “welcome page” when they first connect to this node."))

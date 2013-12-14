@@ -20,13 +20,13 @@ local cnw = require "luci.commotion.network"
 local db = require "luci.commotion.debugger"
 local http = require "luci.http"
 local SW = require "luci.commotion.setup_wizard"
-local cdisp = require "luci.commotion.dispatch"
+local ccbi = require "luci.commotion.ccbi"
 
 m = Map("network", translate("Internet Gateway"), translate("If desired, you can configure your gateway interface  here."))
 
 --redirect on saved and changed to check changes.
 if not SW.status() then
-   m.on_after_save = cdisp.conf_page
+   m.on_after_save = ccbi.conf_page
 end
 
 p = m:section(NamedSection, "plug")

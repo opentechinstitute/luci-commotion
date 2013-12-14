@@ -29,13 +29,13 @@ $Id: p2pblock.lua 5448 2009-10-31 15:54:11Z jow $
 ]]--
 
 local sys = require "luci.sys"
-local cdisp = require "luci.commotion.dispatch"
+local ccbi = require "luci.commotion.ccbi"
 
 m = Map("freifunk_p2pblock", translate("Bandwidth Controls"),
 	translate("You can disable potentially high-bandwith applications here. "))
 
 --redirect on saved and changed to check changes.
-m.on_after_save = cdisp.conf_page
+m.on_after_save = ccbi.conf_page
 
 s = m:section(NamedSection, "p2pblock", "settings", "Settings")
 s.anonymous = true

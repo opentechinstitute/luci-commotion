@@ -21,14 +21,13 @@ local cnw = require "luci.commotion.network"
 local db = require "luci.commotion.debugger"
 local http = require "luci.http"
 local SW = require "luci.commotion.setup_wizard"
-local cdisp = require "luci.commotion.dispatch"
 local ccbi = require "luci.commotion.ccbi"
 
 local m = Map("wireless", translate("Wireless Network"), translate("Turning on an Access Point provides a wireless network for people to connect to using a laptop or other wireless devices."))
 
 --redirect on saved and changed to check changes.
 if not SW.status() then
-   m.on_after_save = cdisp.conf_page
+   m.on_after_save = ccbi.conf_page
 end
 
 s = m:section(TypedSection, "wifi-iface", translate("Access Point"), translate("Turning on an Access Point provides a wireless network for people to connect to using a laptop or other wireless devices."))
@@ -38,8 +37,9 @@ s.anonymous = true
 if not SW.status() then
    s.addremove = true
 
-   dflts = s:option(DummyValue,  "_dummy_val01")
+   dflts = s:option(Value,  "_dummy_val01")
    dflts.anonymous = true
+   dflts.default = true
 
    function dflts.write(self, section, value)
 	  first = self.map:set(section, "mode", "adhoc")
@@ -82,6 +82,7 @@ if #wifi_dev > 1 then
 	  end
 	  channels.default = uci:get("wireless", dev[1], "channel")
 	  function channels.write(self, section, value)
+		 local enable = self.map:set(dev[1], "disabled", "0") -- enable the radio
 		 return self.map:set(dev[1], "channel", value)
 	  end
    end
@@ -94,6 +95,8 @@ else
    local channels = s:option(ListValue, "channel", translate("Channel"), translate("The channel of your wireless interface."))
    channels.default = uci:get("wireless", wifi_dev[1][1], "channel")
    function channels.write(self, section, value)
+	  local enable = self.map:set(wifi_dev[1][1], "disabled", "0") -- enable the radio
+	  self.map:set(section, "device", wifi_dev[1][1]) --set iface to use this device.
 	  return self.map:set(wifi_dev[1][1], "channel", value)
    end
    for _,x in pairs(cnw.get_channels(wifi_dev[1][2])) do
@@ -106,8 +109,8 @@ enc.disabled = "none"
 enc.enabled = "psk2"
 enc.rmempty = true
 enc.default = "none" --default must == disabled value for rmempty to work
-enc.write=ccbi.flag_write
 
+enc.write=ccbi.flag_write
 --Have enc flag also remove the encryption key when deleted and mark as changed.
 function enc.remove(self, section)
    value = self.map:get(section, self.option)
@@ -123,6 +126,7 @@ end
 pw1 = s:option(Value, "_pw1", translate("Password"), translate("Enter the password people should use to connect to this access point. Commotion uses WPA2 security for Access Point passwords."))
 pw1.password = true
 pw1:depends("encryption", "psk2")
+pw1.datatype = "wpakey"
 
 --password should write to the key, not to the dummy value
 function pw1.write(self, section, value)

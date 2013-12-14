@@ -21,14 +21,14 @@ local cnw = require "luci.commotion.network"
 local db = require "luci.commotion.debugger"
 local http = require "luci.http"
 local SW = require "luci.commotion.setup_wizard"
-local cdisp = require "luci.commotion.dispatch"
+local ccbi = require "luci.commotion.ccbi"
 
 
 local m = Map("wireless", translate("Network Interfaces"), translate("Every Commotion node must have one mesh network connection or interface. Commotion can mesh over wireless or wired interfaces."))
 
 --redirect on saved and changed to check changes.
 if not SW.status() then
-   m.on_after_save = cdisp.conf_page
+   m.on_after_save = ccbi.conf_page
 end
 
 function m.on_before_commit()
@@ -41,8 +41,9 @@ s = m:section(TypedSection, "wifi-iface")
 if not SW.status() then --if not setup wizard then allow for adding and removal
    s.addremove = true
 
-   dflts = s:option(DummyValue,  "_dummy_val01") --also add defaults if not in qs
+   dflts = s:option(Value,  "_dummy_val01") --also add defaults if not in qs
    dflts.anonymous = true
+   dflts.default = true
    
    function dflts.write(self, section, value)
 	  return self.map:set(section, "mode", "adhoc")
@@ -55,8 +56,6 @@ function s:filter(section)
    mode = self.map:get(section, "mode")
    return mode == "adhoc" or mode == nil
 end
-
-
 
 s.valuefooter = "cbi/full_valuefooter"
 s.template_addremove = "cbi/commotion/addMesh" --This template controls the addremove form for adding a new access point so that it has better wording.
@@ -94,14 +93,12 @@ if #wifi_dev > 1 then
 	  end
    end
 else
-   --Default radio (don't render this. Just add it so that it gets added to UCI when created)
-   radio = s:option(Value, "device")
-   radio.default = wifi_dev[1][1]
-   radio.render = function() end
 
    local channels = s:option(ListValue, "channel", translate("Channel"), translate("The channel of your wireless interface."))
    channels.default = uci:get("wireless", wifi_dev[1][1], "channel")
    function channels.write(self, section, value)
+	  local enable = self.map:set(wifi_dev[1][1], "disabled", "0") -- enable the radio
+	  self.map:set(section, "device", wifi_dev[1][1]) --set iface to use this device.
 	  return self.map:set(wifi_dev[1][1], "channel", value)
    end
    for _,x in pairs(cnw.get_channels(wifi_dev[1][2])) do
@@ -115,6 +112,7 @@ enc.enabled = "psk2"
 enc.rmempty = true
 enc.default = "none" --default must == disabled value for rmempty to work
 
+enc.write = ccbi.flag_write
 --Have enc flag also remove the encryption key when deleted
 function enc.remove(self, section)
    value = self.map:get(section, self.option)
@@ -126,19 +124,13 @@ function enc.remove(self, section)
    end
 end
 
-function enc.write(self, section, fvalue)
-   value = self.map:get(section, self.option)
-   if value ~= fvalue then
-	  self.section.changed = true
-	  return self.map:set(section, self.option, fvalue)
-   end
-end
 
 
 --dummy value set to not reveal password
 pw1 = s:option(Value, "_pw1", translate("Mesh Encryption Password"), translate("To encrypt data between devices, each device must share a common mesh encryption password."))
 pw1.password = true
 pw1:depends("encryption", "psk2")
+pw1.datatype = "wpakey"
 
 --password should write to the key, not to the dummy value
 function pw1.write(self, section, value)
@@ -176,6 +168,5 @@ function pw1.validate(self, value, section)
 	  return nil
    end
 end
-
 
 return m

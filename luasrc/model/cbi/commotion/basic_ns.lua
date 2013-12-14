@@ -18,14 +18,15 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 local SW = require "luci.commotion.setup_wizard"
 local db = require "luci.commotion.debugger"
 local uci = require "luci.model.uci".cursor()
-local cdisp = require "luci.commotion.dispatch"
 local cnet = require "luci.commotion.network"
 local http = require "luci.http"
+local ccbi = require "luci.commotion.ccbi"
+
 --Main title and system config map for hostname value
 local m = Map("system", translate("Basic Configuration"), translate("In this section you'll set the basic required settings for this device, and the basic network settings required to connect this device to a Commotion Mesh network. You will be prompted to save your settings along the way and apply them at the end."))
 --redirect on saved and changed to check changes.
 if not SW.status() then
-   m.on_after_save = cdisp.conf_page
+   m.on_after_save = ccbi.conf_page
 end
 
 --load up system section
@@ -38,6 +39,7 @@ shn.addremove = false
 
 --Create a value field for hostname
 local hname = shn:option(Value, "hostname", translate("Node Name"), translate("The node name (hostname) is a unique name for this device, visible to other devices and users on the network. Name this device in the field provided."))
+hname.datatype = "hostname"
 
 function hname.write(self, section, value)
    local node_id = cnet.nodeid()
@@ -76,10 +78,11 @@ s = m:section(TypedSection, "_dummy", translate("Administration Password"), tran
 s.addremove = false
 s.anonymous = true
 
-pw1 = s:option(Value, "pw1", translate("Password"))
+pw1 = s:option(Value, "_pw1", translate("Password"))
 pw1.password = true
+pw1.datatype = [[]]
 
-pw2 = s:option(Value, "pw2", translate("Confirmation"))
+pw2 = s:option(Value, "_pw2", translate("Confirmation"))
 pw2.password = true
 
 function s.cfgsections()
@@ -117,9 +120,9 @@ function m.on_parse(map)
 end
 
 function m.on_save(map) --! @TODO this does not check any of the pasword checks with the new form.
-   local v1 = pw1:formvalue("_pw1")
-   local v2 = pw2:formvalue("_pw2")
-	
+--   db.log(http.formvalue())
+   local v1 = pw1:formvalue("_pass")
+   local v2 = pw2:formvalue("_pass")
 	if v0 == true and v1 and v2 and #v1 > 0 and #v2 > 0 then
 	   if v1 == v2 then
 		  if luci.sys.user.setpasswd(luci.dispatcher.context.authuser, v1) == 0 then
@@ -132,10 +135,12 @@ function m.on_save(map) --! @TODO this does not check any of the pasword checks 
 		  else
 			 --function m.on_after_save() return true end
 			 m.message = translate("Unknown Error, password not changed!")
+			 m.state = -1
 		  end
 	   else
 		  --function m.on_after_save() return true end
 		  m.message = translate("Given password confirmation did not match, password not changed!")
+		  m.state = -1
 	   end
 	end
 end

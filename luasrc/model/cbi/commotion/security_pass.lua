@@ -1,11 +1,27 @@
+--[[
+Copyright (C) 2013 Seamus Tuohy 
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+   
+   This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+   
+   You should have received a copy of the GNU General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
+]]--
 local db = require "luci.commotion.debugger"
 local http = require "luci.http"
-local cdisp = require "luci.commotion.dispatch"
+local ccbi = require "luci.commotion.ccbi"
 
 local m = Map("wireless", translate("Passwords"), translate("Commotion basic security settings places all the passwords and other security features in one place for quick configuration. "))
 
 --redirect on saved and changed to check changes.
-m.on_after_save = cdisp.conf_page
+m.on_after_save = ccbi.conf_page
 
 --PASSWORDS
 local v0 = true -- track password success across maps
