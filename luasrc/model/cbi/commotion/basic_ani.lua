@@ -32,21 +32,22 @@ end
 p = m:section(NamedSection, "plug")
 p.anonymous = true
 
-msh = p:option(Flag, "meshability", translate("Will you be meshing with other Commotion devices over the ethernet interface?"))
+config = p:option(ListValue, "dhcp", translate("Gateway Configuration"))
+config:value("auto", translate("Automatically configure gateway on boot."))
+config:value("client", translate("This device should ALWAYS try and acquire a DHCP lease."))
+config:value("server", translate("This device should ALWAYS provide DHCP leases to clients."))
+config:value("none", translate("This device should not do anything with DHCP."))
+
+msh = p:option(Flag, "meshed", translate("Will you be meshing with other Commotion devices over the ethernet interface?"))
 msh.enabled = "true"
 msh.disabled = "false"
 msh.default = "false"
-msh.addremove = true
+msh.addremove = false
 
-ance = p:option(Flag, "announceability", translate("Advertise your gateway to the mesh."))
+ance = p:option(Flag, "announced", translate("Advertise your gateway to the mesh."))
 ance.enabled = "true"
 ance.disabled = "false"
-ance.addremove = true
---ance:depends("meshability", "false") --!TODO Currently Flags do not have dependance capabilities it seems. I will add and patch in R1.1
-
-config = p:option(ListValue, "plugability", translate("Gateway Configuration"))
-config:value("auto", translate("Automatically configure gateway on boot."))
-config:value("client", translate("This device should try and acquire a DHCP lease"))
-config:value("host", translate("This device should provide DHCP leases to clients."))
-
+ance.addremove = false
+ance.default = 'true'
+   
 return m
