@@ -22,18 +22,6 @@ function dispatch.nodeurl(controller, prefix, name, query)
    end
    return util.pcdata(url)
 end
-
---! @name conf_page
---! @brief  redirects cbi Maps on_after_save  to a confirmation page instead of letting a user save/save-apply directly on a page... inconvienence for for usability
---! @param self the map object (m.on_after_save = conf_page )
---! @return nil but redirects a user to the confirmation page)
-function dispatch.conf_page(self)
-   if self.changed then
-	  http.redirect(disp.build_url("admin", "commotion", "confirm"))
-   end
-end
-
-
 				
 
 return dispatch

@@ -15,6 +15,9 @@ GNU General Public License for more details.
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 ]]--
 
+local http = require "luci.http"
+local disp = require "luci.dispatcher"
+
 module "luci.commotion.ccbi"
 
 local ccbi = {}
@@ -55,6 +58,16 @@ function ccbi.flag_off(self, section)
    end
 end
 
+--! @name conf_page
+--! @brief  redirects cbi Maps on_after_save  to a confirmation page instead of letting a user save/save-apply directly on a page... inconvienence for for usability
+--! @param self the map object (m.on_after_save = conf_page )
+--! @return nil but redirects a user to the confirmation page)
+function ccbi.conf_page(self)
+   FORM_INVALID = -1
+   if self.changed and self.state ~= FORM_INVALID then
+	  http.redirect(disp.build_url("admin", "commotion", "confirm"))
+   end
+end
 
 
 return ccbi
