@@ -99,7 +99,7 @@ function m.on_parse(map)
 					 if tonumber(num) == 0 then
 						conf_pass = val
 					 end
-					 if val then
+					 if val ~= nil and val ~= "" then
 						check = true
 					 end
 				  end)
