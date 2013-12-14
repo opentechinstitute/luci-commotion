@@ -16,6 +16,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 ]]--
 
 local util = require "luci.util"
+local db = require "luci.commotion.debugger"
+local i18n = require "luci.i18n"
 
 module ("luci.controller.commotion.status_config", package.seeall)
 
@@ -48,7 +50,7 @@ function status_builder(page, assets, active_tab)
 				  local status = nil
 				  local sec = nil
 				  local conn = nil
-				  local zone = zone_iface[s.network]
+				  local zone = zone_iface.zone_to_iface[s.network]
 				  if uci:get("wireless", "wifi-device", device, "disabled") == '1' then
 					 status = "Off"
 				  else
@@ -59,6 +61,7 @@ function status_builder(page, assets, active_tab)
 				  else
 					 sec = "Unsecured"
 				  end
+
 				  for i,x in pairs(splash_info) do
 					 if zone == i then
 						conn = splash_info[zone].connected
@@ -88,7 +91,8 @@ end
 
 function conn_clnts()
    clients = get_client_splash_info()
-   status_builder("commotion/conn_clients", {clients=clients}, "connected_clients")
+   splash = get_splash_iface_info()
+   status_builder("commotion/conn_clients", {clients=clients, splash=splash}, "connected_clients")
 end
 
 --! @brief currently only gets number of connected clients... because that is what I needed
@@ -96,8 +100,11 @@ function get_splash_iface_info()
    local splash = {}
    local interface = nil
    for line in util.execi("ndsctl status") do
-	  string.gsub(line, "^(.-):%s(.*)$",
-				  function(key, val)
+	  string.gsub(line, "^(.-:%s.*)$",
+				  function(str)
+					 local sstr = util.split(str, ":%s", nil, true)
+					 local key = sstr[1]
+					 local val = sstr[2]
 					 if key == "Managed interface" then
 						interface = val
 						splash[interface] = {}
@@ -148,20 +155,26 @@ end
 
 function get_client_splash_info()
    local convert = function(x)
-	  return tostring(tonumber(x)*60).." "..translate("minutes")
+	  return tostring(math.floor(tonumber(x)/60)).." "..i18n.translate("minutes")
    end
    local function total_kB(a, b) return tostring(a+b).." kByte" end
    local function total_kb(a, b) return tostring(a+b).." kbit/s" end
    local clients = {}
    i = 0
    for line in util.execi("ndsctl clients") do
-	  if string.match(line, "^%d*$") then
+	  if string.match(line, "^%d+$") then
 		 i = i + 1
+		 clients[i] = {}
 	  end
-	  string.gsub(i, "^(.-)=(.*)$",
-			   function(key, val)
+	  string.gsub(line, "^(.+=.+)$",
+			   function(str)
+				  local sstr = util.split(str, "=")
+				  local key = sstr[1]
+				  local val = sstr[2]
 				  clients[i][key] = val
 			   end)
+   end
+   for i,x in ipairs(clients) do
 	  if clients[i] ~= nil then
 		 clients[i].curr_conn=false
 		 clients[i].duration = convert(clients[i].duration)

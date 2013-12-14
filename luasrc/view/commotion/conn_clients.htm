@@ -22,7 +22,7 @@ function setHelp(text) {
 </script>
 <%-
 local util = require "luci.util"
-
+local db = require "luci.commotion.debugger"
 --Rip open assets table to get its sweet innards (need this because of the open ended include)
 for name,obj in pairs(assets) do
    _G[name] = obj
@@ -30,23 +30,25 @@ end
 
 colors = {default="", grn="#00cc00", yellow="#ffcb05", orange="#ff6600", red="#bb3333" }
 
-headers = {{title="IP-Address", help="HELP TEXT NEEDED", var="ip"},
-		   {title="Time Connected", help="HELP TEXT NEEDED", var="duration"},
-		   {title="Bandwidth Used", help="HELP TEXT NEEDED", var="bnd_wdth"},
-		   {title="Average Speed", help="HELP TEXT NEEDED", var="avg_spd"},
-		   {title="Currently Active", help="HELP TEXT NEEDED", var="curr_conn"}}
+headers = {{title="IP-Address", var="ip"},
+		   {title="Time Connected", var="duration"},
+		   {title="Bandwidth Used", var="bnd_wdth"},
+		   {title="Average Speed", var="avg_spd"},
+		   {title="Currently Active", var="curr_conn"}}
 
 if #clients > 0 then
-   for i in util.execi("iw dev wlan0 station dump") do
-	  string.gsub(i, "^Station%s(.-)%s%(",
-				  function(mac)
-					 for _,dossier in ipairs(clients) do
-						local c_idx = util.contains(dossier, mac)
-						if c_idx then
-						   clients[c_idx].curr_conn = true
+   for iface_name, conn in pairs(splash) do
+	  for i in util.execi("iw dev "..iface_name.." station dump") do
+		 string.gsub(i, "^Station%s(.-)%s%(",
+					 function(mac)
+						for client,dossier in ipairs(clients) do
+						   local c_idx = util.contains(dossier, mac)
+						   if c_idx then
+							  clients[client].curr_conn = true
+						   end
 						end
-					 end
-				  end)
+					 end)
+	  end
    end
 end
 

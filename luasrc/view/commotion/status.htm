@@ -26,9 +26,9 @@
   <div>
 <%- for _,iface in pairs(ifaces) do -%>
 	<h3><%=iface.name%><small><%=iface.status%> <%=iface.sec%> <%=iface.conn%></small></h3>
+<%end%>
   </div>
 </div>
-<%end%>
 <div class="cbi-map">
   <ul id="tabs" class="cbi-tabmenu">
 	<li class=<%=tabs.nd%>>
