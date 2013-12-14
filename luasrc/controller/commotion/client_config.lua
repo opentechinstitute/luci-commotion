@@ -17,6 +17,4 @@ module "luci.controller.commotion.client_config"
 function index()
    entry({"admin", "commotion", "client"}, alias("admin", "commotion", "client", "welcome_page"), translate("Client Controls"), 30)
    entry({"admin", "commotion", "client", "welcome_page"}, cbi("commotion/client_wp", {hideapplybtn=true, hideresetbtn=true}), translate("Welcome Page"), 40).index = true
-   entry({"admin", "commotion", "client", "bandwidth_controls"}, cbi("commotion/client_bc", {hideapplybtn=true, hideresetbtn=true}), translate("Bandwidth Controls"), 50)
-
 end
