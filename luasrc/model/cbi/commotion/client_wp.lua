@@ -65,24 +65,20 @@ splshtxt = m:section(TypedSection, "_page", translate("Edit Welcome Page Text"),
 splshtxt.cfgsections = function() return { "_page" } end
 splshtxt.anonymous = true
 edit = splshtxt:option(Button, "_page", translate("Edit"))
---edit.template = "cbi/cmtn_js_button"
 --The following removes the default title for a word button.
 edit.inputtitle = edit.title
 edit.title = nil
 upload = splshtxt:option(Button, "_page", translate("Upload"))
---edit.template = "cbi/cmtn_js_button"
 --The following removes the default title for a word button.
 upload.inputtitle = upload.title
 upload.title = nil
 
 local splashtextfile = "/usr/lib/lua/luci/view/commotion-splash/splashtext.htm"
 
-help = splshtxt:option(DummyValue, "_dummy", translate("Edit Splash text"),
-							 translate("You can enter your own text that is displayed to clients here.<br /><br />" ..
-										  "It is possible to use the following markers:<br />" ..
-										  "$gatewayname: The value of GatewayName as set in nodogsplash.conf.<br />" ..
-										  "$authtarget: A URL which encodes a unique token and the URL of the user's original web request.<br />" ..
-										  "$imagesdir: The directory in nodogsplash's web hierarchy where images to be displayed in the splash page must be located.<br />"))
+
+local help_text = translate("You can enter text and HTML that will be displayed on the welcome page.").."<br /><br />"..translate("These variables can be used to provide custom values from this node on the welcome page :").."<br />"..translate("$gatewayname: The value of GatewayName as set in the Welcome Page configuration file (/path/nodogsplash.conf).").."<br />"..translate("$authtarget: The URL of the user's original web request.").."<br />"..translate("$imagesdir: The directory in on this node where images to be displayed in the splash page must be located.").."<br />"..translate("The welcome page might include terms of service, advertisements, or other information. Edit the welcome page text here or upload an HTML file.").."<br />"
+
+help = splshtxt:option(DummyValue, "_dummy", translate("Edit Welcome Page Text"), help_text)
 help.template = "cbi/nullsection"
 t = splshtxt:option(TextValue, "text")
 t.rmempty = true
@@ -91,7 +87,7 @@ function t.cfgvalue()
    return fs.readfile(splashtextfile) or ""
 end
 
-uploader = splshtxt:option(FileUpload, "_upload", "UPLOADER TEXT HERE")
+uploader = splshtxt:option(FileUpload, "_upload", help_text)
 
 function m.on_parse(self)
    local b_press = luci.http.formvalue("cbid.nodogsplash._page._page")
@@ -106,19 +102,27 @@ function m.on_parse(self)
    if luci.fs.isfile(uploaded) then
 	  local nfs = require "nixio.fs"
 	  nfs.move(uploaded, splashtextfile)
-	  m.message = "file uploaded!" 
+	  m.proceed = true
+	  m.message = "Success! Your welcome page text has been updated!"
+   else
+	  m.proceed = true
+	  m.message = "Sorry! There was a problem updating your welcome page text. Please try again."
    end
    text = luci.http.formvalue("cbid.nodogsplash._page.text")
    if text and not b_press then
 	  if text ~= "" then
 		 fs.writefile(splashtextfile, text:gsub("\r\n", "\n"))
-		 m.message = "Splashpage updated successfully!"
+		 m.proceed = true
+		 m.message = "Success! Your welcome page text has been updated!"
 	  else
 		 fs.unlink(splashtextfile)
-		 m.message ="Default Splash page selected!"
+		 m.proceed = true
+		 m.message ="The default welcome page has been restored."
 	  end
    end
    return true
 end
 
 return m
+
+
