@@ -33,9 +33,17 @@ $Id: apply.htm 9014 2012-08-14 13:08:18Z jow $
 <% else %>
 	<p><strong><%:There are no pending changes to apply!%></strong></p>
 <% end %>
+<%sw_stat = SW.status()%>
+<%if sw_stat then%>
+<div class="basic_menu">
+<%end%>
 <div class="cbi-page-actions">
 	<form class="inline" method="get" action="<%=controller%>/admin/commotion/">
 		<input class="cbi-button cbi-button-admin" type="submit" value="<%:Finish%>" />
 	</form>
 </div>
+<%if sw_stat then%>
+</div>
+<%end%>
+
 <%+footer%>

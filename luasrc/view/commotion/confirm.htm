@@ -41,8 +41,11 @@ $Id: changes.htm 9014 2012-08-14 13:08:18Z jow $
 <% else %>
 	<p><strong><%:There are no pending changes!%></strong></p>
 <% end %>
+<%sw_stat = SW.status()%>
+<%if sw_stat then%>
+<div class="basic_menu">
+<%end%>
 <div class="cbi-page-actions">
-  	<%sw_stat = SW.status()%>
 	<%if sw_stat then%>
 	<div style="float:left">
 	<form class="inline" method="get" action="<%=controller%>/commotion/setup_wizard">
@@ -76,4 +79,7 @@ $Id: changes.htm 9014 2012-08-14 13:08:18Z jow $
 		</form>
 	</div>
 </div>
+<%if sw_stat then%>
+</div>
+<%end%>
 <%+footer%>

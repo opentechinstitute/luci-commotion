@@ -14,9 +14,7 @@ $Id: revert.htm 9014 2012-08-14 13:08:18Z jow $
 -%>
 
 <%SW = require "luci.commotion.setup_wizard"%>
-<%if not SW.status() then
-	 redirect = luci.dispatcher.build_url("admin","commotion")
-end%>
+<%sw_stat = SW.status()%>
 
 <%+header%>
 
@@ -25,13 +23,17 @@ end%>
 <% if changes then %>
 	<%+cbi/apply_xhr%>
 	<%+admin_uci/changelog%>
-	<p><strong><%:The following changes have been reverted%>:</strong></p>
+	<p><strong><%:Reverting changes...
+Please be patient, this may take a few moments. Once the settings are reset click "Start Over" to return to the beginning of the Setup Wizard.%>:</strong></p>
 	<%- uci_changelog(changes) -%>
 <% else %>
 	<p><strong><%:There are no pending changes to revert!%></strong></p>
 <% end %>
+<%if sw_stat then%>
+<div class="basic_menu">
+<%end%>
 <div class="cbi-page-actions">
-  <%if SW.status() then%>
+  <%if sw_stat then%>
   <div style="float:left">
   <form class="inline" method="get" action="<%=controller%>/commotion/setup_wizard">
 	<input class="cbi-button cbi-button-back" type="submit" value="<%:Start Over%>" />
@@ -43,4 +45,7 @@ end%>
 	</form>
 	<%end%>
 </div>
+<%if sw_stat then%>
+</div>
+<%end%>
 <%+footer%>
