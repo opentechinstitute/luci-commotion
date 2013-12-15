@@ -41,7 +41,7 @@ function status_builder(page, assets, active_tab)
 
    local ifaces = {}
    local gw = "No"
-   local zone_iface = cnet.list_ifaces()
+   local zone_iface = cnet.ifaces_list()
    local splash_info = get_splash_iface_info()
    uci:foreach("wireless", "wifi-iface",
 			   function(s)
@@ -50,7 +50,7 @@ function status_builder(page, assets, active_tab)
 				  local status = nil
 				  local sec = nil
 				  local conn = nil
-				  local zone = zone_iface.zone_to_iface[s.network]
+				  local zone = zone_iface[s.network]
 				  if uci:get("wireless", "wifi-device", device, "disabled") == '1' then
 					 status = "Off"
 				  else
