@@ -1120,7 +1120,7 @@ table.cbi-section-table td.cbi-section-table-cell {
 }
 .cbi-value-description {
   display: inline;
-  font: normal 12px/14px Helvetica, Arial, sans-serif;
+  font: normal 14px/16px Helvetica, Arial, sans-serif;
   color: black;
 }
 .cbi-value-description img {
