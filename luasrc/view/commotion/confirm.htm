@@ -26,7 +26,9 @@ $Id: changes.htm 9014 2012-08-14 13:08:18Z jow $
 -%>
 
 <%SW = require "luci.commotion.setup_wizard"
-  disp = require "luci.dispatcher"%>
+  disp = require "luci.dispatcher"
+  util = require "luci.util"%>
+
 <%+header%>
 
 <h2><a id="content" name="content"><%:Confirm Configuration%></a></h2>
@@ -39,13 +41,12 @@ $Id: changes.htm 9014 2012-08-14 13:08:18Z jow $
 <% else %>
 	<p><strong><%:There are no pending changes!%></strong></p>
 <% end %>
-
 <div class="cbi-page-actions">
   	<%sw_stat = SW.status()%>
 	<%if sw_stat then%>
 	<div style="float:left">
 	<form class="inline" method="get" action="<%=controller%>/commotion/setup_wizard">
-	  <input class="cbi-button cbi-button-apply" type="submit" value="<%:Make Changes%>" />
+	  <input class="cbi-button cbi-button-make-changes" type="submit" value="<%:Make Changes%>" />
 	</form>
 	<%else%>
 	<% local r = luci.http.formvalue("redir"); if r and #r > 0 then %>
@@ -54,27 +55,25 @@ $Id: changes.htm 9014 2012-08-14 13:08:18Z jow $
 		</form>
 	<% end
 	   end%>
-	</div>
 	<div style="text-align:right">
 	  <%if sw_stat then%>
 		<form class="inline" method="get" action="<%=controller%>/commotion/saveapply">
 	  <%else%>
 		<form class="inline" method="get" action="<%=controller%>/admin/commotion/saveapply">
 	  <%end%>
-			<input type="hidden" name="redir" value="<%=pcdata(luci.http.formvalue("redir"))%>" />
+			<input type="hidden" name="redir" value="<%=util.pcdata(luci.http.formvalue("redir"))%>" />
 			<input class="cbi-button cbi-button-apply" type="submit" value="<%:Save And Apply%>" />
 		</form>
 		<%if sw_stat then%>
 		<form class="inline" method="get" action="<%=controller%>/commotion/revert">
-		  <input type="hidden" name="redir" value="<%=pcdata(luci.http.formvalue("redir"))%>" />
+		  <input type="hidden" name="redir" value="<%=util.pcdata(luci.http.formvalue("redir"))%>" />
 		  <input class="cbi-button cbi-button-reset" type="submit" value="<%:Start Over%>" />
 		  <%else%>
 		<form class="inline" method="get" action="<%=controller%>/admin/commotion/revert">
-		  <input type="hidden" name="redir" value="<%=pcdata(luci.http.formvalue("redir"))%>" />
+		  <input type="hidden" name="redir" value="<%=util.pcdata(luci.http.formvalue("redir"))%>" />
 		  <input class="cbi-button cbi-button-reset" type="submit" value="<%:Revert%>" />
 		  <%end%>
 		</form>
 	</div>
 </div>
-
 <%+footer%>

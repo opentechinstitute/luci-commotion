@@ -14,7 +14,11 @@ $Id: apply.htm 9014 2012-08-14 13:08:18Z jow $
 -%>
 <%SW = require "luci.commotion.setup_wizard"%>
 <%+header%>
-
+<%if SW.status() then
+	 redirect = luci.dispatcher.build_url("setupctl", "complete")
+  else
+	 redirect = luci.dispatcher.build_url("admin","commotion")
+  end%>
 
 <h2><a id="content" name="content"><%:Applying Changes%></a></h2>
 
@@ -22,27 +26,16 @@ $Id: apply.htm 9014 2012-08-14 13:08:18Z jow $
 	<%+commotion/apply_xhr%>
 	<%+admin_uci/changelog%>
 
-	<%- cbi_apply_xhr('uci-apply', configs) -%>
+	<%- cbi_apply_xhr('uci-apply', configs, redirect) -%>
 
 	<p><strong><%:The following changes have been committed%>:</strong></p>
 	<%- uci_changelog(changes) -%>
 <% else %>
 	<p><strong><%:There are no pending changes to apply!%></strong></p>
 <% end %>
-
 <div class="cbi-page-actions">
 	<form class="inline" method="get" action="<%=controller%>/admin/commotion/">
-		<input class="cbi-button cbi-button-link" style="margin:0" type="submit" value="<%:Finish%>" />
+		<input class="cbi-button cbi-button-admin" type="submit" value="<%:Finish%>" />
 	</form>
 </div>
-<%-
-   if SW.status() then
-   local uci = require "luci.model.uci".cursor()
-   uci:set("setup_wizard", "settings", "enabled", "0")
-   uci:set("setup_wizard", "tracking", "adminPass", "false")
-   uci:save("setup_wizard")
-   uci:commit("setup_wizard")
-   end
- -%>
-
 <%+footer%>

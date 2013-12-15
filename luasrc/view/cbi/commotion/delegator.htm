@@ -5,11 +5,11 @@
 		<script>
 		  function set_page(page) {
 		  if (page == '') {
-		  $("#pineapple").append("<input type='hidden' name='cbi.delg.back' value='true' />")
-		  $("#pineapple").append("<input type='hidden' name='sw_page' value='<%=self.chain[2]%>' />")
+		  $("#sb_del").append("<input type='hidden' name='cbi.delg.back' value='true' />")
+		  $("#sb_del").append("<input type='hidden' name='sw_page' value='<%=self.chain[2]%>' />")
 		  }
 		  else {
-		  $("#pineapple").append("<input type='hidden' name='sw_page' value='"+page+"' />")
+		  $("#sb_del").append("<input type='hidden' name='sw_page' value='"+page+"' />")
 		  }
 		  document.cbi.submit()
 		  }
@@ -17,7 +17,7 @@
 		<input type="hidden" name="cbi.submit" value="1" />
 		<input type="submit" value="<%:Save%>" class="hidden" />
 	</div>
-	<div class="sb-container" id="pineapple">
+	<div class="sb-container" id="sb_del">
 	  <div class="sb-follow">
 		<% for i, x in ipairs(self.chain) do
 		   local title = translate(x)
@@ -33,7 +33,7 @@
 		  <% end %>
 		</div>
 	  </div>
-	  <div class="body-content">
+	  <div class="body-content  basic_menu">
 	<%- self.active:render() %>
 	<div class="cbi-page-actions">
 		<input type="hidden" name="cbi.delg.current" value="<%=self.current%>" />
@@ -48,7 +48,7 @@
 		<input class="cbi-button cbi-button-next" type="submit" value="<%:Next »%>" />
 <% end %>
 <% if self.current == "Configuration Complete" then %>
-        <input class="cbi-button cbi-button-cancel" type="submit" name="cbi.cancel" value="<%:Finish%>" />
+        <input class="cbi-button cbi-button-cancel cbi-fake-finish" type="submit" name="cbi.cancel" value="<%:Finish%>" />
 <% end %>
 <% if self.allow_reset then %>
 		<input class="cbi-button cbi-button-reset" type="reset" value="<%:Reset%>" />

@@ -18,12 +18,12 @@ function index()
    SW = require "luci.commotion.setup_wizard"
    if SW.status() then
 	  entry({"setupctl"}, alias("setupctl", "status"))
-	  entry({"setupctl", "status"}, call("action_status")).leaf = true
    else
 	  entry({"setupctl"}, alias("setupctl", "status")).sysauth = "root"
-	  entry({"setupctl", "status"}, call("action_status")).leaf = true
    end
+   entry({"setupctl", "status"}, call("action_status")).leaf = true
    entry({"setupctl", "restart"}, call("action_restart")).leaf = true
+   entry({"setupctl", "complete"}, call("action_setup")).leaf = true   
 end
 
 function action_status()
@@ -32,35 +32,51 @@ function action_status()
 		luci.http.write("/etc/config/")
 		luci.http.write(data)
 	else
-		luci.http.write("finish")
+	   luci.http.write("finish")
 	end
 end
 
 function action_restart(args)
-	local uci = require "luci.model.uci".cursor()
-	if args then
-		local service
-		local services = { }
+   local uci = require "luci.model.uci".cursor()
+   if args then
+	  local service
+	  local services = { }
+	  
+	  for service in args:gmatch("[%w_-]+") do
+		 services[#services+1] = service
+	  end
+	  
+	  local command = uci:apply(services, true)
+	  if nixio.fork() == 0 then
+		 local i = nixio.open("/dev/null", "r")
+		 local o = nixio.open("/dev/null", "w")
+		 
+		 nixio.dup(i, nixio.stdin)
+		 nixio.dup(o, nixio.stdout)
+		 
+		 i:close()
+		 o:close()
+		 
+		 nixio.exec("/bin/sh", unpack(command))
+	  else
+		 luci.http.write("OK")
+		 os.exit(0)
+	  end
+   end
+end
 
-		for service in args:gmatch("[%w_-]+") do
-			services[#services+1] = service
-		end
-
-		local command = uci:apply(services, true)
-		if nixio.fork() == 0 then
-			local i = nixio.open("/dev/null", "r")
-			local o = nixio.open("/dev/null", "w")
-
-			nixio.dup(i, nixio.stdin)
-			nixio.dup(o, nixio.stdout)
-
-			i:close()
-			o:close()
-
-			nixio.exec("/bin/sh", unpack(command))
-		else
-			luci.http.write("OK")
-			os.exit(0)
-		end
-	end
+function action_setup()
+   local disp = require "luci.dispatcher"
+   local http = require "luci.http"
+   local uci = require "luci.model.uci".cursor()
+   local SW = require "luci.commotion.setup_wizard"
+   
+   if SW.status() then
+	  uci:set("setup_wizard", "settings", "enabled", "0")
+	  uci:set("setup_wizard", "tracking", "adminPass", "false")
+	  uci:save("setup_wizard")
+	  uci:commit("setup_wizard")
+   end   
+   adv = disp.build_url("admin", "commotion")
+   http.redirect(adv)
 end

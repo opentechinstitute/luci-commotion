@@ -44,7 +44,7 @@ function index()
    if not root.lock then
 	  root.target = alias("commotion")
 	  root.index = true
-   end   
+   end
 
    local redir = luci.http.formvalue("redir", true) or
 	  luci.dispatcher.build_url(unpack(luci.dispatcher.context.request))
@@ -152,8 +152,7 @@ function action_apply()
 
 	luci.template.render("commotion/apply", {
 		changes = next(changes) and changes,
-		configs = reload
-	})
+		configs = reload})
 end
 
 function action_revert()
