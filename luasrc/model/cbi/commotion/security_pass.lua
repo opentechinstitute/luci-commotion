@@ -17,6 +17,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 local db = require "luci.commotion.debugger"
 local http = require "luci.http"
 local ccbi = require "luci.commotion.ccbi"
+local uci = require "luci.model.uci".cursor()
 
 local m = Map("wireless", translate("Passwords"), translate("Commotion basic security settings places all the passwords and other security features in one place for quick configuration. "))
 
@@ -43,7 +44,7 @@ if luci.sys.user.getpasswd("root") then
 end
 
 local interfaces = {}
-uci.foreach("wireless", "wifi-iface",
+uci:foreach("wireless", "wifi-iface",
 			function(s)
 			   local name = s[".name"]
 			   local key = s.key or "NONE"
@@ -89,14 +90,14 @@ function pw_sec_opt(pw_s, iface)
    end
    
    --password options
-   pw1 = pw_s:option(Value, (iface.name.."_pass1"))
+   pw1 = pw_s:option(Value, (iface.name.."_pw1"))
    pw1.password = true
-   pw1.anonymous = true
    pw1:depends("encryption", "psk2")
+   pw1.datatype = "wpakey"
+   
    --confirmation password
-   pw2 = pw_s:option(Value, iface.name.."_pass2", nil, translate("Confirm Password"))
+   pw2 = pw_s:option(Value, iface.name.."_pw2", nil, translate("Confirm Password"))
    pw2.password = true
-   pw2.anonymous = true
    pw2:depends("encryption", "psk2")
    
    --password should write to the key, not to the dummy value
@@ -104,13 +105,15 @@ function pw_sec_opt(pw_s, iface)
 	  return self.map:set(section, "key", value)
    end
    
-   function pw2.write() return true end
+   --Don't actually write this value, just return success
+   function pw2.write(self, section, value)
+	  return true
+   end
    
    --make sure passwords are equal
    function pw1.validate(self, value, section)
 	  local v1 = value
-	  local v2 = pw2:formvalue(section)
-	  --local v2 = http.formvalue(string.gsub(self:cbid(section), "%d$", "2"))
+	  local v2 = http.formvalue(string.gsub(self:cbid(section), "%d$", "2"))
 	  if v1 and v2 and #v1 > 0 and #v2 > 0 then
 		 if v1 == v2 then
 			if m.message == nil then
@@ -120,11 +123,13 @@ function pw_sec_opt(pw_s, iface)
 		 else
 			m.message = translate("Error, no changes saved. See below.")
 			self:add_error(section, translate("Given password confirmation did not match, password not changed!"))
+			m.state = -1
 			return nil
 		 end
 	  else
 		 m.message = translate("Error, no changes saved. See below.")
 		 self:add_error(section, translate("Unknown Error, password not changed!"))
+		 m.state = -1
 		 return nil
 	  end
    end
@@ -146,8 +151,6 @@ if #mesh_ifaces > 1 then
 	  meshPW = pw_sec_opt(meshPW, x)
    end
 else
-   db.log("mesh ifaces")
-   db.log(mesh_ifaces[1].name)
    local meshPW = m:section(NamedSection, mesh_ifaces[1].name, "wifi-iface", mesh_ifaces[1].name, pw_text)
    meshPW = pw_sec_opt(meshPW, mesh_ifaces[1])
 end
@@ -177,7 +180,7 @@ for i,iface in ipairs(interfaces) do
 end
 
 --!brief This map checks for the admin password field and denies all saving and removes the confirmation page redirect if it is there.
-function m.on_parse(map)
+function m.on_parse(self)
    local form = http.formvaluetable("cbid.wireless")
    local check = nil
    local conf_pass = nil
@@ -198,7 +201,6 @@ function m.on_parse(map)
 		 if v0 ~= true then
 			m.message = translate("Incorrect password. Changes rejected!")
 			m.save = false
-			function m.on_after_save() return true end --Don't redirect on error
 		 end
 	  else
 		 m.message = translate("Please enter your old password. Changes rejected!")
@@ -207,20 +209,23 @@ function m.on_parse(map)
    end
 end
 
+--! admin password changes checks
 function m.on_save(self)
-   local v1 = pw1:formvalue("_pass")
-   local v2 = pw2:formvalue("_pass")
+   local v1 = admin_pw1:formvalue("_pass")
+   local v2 = admin_pw2:formvalue("_pass")
    if v0 == true and v1 and v2 and #v1 > 0 and #v2 > 0 then
 	  if v1 == v2 then
 		 if luci.sys.user.setpasswd(luci.dispatcher.context.authuser, v1) == 0 then
-			--TODO WAIT @critzo/@georgiamoon decide upon administration password experience for confirmation page.
---			eg. function m.on_after_save() return true end --Don't redirect on admin pw success as it is not a uci value and shows up as nil.
 			m.message = translate("Admin Password successfully changed!")
+			uci:set("setup_wizard", "passwords", "admin_pass", 'changed')
+			uci:save("setup_wizard")
 		 else
 			m.message = translate("Unknown Error, password not changed!")
+			m.state = -1
 		 end
 	  else
 		 m.message = translate("Given password confirmation did not match, password not changed!")
+		 m.state = -1
 	  end
    end
 end

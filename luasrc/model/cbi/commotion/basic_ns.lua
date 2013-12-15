@@ -80,7 +80,6 @@ s.anonymous = true
 
 pw1 = s:option(Value, "_pw1", translate("Password"))
 pw1.password = true
-pw1.datatype = [[]]
 
 pw2 = s:option(Value, "_pw2", translate("Confirmation"))
 pw2.password = true
@@ -89,7 +88,7 @@ function s.cfgsections()
 	return { "_pass" }
 end
 
-function m.on_parse(map)  --! @TODO this does not work
+function m.on_parse(self)
    local form = http.formvaluetable("cbid")
    local check = nil
    local conf_pass = nil
@@ -111,7 +110,6 @@ function m.on_parse(map)  --! @TODO this does not work
 			if v0 ~= true then
 			   m.message = translate("Incorrect password. Changes rejected!")
 			   m.save = false
-			   function m.on_after_save() return true end --Don't redirect on error
 			end
 		 else
 			m.message = translate("Please enter your old password. Changes rejected!")
@@ -121,8 +119,7 @@ function m.on_parse(map)  --! @TODO this does not work
    end
 end
 
-function m.on_save(map) --! @TODO this does not check any of the pasword checks with the new form.
---   db.log(http.formvalue())
+function m.on_save(self) 
    local v1 = pw1:formvalue("_pass")
    local v2 = pw2:formvalue("_pass")
 	if v0 == true and v1 and v2 and #v1 > 0 and #v2 > 0 then
@@ -130,18 +127,15 @@ function m.on_save(map) --! @TODO this does not check any of the pasword checks 
 		  if luci.sys.user.setpasswd("root", v1) == 0 then
 			 m.message = translate("Password successfully changed!")
 			 if SW.status() then
-				uci:set("setup_wizard", "tracking", "adminPass", 'true')
+				uci:set("setup_wizard", "passwords", "admin_pass", 'changed')
 				uci:save("setup_wizard")
-				uci:commit("setup_wizard")
 			 end
 		  else
-			 --function m.on_after_save() return true end
-			 m.message = translate("Unknown Error, password not changed!")
+			 m.message = translate("Unknown Error with Admin password change, password not changed!")
 			 m.state = -1
 		  end
 	   else
-		  --function m.on_after_save() return true end
-		  m.message = translate("Given password confirmation did not match, password not changed!")
+		  m.message = translate("Given Admin password confirmation did not match, password not changed!")
 		  m.state = -1
 	   end
 	end
