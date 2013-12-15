@@ -89,7 +89,7 @@ function s.cfgsections()
 	return { "_pass" }
 end
 
-function m.on_parse(map)
+function m.on_parse(map)  --! @TODO this does not work
    local form = http.formvaluetable("cbid")
    local check = nil
    local conf_pass = nil
@@ -125,7 +125,7 @@ function m.on_save(map) --! @TODO this does not check any of the pasword checks 
    local v2 = pw2:formvalue("_pass")
 	if v0 == true and v1 and v2 and #v1 > 0 and #v2 > 0 then
 	   if v1 == v2 then
-		  if luci.sys.user.setpasswd(luci.dispatcher.context.authuser, v1) == 0 then
+		  if luci.sys.user.setpasswd("root", v1) == 0 then
 			 m.message = translate("Password successfully changed!")
 			 if SW.status() then
 				uci:set("setup_wizard", "tracking", "adminPass", 'true')
