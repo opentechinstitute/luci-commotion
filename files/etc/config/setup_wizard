@@ -1,5 +1,5 @@
 config settings settings
 	   option enabled '1'
 
-config uci tracking
-	   option adminPass 'false'
+config uci passwords
+	   option admin_pass 'false'

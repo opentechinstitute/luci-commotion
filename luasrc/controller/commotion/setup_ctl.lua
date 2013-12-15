@@ -73,7 +73,7 @@ function action_setup()
    
    if SW.status() then
 	  uci:set("setup_wizard", "settings", "enabled", "0")
-	  uci:set("setup_wizard", "tracking", "adminPass", "false")
+	  uci:set("setup_wizard", "passwords", "admin_pass", 'false')
 	  uci:save("setup_wizard")
 	  uci:commit("setup_wizard")
    end   
