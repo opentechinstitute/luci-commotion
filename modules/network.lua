@@ -194,9 +194,9 @@ function network.ifaces_list(swap)
 					 if iface.device ~= nil then
 						dev = tostring(iface.device)
 						if swap and dev then
-						   r.z2if[dev]=zone['.name']
+						   z2if[dev]=zone['.name']
 						else
-						   r.z2if[zone['.name']]=dev
+						   z2if[zone['.name']]=dev
 						end
 					 end
 				  end)
