@@ -873,7 +873,7 @@ footer a:active, footer a:hover {
 .btn:focus, .cbi-button:focus {
   outline: 1px dotted #666666;
 }
-.btn.primary, .cbi-page-actions .cbi-button-apply, .cbi-page-actions .cbi-button-save {
+.btn.primary, {
   background-color: #00ffcf;
   background-image: -moz-linear-gradient(center top , #00ffcf, #000000);
   background-repeat: repeat-x;
@@ -911,6 +911,49 @@ footer a:active, footer a:hover {
   font-size: 11px;
   padding: 7px 9px;
 }
+
+
+.basic_menu .btn:hover, .cbi-button:hover {
+  color: #333333;
+  text-decoration: none;
+}
+.basic_menu .btn:focus, .cbi-button:focus {
+  outline: 1px dotted #666666;
+}
+
+.basic_menu .cbi-page-actions {
+  background: none repeat scroll 0 0 #FFFFFF;
+  border-top: none;
+  padding: 5px 5px 5px 150px;
+}
+
+.basic_menu .cbi-page-actions input.cbi-button {
+	display: inline-block;
+	padding: 100px 45px 0 45px;
+	font-weight: bold;
+	box-shadow: none;
+}
+
+.basic_menu .cbi-page-actions .cbi-button:hover {
+	color: #FF6699;
+}
+
+.basic_menu .cbi-page-actions .cbi-button-save, .basic_menu .cbi-page-actions .cbi-button-apply, .basic_menu .cbi-page-actions .cbi-fake-finish, .basic_menu .cbi-page-actions  .cbi-button-finish {
+	background: transparent url(approve_app_button.png) no-repeat top center;
+}
+.basic_menu .cbi-page-actions .cbi-button-reset, .basic_menu .cbi-page-actions .inline .cbi-button-reset {
+	background: transparent url(commotion_delete_icon.png) no-repeat top center;	
+}
+.basic_menu .cbi-page-actions  .cbi-button-next, .basic_menu .cbi-page-actions .cbi-button-skip {
+	background: transparent url(right_arrow_button.png) no-repeat top center;
+}
+.basic_menu .cbi-page-actions .cbi-button-back, .basic_menu .cbi-page-actions .cbi-button-make-changes {
+	background: transparent url(left_arrow_button.png) no-repeat top center;
+}
+.basic_menu .cbi-page-actions .cbi-button-admin {
+	background: transparent url(advanced_button.png) no-repeat top center;
+}
+
 .Startup .cbi-section-table input.cbi-input-apply, .Startup .cbi-section-table input.cbi-button-apply {
   background-image: url("./resources/cbi/apply.gif");
   background-position: 7px 4px;
