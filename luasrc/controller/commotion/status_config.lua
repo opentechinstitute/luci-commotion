@@ -51,10 +51,14 @@ function status_builder(page, assets, active_tab)
 				  local sec = nil
 				  local conn = nil
 				  local zone = zone_iface[s.network]
-				  if uci:get("wireless", "wifi-device", device, "disabled") == '1' then
-					 status = "Off"
+				  if device ~= nil then
+					 if uci:get("wireless", "wifi-device", device, "disabled") == '1' then
+						status = "Off"
+					 else
+						status = "On"
+					 end
 				  else
-					 status = "On"
+					 status = "Unknown"
 				  end
 				  if s.encryption == "psk2" then
 					 sec = "Secured"
