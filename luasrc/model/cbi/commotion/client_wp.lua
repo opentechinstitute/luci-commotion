@@ -20,6 +20,7 @@ local db = require "luci.commotion.debugger"
 local uci = require "luci.model.uci".cursor()
 local fs = require "nixio.fs"
 local ccbi = require "luci.commotion.ccbi"
+local lfs = require "luci.fs"
 
 m = Map("nodogsplash", translate("Welcome Page"))
 
@@ -98,13 +99,12 @@ function m.on_parse(self)
    if b_press ~= "Upload" then
 	  function uploader.render() return nil end
    end
-   uploaded = "/lib/uci/upload/cbid.nodogsplash._page._upload"
-   if luci.fs.isfile(uploaded) then
-	  local nfs = require "nixio.fs"
-	  nfs.move(uploaded, splashtextfile)
+   uploaded = "cbid.nodogsplash._page._upload"
+   if lfs.isfile("/lib/uci/upload/"..uploaded) then
+	  fs.move(uploaded, splashtextfile)
 	  m.proceed = true
 	  m.message = "Success! Your welcome page text has been updated!"
-   else
+   elseif luci.http.formvalue(uploaded) ~= nil then
 	  m.proceed = true
 	  m.message = "Sorry! There was a problem updating your welcome page text. Please try again."
    end
