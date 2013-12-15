@@ -43,11 +43,13 @@ msh.enabled = "true"
 msh.disabled = "false"
 msh.default = "false"
 msh.addremove = false
+msh.write = ccbi.flag_write
 
 ance = p:option(Flag, "announced", translate("Advertise your gateway to the mesh."))
 ance.enabled = "true"
 ance.disabled = "false"
 ance.addremove = false
 ance.default = 'true'
-   
+ance.write = ccbi.flag_write
+
 return m
