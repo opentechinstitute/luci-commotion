@@ -3,8 +3,10 @@
 local utils = require "luci.util"
 local sys = require "luci.sys"
 local uci = require "luci.model.uci"
-local string, table, tostring, pairs = string, table, tostring, pairs
+local ubus = require "ubus"
 
+local string, table, tostring, pairs = string, table, tostring, pairs
+local print = print
 module "luci.commotion.network"
 
 local network = {}
@@ -172,9 +174,34 @@ nodeid.
   "servalsid": "",
   "announce": "true"
 }
-
 ]]--
 
+
+--! @name list_ifaces
+--! @brief iterates over all zones in the network uci config and then uses ubus to gather network interfaces that use that zone.
+--! @param swap optional to return a swapped array of with interfaces from ubus as keys and zones from uci as values
+--! @return an array with matched zone names and interface names. By default the array is keyed by the zones pulled from /etc/config/network interface section names.
+function network.ifaces_list(swap)
+   local z2if = {}
+   local conn = ubus.connect()
+   if not conn then
+	  error("Failed to connect to ubusd")
+   end
+   cursor = uci.cursor()
+   cursor:foreach("network", "interface",
+				  function(zone)
+					 local iface = conn:call("network.interface."..zone['.name'], "status", {})
+					 if iface.device ~= nil then
+						dev = tostring(iface.device)
+						if swap and dev then
+						   r.z2if[dev]=zone['.name']
+						else
+						   r.z2if[zone['.name']]=dev
+						end
+					 end
+   )
+   return r
+end
 
 return network
 
