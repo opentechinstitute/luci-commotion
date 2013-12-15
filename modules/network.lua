@@ -200,6 +200,7 @@ function network.ifaces_list(swap)
 						end
 					 end
 				  end)
+   conn:close()
    return z2if
 end
 
