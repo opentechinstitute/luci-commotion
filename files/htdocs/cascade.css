@@ -812,27 +812,27 @@ footer a:active, footer a:hover {
 	padding: 62px 10px 0 10px;
 	font-weight: bold;
 }
+
+
 #welcome li {
-  display: inline-block;
-  padding: 0 5px;
+	display: inline-block;
+	font-weight: bold;
+	box-shadow: none;
 }
 #welcome li.setup a {
 	display: inline-block;
-	background: transparent url(setup_wizard.png) no-repeat top center;
-	padding: 62px 0 0 0;
-	font-weight: bold;
+	padding: 100px 45px 0 45px;
+	background: transparent url(setupwiz_button.png) no-repeat top center;
 }
 #welcome li.upload a {
-	display: inline-block;
 	background: transparent url(upload_config.png) no-repeat top center;
-	padding: 62px 0 0 0;
-	font-weight: bold;
+	display: inline-block;
+	padding: 100px 45px 0 45px;
 }
 #welcome li.advanced a {
+	background: transparent url(advanced_button.png) no-repeat top center;
 	display: inline-block;
-	background: transparent url(advanced_setup.png) no-repeat top center;
-	padding: 62px 0 0 0;
-	font-weight: bold;
+	padding: 100px 45px 0 45px;
 }
 
 
