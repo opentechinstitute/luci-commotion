@@ -199,8 +199,8 @@ function network.ifaces_list(swap)
 						   r.z2if[zone['.name']]=dev
 						end
 					 end
-   )
-   return r
+				  end)
+   return z2if
 end
 
 return network
