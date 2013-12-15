@@ -105,16 +105,18 @@ function m.on_parse(map)  --! @TODO this does not work
 				  end)
    end
    if check ~= nil then
-	  if conf_pass then
-		 v0 = luci.sys.user.checkpasswd("root", conf_pass)
-		 if v0 ~= true then
-			m.message = translate("Incorrect password. Changes rejected!")
+	  if not SW.status() then
+		 if conf_pass then
+			v0 = luci.sys.user.checkpasswd("root", conf_pass)
+			if v0 ~= true then
+			   m.message = translate("Incorrect password. Changes rejected!")
+			   m.save = false
+			   function m.on_after_save() return true end --Don't redirect on error
+			end
+		 else
+			m.message = translate("Please enter your old password. Changes rejected!")
 			m.save = false
-			function m.on_after_save() return true end --Don't redirect on error
 		 end
-	  else
-		 m.message = translate("Please enter your old password. Changes rejected!")
-		 m.save = false
 	  end
    end
 end
