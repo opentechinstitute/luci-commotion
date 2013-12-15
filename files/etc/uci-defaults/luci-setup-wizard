@@ -2,6 +2,13 @@
 
 . /etc/functions.sh
 
+#setup ucitrack
+config_load ucitrack
+uci_add ucitrack nodogsplash nodogsplash
+uci_set ucitrack nodogsplash init ucidog
+uci_commit ucitrack
+
+#setup serval (Enable if in R1)
 config_load serval
 uci_add serval settings settings
 uci_set serval settings enabled false
@@ -11,5 +18,8 @@ uci_set serval settings update_primary_keyring false
 uci_set serval settings update_mdp_keyring false
 uci_set serval settings new_mdp_keyring false
 uci_commit serval
+
+#use our help icon
+cp /www/luci-static/commotion/help.png /www/luci-static/resources/cbi/help.gif
 
 exit 0
