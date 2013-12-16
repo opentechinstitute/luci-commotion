@@ -85,8 +85,42 @@ You may obtain a copy of the License at
 	<header>
 	  <nav><ul><li></li></ul></nav>
     <a id="device" href="/"><img src="<%=media%>/commotion_tiny.png" alt="Commotion - toggle header" title="Commotion - toggle header" /></a>
+	<%uci = require "luci.model.uci".cursor()
+  ubus = require "ubus"
+  conn = ubus.connect()
+  if not conn then
+	 error("Failed to connect to ubusd")
+  end
+  mesh_ip = nil
+  uci:foreach("wireless", "wifi-iface",
+			  function(s)
+				 if s and s.mode and s.mode == "adhoc" then
+					local iface = conn:call("network.interface."..s['.name'], "status", {})
+					if iface then
+					   if iface ~= nil and iface.ipv4-address then
+						  mesh_ip = iface.ipv4-address
+					   else
+						  mesh_ip = "Unknown"
+					   end
+					else
+					   mesh_ip = "Unknown"
+					end
+				 end
+			  end
+  )
+  conn:close()
+	 -%>
+
 	<div class="collapsible">
-      <h1 class="brand"><a href="/">Node name: <%=hostname%></a></h1>
+	 <table class="status-bar">
+	 <tr>
+	 <td style="width:20%"></td>
+      <td class="key-item hug-right">Node name:</td><td class="hug-left"><%=hostname%></td>
+	 <td style="width:10%"></td>
+	  <td class="key-item hug-right">Mesh IP-Address:</td><td class="hug-left"><%=mesh_ip%></td>
+	 <td style="width:20%"></td>
+	 </tr>
+	 </table>
     </div>
 
 	  <%include("themes/commotion/unsaved_changes", {tree=tree, controller=controller, category=category})%>

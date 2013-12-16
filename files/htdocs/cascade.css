@@ -985,6 +985,39 @@ button.btn::-moz-focus-inner, input.btn[type="submit"]::-moz-focus-inner {
   border: 0 none;
   padding: 0;
 }
+
+.status-bar {
+	overflow: auto;
+}
+
+.info-list {
+	float:left;
+	width:25%;
+}
+.iface-info {
+	float:right;
+	width:45%;
+}
+
+td.hug-right {
+text-align:right;
+}
+
+td.hug-left {
+text-align:left;
+}
+.status-bar td.key-item {
+	color:black;
+	font-weight: bold;
+	font-size:30;
+}
+.status-bar td {
+	background-color:#FFFFFF;
+	color:#FF6699;
+	font-weight: bold;
+	font-size:25;
+}
+
 .close {
   color: #000000;
   float: right;
