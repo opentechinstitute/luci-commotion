@@ -65,51 +65,48 @@ timeopt:value("days")
 splshtxt = m:section(TypedSection, "_page", translate("Edit Welcome Page Text"), translate("The welcome page can include terms of service, advertisements, or other information. Edit the welcome page text here or upload an HTML file."))
 splshtxt.cfgsections = function() return { "_page" } end
 splshtxt.anonymous = true
-edit = splshtxt:option(Button, "_page", translate("Edit"))
---The following removes the default title for a word button.
-edit.inputtitle = edit.title
-edit.title = nil
-upload = splshtxt:option(Button, "_page", translate("Upload"))
---The following removes the default title for a word button.
-upload.inputtitle = upload.title
-upload.title = nil
+
+edit2 = splshtxt:option(Flag, "edit", translate("Edit Welcome Page Text"))
+upload2 = splshtxt:option(Flag, "upload", translate("Upload Welcome Page Text"))
 
 local splashtextfile = "/usr/lib/lua/luci/view/commotion-splash/splashtext.htm"
 
-
 local help_text = translate("You can enter text and HTML that will be displayed on the welcome page.").."<br /><br />"..translate("These variables can be used to provide custom values from this node on the welcome page :").."<br />"..translate("$gatewayname: The value of GatewayName as set in the Welcome Page configuration file (/path/nodogsplash.conf).").."<br />"..translate("$authtarget: The URL of the user's original web request.").."<br />"..translate("$imagesdir: The directory in on this node where images to be displayed in the splash page must be located.").."<br />"..translate("The welcome page might include terms of service, advertisements, or other information. Edit the welcome page text here or upload an HTML file.").."<br />"
 
-help = splshtxt:option(DummyValue, "_dummy", translate("Edit Welcome Page Text"), help_text)
-help.template = "cbi/nullsection"
+help = splshtxt:option(DummyValue, "_dummy", nil, help_text)
+--help.template = "cbi/nullsection"
+help:depends("edit", "1")
+help:depends("upload", "1")
+
 t = splshtxt:option(TextValue, "text")
 t.rmempty = true
 t.rows = 30
+t:depends("edit", "1")
+
 function t.cfgvalue()
    return fs.readfile(splashtextfile) or ""
 end
 
-uploader = splshtxt:option(FileUpload, "_upload", help_text)
+uploader = splshtxt:option(FileUpload, "_upload")
+uploader:depends("upload", "1")
 
 function m.on_parse(self)
    local b_press = luci.http.formvalue("cbid.nodogsplash._page._page")
-   if b_press ~= "Edit" then
-	  function t.render() return nil end
-	  function help.render() return nil end
-   end
-   if b_press ~= "Upload" then
-	  function uploader.render() return nil end
-   end
    uploaded = "cbid.nodogsplash._page._upload"
    if lfs.isfile("/lib/uci/upload/"..uploaded) then
-	  fs.move(uploaded, splashtextfile)
-	  m.proceed = true
-	  m.message = "Success! Your welcome page text has been updated!"
+	  if fs.move("/lib/uci/upload/"..uploaded, splashtextfile) then
+		 m.proceed = true
+		 m.message = "Success! Your welcome page text has been updated!"
+	  else
+		 m.proceed = true
+		 m.message = "Sorry! There was a problem moving your welcome text to the correct location. You can find it in ".."/lib/uci/upload/"..uploaded.. " and move it to "..splashtextfile
+	  end
    elseif luci.http.formvalue(uploaded) ~= nil then
 	  m.proceed = true
 	  m.message = "Sorry! There was a problem updating your welcome page text. Please try again."
    end
    text = luci.http.formvalue("cbid.nodogsplash._page.text")
-   if text and not b_press then
+   if text then
 	  if text ~= "" then
 		 fs.writefile(splashtextfile, text:gsub("\r\n", "\n"))
 		 m.proceed = true
