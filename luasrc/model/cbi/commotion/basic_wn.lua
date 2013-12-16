@@ -40,10 +40,20 @@ if not SW.status() then
    md = s:option(Value, "mode")
    md.default = 'ap'
    md.render = function() end
-
+   md.parse = function(self, section, novld)
+	  if self:cfgvalue(section) ~= md.default then
+		 return self.map:set(section, self.option, value)
+	  end
+   end
+   
    nwk = s:option(Value, "network")
    nwk.default = "client"
    nwk.render = function() end
+   nwk.parse = function(self, section, novld)
+	  if self:cfgvalue(section) ~= nwk.default then
+		 return self.map:set(section, self.option, value)
+	  end
+   end
 end
 
 function s:filter(section)
