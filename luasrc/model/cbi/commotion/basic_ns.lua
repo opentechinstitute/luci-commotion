@@ -23,7 +23,7 @@ local http = require "luci.http"
 local ccbi = require "luci.commotion.ccbi"
 
 --Main title and system config map for hostname value
-local m = Map("system", translate("Basic Configuration"), translate("In this section you'll set the basic required settings for this device, and the basic network settings required to connect this device to a Commotion Mesh network. You will be prompted to save your settings along the way and apply them at the end."))
+local m = Map("system", translate("Node Settings"), translate("In this section you'll set the basic required settings for this device, and the basic network settings required to connect this device to a Commotion Mesh network. You will be prompted to save your settings along the way and apply them at the end."))
 --redirect on saved and changed to check changes.
 if not SW.status() then
    m.on_after_save = ccbi.conf_page

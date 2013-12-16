@@ -24,7 +24,7 @@ local SW = require "luci.commotion.setup_wizard"
 local ccbi = require "luci.commotion.ccbi"
 
 
-local m = Map("wireless", translate("Network Interfaces"), translate("Every Commotion node must have one mesh network connection or interface. Commotion can mesh over wireless or wired interfaces."))
+local m = Map("wireless", translate("Network Settings"), translate("Every Commotion node must have one mesh network connection or interface. Commotion can mesh over wireless or wired interfaces."))
 
 --redirect on saved and changed to check changes.
 if not SW.status() then
