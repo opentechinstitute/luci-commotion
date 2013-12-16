@@ -84,61 +84,70 @@ pw1.password = true
 pw2 = s:option(Value, "_pw2", translate("Confirmation"))
 pw2.password = true
 
-function s.cfgsections()
-	return { "_pass" }
-end
-
-function m.on_parse(self)
-   local form = http.formvaluetable("cbid")
-   local check = nil
-   local conf_pass = nil
-   for field,val in pairs(form) do
-	  string.gsub(field, ".-_pw(%d)$",
-				  function(num)
-					 if tonumber(num) == 0 then
-						conf_pass = val
-					 end
-					 if val ~= nil and val ~= "" then
-						check = true
-					 end
-				  end)
-   end
-   if check ~= nil then
-	  if not SW.status() then
-		 if conf_pass then
-			v0 = luci.sys.user.checkpasswd("root", conf_pass)
-			if v0 ~= true then
-			   m.message = translate("Incorrect password. Changes rejected!")
-			   m.save = false
+--make sure passwords are equal
+function pw1.validate(self, value, section)
+   local v1 = value
+   local v2 = pw2:formvalue(section)
+   --local v2 = http.formvalue(string.gsub(self:cbid(section), "%d$", "2"))
+   if root_pass_check() == true then
+	  if v1 and v2 and #v1 > 0 and #v2 > 0 then
+		 if v1 == v2 then
+			if m.message == nil then
+			   m.message = translate("Password successfully changed!")
 			end
+			return value
 		 else
-			m.message = translate("Please enter your old password. Changes rejected!")
-			m.save = false
+			m.message = translate("Error, no changes saved. See below.")
+			self:add_error(section, translate("Given confirmation password did not match, password not changed!"))
+			return nil
 		 end
+	  else
+		 m.message = translate("Error, no changes saved. See below.")
+		 self:add_error(section, translate("Unknown Error, password not changed!"))
+		 return nil
 	  end
    end
 end
 
-function m.on_save(self) 
-   local v1 = pw1:formvalue("_pass")
-   local v2 = pw2:formvalue("_pass")
-	if v0 == true and v1 and v2 and #v1 > 0 and #v2 > 0 then
-	   if v1 == v2 then
-		  if luci.sys.user.setpasswd("root", v1) == 0 then
-			 m.message = translate("Password successfully changed!")
-			 if SW.status() then
-				uci:set("setup_wizard", "passwords", "admin_pass", 'changed')
-				uci:save("setup_wizard")
-			 end
-		  else
-			 m.message = translate("Unknown Error with Admin password change, password not changed!")
-			 m.state = -1
-		  end
-	   else
-		  m.message = translate("Given Admin password confirmation did not match, password not changed!")
-		  m.state = -1
-	   end
-	end
+function s.cfgsections()
+	return { "_pass" }
+end
+
+function root_pass_check()
+   if not SW.status() then
+	  local form = http.formvaluetable("cbid")
+	  local check = nil
+	  local conf_pass = nil
+	  for field,val in pairs(form) do
+		 string.gsub(field, ".-_pw(%d)$",
+					 function(num)
+						if tonumber(num) == 0 then
+						   conf_pass = val
+						end
+						if val ~= nil and val ~= "" then
+						   check = true
+						end
+		 end)
+	  end
+	  if check ~= nil then
+		 if conf_pass then
+			v0 = luci.sys.user.checkpasswd("root", conf_pass)
+			if v0 ~= true then
+			   m.message = translate("Incorrect node administration password. Changes rejected!")
+			   m.save = false
+			   return false
+			else
+			   return true
+			end
+		 else
+			m.message = translate("Please enter your old node administration password. Changes rejected!")
+			m.save = false
+			return false
+		 end
+	  else
+		 return true
+	  end	  
+   end
 end
 
 return m
