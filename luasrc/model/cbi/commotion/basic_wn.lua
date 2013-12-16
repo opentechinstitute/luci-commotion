@@ -127,7 +127,7 @@ function pw1.write(self, section, value)
    return self.map:set(section, "key", value)
 end
 
-pw2 = s:option(Value, "_dummy")
+pw2 = s:option(Value, "_dummy", translate("Confirmation"))
 pw2.password = true
 pw2:depends("encryption", "psk2")
 

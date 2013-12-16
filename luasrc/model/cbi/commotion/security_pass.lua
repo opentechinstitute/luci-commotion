@@ -164,7 +164,7 @@ admin_pw_s.anonymous = true
 admin_pw1 = admin_pw_s:option(Value, "admin_pw1")
 admin_pw1.password = true
 
-admin_pw2 = admin_pw_s:option(Value, "admin_pw2", nil, translate("Confirm Password"))
+admin_pw2 = admin_pw_s:option(Value, "admin_pw2", translate("Confirmation"))
 admin_pw2.password = true
 
 function admin_pw_s.cfgsections()
