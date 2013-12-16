@@ -53,23 +53,23 @@ if not SW.status() then --if not setup wizard then allow for adding and removal
 		 self:write(section, self.default)
 	  end
    end
+end
 
-   nwk = s:option(Value, "network")
-   --! @brief creates a network section and same named commotion profile when creating a mesh interface and assigns it to that mesh interface
-   function nwk:write(section, value)
-	  db.log("starting")
-	  network_name = uci:section("network", "interface", nil, {proto="commotion"})
-	  cnw.commotion_set(network_name)
-	  uci:set("network", network_name, "profile", network_name)
-	  uci:save("network")
-	  return self.map:set(section, self.option, network_name)
-   end
-   nwk.render = function() end
-   function nwk:parse(section)
-	  local cvalue = self:cfgvalue(section)
-	  if not cvalue then
-		 self:write(section, self.default)
-	  end
+nwk = s:option(Value, "network")
+--! @brief creates a network section and same named commotion profile when creating a mesh interface and assigns it to that mesh interface
+function nwk:write(section, value)
+   db.log("starting")
+   network_name = uci:section("network", "interface", nil, {proto="commotion"})
+   cnw.commotion_set(network_name)
+   uci:set("network", network_name, "profile", network_name)
+   uci:save("network")
+   return self.map:set(section, self.option, network_name)
+end
+nwk.render = function() end
+function nwk:parse(section)
+   local cvalue = self:cfgvalue(section)
+   if not cvalue then
+	  self:write(section, self.default)
    end
 end
 
