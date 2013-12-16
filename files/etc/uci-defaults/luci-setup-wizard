@@ -19,7 +19,4 @@ uci_set serval settings update_mdp_keyring false
 uci_set serval settings new_mdp_keyring false
 uci_commit serval
 
-#use our help icon
-cp /www/luci-static/commotion/help.png /www/luci-static/resources/cbi/help.gif
-
 exit 0
