@@ -114,8 +114,8 @@ footer nav,
 section {
   margin-left: auto;
   margin-right: auto;
-  max-width: 1500px;
-  width: 100%;
+  width: 80%;
+  text-align: center;
 }
 header nav ul:after,
 header:before, header:after,
@@ -150,6 +150,9 @@ a {
 a:hover {
   color: #66ccff;
   text-decoration: underline;
+}
+.body-content {
+	width:50%;
 }
 .pull-right {
   float: right;
