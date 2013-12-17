@@ -29,14 +29,21 @@
 	border-right:2px solid #ffffff;
 	border-left:2px solid #ffffff;
 	background:#00ffcf;
+	color: #000000;
 }
 
 #selected {
 	background: #877AED;
 }
 
-.sb-btn h3 {
+.sb-btn h3 a {
 	color:#000000;
+	font-weight: bold;
+	text-align: center;
+}
+
+#selected h3 a {
+	color:#ffffff;
 	font-weight: bold;
 	text-align: center;
 }
@@ -156,7 +163,7 @@ textarea {
 body {
   background-color: #FFFFFF;
   color: #4d4d4d;
-  font: 15px/18px Helvetica, Arial, sans-serif;
+  font: 1em/1.5em Helvetica, Arial, sans-serif;
   margin: 0;
   padding: 0;
   max-width: 100%;
@@ -220,7 +227,7 @@ a:hover {
   float: left;
 }
 p, .cbi-map-descr, .cbi-section-descr {
-  font: normal 13px/18px;
+  font: normal 1em/1.5em;
 }
 p small {
   color: #BFBFBF;
@@ -233,9 +240,10 @@ h1, h2, h3, h4, h5, h6 {
 h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
   color: #404040;
 }
-h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
+/* Source of 90% of my link colour errors -_-
+ * h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
   color: black;
-}
+} */
 h1 {
   font-size: 30px;
   line-height: 36px;
@@ -250,9 +258,6 @@ h2 {
 }
 h2 small {
   font-size: 14px;
-}
-h3, h4, h5, h6 {
-  line-height: 36px;
 }
 h3 {
   font-size: 18px;
@@ -968,6 +973,7 @@ button.btn::-moz-focus-inner, input.btn[type="submit"]::-moz-focus-inner {
  
 .status-bar {
 	overflow: auto;
+	padding: 0.5em;
 }
 
 .info-list {
@@ -981,21 +987,45 @@ button.btn::-moz-focus-inner, input.btn[type="submit"]::-moz-focus-inner {
 	margin-right: auto;
 }
 
-/* node name and mesh ip address */
 
-td.hug-right {
-text-align:right;
-}
-
-td.hug-left {
-text-align:left;
-}
 .status-bar td.key-item {
 	color:black;
 	font-weight: bold;
 	font-size:1em;
 }
 .status-bar td {
+	background-color:#FFFFFF;
+	color:#FF6699;
+	padding: 0.3em;
+	font-weight: bold;
+	font-size:1em;
+}
+
+/* node name and mesh ip address */
+
+#nodeinfo {
+	overflow: auto;
+	padding: 0.5em;
+	margin-top: 10px;
+}
+
+td.hug-right {
+text-align:right;
+}
+
+td.tdempty {
+width: 1em;
+}
+
+td.hug-left {
+text-align:left;
+}
+#nodeinfo td.key-item {
+	color:black;
+	font-weight: bold;
+	font-size:1em;
+}
+#nodeinfo td {
 	background-color:#FFFFFF;
 	color:#FF6699;
 	padding: 0.3em;
@@ -1091,6 +1121,7 @@ a.label:hover {
 a.label.notice {
   background-color: /*#66ccff*/;
   color: black;
+  padding: 3px;
 }
 .hidden {
   display: none;
@@ -1255,6 +1286,7 @@ div.cbi-value var, td.cbi-value-field var {
   margin: 0;
   height: 4px;
   background-color: #877AED;
+  margin-bottom: 2px;
 }
 .navbar-inners div {
   display: block;
