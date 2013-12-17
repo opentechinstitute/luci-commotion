@@ -37,7 +37,7 @@ a:focus {
 a:hover, a:active {
   outline: 0 none;
 }
-article, aside, details, figcaption, figure, footer, header, hgroup, nav, section {
+article, aside, details, figcaption, figure, footer, header, hgroup, topbar, section {
   display: block;
 }
 #maincontent {
@@ -107,7 +107,7 @@ footer {
   margin: 0;
   width: 100%;
 }
-header nav ul,
+header topbar ul,
 header .brand,
 footer .credits,
 footer nav,
@@ -117,14 +117,14 @@ section {
   width: 80%;
   text-align: center;
 }
-header nav ul:after,
+header topbar ul:after,
 header:before, header:after,
 footer:before, footer:after,
 section:before, section:after {
   content: "";
   display: table;
 }
-header nav ul:after,
+header topbar ul:after,
 header:after,
 footer:after,
 section:after {
@@ -161,7 +161,7 @@ a:hover {
   float: left;
 }
 p, .cbi-map-descr, .cbi-section-descr {
-  font: normal 13px/18px;
+  font: 13px;
 }
 p small {
   color: #BFBFBF;
@@ -562,20 +562,20 @@ header h1 a {
   color: #4d4d4d;
   font: 15px/17px Helvetica, Arial, sans-serif;
 }
-header nav {
+header topbar {
   background: black;
   display: block;
   margin: 0;
   list-style: none;
 }
-header nav ul {
+header topbar ul {
   text-align: center;
   padding-bottom: 28px;
 }
-header nav > ul > li, header nav > ul > li {
+header topbar > ul > li, header topbar > ul > li {
   display: inline-block;
 }
-header nav > ul a, header nav > ul a {
+header topbar > ul a, header topbar > ul a {
   display: block;
   float: none;
   padding: 0;
@@ -586,45 +586,45 @@ header nav > ul a, header nav > ul a {
   border-bottom: 2px solid transparent;
   color: #ffffff;
 }
-header nav > ul a:hover, header nav > ul a:hover {
+header topbar > ul a:hover, header topbar > ul a:hover {
   text-decoration: none;
   color: #ffffff;
   border-bottom: 2px solid #e8ff00;
 }
-header nav > ul .active > a, header nav > ul .active > a {
+header topbar > ul .active > a, header topbar > ul .active > a {
   background-color: rgba(0, 0, 0, 0.5);
 }
-header nav > ul.secondary-nav, header nav > ul.secondary-nav {
+header topbar > ul.secondary-nav, header topbar > ul.secondary-nav {
   float: right;
   margin-left: 10px;
   margin-right: 0;
 }
-header nav > ul.secondary-nav .dropdown-menu, header nav > ul.secondary-nav .dropdown-menu {
+header topbar > ul.secondary-nav .dropdown-menu, header topbar > ul.secondary-nav .dropdown-menu {
   border: 0 none;
   right: 0;
 }
-header nav > ul a.menu:hover, header nav > ul a.menu:hover, header nav > ul li.open .menu, header nav > ul li.open .menu, header nav > ul .dropdown-toggle:hover, header nav > ul .dropdown-toggle:hover, header nav > ul .dropdown.open .dropdown-toggle, header nav > ul .dropdown.open .dropdown-toggle {
+header topbar > ul a.menu:hover, header topbar > ul a.menu:hover, header topbar > ul li.open .menu, header topbar > ul li.open .menu, header topbar > ul .dropdown-toggle:hover, header topbar > ul .dropdown-toggle:hover, header topbar > ul .dropdown.open .dropdown-toggle, header topbar > ul .dropdown.open .dropdown-toggle {
   background: none repeat scroll 0 0 rgba(255, 255, 255, 0.05);
 }
-header nav > ul .dropdown-menu, header nav > ul .dropdown-menu {
+header topbar > ul .dropdown-menu, header topbar > ul .dropdown-menu {
   background-color: #333333;
 }
-header nav > ul .dropdown-menu a.menu, header nav > ul .dropdown-menu a.menu, header nav > ul .dropdown-menu .dropdown-toggle, header nav > ul .dropdown-menu .dropdown-toggle {
+header topbar > ul .dropdown-menu a.menu, header topbar > ul .dropdown-menu a.menu, header topbar > ul .dropdown-menu .dropdown-toggle, header topbar > ul .dropdown-menu .dropdown-toggle {
   color: #FFFFFF;
 }
-header nav > ul .dropdown-menu a.menu.open, header nav > ul .dropdown-menu a.menu.open, header nav > ul .dropdown-menu .dropdown-toggle.open, header nav > ul .dropdown-menu .dropdown-toggle.open {
+header topbar > ul .dropdown-menu a.menu.open, header topbar > ul .dropdown-menu a.menu.open, header topbar > ul .dropdown-menu .dropdown-toggle.open, header topbar > ul .dropdown-menu .dropdown-toggle.open {
   background: none repeat scroll 0 0 rgba(255, 255, 255, 0.05);
 }
-header nav > ul .dropdown-menu li a, header nav > ul .dropdown-menu li a {
+header topbar > ul .dropdown-menu li a, header topbar > ul .dropdown-menu li a {
   color: #ff6699;
 }
-header nav > ul .dropdown-menu li a:hover, header nav > ul .dropdown-menu li a:hover {
+header topbar > ul .dropdown-menu li a:hover, header topbar > ul .dropdown-menu li a:hover {
   color: #FFFFFF;
 }
-header nav > ul .dropdown-menu .active a, header nav > ul .dropdown-menu .active a {
+header topbar > ul .dropdown-menu .active a, header topbar > ul .dropdown-menu .active a {
   color: #ff6699;
 }
-header nav > ul .dropdown-menu .divider, header nav > ul .dropdown-menu .divider {
+header topbar > ul .dropdown-menu .divider, header topbar > ul .dropdown-menu .divider {
   background-color: #222222;
   border-color: #444444;
 }
@@ -876,7 +876,7 @@ footer a:active, footer a:hover {
 .btn:focus, .cbi-button:focus {
   outline: 1px dotted #666666;
 }
-.btn.primary, {
+.btn.primary {
   background-color: #00ffcf;
   background-image: -moz-linear-gradient(center top , #00ffcf, #000000);
   background-repeat: repeat-x;
@@ -914,9 +914,10 @@ footer a:active, footer a:hover {
   font-size: 11px;
   padding: 7px 9px;
 }
-
-
-.basic_menu .btn:hover, .cbi-button:hover {
+.cbi-map {
+	text-align:left;
+}
+.basc_menu .btn:hover, .cbi-button:hover {
   color: #333333;
   text-decoration: none;
 }
@@ -1001,24 +1002,38 @@ button.btn::-moz-focus-inner, input.btn[type="submit"]::-moz-focus-inner {
 	float:right;
 	width:45%;
 }
-
-td.hug-right {
-text-align:right;
-}
-
-td.hug-left {
-text-align:left;
-}
-.status-bar td.key-item {
-	color:black;
-	font-weight: bold;
-	font-size:30;
-}
-.status-bar td {
+.status-bar {
+	margin: 20px 5% 20px 5%;
 	background-color:#FFFFFF;
 	color:#FF6699;
 	font-weight: bold;
-	font-size:25;
+	font-size:1.4em;
+	display:block;
+	text-align:center;
+}
+
+.status-info {
+	margin: 20px 5% 20px 5%;
+	color:#FF6699;
+	font-weight: bold;
+	font-size:1em;
+	display:block;
+	text-align:left;
+}
+
+span .status-data {
+	padding-right:10px;
+	text-align:right;
+}
+
+.status-item {
+	display:inline-block;
+	margin: 5px 1% 5px 1%;
+}
+
+span.key-item {
+	color:black;
+	font-weight: bold;
 }
 
 .close {
@@ -1310,10 +1325,10 @@ div.cbi-value var, td.cbi-value-field var {
   #maincontent {
       padding: 0;
   }
-  header nav {
+  header topbar {
     padding: 5px 0;
   }
-  header nav ul, header .brand, footer .credits, footer nav, section {
+  header topbar ul, header .brand, footer .credits, footer nav, section {
     margin-left: 5px;
     width: 99%;
   }
@@ -1330,12 +1345,12 @@ div.cbi-value var, td.cbi-value-field var {
 }
 
 @media screen and (min-width: 1024px) {                                              
-  header nav ul,                                                                         
+  header topbar ul,                                                                         
   header .brand,                                                                                                                                                                                    
   footer .credits,                                                                 
   footer nav,                  
-  section {                                                               
-    max-width: 1500px;                                                                                    
+  section {
+    max-width: 1500px;
   }                                            
 }
 
@@ -1350,4 +1365,47 @@ div.cbi-value var, td.cbi-value-field var {
 .error {                                       
   color: #FF6699;                                                          
   font-weight: bold;                                                  
+}
+
+
+/*MEDIA QUERY*/
+@media only screen and (max-width : 640px) {
+
+	span.key-item {
+		color:black;
+		font-weight: bold;
+	}
+	
+	#welcome li.setup a {
+		padding: 50px 25px 0 25px;
+		background: transparent url(small_setupwiz_button.png) no-repeat top center;
+	}
+	#welcome li.upload a {
+		background: transparent url(small_upload_config.png) no-repeat top center;
+		padding: 50px 25px 0 25px;
+	}
+	#welcome li.advanced a {
+		background: transparent url(small_advanced_button.png) no-repeat top center;
+		padding: 50px 25px 0 25px;
+	}
+	.basic_menu .cbi-page-actions input.cbi-button {
+		padding: 50px 25px 0 25px;
+	}
+
+	.basic_menu .cbi-page-actions .cbi-button-save, .basic_menu .cbi-page-actions .cbi-button-apply, .basic_menu .cbi-page-actions .cbi-fake-finish, .basic_menu .cbi-page-actions  .cbi-button-finish {
+		background: transparent url(small_approve_app_button.png) no-repeat top center;
+	}
+	.basic_menu .cbi-page-actions .cbi-button-reset, .basic_menu .cbi-page-actions .inline .cbi-button-reset {
+		background: transparent url(small_commotion_delete_icon.png) no-repeat top center;	
+	}
+	.basic_menu .cbi-page-actions  .cbi-button-next, .basic_menu .cbi-page-actions .cbi-button-skip {
+		background: transparent url(small_right_arrow_button.png) no-repeat top center;
+	}
+	.basic_menu .cbi-page-actions .cbi-button-back, .basic_menu .cbi-page-actions .cbi-button-make-changes {
+		background: transparent url(small_left_arrow_button.png) no-repeat top center;
+	}
+	.basic_menu .cbi-page-actions .cbi-button-admin {
+		background: transparent url(small_advanced_button.png) no-repeat top center;
+	}
+
 }

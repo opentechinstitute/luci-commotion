@@ -1,5 +1,6 @@
-<div class="sb-container">
-   <div>
+<nav id=sidebar-nav>
+  <a href="#" id="menu-icon"></a>
+   <div class="sb-container">
 	 <%-
 local util = require "luci.util"
 local http = require "luci.http"
@@ -71,7 +72,7 @@ if #childs > 0 and category == "admin" then
 	  <div class="body-content">
 		<%else%>
 		</div>
-	  	  </div>
+	  	  </nav>
    <div class="login">
 
 <%end%>
