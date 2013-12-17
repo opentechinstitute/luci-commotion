@@ -1034,7 +1034,7 @@ text-align:left;
   -moz-border-radius: 5px;
   border-radius: 5px;
   min-height: 1.5em;
-  margin: 0 auto;
+  margin: 0 auto; 
 }
 
 .alert .close {
