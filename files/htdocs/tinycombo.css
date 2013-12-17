@@ -1336,4 +1336,21 @@ div.cbi-value var, td.cbi-value-field var {
   min-height: 1.5em;
   margin: 0 auto;                                        
 }
+
+.cbi-value-error {
+  background: #FFFFFF url(warning_icon.png) no-repeat left center;
+  color: #000000;
+  font-weight: bold;
+  padding: 3px;
+  padding-left: 10px;
+  position: relative;
+  max-width: 100%;
+  border-color: #C43C35;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  min-height: 1.5em;
+  margin: 0 auto;                                        
+}
+
 /* end error 2 */
