@@ -1,4 +1,5 @@
 .sb-container {
+	z-index:10000;
 	width: 25%;
 	margin:10px 10px 10px 10px;
 	overflow:hidden;
@@ -21,7 +22,7 @@
 	-o-box-sizing:border-box;
 	width:100%;
 	margin:0 auto;
-	padding:5px 5px;
+	padding:.5em .5em;
 	cursor:pointer;
 	border-bottom:5px solid #ffffff;
 	border-right:5px solid #ffffff;
@@ -45,6 +46,7 @@
 	color:#000000;
 	font-weight: bold;
 	text-align: center;
+	line-height: 2em;
 }
 
 p.submenutitle {
@@ -79,6 +81,8 @@ p.submenutitle a {
 	nav .sb-container, nav:active .sb-container {
 		display: none;
 		width:80%;
+		position:relative;
+		z-index:10000;
 	}
 	.basic_menu {
 		width:80%;
@@ -89,7 +93,6 @@ p.submenutitle a {
 	nav .sb-btn {
 		text-align: center;
 		width: 100%;
-		padding: 10px 0;
 		margin: 0;
 	}
 
@@ -99,5 +102,6 @@ p.submenutitle a {
 	
 	.sb-btn h3 {
 		font-size:1em;
+		line-height: 1em;		
 	}
 }
