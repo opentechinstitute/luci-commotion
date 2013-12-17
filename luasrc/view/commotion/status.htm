@@ -19,21 +19,19 @@
 
 <%+header%>
 
-<div class="status-bar">
-  <table class="info-list">
-	<tr>
-	  <td class="key-item"><%:Providing Gateway%></td>
-	  <td><%=gateway_provided%></td>
-	<tr>
-  </table>
-  <table class="iface-info">
+<div class="status-info">
+  <div class="status-item">
+	<span class="key-item"><%:Providing Gateway%></span>
+	<span class="status-data"><%=gateway_provided%></span>
+  </div>
+  <div class="status-item">
 	<%- for _,iface in pairs(ifaces) do -%>
-	<tr><td class="key-item"><%=iface.name%></td>
-	  <td><%=iface.status%></td>
-	  <td><%=iface.sec%></td>
-	  <td><%=iface.conn%> Connections</td></tr>
+	<div>
+	  <span class="key-item"><%=iface.name%></span>
+	  <span class="status-data"> <%=iface.status%> <%=iface.sec%> <%=iface.conn%> <%:Connections%> </span>
+	</div>
 	<%end%>
-  </table>
+  </div>
 </div>
 <div class="cbi-map">
   <ul id="tabs" class="cbi-tabmenu">
