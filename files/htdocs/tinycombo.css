@@ -1,3 +1,60 @@
+.sb-container {
+	width: 100%;
+	overflow:hidden;
+	float:none;
+	background:#ffffff;
+	clear: both;
+	
+}
+
+.body-content {
+	overflow: auto;
+}
+
+.login {
+	margin:10px 10% auto 10%;
+}
+
+
+.sb-btn {
+	-webkit-box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	-o-box-sizing:border-box;
+	box-sizing:border-box;
+	width:100%;
+	margin:0 auto;
+	padding:2px 2px;
+	cursor:pointer;
+	border-bottom:2px solid #ffffff;
+	border-right:2px solid #ffffff;
+	border-left:2px solid #ffffff;
+	background:#00ffcf;
+}
+
+#selected {
+	background: #877AED;
+}
+
+.sb-btn h3 {
+	color:#000000;
+	font-weight: bold;
+	text-align: center;
+}
+
+.submenutitle a {
+	font: 16px 'Helvetica', 'Arial', sans-serif;
+	color: #877AED;
+	font-weight: bold;
+}
+
+.submenu li {
+	font: 16px 'Helvetica', 'Arial', san-serif;
+	color: #877AED;
+	font-weight: bold;
+}
+
+/* cascade.css */
+
 /* If needed cleancss.com could strip ~7Kbytes from this file */
 html, body {
   margin: 0;
@@ -41,7 +98,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, nav, sectio
   display: block;
 }
 #maincontent {
-	padding-top: 10px;
+	padding-top: 5px;
 }
 sub, sup {
   font-size: 75%;
@@ -82,7 +139,7 @@ button, input[type="button"], input[type="reset"], input[type="submit"] {
   font-size: 13px;
   font-weight: bold;
   line-height: normal;
-  padding: 5px 14px 6px;
+  padding: 2px 7px 3px;
   border: 0;
 }
 button:hover, input[type="button"]:hover, input[type="reset"]:hover, input[type="submit"]:hover {
@@ -154,7 +211,7 @@ a:hover {
   text-decoration: underline;
 }
 .body-content {
-	width:50%;
+	width:100%;
 }
 .pull-right {
   float: right;
@@ -293,7 +350,7 @@ pre {
   font-size: 12px;
   line-height: 18px;
   margin: 0 0 18px;
-  padding: 8.5px;
+  padding: 4px;
   white-space: pre-wrap;
   word-wrap: break-word;
 }
@@ -301,8 +358,8 @@ form {
   margin-bottom: 18px;
 }
 fieldset {
-  margin-bottom: 9px;
-  padding-top: 9px;
+  margin-bottom: 4px;
+  padding-top: 4px;
 }
 fieldset legend {
   color: #8073cb;
@@ -311,7 +368,7 @@ fieldset legend {
   font-size: 15px;
   font-weight: bold;
   line-height: 1;
-  padding: 40px 0 0 0;
+  padding: 4em 0 0 0;
   border-bottom: 3px solid #8073cb;
   width: 100%;
 }
@@ -324,7 +381,7 @@ form .clearfix:before, form .clearfix:after, form .cbi-value:before, form .cbi-v
   display: table;
 }
 label, input, select, textarea {
-  font-size: 13px;
+  font-size: 0.6em;
   font-weight: normal;
   line-height: normal;
 }
@@ -334,7 +391,6 @@ form .cbi-value label.cbi-value-title {
   line-height: 22px;
 }
 form .cbi-value label.cbi-value-title.tippable {
-  padding-right:20px;
   width: 100%;
   background: url(help.png) no-repeat center right;
 }
@@ -343,7 +399,7 @@ form .cbi-value label.cbi-value-title.tippable {
   background: #E6E6E6;
   color: black;
   font: italic 14px/16px Helvetica, Arial, sans-serif;
-  padding: 5px;
+  padding: 3px;
   margin: 10px 0 0 0;
   display: none;
 }
@@ -373,7 +429,7 @@ input, textarea, select, .uneditable-input {
   font-size: 17px;
   height: 18px;
   line-height: 18px;
-  padding: 10px 5px;
+  padding: 0.5em 0.5em;
   margin: 10px 0 5px 0;
   width: 97%;
 }
@@ -483,7 +539,7 @@ input[disabled], select[disabled], textarea[disabled], input[readonly], select[r
   background: none repeat scroll 0 0 #F5F5F5;
   border-top: 1px solid #DDDDDD;
   margin-bottom: 18px;
-  padding: 17px 20px 18px 150px;
+  padding: 0.5em 0.5em 0.5em 1em;
   text-align: right;
 }
 .actions .secondary-action, .cbi-page-actions .secondary-action {
@@ -514,15 +570,12 @@ input[disabled], select[disabled], textarea[disabled], input[readonly], select[r
 table {
   border-collapse: collapse;
   font-size: 13px;
-  margin-bottom: 18px;
-  padding: 0;
   width: 100%;
 }
 table th, table td {
-  font: normal 13px/16px Helvetica, Arial, sans-serif;
-  padding: 15px 5px;
+  font: normal 1em Helvetica, Arial, sans-serif;
   text-align: left;
-  background-color: whitesmoke;
+  background-color: #f7f7f7;
 }
 .cbi-section-table tbody tr:nth-child(2n+1) td {
   background: #ccffff;
@@ -533,7 +586,6 @@ table th, table td {
 table th {
   font-weight: bold;
   background-color: white;
-  padding: 5px;
   vertical-align: middle;
 }
 .cbi-section-table-titles th {
@@ -562,7 +614,7 @@ header h1 {
 }
 header h1 a {
   color: #4d4d4d;
-  font: 15px/17px Helvetica, Arial, sans-serif;
+  font: 1.5em Helvetica, Arial, sans-serif;
 }
 header nav {
   background: black;
@@ -572,7 +624,7 @@ header nav {
 }
 header nav ul {
   text-align: center;
-  padding-bottom: 28px;
+  padding-bottom: 1em;
 }
 header nav > ul > li, header nav > ul > li {
   display: inline-block;
@@ -584,8 +636,7 @@ header nav > ul a, header nav > ul a {
   margin: 4px;
   text-decoration: none;
   text-transform: uppercase;
-  font: 13px/18px Helvetica, Arial, sans-serif;
-  border-bottom: 2px solid transparent;
+  font: 1.5em Helvetica, Arial, sans-serif;
   color: #ffffff;
 }
 header nav > ul a:hover, header nav > ul a:hover {
@@ -647,7 +698,7 @@ li.menu, .dropdown {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   max-width: 220px;
   min-width: 160px;
-  padding: 6px 0;
+  padding: 3px 0;
   position: absolute;
   top: 24px;
   display: none;
@@ -663,7 +714,7 @@ header .dropdown-menu a, .dropdown-menu a {
   display: block;
   font-weight: normal;
   line-height: 18px;
-  padding: 4px 15px;
+  padding: 3px 7px;
 }
 header .dropdown-menu a:hover, .dropdown-menu a:hover, header .dropdown-menu a.hover, .dropdown-menu a.hover {
   color: #404040;
@@ -716,7 +767,7 @@ header .dropdown-menu a:hover, .dropdown-menu a:hover, header .dropdown-menu a.h
   font: normal 15px/23px Helvetica, Arial, sans-serif;
   color: #6e6e6e;
   margin-right: 2px;
-  padding: 0 9px;
+  padding: 0 4px;
 }
 .cbi-tab > a:hover {
   text-decoration: none;
@@ -762,7 +813,7 @@ header .dropdown-menu a:hover, .dropdown-menu a:hover, header .dropdown-menu a.h
 }
 footer {
   margin-top: 17px;
-  padding: 0 0 17px 0;
+  padding: 0 0 8px 0;
   background: #00ffcf;
 }
 footer .pointydown {
@@ -786,7 +837,7 @@ footer a:active, footer a:hover {
 }
 #footermenu {
   list-style: none;
-  margin: 20px auto 50px;
+  margin: 2em auto;
   text-align: center;
 }
 #footermenu li {
@@ -796,25 +847,25 @@ footer a:active, footer a:hover {
 #footermenu li.admin a {
 	display: inline-block;
 	background: transparent url(advanced_point.png) no-repeat top center;
-	padding: 62px 0 0 0;
+	padding: 4em 0 0 0;
 	font-weight: bold;
 }
 #footermenu li.about a {
 	display: inline-block;
 	background: transparent url(about_point.png) no-repeat top center;
-	padding: 62px 10px 0 10px;
+	padding: 4em 1em 0 1em;
 	font-weight: bold;
 }
 #footermenu li.help a {
 	display: inline-block;
 	background: transparent url(help_point.png) no-repeat top center;
-	padding: 62px 10px 0 10px;
+	padding: 4em 1em 0 1em;
 	font-weight: bold;
 }
 #footermenu li.license a {
 	display: inline-block;
 	background: transparent url(license_point.png) no-repeat top center;
-	padding: 62px 10px 0 10px;
+	padding: 4em 1em 0 1em;
 	font-weight: bold;
 }
 
@@ -826,18 +877,18 @@ footer a:active, footer a:hover {
 }
 #welcome li.setup a {
 	display: inline-block;
-	padding: 100px 45px 0 45px;
+	padding: 3em 2em 0 2em;
 	background: transparent url(setupwiz_button.png) no-repeat top center;
 }
 #welcome li.upload a {
 	background: transparent url(upload_config.png) no-repeat top center;
 	display: inline-block;
-	padding: 100px 45px 0 45px;
+	padding: 3em 2em 0 2em;
 }
 #welcome li.advanced a {
 	background: transparent url(advanced_button.png) no-repeat top center;
 	display: inline-block;
-	padding: 100px 45px 0 45px;
+	padding: 3em 2em 0 2em;
 }
 
 
@@ -872,6 +923,8 @@ footer a:active, footer a:hover {
   background-repeat: repeat-x;
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 }
+
+/* ^ */
 .btn, .cbi-button {
 }
 .cbi-button-remove {
@@ -914,13 +967,13 @@ footer a:active, footer a:hover {
   opacity: 0.65;
 }
 .btn.large {
-  font-size: 15px;
+  font-size: 0.75em;
   line-height: normal;
-  padding: 9px 14px;
+  padding: 0.5em 0.75em;
 }
 .btn.small {
-  font-size: 11px;
-  padding: 7px 9px;
+  font-size: 0.5em;
+  padding: 0.5em;
 }
 
 
@@ -935,12 +988,12 @@ footer a:active, footer a:hover {
 .basic_menu .cbi-page-actions {
   background: none repeat scroll 0 0 #FFFFFF;
   border-top: none;
-  padding: 5px 5px 5px 150px;
+  padding: 0.3em 0.3em 0.3em 3em;
 }
 
 .basic_menu .cbi-page-actions input.cbi-button {
 	display: inline-block;
-	padding: 100px 45px 0 45px;
+	padding: 3em 2em 0 2em;
 	font-weight: bold;
 	box-shadow: none;
 }
@@ -968,27 +1021,22 @@ footer a:active, footer a:hover {
 .Startup .cbi-section-table input.cbi-input-apply, .Startup .cbi-section-table input.cbi-button-apply {
   background-image: url("./resources/cbi/apply.gif");
   background-position: 7px 4px;
-  padding: 3px 9px 3px 27px;
 }
 .Processes .cbi-section-table input.cbi-input-reload, .Startup .cbi-section-table input.cbi-input-reload {
   background-image: url("./resources/cbi/reload.gif");
   background-position: 7px 4px;
-  padding: 3px 9px 3px 27px;
 }
 .Processes .cbi-section-table input.cbi-input-remove, .Processes .cbi-section-table div.cbi-section-remove input, .Startup .cbi-section-table input.cbi-input-remove, .Startup .cbi-section-table div.cbi-section-remove input {
   background-image: url("./resources/cbi/remove.gif");
   background-position: 7px 4px;
-  padding: 3px 9px 3px 27px;
 }
 .Processes .cbi-section-table input.cbi-input-reset, .Processes .cbi-section-table input.cbi-button-reset, .Startup .cbi-section-table input.cbi-input-reset, .Startup .cbi-section-table input.cbi-button-reset {
   background-image: url("./resources/cbi/reset.gif");
   background-position: 7px 4px;
-  padding: 3px 9px 3px 27px;
 }
 .Startup .cbi-section-table input.cbi-input-save, .Startup .cbi-section-table input.cbi-button-save {
   background-image: url("./resources/cbi/save.gif");
   background-position: 7px 4px;
-  padding: 3px 9px 3px 27px;
 }
 :root .alert, *:root .btn {
 }
@@ -1002,12 +1050,14 @@ button.btn::-moz-focus-inner, input.btn[type="submit"]::-moz-focus-inner {
 }
 
 .info-list {
-	float:left;
-	width:25%;
+	margin-left: auto;
+	margin-right: auto;
+	width: 13em;
 }
 .iface-info {
-	float:right;
-	width:45%;
+	width:100%;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 td.hug-right {
@@ -1032,9 +1082,9 @@ text-align:left;
 .close {
   color: #000000;
   float: right;
-  font-size: 20px;
+  font-size: 1.5em;
   font-weight: bold;
-  line-height: 13.5px;
+  line-height: 1.75em;
   opacity: 0.25;
 }
 .close:hover {
@@ -1053,14 +1103,14 @@ text-align:left;
   background: #E8FF00 url(warning_icon.png) no-repeat left center;
   max-width: 400px;
   margin: 0 auto;
-  padding: 5px 5px 5px 100px;
+  padding: 0.3em 0.3em 0.3em 3em;
   min-height: 70px;
 }
 .errorbox {
   background: #00ffcf url(status_message_smile.png) no-repeat 10px center;
   max-width: 455px;
   margin: 0 auto;
-  padding: 10px 10px 10px 45px;
+  padding: 1em 1em 1em 2em;
   min-height: 13px;
 }
 .alert .close {
@@ -1091,7 +1141,7 @@ text-align:left;
 .label {
   background-color: #BFBFBF;
   color: #000000;
-  font-size: 9.75px;
+  font-size: 0.75em;
   font-weight: bold;
   padding: 1px 3px 2px;
   text-transform: uppercase;
@@ -1124,8 +1174,8 @@ a.label.notice {
   border: 1px solid #CCCCCC;
   color: #808080;
   display: inline-block;
-  font-size: 13px;
-  line-height: 18px;
+  font-size: 1em;
+  line-height: 1.25em;
 }
 #xhr_poll_status {
   cursor: pointer;
@@ -1134,7 +1184,7 @@ form.inline {
   display: inline;
 }
 header .pull-right {
-  padding-top: 8px;
+  padding-top: 0.5em;
 }
 #modemenu li:last-child span.divider {
   display: none;
@@ -1164,7 +1214,7 @@ table.cbi-section-table td.cbi-section-table-cell {
 }
 .cbi-value-description {
   display: inline;
-  font: normal 14px/16px Helvetica, Arial, sans-serif;
+  font: normal 1em Helvetica, Arial, sans-serif;
   color: black;
 }
 .cbi-value-description img {
@@ -1322,8 +1372,7 @@ div.cbi-value var, td.cbi-value-field var {
     padding: 5px 0;
   }
   header nav ul, header .brand, footer .credits, footer nav, section {
-    margin-left: 5px;
-    width: 99%;
+    width: 100%;
   }
   .tabs, .cbi-tabmenu,
   input, textarea, select, .uneditable-input {
