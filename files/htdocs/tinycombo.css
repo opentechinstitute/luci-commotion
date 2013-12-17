@@ -944,6 +944,8 @@ footer a:active, footer a:hover {
   background-image: url("./resources/cbi/apply.gif");
   background-position: 7px 4px;
 }
+
+/* this reload.gif appears when the cbi page should say something like "show password" */
 .Processes .cbi-section-table input.cbi-input-reload, .Startup .cbi-section-table input.cbi-input-reload {
   background-image: url("./resources/cbi/reload.gif");
   background-position: 7px 4px;
