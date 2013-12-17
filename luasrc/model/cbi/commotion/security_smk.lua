@@ -35,6 +35,13 @@ toggle.default = toggle.disabled
 toggle.title = nil
 
 --Make flag actually check for section.changed and set that flag for the confirmation page to work
+
+--[[
+config LoadPlugin
+    option sid 'A6D29C35D0409F176B22AEF2FAC447572540F39D8AEB8C48C107F9A11D224B06'
+    option servalpath '/etc/commotion/keys.d/mdp'
+]]--
+
 --TODO make this a commotion function. It is repeated in multiple cbi models.
 function toggle.remove(self, section)
    value = self.map:get(section, self.option)
@@ -65,6 +72,8 @@ function uploader.write(self, section, value)
    if key == nil or string.len(key) ~= 64 then
 	  self:add_error(section, translate("The file supplied is not a proper keyring, or is password protected. Please upload another key."))
    else
+	  --set key variable for mdp
+	  self.map:set(section, "mdp_sid", key)
 	  return self.map:set(section, "new_mdp_keyring", "true")
    end
 end

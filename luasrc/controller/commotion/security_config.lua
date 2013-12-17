@@ -22,6 +22,6 @@ function index()
 
 	  entry({"admin", "commotion", "security", "passwords"}, cbi("commotion/security_pass", {hideapplybtn=true, hideresetbtn=true}), translate("Passwords"), 50).subsection=true
 
-	  --[[	  entry({"admin", "commotion", "security", "shared_mesh_keychain"}, cbi("commotion/security_smk", {hideapplybtn=true, hideresetbtn=true}), translate("Shared Mesh Keychain"), 60).subsection=true ]]--
+	  entry({"admin", "commotion", "security", "shared_mesh_keychain"}, cbi("commotion/security_smk", {hideapplybtn=true, hideresetbtn=true}), translate("Shared Mesh Keychain"), 60).subsection=true 
 end
 
