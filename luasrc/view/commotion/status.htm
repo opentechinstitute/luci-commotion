@@ -20,15 +20,14 @@
 <%+header%>
 
 <div class="status-info">
-  <div class="status-item">
+  <div class="status-list">
 	<span class="key-item"><%:Providing Gateway%></span>
 	<span class="status-data"><%=gateway_provided%></span>
-  </div>
-  <div class="status-item">
+	<br /><br /><br />
 	<%- for _,iface in pairs(ifaces) do -%>
 	<div>
 	  <span class="key-item"><%=iface.name%></span>
-	  <span class="status-data"> <%=iface.status%> <%=iface.sec%> <%=iface.conn%> <%:Connections%> </span>
+	  <span class="status-data">(<%=iface.status%>) (<%=iface.sec%>) (<%=iface.conn%> <%:Connections%>) </span>
 	</div>
 	<%end%>
   </div>
