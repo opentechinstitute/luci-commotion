@@ -791,7 +791,6 @@ footer a:active, footer a:hover {
 	font-weight: bold;
 }
 
-
 #welcome li {
 	display: inline-block;
 	font-weight: bold;
@@ -813,7 +812,7 @@ footer a:active, footer a:hover {
 	padding: 3em 2em 0 2em;
 }
 
-
+/* buttons, styles likely from Flat UI and heavily modified */
 .btn.danger, .alert.danger, .btn.danger:hover, .alert.danger:hover, .btn.error, .alert.error, .btn.error:hover, .alert.error:hover, .btn.success, .alert.success, .btn.success:hover, .alert.success:hover, .btn.info, .alert.info, .btn.info:hover, .alert.info:hover {
   color: #FFFFFF;
 }
@@ -846,7 +845,6 @@ footer a:active, footer a:hover {
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 }
 
-/* ^ */
 .btn, .cbi-button {
 }
 .cbi-button-remove {
@@ -897,7 +895,6 @@ footer a:active, footer a:hover {
   font-size: 0.5em;
   padding: 0.5em;
 }
-
 
 .basic_menu .btn:hover, .cbi-button:hover {
   color: #333333;
