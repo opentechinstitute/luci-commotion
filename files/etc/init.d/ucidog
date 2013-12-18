@@ -13,7 +13,7 @@ reload() {
 	local conffile=/etc/nodogsplash/nodogsplash.conf
 	#disable/enable nodogsplash
 	local enable=$(uci_get nodogsplash settings enable)
-	if [ "$enable" == 1 ]; then #this might come back as a string and not as a intiger. Check and fix that.
+	if [ "$enable" == '1' ]; then #this might come back as a string and not as a intiger. Check and fix that.
 		/etc/init.d/nodogsplash disable  || return 0
 	else
 		/etc/init.d/nodogsplash enable  || return 0

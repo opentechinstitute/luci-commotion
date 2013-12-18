@@ -31,7 +31,6 @@ m.on_after_save = ccbi.conf_page
 enable = m:section(TypedSection, "settings", translate("On/Off"), translate("Users can be redirected to a “welcome page” when they first connect to this node."))
 enable.anonymous = true
 toggle = enable:option(Flag, "enable")
---TODO add /etc/init.d/script to run "ndsctl disable or enable" on this value.
 
 ifaces = m:section(TypedSection, "interfaces", translate("For which network connection should this welcome page be active?"), translate("Select list of Aps and /or defined networks on this node's interfaces Auto select the first AP interface if configured."))
 ifaces.anonymous = true
