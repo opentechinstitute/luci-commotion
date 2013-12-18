@@ -105,7 +105,7 @@ a:focus {
 a:hover, a:active {
   outline: 0 none;
 }
-article, aside, details, figcaption, figure, footer, header, hgroup, nav, section {
+article, aside, details, figcaption, figure, footer, header, topbar, hgroup, nav, section {
   display: block;
 }
 #maincontent {
@@ -177,6 +177,7 @@ footer {
   margin: 0;
   width: 100%;
 }
+header topbar ul,
 header nav ul,
 header .brand,
 footer .credits,
@@ -187,6 +188,7 @@ section {
   width: 80%;
   text-align: center;
 }
+header topbar ul:after,
 header nav ul:after,
 header:before, header:after,
 footer:before, footer:after,
@@ -194,6 +196,7 @@ section:before, section:after {
   content: "";
   display: table;
 }
+header topbar ul:after,
 header nav ul:after,
 header:after,
 footer:after,
@@ -625,19 +628,23 @@ header h1 a {
   color: #4d4d4d;
   font: 1.5em Helvetica, Arial, sans-serif;
 }
-header nav {
+header topbar, header nav {
   background: black;
   display: block;
   margin: 0;
+  padding-top:1.5em;
   list-style: none;
 }
+header nav ul, 
 header nav ul {
   text-align: center;
   padding-bottom: 1em;
 }
+header topbar > ul > li, header topbar > ul > li,
 header nav > ul > li, header nav > ul > li {
   display: inline-block;
 }
+header topbar > ul a, header topbar > ul a,
 header nav > ul a, header nav > ul a {
   display: block;
   float: none;
@@ -648,14 +655,17 @@ header nav > ul a, header nav > ul a {
   font: 1.5em Helvetica, Arial, sans-serif;
   color: #ffffff;
 }
+header topbar > ul a:hover, header topbar > ul a:hover,
 header nav > ul a:hover, header nav > ul a:hover {
   text-decoration: none;
   color: #ffffff;
   border-bottom: 2px solid #e8ff00;
 }
+header topbar > ul .active > a, header topbar > ul .active > a,
 header nav > ul .active > a, header nav > ul .active > a {
   background-color: rgba(0, 0, 0, 0.5);
 }
+header topbar > ul.secondary-nav, header topbar > ul.secondary-nav,
 header nav > ul.secondary-nav, header nav > ul.secondary-nav {
   float: right;
   margin-left: 10px;
