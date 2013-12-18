@@ -11,6 +11,10 @@ module "luci.commotion.network"
 
 local network = {}
 
+--! @name replacements
+--! @brief A list of uci to commotiond values that correspond
+local replacements = {key="wpakey", encryption="wpa"}
+
 --! @name list_ifaces
 --! @brief iterates over all zones in the network uci config and then uses ubus to gather network interfaces that use that zone.
 --! @return an array with matched zone names and interface names. Arrays are mirrors of each other with one keyed by interface names and another keyed by zone name.
@@ -66,15 +70,64 @@ end
 --! @brief a local function which currently calls the commotiond command line function. This will hopfully be replaces with lua/c bindings later.
 --! param cmd string The command to append to commotiond
 --! param err bool true if you want to receive the error code nil if you wan the standard output
---! @return the standard out of the commotiond call
+--! @return a table containing the output of the commotiond call
 function network.commotiond(cmd, err)
+   local json = require "luci.json"
    if err then
 	  return sys.call("commotiond "..cmd)
    else
-	  return sys.exec("commotiond "..cmd)
+	  json_obj =  sys.exec("commotiond "..cmd)
+	  return json.decode(obj)
    end
 end
 
+local val_check = {
+   ssid=nil,
+   domain=nil,
+   dns=nil,
+   bssid=nil,
+   channel=nil,
+   dns=nil,
+   mode=nil,
+   ip=nil,
+   netmask=nil,
+   wpa=nil,
+   wpakey=nil,
+}
+ 
+--! @name c_check
+--! @TODO THIS WILL ALWAYS RETURN NIL!!!!
+--! @brief a function that does value and error checking and option replacement 
+--! param op string: the option name 
+--! param val string: the value associated with an option
+--! @return option and value or nil if the value is incorrectly formatted.
+function network.c_check(option, value)
+   if replacements.option then
+	  option = replacements.option
+   end
+   if val_check.valuevalue then
+	  if value:match(val_check.value) then
+		 return option, value
+	  else
+		 return nil
+	  end
+   else
+	  return option, value
+   end
+end
+
+--! @name cerr
+--! @brief a function that checks for error returns in a commotion set
+--! param set a decoded data structure returned from commotiond
+--! param key a key you would like to exstract from the set
+--! @return false, and the error message if error or the value if not false.
+function network.cerr(set, key)
+   if set['error'] then
+	  return false, set['error']
+   else
+	  return set[key]
+   end
+end
 
 --! @name commotion_set
 --! @brief finds, or creates a commotion profile and sets values
@@ -82,100 +135,58 @@ end
 --! param options table options in key/value pairs {option="value", option2="value2"}
 --! @return boolean value stating success or failure and errors if any on failure
 function network.commotion_set(name, options)
-   return true --! TODO ALERT this renders this function useless until commotiond functionality is enabled.
---[[   local function setop(opts, err, pr)
-	  for i,x in pairs(opts) do
-		 if not network.commotiond("set "..pr.." "..i.." "..x, true) then
-			table.insert(err, {i,x})
+   local errors = {}
+   --! This function runs command and adds to the error table being created
+   local function setop(opts, err, pr)
+	  local op, val
+	  for op,val in pairs(opts) do
+		 op, val = network.c_check(op, val)
+		 if op then
+			local operation = network.commotiond("set "..pr.." "..i.." "..x)
+			if operation.error then
+			   table.insert(err, {i,operation.error})
+			end
 		 end
 	  end
 	  return err
    end
-   local profiles = network.commotiond("profiles", true)
-   local profile = nil
-   local errors = {}
-   for _,prof in ipairs(prof) do
-	  if prof == name then
-		 profile = name
-	  end
-   end
+   local profiles = network.commotiond("profiles")
+   local profile
+   profile = utils.contains(profiles, name)
    if profile then
 	  errors = setop(options, errors, profile)
    else
-	  local create = network.commotiond(name, true)
-	  if create then
+	  local create = network.commotiond(name)
+	  if not create.error then
 		 errors = setop(options, errors, name)
 	  else
-		 table.insert(errors, {"profile", "created"}
+		 table.insert(errors, {"profile", create.error})
 	  end
    end
    if errors then
-	  return nil, errors
+	  return false, errors
    else
 	  return true
    end
-   return true]]--
 end
 
 --! @name nodeid
---! @brief finds, or creates the nodeid 
+--! @brief finds, or creates the nodeid
 --! param name string name of profile
 --! param options table options in key/value pairs {option="value", option2="value2"}
 --! @return boolean value stating success or failure and errors if any on failure
 function network.nodeid(new_id)
-   return "abcdefghijklmnopqrstuvwxyznowiknowmyabcs"
-   --! TODO ALERT this renders this function useless until commotiond functionality is enabled.
---[[   if new_id then
-	  return network.commotiond("nodeid "..new_id, true)
+   if new_id then
+	  if #new_id <= 10  and new_id:match("^[0-9]+$") then
+		 id_set = network.commotiond("nodeid "..new_id)
+		 return network.cerr(id_set, 'id')
+	  else
+		 return false, "Node id must be less than 10 charicters and composed of only numbers."
    else
-	  return network.commotiond("nodeid")
-   end	  ]]--
+	  cur_id = network.commotiond("nodeid")
+	  return network.cerr(id_set, 'id')
+   end
 end
-
---[[
-
-Commotiond commands to add functionality for
-   
-up <iface> <profile> -same as before
-down <iface> -same as before
-status <iface> -same as before
-state <iface> <property> -same as before
-profiles -replaces list_profiles
-set <profile> <property> <value> -allows you to set profile values
-get <profile> <property> <value> -allows you to get profile values
-save <profile> <file> -allows you to save a profile to a new file in the
-profiles.d directory
-new <profile> -allows you to create a new profile
-delete <profile> -allows you to delete a profile
-ipgen <ip address> <netmask> -allows you to generate an arbitrary IP
-address from the nodeid
-nodeid <id> -run without arguments, prints the nodeid. Can also set the
-nodeid.
-]]--
-
---[[
-   And here's the new config file:
-{
-  "ssid": "commotionwireless.net",
-  "bssid": "02:CA:FF:EE:BA:BE",
-  "bssidgen": "true"
-  "channel": "5",
-  "type": "mesh",
-  "dns": "8.8.8.8",
-  "domain": "mesh.local",
-  "ipgen": "true",
-  "ipgenmask": "255.0.0.0",
-  "mode": "adhoc",
-  "ip": 100.64.0.0,
-  "netmask": "255.192.0.0",
-  "wpa": "true",
-  "wpakey": "c0MM0t10n!r0cks",
-  "servald": "false",
-  "servalsid": "",
-  "announce": "true"
-}
-]]--
-
 
 --! @name list_ifaces
 --! @brief iterates over all zones in the network uci config and then uses ubus to gather network interfaces that use that zone.
