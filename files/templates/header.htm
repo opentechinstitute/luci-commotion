@@ -71,8 +71,13 @@ You may obtain a copy of the License at
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=yes" />
     <title><%=striptags( hostname .. ( (node and node.title) and ' - ' .. translate(node.title) or '')) %> - LuCI</title>
-    <link rel="stylesheet" href="<%=media%>/cascade.css">
-	<link rel="stylesheet" href="<%=media%>/sidebar.css">
+
+<!-- Stylesheets for mobile and small tablets -->
+    <link rel="stylesheet" href="<%=media%>/tinycombo.css">
+
+<!-- Stylesheets for desktop and large tablets -->
+    <link rel="stylesheet" href="<%=media%>/cascade.css" media="screen and (min-device-width:768px) and (min-width:768px), projection">
+	<link rel="stylesheet" href="<%=media%>/sidebar.css" media="screen and (min-device-width:768px) and (min-width:768px), projection">
     <link rel="shortcut icon" href="<%=media%>/favicon.ico">
     <% if node and node.css then %>
     <link rel="stylesheet" href="<%=resource%>/<%=node.css%>">
@@ -111,11 +116,15 @@ You may obtain a copy of the License at
 	 -%>
 
 	<div class="collapsible">
-	 <div class="status-bar">
-	 <div class="status-item"><span class="key-item"><%:Node name%>:</span><span><%=hostname%></span></div>
-	 <div class="status-item"><span class="key-item"><%:Mesh IP-Address%>:</span><span><%=mesh_ip%></span></div>
-	 </div>
-	 
+	 <table id="nodeinfo">
+	 <tr>
+      <td class="key-item hug-right">Node name:</td><td class="hug-left"><%=hostname%></td>
+      <td class="tdempty"></td>
+	  <td class="key-item hug-right">Mesh IP-Address:</td><td class="hug-left"><%=mesh_ip%></td>
+	 </tr>
+	 </table>
+    </div>
+
 	  <%include("themes/commotion/unsaved_changes", {tree=tree, controller=controller, category=category})%>
 
     <div class="navbar-inners"><div class="color0"></div><div class="color1"></div><div class="color2"></div><div class="color3"></div><div class="color4"></div></div>
