@@ -29,7 +29,7 @@ if not SW.status() then
    m.on_after_save = ccbi.conf_page
 end
 
-p = m:section(NamedSection, "plug")
+p = m:section(NamedSection, "wired")
 p.anonymous = true
 
 config = p:option(ListValue, "dhcp", translate("Gateway Configuration"))
