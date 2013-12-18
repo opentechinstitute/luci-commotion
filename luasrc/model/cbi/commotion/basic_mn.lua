@@ -31,11 +31,12 @@ if not SW.status() then
    m.on_after_save = ccbi.conf_page
 end
 
-function m.on_before_commit()
+--[[function m.on_before_commit()
    if SW.status() then
+	  db.log("set commotion values here")
 	  cnw.commotion_set("commotionMesh", {values="mapvalues here"}) --TODO make commotion set actually work
    end
-end
+   end]]--
 
 s = m:section(TypedSection, "wifi-iface")
 s.optional = false
