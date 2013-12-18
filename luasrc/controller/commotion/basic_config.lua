@@ -116,7 +116,7 @@ function start_setup()
    local uci = require "luci.model.uci".cursor()
    local disp = require "luci.dispatcher"
    local http = require "luci.http"
-   uci:section("wireless", "wifi-iface", "commotionAP", {mode="ap", network="client"})
+   uci:section("wireless", "wifi-iface", "commotionAP", {mode="ap", network="lan"})
    uci:section("wireless", "wifi-iface", "commotionMesh", {mode="adhoc"})
    uci:save("wireless")
    uci:commit("wireless")

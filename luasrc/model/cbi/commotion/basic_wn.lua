@@ -47,7 +47,7 @@ if not SW.status() then
    end
    
    nwk = s:option(Value, "network")
-   nwk.default = "client"
+   nwk.default = "lan"
    nwk.render = function() end
    nwk.parse = function(self, section, novld)
 	  if self:cfgvalue(section) ~= nwk.default then
