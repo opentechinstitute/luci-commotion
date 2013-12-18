@@ -56,10 +56,10 @@ reload() {
 	   #have serval make a new key
 	   export SERVALINSTANCE_PATH=$mdp_keyring
 	   serval-client stop && sleep 1
-	   serval-client start
+	   new_sid=serval-client start
 	   #get sid from serval
 	   #new_mdp_sid=????????????
-	   uci_set "olsrd" "mdpplugin" "sid" $new_mdp_sid
+	   uci_set "olsrd" "mdpplugin" "sid" $new_sid
 	   uci_set "olsrd" "mdpplugin" "servalpath" $mdp_keyring
 	fi
 	uci_set serval settings new_mdp_keyring 'false'

@@ -35,28 +35,22 @@ toggle.default = toggle.disabled
 toggle.title = nil
 
 --Make flag actually check for section.changed and set that flag for the confirmation page to work
-
---[[
-config LoadPlugin
-    option sid 'A6D29C35D0409F176B22AEF2FAC447572540F39D8AEB8C48C107F9A11D224B06'
-    option servalpath '/etc/commotion/keys.d/mdp'
-]]--
-
---TODO make this a commotion function. It is repeated in multiple cbi models.
-function toggle.remove(self, section)
-   value = self.map:get(section, self.option)
-   if value ~= self.disabled then
-	  self.section.changed = true
-	  return self.map:del(section, self.option)
-   end
-end
+toggle.remove = ccbi.flag_removed
 
 function toggle.write(self, section, fvalue)
-   db.log("toggle write function")
-   db.log(fvalue)
    value = self.map:get(section, self.option)
+   local sid = nil
+   local keyring = nil
    if value ~= fvalue then
 	  self.section.changed = true
+	  keyring = uci:get("serval", "settings", "olsrd_mdp_keyring")
+	  sid = luci.sys.exec("SERVALINSTANCE_PATH="..keyring.." serval-client keyring list")
+	  if not sid then
+		 sid = luci.sys.exec("SERVALINSTANCE_PATH="..keyring.." serval-client start")
+	  end
+	  --set olsrd section settings
+	  uci:section("olsrd","LoadPlugin","mdpplugin", {sid=sid, servalpath=keyring, library="olsrd_mdp.so.0.1"})
+	  uci:save("olsrd")
 	  return self.map:set(section, self.option, value)
    end
 end
@@ -67,7 +61,7 @@ uploader.anonymous = true
 
 --! TODO test this function to ensure that it checks for a good key and then writes the new_mdp_keyring value to true if so.
 function uploader.write(self, section, value)
-   local keyring = luci.sys.exec("SERVALINSTANCE_PATH=/lib/uci/upload/ servald keyring list")
+   local keyring = luci.sys.exec("SERVALINSTANCE_PATH=/lib/uci/upload/ serval-client keyring list")
    local key = string.match(keyring, "^(%w*):%w*:")
    if key == nil or string.len(key) ~= 64 then
 	  self:add_error(section, translate("The file supplied is not a proper keyring, or is password protected. Please upload another key."))
@@ -77,7 +71,6 @@ function uploader.write(self, section, value)
 	  return self.map:set(section, "new_mdp_keyring", "true")
    end
 end
-
 
 dwnld = s:option(Button, "_dummy", translate("Download Shared Mesh Keychain"), translate("Download a copy of this device's existing Shared Mesh Keychain. Use this feature to make a backup of this file, or to share it with people putting up new devices on your Commotion mesh network."))
 dwnld.anonymous = true
