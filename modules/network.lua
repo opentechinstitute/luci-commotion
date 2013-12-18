@@ -4,8 +4,10 @@ local utils = require "luci.util"
 local sys = require "luci.sys"
 local uci = require "luci.model.uci"
 local ubus = require "ubus"
+local dt = require "luci.cbi.datatypes"
+local db = require "luci.commotion.debugger"
 
-local string, table, tostring, pairs = string, table, tostring, pairs
+local string, table, tostring, pairs, require = string, table, tostring, pairs, require
 local print = print
 module "luci.commotion.network"
 
@@ -72,41 +74,50 @@ end
 --! param err bool true if you want to receive the error code nil if you wan the standard output
 --! @return a table containing the output of the commotiond call
 function network.commotiond(cmd, err)
+   db.log("commotiond")
+   db.log(cmd)
+   db.log(err)
    local json = require "luci.json"
    if err then
-	  return sys.call("commotiond "..cmd)
+	  return sys.call("commotion "..cmd)
    else
-	  json_obj =  sys.exec("commotiond "..cmd)
-	  return json.decode(obj)
+	  json_obj =  sys.exec("commotion "..cmd)
+	  db.log("commotion returns "..tostring(json_obj))
+	  return json.decode(json_obj)
+   end
+end
+
+
+--! @name check_channel
+--! @brief  checks if a channel is appropriate 
+local function check_channel(x)
+   db.log("channels")
+   db.log(x)
+   local channels = {1,2,3,4,5,6,7,8,9,10,11,36,40,44,48,149,153,157,161,165}
+   if util.table.contains(channels, x) then
+	  return true
    end
 end
 
 local val_check = {
-   ssid=nil,
-   domain=nil,
-   dns=nil,
-   bssid=nil,
-   channel=nil,
-   dns=nil,
-   mode=nil,
-   ip=nil,
-   netmask=nil,
-   wpa=nil,
-   wpakey=nil,
+   bssid=dt.macaddr,
+   channel=check_channel,
+   ip=dt.ipaddr,
+   wpakey=dt.wpakey,
 }
- 
+
 --! @name c_check
---! @TODO THIS WILL ALWAYS RETURN NIL!!!!
 --! @brief a function that does value and error checking and option replacement 
 --! param op string: the option name 
 --! param val string: the value associated with an option
 --! @return option and value or nil if the value is incorrectly formatted.
 function network.c_check(option, value)
+   db.log("ccheck")
    if replacements.option then
 	  option = replacements.option
    end
-   if val_check.valuevalue then
-	  if value:match(val_check.value) then
+   if val_check.value then
+	  if val_check.value(value) then
 		 return option, value
 	  else
 		 return nil
@@ -122,6 +133,9 @@ end
 --! param key a key you would like to exstract from the set
 --! @return false, and the error message if error or the value if not false.
 function network.cerr(set, key)
+   db.log("cerr")
+   db.log(set)
+   db.log(key)
    if set['error'] then
 	  return false, set['error']
    else
@@ -135,6 +149,7 @@ end
 --! param options table options in key/value pairs {option="value", option2="value2"}
 --! @return boolean value stating success or failure and errors if any on failure
 function network.commotion_set(name, options)
+   db.log("network commotion set")
    local errors = {}
    --! This function runs command and adds to the error table being created
    local function setop(opts, err, pr)
@@ -156,10 +171,11 @@ function network.commotion_set(name, options)
    if profile then
 	  errors = setop(options, errors, profile)
    else
-	  local create = network.commotiond(name)
+	  local create = network.commotiond("new "..name)
 	  if not create.error then
 		 errors = setop(options, errors, name)
 	  else
+		 local save = network.commotiond("save "..name)
 		 table.insert(errors, {"profile", create.error})
 	  end
    end
@@ -176,15 +192,17 @@ end
 --! param options table options in key/value pairs {option="value", option2="value2"}
 --! @return boolean value stating success or failure and errors if any on failure
 function network.nodeid(new_id)
+   db.log("nodeid")
    if new_id then
 	  if #new_id <= 10  and new_id:match("^[0-9]+$") then
 		 id_set = network.commotiond("nodeid "..new_id)
 		 return network.cerr(id_set, 'id')
 	  else
 		 return false, "Node id must be less than 10 charicters and composed of only numbers."
+	  end
    else
 	  cur_id = network.commotiond("nodeid")
-	  return network.cerr(id_set, 'id')
+	  return network.cerr(cur_id, 'id')
    end
 end
 
