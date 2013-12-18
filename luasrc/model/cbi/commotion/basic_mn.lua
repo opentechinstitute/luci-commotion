@@ -59,7 +59,7 @@ nwk = s:option(Value, "network")
 --! @brief creates a network section and same named commotion profile when creating a mesh interface and assigns it to that mesh interface
 function nwk:write(section, value)
    db.log("starting")
-   network_name = uci:section("network", "interface", nil, {proto="commotion"})
+   network_name = uci:section("network", "interface", name:formvalue(section), {proto="commotion"}) --! @TODO Check to see if formvalue section returns?!?!?
    cnw.commotion_set(network_name)
    uci:set("network", network_name, "profile", network_name)
    uci:save("network")
