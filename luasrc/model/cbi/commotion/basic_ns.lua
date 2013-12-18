@@ -42,11 +42,24 @@ local hname = shn:option(Value, "hostname", translate("Node Name"), translate("T
 hname.datatype = "hostname"
 
 function hname.write(self, section, value)
-   local node_id = cnet.nodeid()
-   local new_hn = value.."-"..string.sub(node_id, 1, 10)
-   luci.sys.hostname(new_hn)
-   return self.map:set(section, "hostname", new_hn)
+   local node_id = '1234'
+   --local node_id = cnet.nodeid() --@TODO REIMPLEMENT THIS!!!!!!! 
+   --check if the nodeid is the same and don't write hostname if it is. This means that if a person changes the hostname, but appends the old nodeif to the end of it the hostname will not change. But who in their right mind would do that.
+   hn, nid = value:match("(.-)%-([%d])*$")
+   if nid and nid == node_id then
+	  return true
+   else
+	  local new_hn = value.."-"..string.sub(node_id, 1, 10)
+	  luci.sys.hostname(new_hn)
+	  return self.map:set(section, self.option, new_hn)
+   end
 end
+
+local egg = shn:option(DummyValue, "_dummy1", translate("HI ANDREW!"))
+egg:depends("hostname", "meat")
+local egg2 = shn:option(DummyValue, "_dummy2", translate("Hail to the King!"))
+egg2:depends("hostname", "jheretic")
+
 
 
 --PASSWORDS
@@ -88,10 +101,13 @@ pw2.password = true
 function pw1.validate(self, value, section)
    local v1 = value
    local v2 = pw2:formvalue(section)
-   --local v2 = http.formvalue(string.gsub(self:cbid(section), "%d$", "2"))
    if root_pass_check() == true then
 	  if v1 and v2 and #v1 > 0 and #v2 > 0 then
 		 if v1 == v2 then
+			if luci.sys.user.setpasswd(luci.dispatcher.context.authuser, v1) == 0 then
+			   uci:set("setup_wizard", "passwords", "admin_pass", 'changed')
+			   uci:save("setup_wizard")
+			end
 			if m.message == nil then
 			   m.message = translate("Password successfully changed!")
 			end
@@ -99,11 +115,13 @@ function pw1.validate(self, value, section)
 		 else
 			m.message = translate("Error, no changes saved. See below.")
 			self:add_error(section, translate("Given confirmation password did not match, password not changed!"))
+			m.save = false
 			return nil
 		 end
 	  else
 		 m.message = translate("Error, no changes saved. See below.")
 		 self:add_error(section, translate("Unknown Error, password not changed!"))
+		 m.save = false
 		 return nil
 	  end
    end
