@@ -818,6 +818,10 @@ footer a:active, footer a:hover {
 }
 
 
+#welcome {
+	margin:auto;
+}
+
 #welcome li {
 	display: inline-block;
 	font-weight: bold;
