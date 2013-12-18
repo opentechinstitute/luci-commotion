@@ -70,7 +70,7 @@ function pw_sec_opt(pw_s, iface)
    enc.default = enc.disabled --default must == disabled value for rmempty to work
    
    --Make enc flag actually check for section.changed and set that flag for the confirmation page to work
-   --TODO make this a commotion function. It is repeated in multiple cbi models.
+   enc.write = ccbi.flag_write
    function enc.remove(self, section)
 	  value = self.map:get(section, self.option)
 	  if value ~= self.disabled then
@@ -80,15 +80,7 @@ function pw_sec_opt(pw_s, iface)
 		 return key and enc or false
 	  end
    end
-   
-   function enc.write(self, section, fvalue)
-	  value = self.map:get(section, self.option)
-	  if value ~= fvalue then
-		 self.section.changed = true
-		 return self.map:set(section, self.option, fvalue)
-	  end
-   end
-   
+      
    --password options
    pw1 = pw_s:option(Value, (iface.name.."_pw1"))
    pw1.password = true
