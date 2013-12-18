@@ -42,8 +42,7 @@ local hname = shn:option(Value, "hostname", translate("Node Name"), translate("T
 hname.datatype = "hostname"
 
 function hname.write(self, section, value)
-   local node_id = '1234'
-   --local node_id = cnet.nodeid() --@TODO REIMPLEMENT THIS!!!!!!! 
+   local node_id = cnet.nodeid()
    --check if the nodeid is the same and don't write hostname if it is. This means that if a person changes the hostname, but appends the old nodeif to the end of it the hostname will not change. But who in their right mind would do that.
    hn, nid = value:match("(.-)%-([%d])*$")
    if nid and nid == node_id then
