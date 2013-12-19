@@ -103,7 +103,7 @@ function pw1.validate(self, value, section)
    if root_pass_check() == true then
 	  if v1 and v2 and #v1 > 0 and #v2 > 0 then
 		 if v1 == v2 then
-			if luci.sys.user.setpasswd(luci.dispatcher.context.authuser, v1) == 0 then
+			if luci.sys.user.setpasswd('root', v1) == 0 then
 			   uci:set("setup_wizard", "passwords", "admin_pass", 'changed')
 			   uci:save("setup_wizard")
 			end
@@ -163,7 +163,9 @@ function root_pass_check()
 		 end
 	  else
 		 return true
-	  end	  
+	  end
+   else
+	return true	 
    end
 end
 
