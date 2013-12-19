@@ -817,18 +817,21 @@ footer a:active, footer a:hover {
 }
 #welcome li.setup a {
 	display: inline-block;
-	padding: 3em 2em 0 2em;
+	padding: 6.5em 2em 3em 2em;
 	background: transparent url(setupwiz_button.png) no-repeat top center;
+	background-size: 96px 96px;
 }
 #welcome li.upload a {
 	background: transparent url(upload_config.png) no-repeat top center;
+	background-size: 96px 96px;
 	display: inline-block;
-	padding: 3em 2em 0 2em;
+	padding: 6.5em 2em 3em 2em;
 }
 #welcome li.advanced a {
 	background: transparent url(advanced_button.png) no-repeat top center;
+	background-size: 96px 96px;
 	display: inline-block;
-	padding: 3em 2em 0 2em;
+	padding: 6.5em 2em 3em 2em;
 }
 
 /* buttons, styles likely from Flat UI and heavily modified */
