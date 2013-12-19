@@ -33,10 +33,9 @@ s.addremove = true
 
 function s.remove(self, section)
    unset_commotion()
-	self.map.proceed = true
-	return self.map:del(section)
+   self.map.proceed = false
+   return self.map:del(section)
 end
-
 
 lib = s:option(Value, "library")
 lib.default = "olsrd_mdp.so.0.1"
@@ -65,6 +64,7 @@ function sp.write(self, section, value)
 end
 
 function set_commotion()
+   db.log("set")
    uci.foreach("wireless", "wifi-iface",
 			   function(s)
 				  local sid = get_sid()
@@ -72,7 +72,7 @@ function set_commotion()
 				  if s.mode == 'adhoc' then
 					 if uci:get("network", s.network, "proto") == "commotion" then
 						local profile = uci:get("network", s.network, "profile")
-						cnet.commotion.set(profile, {mdp_keyring="/etc/commotion/keys.d/mdp/", mdp_sid=sid, serval=true})
+						cnet.commotion_set(profile, {mdp_keyring="/etc/commotion/keys.d/mdp/", mdp_sid=sid, serval='true'})
 						cnet.commotion_set(profile)
 					 end
 				  end
@@ -81,6 +81,7 @@ function set_commotion()
 end
 
 function unset_commotion()
+   db.log("unset")
    uci.foreach("wireless", "wifi-iface",
 			   function(s)
 				  local sid = get_sid()
@@ -88,7 +89,7 @@ function unset_commotion()
 				  if s.mode == 'adhoc' then
 					 if uci:get("network", s.network, "proto") == "commotion" then
 						local profile = uci:get("network", s.network, "profile")
-						cnet.commotion_set(profile, {serval=false})
+						cnet.commotion_set(profile, {serval='false'})
 					 end
 				  end
 			   end
@@ -96,6 +97,7 @@ function unset_commotion()
 end
 
 function get_sid(path)
+   db.log("get sid")
    if path == nil then
 	  path = "/etc/commotion/keys.d/mdp/"
    end
@@ -104,6 +106,8 @@ function get_sid(path)
    end
    local sid = sys.exec("SERVALINSTANCE_PATH="..path.." serval-client keyring list")
    db.log(sid)
+   --! @TODO TEST CODE CHANGE ME!!!!
+   sid = "AA5C1E0DAB14D1177E134BD3001A31114901684FE04A53B67205D53A965C7365:29528158741:"
    local key = string.match(sid, "^(%w*):%w*:")
    if key == nil or string.len(key) ~= 64 then
 	  m.message = translate("The file supplied is not a proper keyring, or is password protected. Please upload another key.")
@@ -169,6 +173,7 @@ end
 new = s:option(Button, "_dummy2", translate("Create a new Shared Mesh Keychain file"), translate("Click on the button below to create a new Shared Mesh Keychain file. This will DELETE the existing Shared Mesh Keychain on this device. Use this option if you are creating a brand new Commotion mesh network, or if you are changing the Shared Mesh Keyhchain on an existing network. In either case, create a backup of the existing Shared Mesh Keychain first."))
 new.anonymous = true
 
+function new.write() return true end
 function new.validate(self, section, value)
    db.log("new")
    m.save = true
@@ -177,9 +182,9 @@ function new.validate(self, section, value)
    set_commotion()
    db.log(create)
    if create then
-	  return true
+	  return 'true'
    else
-	  return false
+	  return nil
    end
 end
 

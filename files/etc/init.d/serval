@@ -23,20 +23,20 @@ reload() {
 	local primary_keyring=$(uci_get serval settings primary_keyring)
 	
 	if [ "$enabled" == "true" ]; then
-		uci_add "olsrd" "LoadPlugin" "mdpplugin"
+		uci_add "olsrd" "LoadPlugin" "olsrd-mdp"
 		uci_set "olsrd" $CONFIG_SECTION "library" "olsrd_mdp.so.0.1"
 		uci_set "olsrd" $CONFIG_SECTION "servalpath" $mdp_keyring
 		uci_set "olsrd" $CONFIG_SECTION "sid" $mdp_sid
 	else
-		uci_remove "olsrd" "mdpplugin"
+		uci_remove "olsrd" "olsrd-mdp"
 	fi
 	if [ "$update_mdp" == "true" ]; then
 	   	 mv /lib/uci/upload/$upload $mdp_keyring/serval.keyring || return 1
 	   	 export SERVALINSTANCE_PATH=$mdp_keyring
 	   	 serval-client stop && sleep 1
 	   	 serval-client start || return 1
-		 uci_set "olsrd" "mdpplugin" "sid" $mdp_sid
-		 uci_set "olsrd" "mdpplugin" "servalpath" $mdp_keyring
+		 uci_set "olsrd" "olsrd-mdp" "sid" $mdp_sid
+		 uci_set "olsrd" "olsrd-mdp" "servalpath" $mdp_keyring
 	elif [ -e "/lib/uci/upload/$upload" ]; then
 		rm /lib/uci/upload/$upload
 	fi
