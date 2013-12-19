@@ -225,7 +225,7 @@ function network.ifaces_list(swap)
    cursor:foreach("network", "interface",
 				  function(zone)
 					 local iface = conn:call("network.interface."..zone['.name'], "status", {})
-					 if iface.device ~= nil then
+					 if iface and iface.device ~= nil then
 						dev = tostring(iface.device)
 						if swap and dev then
 						   z2if[dev]=zone['.name']
