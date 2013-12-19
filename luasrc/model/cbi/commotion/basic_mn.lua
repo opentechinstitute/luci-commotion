@@ -57,7 +57,15 @@ if not SW.status() then --if not setup wizard then allow for adding and removal
 end
 
 nwk = s:option(Value, "network")
---! @brief creates a network section and same named commotion profile when creating a mesh interface and assigns it to that mesh interface
+--! @brief checks for invalid ssid values and rejects the name it they exist.
+function nwk.datatype(val)
+   if val and val:match("\"%<%>%'%&") then
+	  return true
+   else
+	  return false
+   end
+end
+   --! @brief creates a network section and same named commotion profile when creating a mesh interface and assigns it to that mesh interface
 function nwk:write(section, value)
    net_name = string.gsub(name:formvalue(section), "[%p%s%z]", "_")
    network_name = uci:section("network", "interface", net_name, {proto="commotion", class='mesh'})
