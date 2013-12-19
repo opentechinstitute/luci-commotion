@@ -157,9 +157,9 @@ function network.commotion_set(name, options)
 	  for op,val in pairs(opts) do
 		 op, val = network.c_check(op, val)
 		 if op then
-			local operation = network.commotiond("set "..pr.." "..i.." "..x)
+			local operation = network.commotiond("set "..pr.." "..op.." "..val)
 			if operation.error then
-			   table.insert(err, {i,operation.error})
+			   table.insert(err, {op,operation.error})
 			end
 		 end
 	  end
@@ -178,7 +178,6 @@ function network.commotion_set(name, options)
 		 if options then
 			errors = setop(options, errors, name)
 		 end
-		 local save = network.commotiond("save "..name)
 	  else
 		 table.insert(errors, {"profile", create.error})
 	  end
@@ -186,6 +185,7 @@ function network.commotion_set(name, options)
    if errors then
 	  return false, errors
    else
+	  local save = network.commotiond("save "..name)
 	  return true
    end
 end
