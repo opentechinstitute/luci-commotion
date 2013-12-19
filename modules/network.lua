@@ -169,13 +169,17 @@ function network.commotion_set(name, options)
    local profile
    profile = utils.contains(profiles, name)
    if profile then
-	  errors = setop(options, errors, profile)
+	  if options then
+		 errors = setop(options, errors, profile)
+	  end
    else
 	  local create = network.commotiond("new "..name)
 	  if not create.error then
-		 errors = setop(options, errors, name)
-	  else
+		 if options then
+			errors = setop(options, errors, name)
+		 end
 		 local save = network.commotiond("save "..name)
+	  else
 		 table.insert(errors, {"profile", create.error})
 	  end
    end
@@ -196,6 +200,7 @@ function network.nodeid(new_id)
    if new_id then
 	  if #new_id <= 10  and new_id:match("^[0-9]+$") then
 		 id_set = network.commotiond("nodeid "..new_id)
+		 uci:set("commotion", "node", "nodeid", id_set['id'])
 		 return network.cerr(id_set, 'id')
 	  else
 		 return false, "Node id must be less than 10 charicters and composed of only numbers."
