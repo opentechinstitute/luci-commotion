@@ -18,7 +18,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 m = Map("system", translate("Basic Configuration Complete!"), translate("You have completed all of the required steps to configure this mesh node."))
 m.skip_to_end = true
 
-s = m:section(SimpleSection, "stuff", translate("If you would like to configure additional network interfaces on this node, continue to Additional Network Settings below. Otherwise click Review & Apply."))
+s = m:section(SimpleSection, "stuff", translate("If you would like to configure additional network interfaces on this node, click the next button to continue to Additional Network Settings below. Otherwise click the Finish button."))
 s.anonymous = true
 s.title = nil
 
