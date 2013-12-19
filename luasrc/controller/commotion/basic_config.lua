@@ -72,7 +72,7 @@ function index()
 	  
 	  local confirm = {on_success_to={"commotion", "confirm"}}
 	  --Setup Wizard Delegator
-	  entry({"commotion", "setup_wizard"}, cbi("commotion/setup_wizard", confirm, {noheader = true, sw_page=sw_page}), translate("Setup Wizard"), 15).hidden = true
+	  entry({"commotion", "setup_wizard"}, cbi("commotion/setup_wizard", {on_success_to={"commotion", "confirm"},  sw_page=sw_page}), translate("Setup Wizard"), 15).hidden = true
 
 	  --Confirmation Pages
 	  sw_cnfm = entry({"commotion", "confirm"}, call("action_changes"), translate("Confirm"), 40)
