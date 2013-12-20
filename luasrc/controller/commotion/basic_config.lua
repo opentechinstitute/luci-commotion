@@ -108,6 +108,8 @@ function advanced()
    local http = require "luci.http"
    
    uci:set("setup_wizard", "settings", "enabled", "0")
+   uci:save("setup_wizard")
+   uci:commit("setup_wizard")
    adv = disp.build_url("admin", "commotion")
    http.redirect(adv)
 end
