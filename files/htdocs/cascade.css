@@ -1116,9 +1116,10 @@ span.key-item {
 }
 .errorbox {
   background: #00ffcf url(warning_icon.png) no-repeat 10px center;
+  background-size: 55px 55px;
   max-width: 455px;
   margin: 0 auto;
-  padding: 10px 10px 10px 45px;
+  padding: 10px 10px 10px 75px;
   min-height: 13px;
 }
 .alert .close {
