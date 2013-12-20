@@ -98,15 +98,15 @@ You may obtain a copy of the License at
   mesh_ip = "None"
   uci:foreach("wireless", "wifi-iface",
 			  function(s)
-				 if s and s.mode and s.mode == "adhoc" then
-					local iface = conn:call("network.interface."..s['.name'], "status", {})
+				 if s and s.mode and s.mode == "adhoc" and s.network then
+					local iface = conn:call("network.interface."..s.network, "status", {})
 					if iface then
-					   if iface ~= nil and iface.ipv4-address then
-						  mesh_ip = iface.ipv4-address
+					   if iface ~= nil and iface["ipv4-address"][1].address then
+						  mesh_ip = iface["ipv4-address"][1].address
 					   else
 						  mesh_ip = "Unknown"
 					   end
-					else
+					elseif mesh_ip == "None" then
 					   mesh_ip = "Unknown"
 					end
 				 end
