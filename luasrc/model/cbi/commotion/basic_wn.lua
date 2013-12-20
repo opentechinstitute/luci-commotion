@@ -66,6 +66,7 @@ s.template_addremove = "cbi/commotion/addAP" --This template controls the addrem
 
 name = s:option(Value, "ssid", translate("Name"), translate("The access point name (SSID) is the name that people will look for when connecting to this device."))
 name.default = "CommotionWireless"
+name.datatype = "maxlength(15)"
 
 local wifi_dev = {}
 uci.foreach("wireless", "wifi-device",
