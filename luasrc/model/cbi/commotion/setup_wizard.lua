@@ -49,14 +49,20 @@ function d.parse(self, ...)
 end
 
 
---[[function d.get_next(self, state)
+function d.get_next(self, state)
    local form = luci.http.formvalue()
    local page = form.sw_page
+   db.log("is there a page")
+   db.log(page)
    if page then
-	  return d:get(state)
+	  for k, v in ipairs(self.chain) do
+		 if v == state then
+			return self.chain[k]
+		 end
+	  end
    else
 	  return Delegator.get_next(self, state)
    end
-   end]]--
+end
 
 return d

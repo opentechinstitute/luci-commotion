@@ -67,12 +67,15 @@ function nwk.datatype(val)
 end
    --! @brief creates a network section and same named commotion profile when creating a mesh interface and assigns it to that mesh interface
 function nwk:write(section, value)
-   net_name = string.gsub(name:formvalue(section), "[%p%s%z]", "_")
-   network_name = uci:section("network", "interface", net_name, {proto="commotion", class='mesh'})
-   cnw.commotion_set(network_name)
-   uci:set("network", network_name, "profile", network_name)
-   uci:save("network")
-   return self.map:set(section, self.option, network_name)
+   net_name = name:formvalue(section)
+   if net_name ~= nil then
+	  net_name = string.gsub(net_name, "[%p%s%z]", "_")
+	  network_name = uci:section("network", "interface", net_name, {proto="commotion", class='mesh'})
+	  cnw.commotion_set(network_name)
+	  uci:set("network", network_name, "profile", network_name)
+	  uci:save("network")
+	  return self.map:set(section, self.option, network_name)
+   end
 end
 nwk.render = function() end
 function nwk:parse(section)

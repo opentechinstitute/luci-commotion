@@ -3,13 +3,7 @@
 		<script type="text/javascript" src="<%=resource%>/cbi.js"></script>
 		<script>
 		  function set_page(page) {
-		  if (page == '') {
-		  $("#sb_del").append("<input type='hidden' name='cbi.delg.back' value='true' />")
-		  $("#sb_del").append("<input type='hidden' name='sw_page' value='<%=self.chain[2]%>' />")
-		  }
-		  else {
 		  $("#sb_del").append("<input type='hidden' name='sw_page' value='"+page+"' />")
-		  }
 		  document.cbi.submit()
 		  }
 		</script>
@@ -24,7 +18,7 @@
 		<%if x == self.current then%>
 		<div class="sb-btn" id="selected">
 		  <%else%>
-		  <div class="sb-btn" onclick="set_page('<%=self.chain[i-1]%>')">
+		  <div class="sb-btn" onclick="set_page('<%=x%>')">
 			<%end%>
 			<h3><%=title%>
 			</h3>
