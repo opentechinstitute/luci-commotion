@@ -111,7 +111,7 @@ end
 enc = s:option(Flag, "encryption", translate("Require a Password?"), translate("When people connect to this access point, should a password be required?"))
 enc.disabled = "none"
 enc.enabled = "psk2"
-enc.rmempty = true
+enc.rmempty = false
 enc.default = "none" --default must == disabled value for rmempty to work
 
 enc.write=ccbi.flag_write

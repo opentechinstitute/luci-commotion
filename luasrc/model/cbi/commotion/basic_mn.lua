@@ -139,7 +139,7 @@ end
 enc = s:option(Flag, "encryption", translate("Mesh Encryption"), translate("Choose whether or not to encrypt data sent between mesh devices for added security."))
 enc.disabled = "none"
 enc.enabled = "psk2"
-enc.rmempty = true
+enc.rmempty = false
 enc.default = "none" --default must == disabled value for rmempty to work
 
 enc.write = ccbi.flag_write
