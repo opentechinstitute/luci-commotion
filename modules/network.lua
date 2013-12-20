@@ -182,7 +182,7 @@ function network.commotion_set(name, options)
 		 table.insert(errors, {"profile", create.error})
 	  end
    end
-   if errors then
+   if errors[1] then
 	  return false, errors
    else
 	  local save = network.commotiond("save "..name)
