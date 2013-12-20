@@ -56,34 +56,6 @@ if not SW.status() then --if not setup wizard then allow for adding and removal
    end
 end
 
-nwk = s:option(Value, "network")
---! @brief checks for invalid ssid values and rejects the name it they exist.
-function nwk.datatype(val)
-   if val and val:match("\"%<%>%'%&") then
-	  return true
-   else
-	  return false
-   end
-end
-   --! @brief creates a network section and same named commotion profile when creating a mesh interface and assigns it to that mesh interface
-function nwk:write(section, value)
-   net_name = name:formvalue(section)
-   if net_name ~= nil then
-	  net_name = string.gsub(net_name, "[%p%s%z]", "_")
-	  network_name = uci:section("network", "interface", net_name, {proto="commotion", class='mesh'})
-	  cnw.commotion_set(network_name)
-	  uci:set("network", network_name, "profile", network_name)
-	  uci:save("network")
-	  return self.map:set(section, self.option, network_name)
-   end
-end
-nwk.render = function() end
-function nwk:parse(section)
-   local cvalue = self:cfgvalue(section)
-   if not cvalue then
-	  self:write(section, self.default)
-   end
-end
 
 function s:filter(section)
    mode = self.map:get(section, "mode")
@@ -93,10 +65,74 @@ end
 s.valuefooter = "cbi/full_valuefooter"
 s.template_addremove = "cbi/commotion/addMesh" --This template controls the addremove form for adding a new access point so that it has better wording.
 
-
 name = s:option(Value, "ssid",  translate("Mesh Network Name"), translate("Commotion networks share a network-wide name. This must be the same across all devices on the same mesh. This name cannot be greater than 15 characters."))
 name.default = "Commotion"
 name.datatype = "maxlength(15)"
+
+nwk = s:option(Value, "network")
+--! @brief checks for invalid ssid values and rejects the name it they exist.
+function nwk.datatype(val)
+   if val and val:match("\"%<%>%'%&") then
+	  return true
+   else
+	  return false
+   end
+end
+
+   --! @brief creates a network section and same named commotion profile when creating a mesh interface and assigns it to that mesh interface
+function write_network(value)
+   local net_name = value
+   net_name = string.gsub(net_name, "[%p%s%z]", "_")
+   network_name = uci:section("network", "interface", net_name, {proto="commotion", class='mesh'})
+   cnw.commotion_set(network_name)
+   uci:set("network", network_name, "profile", network_name)
+   uci:save("network")
+   if value ~= nil then
+	  uci:foreach("firewall", "zone",
+				  function(s)
+					 if s.name and s.name == "mesh" then
+						local list = {value}
+						for _,x in ipairs(s.network) do
+						   table.insert(list, x)
+						end
+						uci:set_list ("firewall", s[".name"], "network", list)
+						uci:save("firewall")				 
+					 end
+				  end
+	  )
+   end
+end
+
+function check_name(section, value)
+   local uci = require "luci.model.uci".cursor()
+   local clean_name = string.gsub(value, "[%p%s%z]", "_")
+   local exist = uci:get("network", clean_name)
+   if exist ~= nil then
+	  m.message = "You cannot have multiple interfaces with the same name."
+	  m.state = -1
+	  name:add_error(section, nil, "This section is named the same as an existing interface.")
+	  db.log("errors set because of existing network")
+	  return nil
+   else
+	  return true
+   end
+end
+
+nwk.render = function() end
+function nwk:parse(section)
+   db.log("parsing network")
+   local cvalue = self:cfgvalue(section)
+   local name = name:formvalue(section)
+   if name ~= nil and not cvalue then
+	  if check_name(section, name) ~= nil then
+		 write_network(name)
+	  else
+		 db.log("failed to write the network.")
+	  end
+   else
+	  db.log("Already set or a nil value.")
+   end
+end
 
 local wifi_dev = {}
 uci.foreach("wireless", "wifi-device",
