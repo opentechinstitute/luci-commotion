@@ -10,7 +10,6 @@ h1, h2, h3, h4, h5, h6, p, pre, a, abbr, acronym, code, del, em, img, q, s, smal
   font-style: normal;
   font-weight: normal;
   line-height: 1;
-  margin: 5px 0;
   padding: 0;
 }
 abbr[title], acronym[title] {
@@ -136,7 +135,7 @@ section:after {
   display: block;
   position: relative;
   left: 50%;
-  top: -47px;
+  top: -30px;
   height: 0;
   width: 0;
 }
@@ -154,7 +153,9 @@ a:hover {
   text-decoration: underline;
 }
 .body-content {
-	width:50%;
+  width:65%;
+  padding-left: 2em;
+  text-align:left;
 }
 .pull-right {
   float: right;
@@ -845,7 +846,9 @@ footer a:active, footer a:hover {
 	display: inline-block;
 	padding: 100px 45px 0 45px;
 }
-
+.welcomepage {
+  text-align:center;
+}
 
 .btn.danger, .alert.danger, .btn.danger:hover, .alert.danger:hover, .btn.error, .alert.error, .btn.error:hover, .alert.error:hover, .btn.success, .alert.success, .btn.success:hover, .alert.success:hover, .btn.info, .alert.info, .btn.info:hover, .alert.info:hover {
   color: #FFFFFF;
@@ -1016,7 +1019,7 @@ button.btn::-moz-focus-inner, input.btn[type="submit"]::-moz-focus-inner {
 	padding: 0.5em;
 	margin-top: 10px;
 	width: 80%;
-	margin: 0 auto;
+	margin: 0.5em auto;
 }
 
 #nodeinfo td.key-item {
@@ -1448,3 +1451,12 @@ div.cbi-value var, td.cbi-value-field var {
 }
 
 /* end error 2 */
+
+.static-page-content {
+  width: 65%;  
+  margin: 0 auto;
+}
+.static-page-content p,
+.static-page-content ul {
+  text-align: left;
+}
