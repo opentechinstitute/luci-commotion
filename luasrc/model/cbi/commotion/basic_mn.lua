@@ -82,7 +82,6 @@ function nwk:parse(section)
    end
 end
 
-
 function s:filter(section)
    mode = self.map:get(section, "mode")
    return mode == "adhoc" or mode == nil

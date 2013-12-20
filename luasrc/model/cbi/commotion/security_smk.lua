@@ -21,45 +21,65 @@ local uci = require "luci.model.uci".cursor()
 local cnet = require  "luci.commotion.network"
 local sys = require "luci.sys"
 local fs = require "luci.fs"
+local util = require "luci.util"
 
 m = Map("olsrd", translate("Shared Mesh Keychain"), translate("To ensure that only authorized devices can route traffic on your Commotion mesh network, one Shared Mesh Keychain file can be generated and shared by all devices."))
 
 --redirect on saved and changed to check changes.
 m.on_after_save = ccbi.conf_page
 
-s = m:section(NamedSection, "LoadPlugin", "olsrd-mdp", translate("Use a Shared Mesh Keychain to sign mesh routes. Yes/No"), translate("Check the box to use a Shared Mesh Keychain on this device. You'll also be required to upload or generate a Shared Mesh Keychain."))
-s.anonymous = true
+s = m:section(NamedSection, "LoadPlugin", "olsrd_mdp", translate("Use a Shared Mesh Keychain to sign mesh routes. Yes/No"), translate("Check the box to use a Shared Mesh Keychain on this device. You'll also be required to upload or generate a Shared Mesh Keychain."))
 s.addremove = true
 
 function s.remove(self, section)
+   db.log("s.remove")
    unset_commotion()
-   self.map.proceed = false
    return self.map:del(section)
+end
+
+function s.parse(self, novld)
+   local changes = uci:changes("olsrd")
+   if changes and changes.olsrd then
+	  db.log("changes found:")
+	  self.changed = true
+   else
+	  db.log("changes NOT found")
+   end
+   NamedSection.parse(self, novld)
 end
 
 lib = s:option(Value, "library")
 lib.default = "olsrd_mdp.so.0.1"
-lib.hidden = true
 lib.render = function() end
 function lib:parse(section)
+   db.log("lib parse")
    local cvalue = self:cfgvalue(section)
+   db.log(cvalue)
    if not cvalue then
 	  self:write(section, self.default)
    end
 end
 
+function lib.write(self, section, value)
+   set_commotion()
+   return self.map:set(section, self.option, value)
+end
+
+
 sp = s:option(Value, "servalpath")
-sp.hidden = true
 sp.default = "/etc/commotion/keys.d/mdp/"
 sp.render = function() end
 function sp:parse(section)
+   db.log("sp parse")
    local cvalue = self:cfgvalue(section)
+   db.log(cvalue)
    if not cvalue then
 	  self:write(section, self.default)
    end
 end
 function sp.write(self, section, value)
    set_commotion()
+   m.changed = true
    return self.map:set(section, self.option, value)
 end
 
@@ -105,30 +125,35 @@ function get_sid(path)
 	  sys.exec("SERVALINSTANCE_PATH="..path.." serval-client keyring create")
    end
    local sid = sys.exec("SERVALINSTANCE_PATH="..path.." serval-client keyring list")
-   db.log(sid)
+   db.log("this is the serval id (TODO FIX THIS)"..sid)
    --! @TODO TEST CODE CHANGE ME!!!!
-   sid = "AA5C1E0DAB14D1177E134BD3001A31114901684FE04A53B67205D53A965C7365:29528158741:"
-   local key = string.match(sid, "^(%w*):%w*:")
+   local sid = "AA5C1E0DAB14D1177E134BD3001A31114901684FE04A53B67205D53A965C7365:29528158741:"
+   local key = string.match(sid, "^(%w*):%w*:?")
    if key == nil or string.len(key) ~= 64 then
+	  db.log("was nil apparently")
 	  m.message = translate("The file supplied is not a proper keyring, or is password protected. Please upload another key.")
-	  m.status = -1
+	  m.state = -1
 	  return false
    else
+	  db.log(key)
 	  return key
    end
 end
 
 sid = s:option(Value, "sid")
 sid.default = get_sid()
-sid.optional = false
 function sid.write(self, section, value)
+   db.log("sid write")
    local value = get_sid()
+   m.changed = true
    return self.map:set(section, self.option, value)
 end
 
 sid.render = function() end
 function sid:parse(section)
+   db.log("sid parse")
    local cvalue = self:cfgvalue(section)
+   db.log(cvalue)
    if not cvalue then
 	  self:write(section, self.default)
    end
