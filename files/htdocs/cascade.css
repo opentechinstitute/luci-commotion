@@ -846,7 +846,9 @@ footer a:active, footer a:hover {
 	display: inline-block;
 	padding: 100px 45px 0 45px;
 }
-
+.welcomepage {
+  text-align:center;
+}
 
 .btn.danger, .alert.danger, .btn.danger:hover, .alert.danger:hover, .btn.error, .alert.error, .btn.error:hover, .alert.error:hover, .btn.success, .alert.success, .btn.success:hover, .alert.success:hover, .btn.info, .alert.info, .btn.info:hover, .alert.info:hover {
   color: #FFFFFF;
