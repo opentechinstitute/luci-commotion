@@ -47,7 +47,6 @@ $Id: changes.htm 9014 2012-08-14 13:08:18Z jow $
 <%end%>
 <div class="cbi-page-actions">
 	<%if sw_stat then%>
-	<div style="float:left">
 	<form class="inline" method="get" action="<%=controller%>/commotion/setup_wizard">
 	  <input class="cbi-button cbi-button-make-changes" type="submit" value="<%:Make Changes%>" />
 	</form>
@@ -58,7 +57,6 @@ $Id: changes.htm 9014 2012-08-14 13:08:18Z jow $
 		</form>
 	<% end
 	   end%>
-	<div style="text-align:right">
 	  <%if sw_stat then%>
 		<form class="inline" method="get" action="<%=controller%>/commotion/saveapply">
 	  <%else%>
@@ -77,7 +75,6 @@ $Id: changes.htm 9014 2012-08-14 13:08:18Z jow $
 		  <input class="cbi-button cbi-button-reset" type="submit" value="<%:Revert%>" />
 		  <%end%>
 		</form>
-	</div>
 </div>
 <%if sw_stat then%>
 </div>
