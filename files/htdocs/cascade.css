@@ -1116,9 +1116,10 @@ span.key-item {
 }
 .errorbox {
   background: #00ffcf url(warning_icon.png) no-repeat 10px center;
+  background-size: 55px 55px;
   max-width: 455px;
   margin: 0 auto;
-  padding: 10px 10px 10px 45px;
+  padding: 10px 10px 10px 75px;
   min-height: 13px;
 }
 .alert .close {
@@ -1416,10 +1417,10 @@ div.cbi-value var, td.cbi-value-field var {
 /* error 2 - check for ui inconsistency */
 .error {
   background: #FFFFFF url(warning_icon.png) no-repeat left center;
+  background-size: 45px 45px;                                     
   color: #000000;
   font-weight: bold;
-  padding: 3px;
-  padding-left: 10px;
+  padding: 3em 3.5em;                                             
   position: relative;
   max-width: 100%;
   border-color: #C43C35;
@@ -1432,10 +1433,10 @@ div.cbi-value var, td.cbi-value-field var {
 
 .cbi-value-error {
   background: #FFFFFF url(warning_icon.png) no-repeat left center;
+  background-size: 45px 45px;                                     
   color: #000000;
   font-weight: bold;
-  padding: 3px;
-  padding-left: 10px;
+  padding: 3em 3.5em;                                             
   position: relative;
   max-width: 100%;
   border-color: #C43C35;
