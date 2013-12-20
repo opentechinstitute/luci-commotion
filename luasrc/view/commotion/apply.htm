@@ -16,6 +16,9 @@ $Id: apply.htm 9014 2012-08-14 13:08:18Z jow $
 <%+header%>
 <%if SW.status() then
 	 redirect = luci.dispatcher.build_url("setupctl", "complete")
+	 uci = require "luci.model.uci".cursor()
+	 uci:set("setup_wizard", "settings", "enabled", "0")
+	 uci:save("setup_wizard")
   else
 	 redirect = luci.dispatcher.build_url("admin","commotion")
   end%>
