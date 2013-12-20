@@ -123,19 +123,15 @@ function get_sid(path)
    end
    if not fs.isfile("/etc/commotion/keys.d/mdp/serval.keyring") then
 	  sys.exec("SERVALINSTANCE_PATH="..path.." serval-client keyring create")
+	  sys.exec("SERVALINSTANCE_PATH="..path.." serval-client keyring add")
    end
    local sid = sys.exec("SERVALINSTANCE_PATH="..path.." serval-client keyring list")
-   db.log("this is the serval id (TODO FIX THIS)"..sid)
-   --! @TODO TEST CODE CHANGE ME!!!!
-   local sid = "AA5C1E0DAB14D1177E134BD3001A31114901684FE04A53B67205D53A965C7365:29528158741:"
    local key = string.match(sid, "^(%w*):%w*:?")
    if key == nil or string.len(key) ~= 64 then
-	  db.log("was nil apparently")
 	  m.message = translate("The file supplied is not a proper keyring, or is password protected. Please upload another key.")
 	  m.state = -1
 	  return false
    else
-	  db.log(key)
 	  return key
    end
 end
@@ -153,7 +149,6 @@ sid.render = function() end
 function sid:parse(section)
    db.log("sid parse")
    local cvalue = self:cfgvalue(section)
-   db.log(cvalue)
    if not cvalue then
 	  self:write(section, self.default)
    end
@@ -205,7 +200,6 @@ function new.validate(self, section, value)
    sys.exec("rm /etc/commotion/keys.d/mdp/serval.keyring")
    local create = sys.exec("SERVALINSTANCE_PATH=/etc/commotion/keys.d/mdp/ serval-client keyring create")
    set_commotion()
-   db.log(create)
    if create then
 	  return 'true'
    else
