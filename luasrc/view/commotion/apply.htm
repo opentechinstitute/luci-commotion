@@ -15,7 +15,7 @@ $Id: apply.htm 9014 2012-08-14 13:08:18Z jow $
 <%SW = require "luci.commotion.setup_wizard"%>
 <%+header%>
 <%if SW.status() then
-	 redirect = luci.dispatcher.build_url("setupctl", "complete")
+	 redirect = luci.dispatcher.build_url("commotion", "advanced")
   else
 	 redirect = luci.dispatcher.build_url("admin","commotion")
   end%>
