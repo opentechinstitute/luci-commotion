@@ -27,16 +27,29 @@ m = Map("nodogsplash", translate("Welcome Page"))
 --redirect on saved and changed to check changes.
 m.on_after_save = ccbi.conf_page
 
-
 enable = m:section(TypedSection, "settings", translate("On/Off"), translate("Users can be redirected to a “welcome page” when they first connect to this node."))
 enable.anonymous = true
 
 toggle = enable:option(Flag, "enable")
-toggle.write = ccbi.flag_write
-toggle.remove = ccbi.flag_remove
 
+function toggle.write(self, section, fvalue)
+   value = self.map:get(section, self.option)
+   if value ~= fvalue then
+	  self.section.changed = true
+	  self.map:set("interfaces", "interface", "br-lan")
+	  return self.map:set(section, self.option, fvalue)
+   end
+end
 
-ifaces = m:section(TypedSection, "interfaces", translate("For which network connection should this welcome page be active?"), translate("Select list of Aps and /or defined networks on this node's interfaces Auto select the first AP interface if configured."))
+function toggle.remove(self, section)
+   value = self.map:get(section, self.option)
+   if value ~= self.disabled then
+	  self.section.changed = true
+	  return self.map:del(section, self.option)
+   end
+end
+
+--[[ifaces = m:section(TypedSection, "interfaces", translate("For which network connection should this welcome page be active?"), translate("Select list of Aps and /or defined networks on this node's interfaces Auto select the first AP interface if configured."))
 ifaces.anonymous = true
 
 iflist = ifaces:option(ListValue, "interface")
@@ -51,6 +64,7 @@ uci.foreach("wireless", "wifi-iface",
 			   end
 			end
    )
+]]--
 
 stime = m:section(TypedSection, "settings", translate("Time until welcome page is shown again"))
 stime.anonymous = true
