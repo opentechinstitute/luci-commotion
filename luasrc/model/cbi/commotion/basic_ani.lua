@@ -45,11 +45,48 @@ msh.default = "false"
 msh.addremove = false
 msh.write = ccbi.flag_write
 
-ance = p:option(Flag, "announced", translate("Advertise your gateway to the mesh."))
-ance.enabled = "true"
-ance.disabled = "false"
-ance.addremove = false
-ance.default = 'true'
-ance.write = ccbi.flag_write
+ance = p:option(Flag, "_gateway", translate("Advertise your gateway to the mesh."))
+ance.addremove = true
+
+function dyn_exists()
+   local cvalue = nil
+   uci:foreach("olsrd", "LoadPlugin",
+			   function(p)
+				  if string.match(p.library, "^olsrd_dyn_gw_plain.*") then
+					 cvalue = p[".name"]
+				  end
+			   end
+   )
+   return cvalue
+end
+	  
+function ance.cfgvalue(self, section)
+   if dyn_exists() ~= nil then
+	  return '1'
+   else
+	  return '0'
+   end
+end
+
+function ance.write(self, section, fvalue)
+   if dyn_exists() == nil then
+	  self.section.changed = true
+	  --! @TODO Make this actually check the installed version and not just use 0.4.
+	  uci:section("olsrd", "LoadPlugin", nil, {library="olsrd_dyn_gw_plain.so.0.4"})
+	  uci:save("olsrd")
+	  return true
+   end
+end
+
+function ance.remove(self, section)
+   local cvalue = dyn_exists()
+   if cvalue ~= nil  then
+	  self.section.changed = true
+	  uci:delete("olsrd", cvalue)
+	  uci:save("olsrd")
+	  return true
+   end
+end
+
 
 return m
