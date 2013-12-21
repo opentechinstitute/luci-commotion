@@ -103,16 +103,21 @@ function write_network(value)
    end
 end
 
-function check_name(section, value)
+function check_name(self, section, value)
    local uci = require "luci.model.uci".cursor()
    local clean_name = string.gsub(value, "[%p%s%z]", "_")
    local exist = uci:get("network", clean_name)
    if exist ~= nil then
-	  m.message = "You cannot have multiple interfaces with the same name."
-	  m.state = -1
-	  name:add_error(section, nil, "This section is named the same as an existing interface.")
-	  db.log("errors set because of existing network")
-	  return nil
+	  local current = self.map:get(section, "network")
+	  if current == clean_name then
+		 return true
+	  else
+		 m.message = "You cannot have multiple interfaces with the same name."
+		 m.state = -1
+		 name:add_error(section, nil, "This section is named the same as an existing interface.")
+		 db.log("errors set because of existing network")
+		 return nil
+	  end
    else
 	  return true
    end
@@ -124,10 +129,11 @@ function nwk:parse(section)
    local cvalue = self:cfgvalue(section)
    local name = name:formvalue(section)
    if name ~= nil and not cvalue then
-	  if check_name(section, name) ~= nil then
+	  if check_name(self, section, name) ~= nil then
 		 local net_name = write_network(name)
-		 self.map:set(section, "network", net_name)
-	  else
+		 uci:set("wireless", section, "network", net_name)
+		 uci:save("wireless")
+ 	  else
 		 db.log("failed to write the network.")
 	  end
    else
