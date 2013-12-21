@@ -81,8 +81,7 @@ end
 
    --! @brief creates a network section and same named commotion profile when creating a mesh interface and assigns it to that mesh interface
 function write_network(value)
-   local net_name = value
-   net_name = string.gsub(net_name, "[%p%s%z]", "_")
+   local net_name = string.gsub(value, "[%p%s%z]", "_")
    network_name = uci:section("network", "interface", net_name, {proto="commotion", class='mesh'})
    cnw.commotion_set(network_name)
    uci:set("network", network_name, "profile", network_name)
@@ -91,15 +90,16 @@ function write_network(value)
 	  uci:foreach("firewall", "zone",
 				  function(s)
 					 if s.name and s.name == "mesh" then
-						local list = {value}
+						local list = {net_name}
 						for _,x in ipairs(s.network) do
 						   table.insert(list, x)
 						end
 						uci:set_list ("firewall", s[".name"], "network", list)
-						uci:save("firewall")				 
+						uci:save("firewall")
 					 end
 				  end
 	  )
+	  return net_name
    end
 end
 
@@ -125,7 +125,8 @@ function nwk:parse(section)
    local name = name:formvalue(section)
    if name ~= nil and not cvalue then
 	  if check_name(section, name) ~= nil then
-		 write_network(name)
+		 local net_name = write_network(name)
+		 self.map:set(section, "network", net_name)
 	  else
 		 db.log("failed to write the network.")
 	  end
