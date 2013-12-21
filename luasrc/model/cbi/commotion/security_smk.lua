@@ -198,13 +198,8 @@ function new.validate(self, section, value)
    db.log("new")
    m.save = true
    sys.exec("rm /etc/commotion/keys.d/mdp/serval.keyring")
-   local create = sys.exec("SERVALINSTANCE_PATH=/etc/commotion/keys.d/mdp/ serval-client keyring create")
    set_commotion()
-   if create then
-	  return 'true'
-   else
-	  return nil
-   end
+   return true
 end
 
 return m
