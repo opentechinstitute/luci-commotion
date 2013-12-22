@@ -71,7 +71,7 @@ end
 
 
 sp = s:option(Value, "servalpath")
-sp.default = "/etc/commotion/keys.d/mdp/"
+sp.default = "/etc/commotion/keys.d/mdp/serval.keyring"
 sp.render = function() end
 function sp:parse(section)
    db.log("sp parse")
