@@ -47,6 +47,11 @@ if not SW.status() then --if not setup wizard then allow for adding and removal
 		 self:write(section, self.default)
 	  end
    end
+   function s.remove(self, section)
+	  m.changed = true
+	  clean_network(name:formvalue(section))
+	  return self.map:del(section)
+   end
 end
 
 
@@ -86,6 +91,31 @@ function write_network(value)
 						local list = {net_name}
 						for _,x in ipairs(s.network) do
 						   table.insert(list, x)
+						end
+						uci:set_list ("firewall", s[".name"], "network", list)
+						uci:save("firewall")
+					 end
+				  end
+	  )
+	  return net_name
+   end
+end
+
+function clean_network(value)
+   local fs = require "luci.fs"
+   local net_name = string.gsub(value, "[%p%s%z]", "_")
+   uci:delete("network", net_name)
+   fs.unlink("/etc/commotion/profiles.d/"..net_name)
+   uci:save("network")
+   if value ~= nil then
+	  uci:foreach("firewall", "zone",
+				  function(s)
+					 if s.name and s.name == "mesh" then
+						local list = {}
+						for _,x in ipairs(s.network) do
+						   if x ~= net_name then
+							  table.insert(list, x)
+						   end
 						end
 						uci:set_list ("firewall", s[".name"], "network", list)
 						uci:save("firewall")

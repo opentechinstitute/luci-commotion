@@ -54,6 +54,10 @@ if not SW.status() then
 		 return self.map:set(section, self.option, value)
 	  end
    end
+   function s.remove(self, section)
+	  m.changed = true
+	  return self.map:del(section)
+   end
 end
 
 function s:filter(section)
