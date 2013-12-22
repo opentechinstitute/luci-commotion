@@ -8,4 +8,7 @@ uci_add ucitrack nodogsplash nodogsplash
 uci_set ucitrack nodogsplash init ucidog
 uci_commit ucitrack
 
+#setup sysupgrade saves
+echo /etc/config/setup_wizard >> /etc/sysupgrade.conf
+
 exit 0
