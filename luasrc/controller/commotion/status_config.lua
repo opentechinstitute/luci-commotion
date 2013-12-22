@@ -172,8 +172,8 @@ function get_client_splash_info()
    local convert = function(x)
 	  return tostring(math.floor(tonumber(x)/60)).." "..i18n.translate("minutes")
    end
-   local function total_kB(a, b) return tostring(a+b).." kByte" end
-   local function total_kb(a, b) return tostring(a+b).." kbit/s" end
+   local function total_kB(a, b) return tostring(math.floor(a+b)).." kByte" end
+   local function total_kb(a, b) return tostring(math.floor(a+b)).." kbit/s" end
    local clients = {}
    i = 0
    for line in util.execi("ndsctl clients") do
