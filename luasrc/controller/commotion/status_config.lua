@@ -177,7 +177,7 @@ function get_client_splash_info()
    local clients = {}
    i = 0
    for line in util.execi("ndsctl clients") do
-	  if string.match(line, "^%d+$") then
+	  if string.match(line, "^client_id.*$") then
 		 i = i + 1
 		 clients[i] = {}
 	  end
