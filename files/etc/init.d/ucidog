@@ -32,11 +32,11 @@ reload() {
 	#set splashpage time
 	sed -i "s/^\(ClientIdleTimeout \).*/\1  $splash_time/" $conffile ||  return 0
 	sed -i "s/^\(ClientForceTimeout \).*/\1 $splash_time/" $conffile || return 0
+	
 	#get and set interface name
 	local interface=$(uci_get nodogsplash interfaces interface)
 	local network=$(uci_get wireless $interface network)
- '{print$2}'| sed 's/"\(\w*\)",/\1/')
-	sed -i "s/^\(GatewayInterface \).*/\1 $iface_name/" $conffile || return 0
+	sed -i "s/^\(GatewayInterface \).*/\1 $interface/" $conffile || return 0
 	/etc/init.d/nodogsplash stop && sleep 1
 	/etc/init.d/nodogsplash start
 }
