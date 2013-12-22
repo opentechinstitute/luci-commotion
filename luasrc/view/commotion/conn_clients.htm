@@ -35,10 +35,9 @@ headers = {{title="IP-Address", var="ip"},
 		   {title="Bandwidth Used", var="bnd_wdth"},
 		   {title="Average Speed", var="avg_spd"},
 		   {title="Currently Active", var="curr_conn"}}
-
 if #clients > 0 then
-   for iface_name, conn in pairs(splash) do
-	  for i in util.execi("iw dev "..iface_name.." station dump") do
+   for _,iface in ipairs(ifaces) do
+	  for i in util.execi("iw dev "..iface.." station dump") do
 		 string.gsub(i, "^Station%s(.-)%s%(",
 					 function(mac)
 						for client,dossier in ipairs(clients) do

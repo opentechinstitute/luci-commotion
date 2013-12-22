@@ -102,8 +102,12 @@ end
 
 function conn_clnts()
    clients = get_client_splash_info()
-   splash = get_splash_iface_info()
-   status_builder("commotion/conn_clients", {clients=clients, splash=splash}, "connected_clients")
+   local ifaces = {}
+   for i in util.execi("ifconfig -a") do
+	  string.gsub(i, "^([%S%T].-)[%s%t]",
+				  function(x) db.log(x) table.insert(ifaces, x) end)
+   end
+   status_builder("commotion/conn_clients", {clients=clients, ifaces=ifaces}, "connected_clients")
 end
 
 --! @brief currently only gets number of connected clients... because that is what I needed
