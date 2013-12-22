@@ -34,16 +34,45 @@ function index()
 end
 
 
+function fallback_splash_info()
+   local cnet = require "luci.commotion.network"
+   local sys = require "luci.sys"
+   local clients = dhcp_lease_fallback()
+   local cif = {}
+   local ifaces = cnet.ifaces_list()
+   if #clients > 0 then
+	  local arp = sys.net.arptable()
+	  for _,addr in ipairs(arp) do
+		 if not cif[addr.Device] then
+			cif[addr.Device] = {}
+			cif[addr.Device].connected = 0
+		 end
+		 for client,dossier in ipairs(clients) do
+			if dossier.mac == addr["HW address"] then
+			   cif[addr.Device].connected = cif[addr.Device].connected + 1
+			end
+		 end
+	  end
+   end
+   return cif
+end
+
+
 function status_builder(page, assets, active_tab)
    local uci = require "luci.model.uci".cursor()
    local cnet = require "luci.commotion.network"
-   local db = require "luci.commotion.debugger"
-
+   local sys = require "luci.sys"
    local ifaces = {}
    local internet = nil
    local gw = false
+   local splash_info = nil
    local zone_iface = cnet.ifaces_list()
-   local splash_info = get_splash_iface_info()
+   if sys.call("/etc/init.d/nodogsplash enabled") ~= 0 then
+	  splash_info = fallback_splash_info()
+   else
+	  splash_info = get_splash_iface_info()
+   end
+   
    uci:foreach("wireless", "wifi-iface",
 			   function(s)
 				  local name = s['.name']
@@ -105,7 +134,7 @@ function conn_clnts()
    local ifaces = {}
    for i in util.execi("ifconfig -a") do
 	  string.gsub(i, "^([%S].-)[%s]",
-				  function(x) db.log(x) table.insert(ifaces, x) end)
+				  function(x)  table.insert(ifaces, x) end)
    end
    status_builder("commotion/conn_clients", {clients=clients, ifaces=ifaces, warning=warning}, "connected_clients")
 end
@@ -135,7 +164,7 @@ end
 
 function dhcp_lease_fallback()
    clients = {}
-   local i = 1 
+   local i = 1
    for line in io.lines("/tmp/dhcp.leases") do
 	  clients[i] = {}
 	  clients[i].mac = string.match(line, "^[%d]*%s([%x%:]+)%s")
@@ -193,9 +222,6 @@ function action_neigh(json)
                 status_builder("commotion/error_olsr", nil, "nearby_devices")
                 return nil
         end
--- table.sort currently breaks nearby_md
---        table.sort(data.Links, compare_links)
-		
         status_builder("commotion/nearby_md", {links=data.Links}, "nearby_devices")
 end
 
