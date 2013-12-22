@@ -43,7 +43,7 @@ if #clients > 0 then
 						for client,dossier in ipairs(clients) do
 						   local c_idx = util.contains(dossier, mac)
 						   if c_idx then
-							  clients[client].curr_conn = true
+							  clients[client].curr_conn = "Yes"
 						   end
 						end
 					 end)
@@ -94,6 +94,9 @@ if #clients > 0 then
 %>
   <h3><%:Connected Clients!%></h3>
    <p>A client is a device that has connected to this node. Information about clients is displayed below.</p>
+   <% if warning then %>
+   <p class="errorbox"><%:You are not using a welcome page (splash page/captive portal.) Without a splash page we can only show a clients ip-address and the status of their connection.%></p>
+   <%end%>
 <table class="cbi-section-table">
   <thead>
     <tr class="cbi-section-table-titles">

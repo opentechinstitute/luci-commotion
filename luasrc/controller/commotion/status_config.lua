@@ -101,13 +101,13 @@ function viz()
 end
 
 function conn_clnts()
-   clients = get_client_splash_info()
+   clients, warning = get_client_splash_info()
    local ifaces = {}
    for i in util.execi("ifconfig -a") do
 	  string.gsub(i, "^([%S].-)[%s]",
 				  function(x) db.log(x) table.insert(ifaces, x) end)
    end
-   status_builder("commotion/conn_clients", {clients=clients, ifaces=ifaces}, "connected_clients")
+   status_builder("commotion/conn_clients", {clients=clients, ifaces=ifaces, warning=warning}, "connected_clients")
 end
 
 --! @brief currently only gets number of connected clients... because that is what I needed
@@ -140,15 +140,15 @@ function dhcp_lease_fallback()
 	  clients[i] = {}
 	  clients[i].mac = string.match(line, "^[%d]*%s([%x%:]+)%s")
 	  clients[i].ip = string.match(line, "^[%d]*%s[%x%:]+%s([%d%.]+)%s")
+	  clients[i].curr_conn = "No"
 	  i = i + 1
    end
-   db.log(clients)
-   return clients
+   return clients, true
 end
 
 function get_client_splash_info()
    local sys = require "luci.sys"
-   if sys.call("/etc/init.d/nodogsplash enabled") ~= "0" then
+   if sys.call("/etc/init.d/nodogsplash enabled") ~= 0 then
 	  return dhcp_lease_fallback()
    end
    local convert = function(x)
@@ -173,7 +173,7 @@ function get_client_splash_info()
    end
    for i,x in ipairs(clients) do
 	  if clients[i] ~= nil then
-		 clients[i].curr_conn=false
+		 clients[i].curr_conn = "No"
 		 clients[i].duration = convert(clients[i].duration)
 		 clients[i].bnd_wdth = total_kB(clients[i].downloaded, clients[i].uploaded)
 		 clients[i].avg_spd = total_kb(clients[i].avg_down_speed, clients[i].avg_up_speed)
