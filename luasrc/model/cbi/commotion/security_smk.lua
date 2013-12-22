@@ -28,11 +28,15 @@ m = Map("olsrd", translate("Shared Mesh Keychain"), translate("To ensure that on
 --redirect on saved and changed to check changes.
 m.on_after_save = ccbi.conf_page
 
-s = m:section(NamedSection, "LoadPlugin", "olsrd_mdp", translate("Use a Shared Mesh Keychain to sign mesh routes. Yes/No"), translate("Check the box to use a Shared Mesh Keychain on this device. You'll also be required to upload or generate a Shared Mesh Keychain."))
+s = m:section(TypedSection, "LoadPlugin", translate("Use a Shared Mesh Keychain to sign mesh routes. Yes/No"), translate("Check the box to use a Shared Mesh Keychain on this device. You'll also be required to upload or generate a Shared Mesh Keychain."))
 s.addremove = true
+s.anonymous = true
+
+function s.filter(self, section)
+   return self.map:get(section, "library") == "olsrd_mdp.so.0.1"
+end
 
 function s.remove(self, section)
-   db.log("s.remove")
    unset_commotion()
    return self.map:del(section)
 end
@@ -45,7 +49,7 @@ function s.parse(self, novld)
    else
 	  db.log("changes NOT found")
    end
-   NamedSection.parse(self, novld)
+   TypedSection.parse(self, novld)
 end
 
 lib = s:option(Value, "library")
@@ -122,8 +126,8 @@ function get_sid(path)
 	  path = "/etc/commotion/keys.d/mdp/"
    end
    if not fs.isfile("/etc/commotion/keys.d/mdp/serval.keyring") then
-	  sys.exec("SERVALINSTANCE_PATH="..path.." serval-client keyring create")
-	  sys.exec("SERVALINSTANCE_PATH="..path.." serval-client keyring add")
+	  sys.exec("SERVALINSTANCE_PATH=/etc/commotion/keys.d/mdp/ serval-client keyring create")
+	  sys.exec("SERVALINSTANCE_PATH=/etc/commotion/keys.d/mdp/ serval-client keyring add")
    end
    local sid = sys.exec("SERVALINSTANCE_PATH="..path.." serval-client keyring list")
    local key = string.match(sid, "^(%w*):%w*:?")
@@ -159,14 +163,13 @@ uploader.anonymous = true
 
 function uploader.write(self, section, value)
    db.log("uploader write")
+   local nfs = require "nixio.fs"
+   sys.exec("mv /lib/uci/upload/cbid.olsrd.*._upload /lib/uci/upload/serval.keyring")
    if get_sid("/lib/uci/upload/") ~= false then
-	  local mv = sys.call("mv /lib/uci/upload/cbid.serval.settings._upload /etc/commotion/keys.d/mdp/serval.keyring")
-	  if mv ~= 0 then
-		 return false
-	  else
-		 set_commotion()
-		 return true
-	  end
+	  local mv = nfs.move("/lib/uci/upload/serval.keyring", "/etc/commotion/keys.d/mdp/serval.keyring")
+	  self.map:set(section, "sid", get_sid())
+	  set_commotion()
+	  m.changed = true
    else
 	  return false
    end
@@ -176,9 +179,9 @@ dwnld = s:option(Button, "_dummy", translate("Download Shared Mesh Keychain"), t
 dwnld.anonymous = true
 
 function dwnld.write(self, section, value)
-   db.log("write")
+   local ltn12 = require "luci.ltn12"
    keyring = uci:get("serval", "settings", "olsrd_mdp_keyring")
-   local f = io.open(keyring)
+   local f = io.open(keyring.."/serval.keyring")
    if not f then
 	  self:add_error(section, translate("No Current Serval Key To Download."))
 	  return nil
