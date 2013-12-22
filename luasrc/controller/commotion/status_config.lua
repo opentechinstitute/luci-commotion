@@ -40,7 +40,8 @@ function status_builder(page, assets, active_tab)
    local db = require "luci.commotion.debugger"
 
    local ifaces = {}
-   local gw = "No"
+   local internet = nil
+   local gw = false
    local zone_iface = cnet.ifaces_list()
    local splash_info = get_splash_iface_info()
    uci:foreach("wireless", "wifi-iface",
@@ -79,14 +80,20 @@ function status_builder(page, assets, active_tab)
 				  end
    end)
    for line in util.execi("route -n") do
-	  string.gsub(line, "^0%.0%.0%.0%[%s%t]+(%d+%.%d+)%.%d+%.%d)+[%s%t].+eth0$",
+	  string.gsub(line, "^0%.0%.0%.0[%s%t]+(%d+%.%d+)%.%d+%.%d+[%s%t].+eth0$",
 				  function(x)
-					 if string.match(x, "^100%.64^") or string.match(x, "10%.%d+^") then
-						gw = "Yes"
+					 gw = true
+					 if string.match(x, "^100%.64$") or string.match(x, "10%.%d+$") then
+						internet = "No"
 					 end
 				  end)
    end
-   luci.template.render("commotion/status", {ifaces=ifaces, gateway_provided=gw, page=page, assets=assets, active_tab=active_tab})
+   if gw == true and internet == nil then
+	  internet = "Yes"
+   elseif internet == nil then
+	  internet = "No"
+   end
+   luci.template.render("commotion/status", {ifaces=ifaces, gateway_provided=internet, page=page, assets=assets, active_tab=active_tab})
 end
 
 function viz()
