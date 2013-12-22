@@ -80,7 +80,7 @@ function status_builder(page, assets, active_tab)
 				  end
    end)
    for line in util.execi("route -n") do
-	  string.gsub(line, "^0%.0%.0%.0[%s%t]+(%d+%.%d+)%.%d+%.%d+[%s%t].+eth0$",
+	  string.gsub(line, "^0%.0%.0%.0[%s]+(%d+%.%d+)%.%d+%.%d+[%s].+eth0$",
 				  function(x)
 					 gw = true
 					 if string.match(x, "^100%.64$") or string.match(x, "10%.%d+$") then
@@ -104,7 +104,7 @@ function conn_clnts()
    clients = get_client_splash_info()
    local ifaces = {}
    for i in util.execi("ifconfig -a") do
-	  string.gsub(i, "^([%S%T].-)[%s%t]",
+	  string.gsub(i, "^([%S].-)[%s]",
 				  function(x) db.log(x) table.insert(ifaces, x) end)
    end
    status_builder("commotion/conn_clients", {clients=clients, ifaces=ifaces}, "connected_clients")
@@ -130,45 +130,27 @@ function get_splash_iface_info()
 				  end)
    end
    return splash
-   
-   --[[==================
-NoDogSplash Status
-====
-Version: 0.9_beta9.9.6
-Uptime: 826d 6h 44m 26s
-Gateway Name: Commotion
-Managed interface: wlan0
-Managed IP range: 0.0.0.0/0
-Server listening: 103.6.53.1:2050
-Splashpage: /etc/nodogsplash/htdocs/splash.html
-Traffic control: no
-Total download: 0 kByte; avg: 0 kbit/s
-Total upload: 0 kByte; avg: 0 kbit/s
-====
-Client authentications since start: 0
-Httpd request threads created/current: 1/0
-Current clients: 1
+end
 
-Client 0
-  IP: 103.6.53.62 MAC: 10:0b:a9:ca:7b:14
-  Added:   Thu Dec 12 22:38:10 2013
-  Active:  Thu Dec 12 22:38:10 2013
-  Active duration: 0d 0h 0m 0s
-  Added duration:  0d 0h 1m 2s
-  Token: 31707a48
-  State: Preauthenticated
-  Download: 0 kByte; avg: 0 kbit/s
-  Upload:   0 kByte; avg: 0 kbit/s
 
-====
-Blocked MAC addresses: none
-Allowed MAC addresses: N/A
-Trusted MAC addresses: none
-========
-	  ]]--
+function dhcp_lease_fallback()
+   clients = {}
+   local i = 1 
+   for line in io.lines("/tmp/dhcp.leases") do
+	  clients[i] = {}
+	  clients[i].mac = string.match(line, "^[%d]*%s([%x%:]+)%s")
+	  clients[i].ip = string.match(line, "^[%d]*%s[%x%:]+%s([%d%.]+)%s")
+	  i = i + 1
+   end
+   db.log(clients)
+   return clients
 end
 
 function get_client_splash_info()
+   local sys = require "luci.sys"
+   if sys.call("/etc/init.d/nodogsplash enabled") ~= "0" then
+	  return dhcp_lease_fallback()
+   end
    local convert = function(x)
 	  return tostring(math.floor(tonumber(x)/60)).." "..i18n.translate("minutes")
    end
