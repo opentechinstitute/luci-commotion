@@ -6,6 +6,7 @@
 config_load ucitrack
 uci_add ucitrack nodogsplash nodogsplash
 uci_set ucitrack nodogsplash init ucidog
+uci_set ucitrack system init avahi-daemon
 uci_commit ucitrack
 
 #setup sysupgrade saves
