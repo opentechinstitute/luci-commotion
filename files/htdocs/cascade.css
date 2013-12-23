@@ -549,6 +549,10 @@ table tbody th {
   background: white;
   border: 0;
 }
+table#neighbors.cbi-section-table th.cbi-section-table-cell,
+table#neighbors.cbi-section-table td.cbi-section-table-cell {
+  text-align:center;
+}
 header {
   color: #BFBFBF;
   overflow: visible;
