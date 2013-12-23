@@ -3,11 +3,12 @@
 . /etc/functions.sh
 
 #setup ucitrack
-config_load ucitrack
-uci_add ucitrack nodogsplash nodogsplash
-uci_set ucitrack nodogsplash init ucidog
-uci_set ucitrack system init avahi-daemon
-uci_commit ucitrack
+uci add ucitrack nodogsplash
+uci set ucitrack.@nodogsplash[0].init=ucidog
+uci add_list ucitrack.@system[0].affects=avahi_daemon
+uci add ucitrack avahi_daemon
+uci set ucitrack.@avahi_daemon[0].init=avahi-daemon
+uci commit ucitrack
 
 #setup sysupgrade saves
 echo /etc/config/setup_wizard >> /etc/sysupgrade.conf
