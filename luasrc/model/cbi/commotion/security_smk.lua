@@ -28,7 +28,7 @@ m = Map("olsrd", translate("Shared Mesh Keychain"), translate("To ensure that on
 --redirect on saved and changed to check changes.
 m.on_after_save = ccbi.conf_page
 
-s = m:section(TypedSection, "LoadPlugin", translate("Use a Shared Mesh Keychain to sign mesh routes. Yes/No"), translate("Check the box to use a Shared Mesh Keychain on this device. You'll also be required to upload or generate a Shared Mesh Keychain."))
+s = m:section(TypedSection, "LoadPlugin", translate("Use a Shared Mesh Keychain to sign mesh routes. Yes/No"), translate("Add or remove a Shared Mesh Keychain on this device. You can also upload or generate a new Shared Mesh Keychain once you add a Shared Mesh Keychain to this device."))
 s.addremove = true
 s.anonymous = true
 
