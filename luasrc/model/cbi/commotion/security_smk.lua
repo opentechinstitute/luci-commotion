@@ -196,7 +196,11 @@ end
 new = s:option(Button, "_dummy2", translate("Create a new Shared Mesh Keychain file"), translate("Click on the button below to create a new Shared Mesh Keychain file. This will DELETE the existing Shared Mesh Keychain on this device. Use this option if you are creating a brand new Commotion mesh network, or if you are changing the Shared Mesh Keyhchain on an existing network. In either case, create a backup of the existing Shared Mesh Keychain first."))
 new.anonymous = true
 
-function new.write() return true end
+function new.write(self, section, value)
+   m.changed = true
+   return self.map:set(section, "sid", get_sid())
+end
+
 function new.validate(self, section, value)
    db.log("new")
    m.save = true
