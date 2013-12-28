@@ -1,0 +1,5 @@
+#!/bin/sh
+
+#use our help icon
+cp /www/luci-static/commotion/help.png /www/luci-static/resources/cbi/help.gif || exit 1
+exit 0

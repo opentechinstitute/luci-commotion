@@ -11,6 +11,7 @@ You may obtain a copy of the License at
 	http://www.apache.org/licenses/LICENSE-2.0
 
 -%>
+</div>
 <%
 	local disp = require "luci.dispatcher"
 
@@ -27,11 +28,10 @@ You may obtain a copy of the License at
       <nav>
         <div class="pointydown"></div>
         <ul id="footermenu">
-		  <%-local uci = luci.model.uci.cursor()
-			 if uci:get('quickstart', 'options', 'complete') ~= 'true' then-%>
-		  <li class="QS"><a href="<%=controller%>/QuickStart/"><%:QuickStart%></a></li>
-		  <%end%>
-          <li class="admin"><a href="<%=controller%>/admin/"><%:Administration%></a></li>
+          <li class="admin"><a href="<%=controller%>/admin/commotion"><%:Administration%></a></li>
+		  <li class="about"><a href="<%=controller%>/commotion/about/"><%:About%></a></li>
+		  <li class="help"><a href="<%=controller%>/commotion/help/"><%:Help%></a></li>
+		  <li class="license"><a href="<%=controller%>/commotion/license/"><%:License%></a></li>
         </ul>
       </nav>
       <p class="credits">

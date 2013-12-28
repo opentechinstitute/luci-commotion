@@ -1,0 +1,108 @@
+.sb-container {
+	z-index:10000;
+	width: 25%;
+	margin:10px 10px 10px 10px;
+	overflow:hidden;
+	float:left;
+	background:#ffffff;
+}
+
+.body-content {
+	margin:auto;
+	overflow: auto;
+}
+
+.login {
+	margin:10px 10% auto 10%;
+}
+
+.sb-btn {
+	-webkit-box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	-o-box-sizing:border-box;
+	width:100%;
+	margin:0 auto;
+	padding:.5em .5em;
+	cursor:pointer;
+	border-bottom:5px solid #ffffff;
+	border-right:5px solid #ffffff;
+	border-left:5px solid #ffffff;
+	background:#00ffcf;
+}
+
+#selected {
+	background: #877AED;
+}
+
+#menu-icon {
+	display: none;
+	width: 40px;
+	height: 40px;
+	background: #fff url(/luci-static/commotion/drop_menu.png) center;
+}
+
+.sb-btn h3 {
+	font-size:1.5em;
+	color:#000000;
+	font-weight: bold;
+	text-align: center;
+	line-height: 2em;
+}
+
+p.submenutitle {
+	text-align: left;
+	margin-left: 1em;
+}
+
+p.submenutitle a {
+	color: #877AED;
+	font-weight: bold;
+	font-size:1em;
+}
+
+.submenu {
+	text-align: left;
+	font-size:1em;
+}
+.submenu li {
+	color: #877AED;
+	font-weight: bold;
+}
+
+/*MEDIA QUERY*/
+@media only screen and (max-width : 640px) {
+
+	#menu-icon {
+		display:inline-block;
+		float:left;
+	}
+	#sidebar-nav {
+		position:absolute;
+	}
+	nav .sb-container, nav:active .sb-container {
+		display: none;
+		width:80%;
+		position:relative;
+		z-index:10000;
+	}
+	.basic_menu {
+		width:80%;
+		padding: 5px 5px 5px 50px;
+		margin:10px auto auto auto;
+
+	}
+	nav .sb-btn {
+		text-align: center;
+		width: 100%;
+		margin: 0;
+	}
+
+	nav:hover .sb-container {
+		display: block;
+	}
+	
+	.sb-btn h3 {
+		font-size:1em;
+		line-height: 1em;		
+	}
+}
