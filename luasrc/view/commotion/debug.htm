@@ -1,0 +1,54 @@
+<script>
+    function download_warning()
+    {
+    var x;
+    var r=confirm("<%:The information you are about to download contains private information about this device and the network it is connected to. Only give this information to people you trust. Do you understand?%>");
+    if (r==true)
+	{
+	return true;
+	}
+    else (r==false)
+	{
+	return false;
+	}
+	}
+    function formSubmit()
+	{
+	document.getElementById("debug").submit();
+    }
+  </script>
+<%-
+         local debugurl = luci.dispatcher.build_url('admin', 'status', 'debug', 'submit')
+-%>
+  
+  <form id="debug" method="post" action="<%=debugurl%>" enctype="multipart/form-data">
+        <!-- enctype required for sending vales to server-->
+         <h2><a id="content" name="content"><%:Commotion Bug Info%></a></h2>
+
+         <div style="float:left; text-align:left;">
+                <p><strong><%:Name%>:</strong><br />
+                <input type="text" name="name"></p>
+                <p><strong><%:Contact Info%>:</strong><br />
+                <input type="text" name="contact"></p>
+
+                <p><strong><%:What were you doing on the device when the error occurred?%></strong><br />
+                 <textarea name="userAction" cols="60" rows="5"></textarea></p>
+
+                <p><strong><%:Please describe the behavior you expected%>:</strong><br />
+                 <textarea name="expectedBehavior" cols="60" rows="5"></textarea>
+                </p>
+                
+                <p><strong><%:Please describe the behavior you experienced that you believe is wrong%>:</strong><br />
+                 <textarea name="badBehavior" cols="60" royws="5"></textarea>
+                </p>
+
+<h2><%:Debugging Info%>:</h2>
+                <input type="radio" name="buginfo" value="network"> <%:Mesh Network Information%><br />
+                 <input type="radio" name="buginfo" value="state"> <%:Router Status%><br />
+                 <input type="radio" name="buginfo" value="rules"> <%:Router Traffic Routing Rules%><br />
+                 <input type="radio" name="buginfo" value="all" checked> <%:All Info%><br />
+                 <input type="button" value="<%:Create Bug Info File%>:" onclick="download_warning() ? formSubmit() : null;" />
+                </div>
+                <br style="clear:both" /><br />
+  </form>
+

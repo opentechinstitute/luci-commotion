@@ -1,0 +1,53 @@
+<%+header%>
+	<div>
+		<script type="text/javascript" src="<%=resource%>/cbi.js"></script>
+		<script>
+		  function set_page(page) {
+		  $("#sb_del").append("<input type='hidden' name='sw_page' value='"+page+"' />")
+		  document.cbi.submit()
+		  }
+		</script>
+		<input type="hidden" name="cbi.submit" value="1" />
+		<input type="submit" value="<%:Save%>" class="hidden" />
+	</div>
+	<div class="sb-container" id="sb_del">
+	  <div class="sb-follow">
+		<% for i, x in ipairs(self.chain) do
+		   local title = translate(x)
+		   -%>
+		<%if x == self.current then%>
+		<div class="sb-btn" id="selected">
+		  <%else%>
+		  <div class="sb-btn" onclick="set_page('<%=x%>')">
+			<%end%>
+			<h3><%=title%>
+			</h3>
+		  </div>
+		  <% end %>
+		</div>
+	  </div>
+	  <div class="body-content  basic_menu">
+	<%- self.active:render() %>
+	<div class="cbi-page-actions">
+		<input type="hidden" name="cbi.delg.current" value="<%=self.current%>" />
+<% for _, x in ipairs(self.chain) do %>
+		<input type="hidden" name="cbi.delg.path" value="<%=x%>" />
+<% end %>
+<% if not self.disallow_pageactions then %>
+<% if self.allow_back and self:get_prev(self.current) then %>
+		<input class="cbi-button cbi-button-back" type="submit" title="Click here to go to the previous page." name="cbi.delg.back" value="<%:« Back%>" />
+<% end %>
+<% if self.allow_reset then %>
+		<input class="cbi-button cbi-button-reset" type="reset" title="Click here to revert all values added and start over." value="<%:Reset%>" />
+<% end %>
+<% if self.current == "Configuration Complete" then %>
+        <input class="cbi-button cbi-button-cancel cbi-fake-finish" type="submit" title="Click here to go to go to the confirmation page to set your changes." name="cbi.cancel" value="<%:Finish%>" />
+<% end %>
+<% if self.allow_finish and not self:get_next(self.current) then %>
+	<input class="cbi-button cbi-button-finish" type="submit" title="Click here to go to go to the confirmation page to set your changes." value="<%:Finish%>" />
+<% elseif self:get_next(self.current) then %>
+		<input class="cbi-button cbi-button-next" type="submit" title="Click here to go to the next page." value="<%:Next »%>" />
+<% end %>
+<% end %>
+		<script type="text/javascript">cbi_d_update();</script>
+	</div>

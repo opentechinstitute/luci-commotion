@@ -1,0 +1,55 @@
+<%#-
+--! @param gateway_provided String "Yes" if node is providing gateway to (mesh/ap?) "No" if not providing a gateway.
+-%>
+<%
+   sys = require "luci.sys"
+   --Sets tabs to select current page
+   tabs = {nd = "nearby_devices",
+           mv = "mesh_visualizer",
+           cc = "connected_clients",
+           dr = "debug_report"}
+   for i,x in pairs(tabs) do
+       if x == active_tab then
+           tabs[i] = "cbi-tab active"
+       else
+           tabs[i] = "cbi-tab-disabled"
+       end
+   end
+   %>
+
+<%+header%>
+
+<div class="status-info">
+  <div class="status-list">
+	<span class="key-item"><%:Providing Gateway%></span>
+	<span class="status-data"><%=gateway_provided%></span>
+	<br /><br /><br />
+	<%- for _,iface in pairs(ifaces) do -%>
+	<div>
+	  <span class="key-item"><%=iface.name%></span>
+	  <span class="status-data">(<%=iface.status%>) (<%=iface.sec%>) (<%=iface.conn%> <%:Client Connections%>) </span>
+	</div>
+	<%end%>
+  </div>
+</div>
+<div class="cbi-map">
+  <ul id="tabs" class="cbi-tabmenu">
+	<li class=<%=tabs.nd%>>
+	  <a id="nearby_devices" href="<%=controller%>/admin/commotion/status/nearby_md"><%:Nearby Mesh Devices%></a>
+	</li>
+	<li class=<%=tabs.mv%>>
+	  <a id="mesh_visualizer" href="<%=controller%>/admin/commotion/status/mesh_viz"><%:Mesh Visualizer%></a>
+	</li>
+	<li class=<%=tabs.cc%>>
+	  <a id="connected_clients" href="<%=controller%>/admin/commotion/status/conn_clnts"><%:Connected Clients%></a>
+	</li>
+	<% if sys.exec("opkg list-installed |grep luci-commotion-debug") then %>
+	<li class=<%=tabs.dr%>>
+	  <a id="debug_report" href="<%=controller%>/admin/commotion/status/dbg_rpt"><%:Debug Report%></a>
+	</li>
+	<%end%>
+  </ul>
+</div>
+<%include(page, {assets=assets})%>
+
+<%+footer%>

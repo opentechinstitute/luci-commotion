@@ -1,0 +1,15 @@
+<legend class="cbi-value-title"><%:Access Point%></legend>
+<div class="cbi-section-descr"><%:Click here to create a new access point. Once created you will be able to come back to this page to configure it.%></div>
+<div class="cbi-section-create">
+  <% if self.anonymous then -%>
+  <input type="submit" class="cbi-button cbi-button-add" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>.<%=section%>" value="<%:Add%>" />
+  <%- else -%>
+  <% if self.invalid_cts then -%><div class="cbi-section-error"><% end %>
+	<input type="text" class="cbi-section-create-name" id="cbi.cts.<%=self.config%>.<%=self.sectiontype%>.<%=section%>" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>.<%=section%>" />
+	<script type="text/javascript">cbi_validate_field('cbi.cts.<%=self.config%>.<%=self.sectiontype%>.<%=section%>', true, 'uciname');</script>
+	<input type="submit" class="cbi-button cbi-button-add" onclick="this.form.cbi_state='add-section'; return true" value="<%:Add%>" />
+	<% if self.invalid_cts then -%>
+	<br /><%:Invalid%></div>
+  <%- end %>
+  <%- end %>
+</div>

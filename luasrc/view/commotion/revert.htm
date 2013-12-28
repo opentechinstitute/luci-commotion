@@ -1,0 +1,51 @@
+<%#
+LuCI - Lua Configuration Interface
+Copyright 2008 Steven Barth <steven@midlink.org>
+Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+$Id: revert.htm 9014 2012-08-14 13:08:18Z jow $
+
+-%>
+
+<%SW = require "luci.commotion.setup_wizard"%>
+<%sw_stat = SW.status()%>
+
+<%+header%>
+
+<h2><a id="content" name="content"><%:Revert%></a></h2>
+
+<% if changes then %>
+	<%+cbi/apply_xhr%>
+	<%+admin_uci/changelog%>
+	<p><strong><%:Reverting changes...
+Please be patient, this may take a few moments. Once the settings are reset click "Start Over" to return to the beginning of the Setup Wizard.%>:</strong></p>
+	<%- uci_changelog(changes) -%>
+<% else %>
+	<p><strong><%:There are no pending changes to revert!%></strong></p>
+<% end %>
+<%if sw_stat then%>
+<div class="basic_menu">
+<%end%>
+<div class="cbi-page-actions">
+  <%if sw_stat then%>
+  <div style="float:left">
+  <form class="inline" method="get" action="<%=controller%>/commotion/setup_wizard">
+	<input class="cbi-button cbi-button-back" type="submit" value="<%:Start Over%>" />
+  </form>
+  </div>
+  <%else%>
+	<form class="inline" method="get" action="<%=controller%>/admin/commotion/">
+		<input class="cbi-button cbi-button-admin" type="submit" value="<%:Finish%>" />
+	</form>
+	<%end%>
+</div>
+<%if sw_stat then%>
+</div>
+<%end%>
+<%+footer%>

@@ -1,0 +1,7 @@
+config settings settings
+    option enable '1'
+	option splashtime '1'
+	option splashunit 'hours'
+
+config interfaces interfaces
+	option interface 'br-lan'

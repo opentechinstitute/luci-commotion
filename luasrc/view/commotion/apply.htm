@@ -1,0 +1,49 @@
+<%#
+LuCI - Lua Configuration Interface
+Copyright 2008 Steven Barth <steven@midlink.org>
+Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+$Id: apply.htm 9014 2012-08-14 13:08:18Z jow $
+
+-%>
+<%SW = require "luci.commotion.setup_wizard"%>
+<%+header%>
+<%if SW.status() then
+	 redirect = luci.dispatcher.build_url("commotion", "advanced")
+  else
+	 redirect = luci.dispatcher.build_url("admin","commotion")
+  end%>
+
+<h2><a id="content" name="content"><%:Applying Changes%></a></h2>
+
+<% if changes then %>
+	<%+commotion/apply_xhr%>
+	<%+admin_uci/changelog%>
+
+	<%- cbi_apply_xhr('uci-apply', configs, redirect) -%>
+
+	<p><strong><%:The following changes have been committed%>:</strong></p>
+	<%- uci_changelog(changes) -%>
+<% else %>
+	<p><strong><%:There are no pending changes to apply!%></strong></p>
+<% end %>
+<%sw_stat = SW.status()%>
+<%if sw_stat then%>
+<div class="basic_menu">
+<%end%>
+<div class="cbi-page-actions">
+	<form class="inline" method="get" action="<%=controller%>/admin/commotion/">
+		<input class="cbi-button cbi-button-admin" type="submit" value="<%:Finish%>" />
+	</form>
+</div>
+<%if sw_stat then%>
+</div>
+<%end%>
+
+<%+footer%>

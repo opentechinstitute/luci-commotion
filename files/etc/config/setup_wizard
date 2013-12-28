@@ -1,0 +1,5 @@
+config settings settings
+	   option enabled '1'
+
+config uci passwords
+	   option admin_pass 'false'
