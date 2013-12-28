@@ -2,7 +2,7 @@
 local uci = require "luci.model.uci".cursor()
 
 -- check if we're running at all, and exit if not
-if uci:get('commotion-dash', '@dashboard[0]', 'enabled') == 'false' then -- setting is string, not boolean
+if uci:get_first('commotion-dash', 'dashboard', 'enabled') == 'false' then -- setting is string, not boolean
 	do return end
 end
 
