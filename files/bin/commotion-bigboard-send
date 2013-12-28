@@ -2,7 +2,7 @@
 local uci = require "luci.model.uci".cursor()
 
 -- check if we're running at all, and exit if not
-if uci:get('commotion-dash', '@dashboard[0]', 'enabled') == 'false' then -- setting is string, not boolean
+if uci:get_first('commotion-dash', 'dashboard', 'enabled') == 'false' then -- setting is string, not boolean
 	do return end
 end
 
@@ -52,11 +52,8 @@ local options = {}
 options.headers =  {}
 options.headers["Connection"] = "keep-alive"
 options.headers["Content-Type"] = "application/x-www-form-urlencoded"
---options.headers["Content-Type"] = "application/json"
---options.headers["Content-Type"] = "multipart/form-data"
 options.sndtimeo = '100'
 options.rcvtimeo = '50'
---options.tls_context = "client"
 options.method = "POST"
 options.message= {}
 options.body = {}
