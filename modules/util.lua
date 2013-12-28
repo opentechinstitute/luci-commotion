@@ -54,7 +54,11 @@ end
 --! @brief A function to sanatize data before it is passed to the shell to execute.
 --! @param String to be cleaned
 function util.pass_to_shell(str)
-	return str:gsub("$(","\\$"):gsub("`","\\`")
+   if str ~= nil and str ~= "" then
+	  return str:gsub("$(","\\$"):gsub("`","\\`")
+   else
+	  return nil
+   end
 end
 
 return util

@@ -2,6 +2,7 @@
 
 local http = require "luci.http"
 local util = require "luci.util"
+local disp = require "luci.dispatcher"
 
 module "luci.commotion.dispatch"
 
@@ -21,6 +22,7 @@ function dispatch.nodeurl(controller, prefix, name, query)
    end
    return util.pcdata(url)
 end
+				
 
 return dispatch
 
