@@ -12,4 +12,14 @@ cp -f /usr/share/commotion/files/node-hna-mini.gif /www/luci-static/resources/ol
 cp -f /usr/share/commotion/files/olsr-viz.sh /www/cgi-bin/olsr-viz.sh
 }
 
+[ -f "/usr/bin/patch" ] && { \
+  cd /usr/lib/lua/luci/controller/admin/
+  patch -p1 < /usr/share/commotion/patches/system.oldpasswd.patch
+
+  cd /usr/lib/lua/luci/model/cbi/admin_system/
+  patch -p1 < /usr/share/commotion/patches/admin.oldpasswd.patch
+}
+
+rm -f /tmp/luci-indexcache
+
 exit 0
