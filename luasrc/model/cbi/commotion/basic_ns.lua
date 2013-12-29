@@ -54,13 +54,6 @@ function hname.write(self, section, value)
    end
 end
 
-local egg = shn:option(DummyValue, "_dummy1", translate("HI ANDREW!"))
-egg:depends("hostname", "meat")
-local egg2 = shn:option(DummyValue, "_dummy2", translate("Hail to the King!"))
-egg2:depends("hostname", "jheretic")
-
-
-
 --PASSWORDS
 local v0 = true -- track password success across maps
 
