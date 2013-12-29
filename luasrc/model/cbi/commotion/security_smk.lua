@@ -183,7 +183,7 @@ function dwnld.write(self, section, value)
    keyring = uci:get("serval", "settings", "olsrd_mdp_keyring")
    local f = io.open(keyring.."/serval.keyring")
    if not f then
-	  self:add_error(section, translate("No Current Serval Key To Download."))
+	  self:add_error(section, translate("No Current Shared Mesh Keychain To Download."))
 	  return nil
    end
    luci.http.prepare_content("application/force-download")
