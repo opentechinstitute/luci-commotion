@@ -15,23 +15,23 @@ http://www.apache.org/licenses/LICENSE-2.0
    uri_prefix, num_post = string.gsub(uri, "serval_keyring_.*", "serval_keyring")
 -%>
 
-<h1><%:Serval Keyring%></h1>
+<h1><%:Shared Mesh Keychain%></h1>
 
 <h2 class="warning"><%=Err%></h2>
 
-<p><%:The Serval Keyring is used to sign all network traffic on a Commotion mesh network. Every node on your Commotion network should use the same Serval Keyring. On this page you can download the existing Serval keyring for this node, to back it up or to use when adding new nodes to your network. You can also generate a new Serval Keyring, or upload one from your computer.%></p>
+<p><%:To ensure that only authorized devices can route traffic on your Commotion mesh network, one Shared Mesh Keychain file can be generated and shared by all devices..%></p>
 
 <br /><br />
 
-<h1><%:Download a Serval Keyring%></h1>
+<h2><%:Download Shared Mesh Keychain%></h2>
 <form method="post" action="<%=uri_prefix%>_down" enctype="multipart/form-data" id="down">
   <div id="zone-content-wrapper">
 	<div id="zone-content">
 	  <div class="cbi-value">
-		<label class="cbi-value-title tippable" data-tip="<%:Download your current Serval keyring%>"><%:Download your current Serval keyring%></label>
+		<label class="cbi-value-title tippable" data-tip="<%:Download your current Shared Mesh Keychain%>"><%:Download your current Serval keyring%></label>
 		<input type="hidden" name="dl_key" value="true" />
 		<div class="upload-description">
-		  <%:Download your current Serval keyring%>
+		  <%:Download your current Shared Mesh Keychain%>
 		</div>
 	  </div>
 	</div>
@@ -39,15 +39,15 @@ http://www.apache.org/licenses/LICENSE-2.0
   <input type="submit" name="submit" value="<%:Download%>"/>
 </form>
 
-<h1><%:Upload a Serval Keyring%></h1>
+<h2><%:Upload Shared Mesh Keychain%></h2>
 <form method="post" action="<%=uri_prefix%>_up" enctype="multipart/form-data" id="up">
   <div id="zone-content-wrapper">
 	<div id="zone-content">
 	  <div class="cbi-value">
-		<label class="cbi-value-title tippable" data-tip="<%:Click on the field below to upload a keyring.%>"><%:Upload a Keyring%></label>
+		<label class="cbi-value-title tippable" data-tip="<%:Upload Shared Mesh Keychain.%>"><%:Upload Shared Mesh Keychain%></label>
 		<input type="file" name="upload" id="media" />
 		<div class="upload-description">
-		  <%:Upload a Serval key file file from your own computer.%>
+		  <%:If a Shared Mesh Keychain file was provided to you by a network administrator or another community member, select and upload it here to join this device to an existing mesh network.%>
 		</div>
 	  </div>
 	</div>
@@ -55,20 +55,20 @@ http://www.apache.org/licenses/LICENSE-2.0
   <input type="submit" name="submit" value="<%:Upload%>"/>
 </form>
 
-<h1><%:Create a new Serval Keyring%></h1>
+<h2><%:Create a new Shared Mesh Keychain%></h2>
 <form method="post" action="<%=uri_prefix%>_new" enctype="multipart/form-data" id="new_keyring">
   <div id="zone-content-wrapper">
 	<div id="zone-content">
 	  <div class="cbi-value">
-		<label class="cbi-value-title tippable" data-tip="<%:Click on the button below to create a new keyring. This will DELETE the existing keyring on the device. We highly suggest you download any existing network keyrings you have before creating a new keyring.%>"><%:New Keyring%></label>
+		<label class="cbi-value-title tippable" data-tip="<%:Create a new Shared Mesh Keychain file. This will DELETE the existing Shared Mesh Keychain on this device. Use this option if you are creating a brand new Commotion mesh network, or if you are changing the Shared Mesh Keyhchain on an existing network. In either case, create a backup of the existing Shared Mesh Keychain first.%>"><%:New Shared Mesh Keychain%></label>
 		<input type="hidden" name="new_keyring" value="true" />
 		<div class="upload-description">
-		  <%:Create a new keyring on this device, replacing the existing keyring.%>
+		  <%:Create a new Shared Mesh Keychain file. This will DELETE the existing Shared Mesh Keychain on this device. Use this option if you are creating a brand new Commotion mesh network, or if you are changing the Shared Mesh Keyhchain on an existing network. In either case, create a backup of the existing Shared Mesh Keychain first.%>
 		</div>
 	  </div>
 	</div>
   </div>
-  <input type="submit" name="new_keyring" value="<%:Create New Keyring%>" />
+  <input type="submit" name="new_keyring" value="<%:Create New Shared Mesh Keychain%>" />
 </form>
 
 
