@@ -7,6 +7,8 @@ module "luci.commotion.encode"
 
 local encode = {}
 
+--! @name html_replacements
+--! @brief A table of html replacements
 local html_replacements = {
    ["<"] = "&lt;",
    [">"] = "&gt;",
@@ -16,6 +18,8 @@ local html_replacements = {
    ["\""] = "&quot;"
    }
 
+--! @name url_replacements
+--! @brief A table of url replacements
 local url_replacements = {
    ["<"] = "%3C",
    [">"] = "%3E",

@@ -11,6 +11,7 @@ local crypto = {}
 
 --! @name ssl_cert_fingerprints
 --! @brief Gives the md5 and sha1 fingerprints of uhttpd server.
+--! @todo Possibly make this smaller. Readability vs. size 
 --! @return md5, sha1 hashes of uhttpd
 function crypto.ssl_cert_fingerprints()
    --get cert file from /etc/config/uhttpd
@@ -32,10 +33,10 @@ function crypto.ssl_cert_fingerprints()
 end
 
 --! @brief Redirects a page to https if the path is within the "node" path.
---! @param node  node path to check. format as such -> "/NODE/" 
+--! @param node  node path to check. Format as such to ensure full path -> "/NODE/" 
 --! @param env A table containing the REQUEST_URI and the SERVER_NAME. Can take full luci.http.getenv()
---! @return true if page is to be redirected.
---! @return false if path does not include node or if https is already on.
+--! @return true if page is not https and user has been redirected to https page.
+--! @return false if path does not include node or if using an https connection.
 --! @example crypto_check_https.htm
 function crypto.check_https(node, env)
    if string.match(env.REQUEST_URI, node) then
