@@ -1,3 +1,4 @@
+
 --[[
    Copyright (C) 2013 Seamus Tuohy
 
@@ -96,7 +97,7 @@ function set_commotion()
 				  if s.mode == 'adhoc' then
 					 if uci:get("network", s.network, "proto") == "commotion" then
 						local profile = uci:get("network", s.network, "profile")
-						cnet.commotion_set(profile, {mdp_keyring="/etc/commotion/keys.d/mdp/", mdp_sid=sid, serval='true'})
+						cnet.commotion_set(profile, {mdp_keyring="/etc/commotion/keys.d/mdp/serval.keyring", mdp_sid=sid, serval='true'})
 						cnet.commotion_set(profile)
 					 end
 				  end
