@@ -90,6 +90,8 @@ button:hover, input[type="button"]:hover, input[type="reset"]:hover, input[type=
 }
 input[type="search"] {
   -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+  box-sizing: content-box;
 }
 textarea {
   overflow: auto;
@@ -256,7 +258,20 @@ hr {
   -moz-border-left-colors: none;
   -moz-border-right-colors: none;
   -moz-border-top-colors: none;
-  border-color: -moz-use-text-color -moz-use-text-color #EEEEEE;
+
+  border-bottom-colors: none;
+  border-image: none;
+  border-left-colors: none;
+  border-right-colors: none;
+  border-top-colors: none;
+
+  -webkit-border-bottom-colors: none;
+  -webkit-border-image: none;
+  -webkit-border-left-colors: none;
+  -webkit-border-right-colors: none;
+  -webkit-border-top-colors: none;
+
+  border-color: -moz-use-text-color #EEEEEE;
   border-style: none none solid;
   border-width: 0 0 1px;
   margin: 20px 0 19px;
@@ -417,8 +432,10 @@ textarea {
 }
 input, textarea {
   -moz-transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
+  -webkit-transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset;
 }
+
 input:focus, textarea:focus {
   border-color: rgba(82, 168, 236, 0.8);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset, 0 0 8px rgba(82, 168, 236, 0.6);
@@ -739,6 +756,13 @@ header .dropdown-menu a:hover, .dropdown-menu a:hover, header .dropdown-menu a.h
   -moz-border-left-colors: none;
   -moz-border-right-colors: none;
   -moz-border-top-colors: none;
+
+  -webkit-border-bottom-colors: none;
+  -webkit-border-image: none;
+  -webkit-border-left-colors: none;
+  -webkit-border-right-colors: none;
+  -webkit-border-top-colors: none;
+
   border-color: #DDDDDD #DDDDDD white;
   border-style: solid;
   border-width: 3px;
@@ -885,8 +909,7 @@ footer a:active, footer a:hover {
   background-repeat: repeat-x;
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 }
-.btn, .cbi-button {
-}
+
 .cbi-button-remove {
   float: right;
 }
@@ -900,20 +923,28 @@ footer a:active, footer a:hover {
 .btn.primary {
   background-color: #00ffcf;
   background-image: -moz-linear-gradient(center top , #00ffcf, #000000);
+  background-image: -ms-linear-gradient(center top , #00ffcf, #000000);
+  background-image: -webkit-linear-gradient(center top , #00ffcf, #000000);
   background-repeat: repeat-x;
   color: black;
 }
 .cbi-button-up {
   background-image: url("./resources/cbi/up.gif"), -moz-linear-gradient(center top , #FFFFFF, #FFFFFF 25%, #E6E6E6);
+  background-image: url("./resources/cbi/up.gif"), -webkit-linear-gradient(center top , #FFFFFF, #FFFFFF 25%, #E6E6E6);
+  background-image: url("./resources/cbi/up.gif"), -ms-linear-gradient(center top , #FFFFFF, #FFFFFF 25%, #E6E6E6);
+
   background-position: center center;
 }
 .cbi-button-down {
   background-image: url("./resources/cbi/down.gif"), -moz-linear-gradient(center top , #FFFFFF, #FFFFFF 25%, #E6E6E6);
+  background-image: url("./resources/cbi/down.gif"), -ms-linear-gradient(center top , #FFFFFF, #FFFFFF 25%, #E6E6E6);
+  background-image: url("./resources/cbi/down.gif"), -webkit-linear-gradient(center top , #FFFFFF, #FFFFFF 25%, #E6E6E6);
   background-position: center center;
 }
 .btn.active, .btn:active {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
 }
+
 .btn.disabled {
   background-image: none;
   box-shadow: none;
@@ -1005,8 +1036,7 @@ footer a:active, footer a:hover {
   background-position: 7px 4px;
   padding: 3px 9px 3px 27px;
 }
-:root .alert, *:root .btn {
-}
+
 button.btn::-moz-focus-inner, input.btn[type="submit"]::-moz-focus-inner {
   border: 0 none;
   padding: 0;
@@ -1239,6 +1269,8 @@ table.cbi-section-table td.cbi-section-table-cell {
 .ifacebox {
   background-color: #FFFFFF;
   background-image: -moz-linear-gradient(center top , #FFFFFF, #FFFFFF 25%, #E6E6E6);
+  background-image: -webkit-linear-gradient(center top , #FFFFFF, #FFFFFF 25%, #E6E6E6);
+  background-image: -ms-linear-gradient(center top , #FFFFFF, #FFFFFF 25%, #E6E6E6);
   border: 1px solid #CCCCCC;
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
   margin: 0 10px;
@@ -1255,6 +1287,8 @@ table.cbi-section-table td.cbi-section-table-cell {
 .ifacebadge {
   background-color: #FFFFFF;
   background-image: -moz-linear-gradient(center top , #FFFFFF, #FFFFFF 25%, #E6E6E6);
+  background-image: -ms-linear-gradient(center top , #FFFFFF, #FFFFFF 25%, #E6E6E6);
+  background-image: -webkit-linear-gradient(center top , #FFFFFF, #FFFFFF 25%, #E6E6E6);
   border: 1px solid #CCCCCC;
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
   display: inline-block;
