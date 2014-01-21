@@ -21,6 +21,7 @@ local db = require "luci.commotion.debugger"
 local http = require "luci.http"
 local SW = require "luci.commotion.setup_wizard"
 local ccbi = require "luci.commotion.ccbi"
+local ip = require "luci.ip"
 
 m = Map("network", translate("Internet Gateway"), translate("If desired, you can configure your gateway interface  here."))
 
