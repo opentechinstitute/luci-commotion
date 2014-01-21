@@ -67,10 +67,28 @@ name = s:option(Value, "ssid",  translate("Mesh Network Name"), translate("Commo
 name.default = "Commotion"
 name.datatype = "maxlength(15)"
 
+function name:validate(val)
+   if #val > 15 or #val == 0 then
+	  m.message = "Mesh Name invalid. Must be greater than 0 and less than 15 chars long."
+	  m.state = -1
+	  return nil
+   elseif val:match("[%$\"%[%]%?%+%/]") then
+	  m.message = "The name of an interface cannot contain the following chars $\"[]?+/"
+	  m.state = -1
+	  return nil
+   elseif val:match("^[%s%!%#]") then
+	  m.message = "Mesh Name invalid. It cannot start with a space, !, or # char."
+	  m.state = -1
+	  return nil
+   else
+	  return val
+   end
+end
+
 nwk = s:option(Value, "network")
 --! @brief checks for invalid ssid values and rejects the name it they exist.
 function nwk.datatype(val)
-   if val and val:match("\"%<%>%'%&") then
+   if val and val:match("\"%<%>%'%&") and #val < 16 then
 	  return true
    else
 	  return false
@@ -129,6 +147,12 @@ end
 function check_name(self, section, value)
    local uci = require "luci.model.uci".cursor()
    local clean_name = string.gsub(value, "[%p%s%z]", "_")
+   if #clean_name > 15 then
+	  db.log("check_name found greater than 15 chars")
+	  m.message = "That name is too long. It can be 15 chars at most."
+	  m.state = -1
+	  return nil
+   end
    local exist = uci:get("network", clean_name)
    if exist ~= nil then
 	  local current = self.map:get(section, "network")
