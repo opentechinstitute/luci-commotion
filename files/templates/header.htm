@@ -100,9 +100,10 @@ You may obtain a copy of the License at
 			  function(s)
 				 if s and s.mode and s.mode == "adhoc" and s.network then
 					local iface = conn:call("network.interface."..s.network, "status", {})
-					if iface and iface["ipv4-address"] then
-					   if iface ~= nil and iface["ipv4-address"][1].address then
-						  mesh_ip = iface["ipv4-address"][1].address
+					if iface ~= nil and iface["ipv4-address"] then
+					   if iface["ipv4-address"][1] and iface["ipv4-address"][1].address then
+       						  mesh_ip = iface["ipv4-address"][1].address
+		                  end
 					   else
 						  mesh_ip = "Unknown"
 					   end
