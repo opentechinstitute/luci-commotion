@@ -33,18 +33,59 @@ end
 p = m:section(NamedSection, "wired")
 p.anonymous = true
 
-config = p:option(ListValue, "dhcp", translate("Gateway Configuration"))
-config:value("auto", translate("Automatically configure gateway on boot."))
-config:value("client", translate("This device should ALWAYS try and acquire a DHCP lease."))
-config:value("server", translate("This device should ALWAYS provide DHCP leases to clients."))
-config:value("none", translate("This device should not do anything with DHCP."))
-
 msh = p:option(Flag, "meshed", translate("Will you be meshing with other Commotion devices over the ethernet interface?"))
 msh.enabled = "true"
 msh.disabled = "false"
 msh.default = "false"
 msh.addremove = false
 msh.write = ccbi.flag_write
+
+function msh:remove(self, section)
+   value = self.map:get(section, self.option)
+   if value ~= self.disabled then
+	  self.section.changed = true
+	  return self.map:set(section, self.option, 'false')
+   end
+end
+
+ipaddress = p:option(TextValue, "ipaddr", translate("IP-Address"), translate(""))
+ipaddress:depends("meshed", "true")
+ipaddress.datatype = "ipaddr"
+function ipaddress:validate(val)
+   if val then
+	  if ip.IPv4(val) or ip.IPv6(val) then
+		 return val
+	  else
+		 return nil
+	  end
+   end
+   return nil
+end
+
+netmask = p:option(TextValue, "netmask", translate("Net-Mask"), translate(""))
+netmask:depends("meshed", "true")
+netmask.datatype = "ipaddr"
+function netmask:validate(val)
+   if val then
+	  if ip.IPv4(val) or ip.IPv6(val) then
+		 return val
+	  else
+		 return nil
+	  end
+   end
+   return nil
+end
+
+config = p:option(ListValue, "dhcp", translate("Gateway Configuration"))
+config:value("auto", translate("Automatically configure gateway on boot."))
+config:value("client", translate("This device should ALWAYS try and acquire a DHCP lease."))
+config:value("server", translate("This device should ALWAYS provide DHCP leases to clients."))
+config:value("none", translate("This device should not do anything with DHCP."))
+config:depends("meshed", "") --CBI checks on flags check for the self.enabled value if true and and empty string if false. This only applies to flags. So, you know.... don't think this will work other places.
+function config:remove(section, value)
+	return self.map:set(section, self.option, "none")
+end
+
 
 ance = p:option(Flag, "_gateway", translate("Advertise your gateway to the mesh."))
 ance.addremove = true
