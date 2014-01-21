@@ -63,7 +63,7 @@ function pw_sec_opt(pw_s, iface)
    pw_s.anonymous = true
    
    --encryption toggle
-   enc = pw_s:option(Flag, "encryption", translate("Require a Password?"), translate("When people connect to this access point, should a password be required?"))
+   enc = pw_s:option(Flag, "encryption", translate("Require a Password?"), translate("When people connect to this interface, should a password be required?"))
    enc.disabled = "none"
    enc.enabled = "psk2"
    enc.rmempty = true
