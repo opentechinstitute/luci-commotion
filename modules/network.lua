@@ -5,6 +5,7 @@ local sys = require "luci.sys"
 local uci = require "luci.model.uci"
 local ubus = require "ubus"
 local dt = require "luci.cbi.datatypes"
+local validate = require "luci.commotion.validate"
 
 local string, table, tostring, pairs, require = string, table, tostring, pairs, require
 local print = print
@@ -86,27 +87,15 @@ function network.commotiond(cmd, err)
    end
 end
 
-
---! @name check_channel
---! @brief checks if a channel number is a real 2.4 or 5ghz channel 
---! @param x int A number that you beleive is a wireless channel.
---! @bug Only takes numbers currently. A string of a number is rejected even if it is correct
---! @return (bool) True if the number is a correct channel, nil if it is not.
-local function check_channel(x)
-   local channels = {1,2,3,4,5,6,7,8,9,10,11,36,40,44,48,149,153,157,161,165}
-   if util.table.contains(channels, x) then
-	  return true
-   end
-end
-
 --! @name val_check
 --! @brief table containing the values that have corresponding functions for validating input
 --! @todo create a function for every commotiond input. It does not validate input strongly, so we need to do that on the front end.
 local val_check = {
    bssid=dt.macaddr,
-   channel=check_channel,
+   channel=validate.channel,
    ip=dt.ipaddr,
-   wpakey=dt.wpakey,
+   wpakey=validate.wireless_pw,
+   ssid=validate.mesh_ssid
 }
 
 --! @name c_check
