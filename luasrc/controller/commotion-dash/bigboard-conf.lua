@@ -71,7 +71,7 @@ function ifprocess()
    local debug = require "luci.commotion.debugger"
 	local values = luci.http.formvalue()
 	local encode = require "luci.commotion.encode"
-	local id = require "luci.commotion.identify"
+	local dt = require "luci.cbi.datatypes"
 	local ERR = nil
 	--[[ sanitize inputs ]]--
 	for k,v in pairs(values) do
@@ -80,9 +80,7 @@ function ifprocess()
 	
 	if values['bbOnOff'] ~= nil then
 		--[[ validate destination address ]]--
-		if id.is_ip4addr(values['gatherer_ip']) == true and
-               	   id.is_ip4addr_cidr(values['gatherer_ip']) == true and
-                   id.is_fqdn(values['gatherer_ip']) ~= nil then
+		if dt.host(values['gatherer_ip']) == true then
                 	ERR = 'ERROR: invalid IP or site address ' .. values['gatherer_ip']
                 	debug.log("Error validating inputs " .. values['gatherer_ip'])
                 	main(ERR)
