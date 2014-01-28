@@ -4,6 +4,7 @@ local dt = require "luci.cbi.datatypes"
 local uri = require "uri"
 local uci = require "luci.model.uci"
 local util = require "luci.util"
+local tonumber = tonumber
 
 module "luci.commotion.validate"
 
