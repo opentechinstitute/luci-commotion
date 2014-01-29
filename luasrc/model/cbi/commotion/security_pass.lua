@@ -57,13 +57,19 @@ uci:foreach("wireless", "wifi-iface",
 --iface password creator for all other interfaces
 --! @name pw_sec_opt
 --! @brief create password options to add to interface passed-
-function pw_sec_opt(pw_s, iface)
+function pw_sec_opt(pw_s, iface, mode)
    --section options
    pw_s.addremove = false
    pw_s.anonymous = true
+   local helptext
    
    --encryption toggle
-   enc = pw_s:option(Flag, "encryption", translate("Require a Password?"), translate("When people connect to this access point, should a password be required?"))
+   if (mode == 'adhoc') then
+	   helptext = translate("When people connect to this mesh network, should a password be required?")
+   elseif (mode == 'ap') then
+	   helptext = translate("When people connect to this access point, should a password be required?")
+   end
+   enc = pw_s:option(Flag, "encryption", translate("Require a Password?"), helptext)
    enc.disabled = "none"
    enc.enabled = "psk2"
    enc.rmempty = true
@@ -140,11 +146,11 @@ local pw_text = "To encrypt Commotion mesh network data between devices, each de
 if #mesh_ifaces > 1 then
    for _,x in pairs(mesh_ifaces) do
 	  local meshPW = m:section(NamedSection, x.name, "wifi-iface", x.name, pw_text)
-	  meshPW = pw_sec_opt(meshPW, x)
+	  meshPW = pw_sec_opt(meshPW, x, 'adhoc')
    end
 else
    local meshPW = m:section(NamedSection, mesh_ifaces[1].name, "wifi-iface", mesh_ifaces[1].name, pw_text)
-   meshPW = pw_sec_opt(meshPW, mesh_ifaces[1])
+   meshPW = pw_sec_opt(meshPW, mesh_ifaces[1], 'adhoc')
 end
 
 --ADMIN PASSWORD
@@ -167,7 +173,7 @@ end
 for i,iface in ipairs(interfaces) do
    if iface.mode ~= "adhoc" then
 	  local otherPW = m:section(NamedSection, iface.name, "wifi-iface", iface.name.." Interface", translate("Enter the password people should use to connect to this interface."))
-	  otherPW = pw_sec_opt(otherPW, iface, iface.name)
+	  otherPW = pw_sec_opt(otherPW, iface, iface.mode)
    end
 end
 

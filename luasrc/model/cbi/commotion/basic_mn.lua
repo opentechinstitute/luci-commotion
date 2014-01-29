@@ -22,6 +22,8 @@ local db = require "luci.commotion.debugger"
 local http = require "luci.http"
 local SW = require "luci.commotion.setup_wizard"
 local ccbi = require "luci.commotion.ccbi"
+local validate = require "luci.commotion.validate"
+local encode = require "luci.commotion.encode"
 
 
 local m = Map("wireless", translate("Network Settings"), translate("Every Commotion node must have one mesh network connection or interface. Commotion can mesh over wireless or wired interfaces."))
@@ -64,22 +66,20 @@ s.valuefooter = "cbi/full_valuefooter"
 s.template_addremove = "cbi/commotion/addMesh" --This template controls the addremove form for adding a new access point so that it has better wording.
 
 name = s:option(Value, "ssid",  translate("Mesh Network Name"), translate("Commotion networks share a network-wide name. This must be the same across all devices on the same mesh. This name cannot be greater than 15 characters."))
-name.default = "Commotion"
-name.datatype = "maxlength(15)"
-
-nwk = s:option(Value, "network")
---! @brief checks for invalid ssid values and rejects the name it they exist.
-function nwk.datatype(val)
-   if val and val:match("\"%<%>%'%&") then
-	  return true
-   else
-	  return false
+name.default = "commotionwireless.net"
+name.datatype = "maxlength(31)"
+function name.validate(self,val)
+   if val and validate.mesh_ssid(val) then
+	  return val
    end
+   return nil,"Invalid mesh network name; must be between 1 and 31 characters"
 end
 
-   --! @brief creates a network section and same named commotion profile when creating a mesh interface and assigns it to that mesh interface
+nwk = s:option(Value, "network")
+
+--! @brief creates a network section and same named commotion profile when creating a mesh interface and assigns it to that mesh interface
 function write_network(value)
-   local net_name = string.gsub(value, "[%p%s%z]", "_")
+   local net_name = encode.uci(value)
    network_name = uci:section("network", "interface", net_name, {proto="commotion", class='mesh'})
    cnw.commotion_set(network_name)
    uci:set("network", network_name, "profile", network_name)
@@ -103,7 +103,7 @@ end
 
 function clean_network(value)
    local fs = require "luci.fs"
-   local net_name = string.gsub(value, "[%p%s%z]", "_")
+   local net_name = encode.uci(value)
    uci:delete("network", net_name)
    fs.unlink("/etc/commotion/profiles.d/"..net_name)
    uci:save("network")
@@ -128,7 +128,7 @@ end
 
 function check_name(self, section, value)
    local uci = require "luci.model.uci".cursor()
-   local clean_name = string.gsub(value, "[%p%s%z]", "_")
+   local clean_name = encode.uci(value)
    local exist = uci:get("network", clean_name)
    if exist ~= nil then
 	  local current = self.map:get(section, "network")
@@ -251,7 +251,7 @@ function pw1.validate(self, value, section)
    local v1 = value
    local v2 = pw2:formvalue(section)
    --local v2 = http.formvalue(string.gsub(self:cbid(section), "%d$", "2"))
-   if v1 and v2 and #v1 > 0 and #v2 > 0 then
+   if v1 and v2 and validate.wireless_pw(v1) and validate.wireless_pw(v2) then
 	  if v1 == v2 then
 		 if m.message == nil then
 			m.message = translate("Password successfully changed!")
@@ -264,7 +264,7 @@ function pw1.validate(self, value, section)
 	  end
    else
 	  m.message = translate("Error, no changes saved. See below.")
-	  self:add_error(section, translate("Unknown Error, password not changed!"))
+	  self:add_error(section, translate("Invalid password; must be 8 and 63 printable ASCII characters"))
 	  return nil
    end
 end

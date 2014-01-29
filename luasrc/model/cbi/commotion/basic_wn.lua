@@ -22,6 +22,7 @@ local db = require "luci.commotion.debugger"
 local http = require "luci.http"
 local SW = require "luci.commotion.setup_wizard"
 local ccbi = require "luci.commotion.ccbi"
+local validate = require "luci.commotion.validate"
 
 local m = Map("wireless", translate("Wireless Network"), translate("Turning on an Access Point provides a wireless network for people to connect to using a laptop or other wireless devices."))
 
@@ -70,17 +71,13 @@ s.template_addremove = "cbi/commotion/addAP" --This template controls the addrem
 
 name = s:option(Value, "ssid", translate("Name"), translate("The access point name (SSID) is the name that people will look for when connecting to this device."))
 name.default = "CommotionWireless"
+name.datatype = "maxlength(32)"
 
 function name:validate(val)
-   if #val > 31 or #val == 0 then
-	  return nil
-   elseif val:match("[%$\"%[%]%?%+%/]") then
-	  return nil
-   elseif val:match("^[%s%!%#]") then
-	  return nil
-   else
-	  return val
+   if val and validate.ap_ssid(val) then
+	   return val
    end
+   return nil
 end
 
 local wifi_dev = {}
@@ -167,7 +164,7 @@ function pw1.validate(self, value, section)
    local v1 = value
    local v2 = pw2:formvalue(section)
    --local v2 = http.formvalue(string.gsub(self:cbid(section), "%d$", "2"))
-   if v1 and v2 and #v1 > 0 and #v2 > 0 then
+   if v1 and v2 and validate.wireless_pw(v1) and validate.wireless_pw(v2) then
 	  if v1 == v2 then
 		 if m.message == nil then
 			m.message = translate("Password successfully changed!")
@@ -180,7 +177,7 @@ function pw1.validate(self, value, section)
 	  end
    else
 	  m.message = translate("Error, no changes saved. See below.")
-	  self:add_error(section, translate("Unknown Error, password not changed!"))
+	  self:add_error(section, translate("Invalid password; must be 8 and 63 printable ASCII characters"))
 	  return nil
    end
 end
