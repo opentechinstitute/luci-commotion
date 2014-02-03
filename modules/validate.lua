@@ -5,6 +5,7 @@ local uri = require "uri"
 local uci = require "luci.model.uci"
 local util = require "luci.util"
 local tonumber = tonumber
+local type = type
 
 module "luci.commotion.validate"
 
@@ -111,7 +112,7 @@ function validate.app_uri(val)
 end
 
 function validate.app_category(val)
-  local _uci = luci.model.uci.cursor()
+  local _uci = uci.cursor()
   local categories = _uci:get_list("applications","settings","category")
   if (type(val) == "table") then
     for _, cat in pairs(val) do
