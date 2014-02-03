@@ -64,7 +64,7 @@ function validate.ap_ssid(val)
 end
 
 function validate.channel_2(val)
-  local channels = {1,2,3,4,5,6,7,8,9,10,11}
+  local channels = {1,2,3,4,5,6,7,8,9,10,11,12,13,14}
   if util.table.contains(channels, tonumber(val)) then
     return true
   end
