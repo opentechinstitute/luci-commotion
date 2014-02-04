@@ -21,6 +21,7 @@ local uci = require "luci.model.uci".cursor()
 local cnet = require "luci.commotion.network"
 local http = require "luci.http"
 local ccbi = require "luci.commotion.ccbi"
+local validate = require "luci.commotion.validate"
 
 --Main title and system config map for hostname value
 local m = Map("system", translate("Node Settings"), translate("In this section you'll set the basic required settings for this device, and the basic network settings required to connect this device to a Commotion Mesh network. You will be prompted to save your settings along the way and apply them at the end."))
@@ -39,7 +40,15 @@ shn.addremove = false
 
 --Create a value field for hostname
 local hname = shn:option(Value, "hostname", translate("Node Name"), translate("The node name (hostname) is a unique name for this device, visible to other devices and users on the network. Name this device in the field provided."))
-hname.datatype = "hostname"
+hname.datatype = "maxlength(63)"
+
+function hname.validate(self,value)
+   if validate.hostname(value) then
+      return value
+   else
+      return nil, "Valid hostnames must be between 1 and 63 characters; contain only letters, numbers, and hyphens; start with a letter; and cannot end in a hyphen."
+   end
+end
 
 function hname.write(self, section, value)
    local node_id = cnet.nodeid()
