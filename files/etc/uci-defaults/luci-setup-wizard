@@ -10,6 +10,7 @@ uci add ucitrack avahi_daemon
 uci set ucitrack.@avahi_daemon[0].init=avahi-daemon
 uci add ucitrack setup_wizard
 uci add_list ucitrack.@setup_wizard[0].affects=nodogsplash
+uci add_list ucitrack.@setup_wizard[0].affects=network
 uci commit ucitrack
 
 #setup sysupgrade saves
