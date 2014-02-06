@@ -72,7 +72,7 @@ function pw_sec_opt(pw_s, iface, mode)
    enc = pw_s:option(Flag, "encryption", translate("Require a Password?"), helptext)
    enc.disabled = "none"
    enc.enabled = "psk2"
-   enc.rmempty = true
+   enc.rmempty = false
    enc.default = enc.disabled --default must == disabled value for rmempty to work
    
    --Make enc flag actually check for section.changed and set that flag for the confirmation page to work
