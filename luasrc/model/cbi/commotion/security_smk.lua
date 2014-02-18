@@ -71,7 +71,7 @@ function lib.write(self, section, value)
 end
 
 
-sp = s:option(Value, "servalpath")
+sp = s:option(Value, "keyringpath")
 sp.default = "/etc/commotion/keys.d/mdp/serval.keyring"
 sp.render = function() end
 function sp:parse(section)
