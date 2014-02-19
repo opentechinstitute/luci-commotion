@@ -89,7 +89,7 @@ end
 
 ance = p:option(Flag, "_gateway", translate("Advertise your gateway to the mesh."))
 ance.addremove = true
-
+ance:depends("meshed", "")
 function dyn_exists()
    local cvalue = nil
    uci:foreach("olsrd", "LoadPlugin",
@@ -127,6 +127,31 @@ function ance.remove(self, section)
 	  uci:delete("olsrd", cvalue)
 	  uci:save("olsrd")
 	  return true
+   end
+end
+
+
+--! @brief creates a network section and same named commotion profile when creating a mesh interface and assigns it to that mesh interface
+function write_firewall(value)
+   local net_name = encode.uci(value)
+   network_name = uci:section("network", "interface", net_name, {proto="commotion", class='mesh'})
+   cnw.commotion_set(network_name)
+   uci:set("network", network_name, "profile", network_name)
+   uci:save("network")
+   if value ~= nil then
+	  uci:foreach("firewall", "zone",
+				  function(s)
+					 if s.name and s.name == "mesh" then
+						local list = {net_name}
+						for _,x in ipairs(s.network) do
+						   table.insert(list, x)
+						end
+						uci:set_list ("firewall", s[".name"], "network", list)
+						uci:save("firewall")
+					 end
+				  end
+	  )
+	  return net_name
    end
 end
 
