@@ -38,13 +38,43 @@ msh.enabled = "true"
 msh.disabled = "false"
 msh.default = "false"
 msh.addremove = false
-msh.write = ccbi.flag_write
-
+function msh:write(section, fvalue)
+   if ccbi.flag_write(self, section, fvalue) then
+	  return write_firewall(section)
+   else
+	  return nil
+   end
+end
+   
 function msh:remove(self, section)
    value = self.map:get(section, self.option)
    if value ~= self.disabled then
 	  self.section.changed = true
-	  return self.map:set(section, self.option, 'false')
+	  if self.map:set(section, self.option, 'false') then
+		 return write_firewall(section, true)
+	  end
+   end
+end
+
+--! @brief creates a network section and same named commotion profile when creating a mesh interface and assigns it to that mesh interface
+--! @param remove bool, if true remove value from the firewall zone
+function write_firewall(section, remove)
+   if value ~= nil then
+	  uci:foreach("firewall", "zone",
+				  function(s)
+					 if s.name and s.name == "mesh" then
+						local list = remove and {} or {section}
+						for _,x in ipairs(s.network) do
+						   if x ~= section then
+							  table.insert(list, x)
+						   end
+						end
+						uci:set_list ("firewall", s[".name"], "network", list)
+						uci:save("firewall")
+					 end
+				  end
+	  )
+	  return true
    end
 end
 
@@ -129,31 +159,5 @@ function ance.remove(self, section)
 	  return true
    end
 end
-
-
---! @brief creates a network section and same named commotion profile when creating a mesh interface and assigns it to that mesh interface
-function write_firewall(value)
-   local net_name = encode.uci(value)
-   network_name = uci:section("network", "interface", net_name, {proto="commotion", class='mesh'})
-   cnw.commotion_set(network_name)
-   uci:set("network", network_name, "profile", network_name)
-   uci:save("network")
-   if value ~= nil then
-	  uci:foreach("firewall", "zone",
-				  function(s)
-					 if s.name and s.name == "mesh" then
-						local list = {net_name}
-						for _,x in ipairs(s.network) do
-						   table.insert(list, x)
-						end
-						uci:set_list ("firewall", s[".name"], "network", list)
-						uci:save("firewall")
-					 end
-				  end
-	  )
-	  return net_name
-   end
-end
-
 
 return m
