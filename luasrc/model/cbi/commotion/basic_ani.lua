@@ -38,7 +38,7 @@ msh.enabled = "true"
 msh.disabled = "false"
 msh.default = "false"
 msh.addremove = false
-function msh:write(section, fvalue)
+function msh.write(self, section, fvalue)
    if ccbi.flag_write(self, section, fvalue) then
 	  return write_firewall(section)
    else
@@ -46,7 +46,7 @@ function msh:write(section, fvalue)
    end
 end
    
-function msh:remove(self, section)
+function msh.remove(self, section)
    value = self.map:get(section, self.option)
    if value ~= self.disabled then
 	  self.section.changed = true
@@ -59,7 +59,7 @@ end
 --! @brief creates a network section and same named commotion profile when creating a mesh interface and assigns it to that mesh interface
 --! @param remove bool, if true remove value from the firewall zone
 function write_firewall(section, remove)
-   if value ~= nil then
+   if section ~= nil then
 	  uci:foreach("firewall", "zone",
 				  function(s)
 					 if s.name and s.name == "mesh" then
