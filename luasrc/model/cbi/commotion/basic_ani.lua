@@ -21,8 +21,9 @@ local db = require "luci.commotion.debugger"
 local http = require "luci.http"
 local SW = require "luci.commotion.setup_wizard"
 local ccbi = require "luci.commotion.ccbi"
+local ip = require "luci.ip"
 
-m = Map("network", translate("Internet Gateway"), translate("If desired, you can configure your gateway interface  here."))
+m = Map("network", translate("Internet Gateway"), translate("If desired, you can configure your gateway interface here."))
 
 --redirect on saved and changed to check changes.
 if not SW.status() then
@@ -32,22 +33,93 @@ end
 p = m:section(NamedSection, "wired")
 p.anonymous = true
 
-config = p:option(ListValue, "dhcp", translate("Gateway Configuration"))
-config:value("auto", translate("Automatically configure gateway on boot."))
-config:value("client", translate("This device should ALWAYS try and acquire a DHCP lease."))
-config:value("server", translate("This device should ALWAYS provide DHCP leases to clients."))
-config:value("none", translate("This device should not do anything with DHCP."))
-
 msh = p:option(Flag, "meshed", translate("Will you be meshing with other Commotion devices over the ethernet interface?"))
 msh.enabled = "true"
 msh.disabled = "false"
 msh.default = "false"
 msh.addremove = false
-msh.write = ccbi.flag_write
+function msh.write(self, section, fvalue)
+   if ccbi.flag_write(self, section, fvalue) then
+	  return write_firewall(section)
+   else
+	  return nil
+   end
+end
+   
+function msh.remove(self, section)
+   value = self.map:get(section, self.option)
+   if value ~= self.disabled then
+	  self.section.changed = true
+	  if self.map:set(section, self.option, 'false') then
+		 return write_firewall(section, true)
+	  end
+   end
+end
+
+--! @brief creates a network section and same named commotion profile when creating a mesh interface and assigns it to that mesh interface
+--! @param remove bool, if true remove value from the firewall zone
+function write_firewall(section, remove)
+   if section ~= nil then
+	  uci:foreach("firewall", "zone",
+				  function(s)
+					 if s.name and s.name == "mesh" then
+						local list = remove and {} or {section}
+						for _,x in ipairs(s.network) do
+						   if x ~= section then
+							  table.insert(list, x)
+						   end
+						end
+						uci:set_list ("firewall", s[".name"], "network", list)
+						uci:save("firewall")
+					 end
+				  end
+	  )
+	  return true
+   end
+end
+
+ipaddress = p:option(TextValue, "ipaddr", translate("IP Address"), translate(""))
+ipaddress:depends("meshed", "true")
+ipaddress.datatype = "ipaddr"
+function ipaddress:validate(val)
+   if val then
+	  if ip.IPv4(val) or ip.IPv6(val) then
+		 return val
+	  else
+		 return nil
+	  end
+   end
+   return nil
+end
+
+netmask = p:option(TextValue, "netmask", translate("Netmask"), translate(""))
+netmask:depends("meshed", "true")
+netmask.datatype = "ipaddr"
+function netmask:validate(val)
+   if val then
+	  if ip.IPv4(val) or ip.IPv6(val) then
+		 return val
+	  else
+		 return nil
+	  end
+   end
+   return nil
+end
+
+config = p:option(ListValue, "dhcp", translate("Gateway Configuration"))
+config:value("auto", translate("Automatically configure gateway on boot."))
+config:value("client", translate("This device should ALWAYS try to acquire a DHCP lease."))
+config:value("server", translate("This device should ALWAYS provide DHCP leases to clients."))
+config:value("none", translate("This device should not do anything with DHCP."))
+config:depends("meshed", "") --CBI checks on flags check for the self.enabled value if true and and empty string if false. This only applies to flags. So, you know.... don't think this will work other places.
+function config:remove(section, value)
+	return self.map:set(section, self.option, "none")
+end
+
 
 ance = p:option(Flag, "_gateway", translate("Advertise your gateway to the mesh."))
 ance.addremove = true
-
+ance:depends("meshed", "")
 function dyn_exists()
    local cvalue = nil
    uci:foreach("olsrd", "LoadPlugin",
@@ -87,6 +159,5 @@ function ance.remove(self, section)
 	  return true
    end
 end
-
 
 return m
