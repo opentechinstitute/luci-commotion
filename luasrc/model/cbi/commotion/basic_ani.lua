@@ -23,7 +23,7 @@ local SW = require "luci.commotion.setup_wizard"
 local ccbi = require "luci.commotion.ccbi"
 local ip = require "luci.ip"
 
-m = Map("network", translate("Internet Gateway"), translate("If desired, you can configure your gateway interface  here."))
+m = Map("network", translate("Internet Gateway"), translate("If desired, you can configure your gateway interface here."))
 
 --redirect on saved and changed to check changes.
 if not SW.status() then
@@ -78,7 +78,7 @@ function write_firewall(section, remove)
    end
 end
 
-ipaddress = p:option(TextValue, "ipaddr", translate("IP-Address"), translate(""))
+ipaddress = p:option(TextValue, "ipaddr", translate("IP Address"), translate(""))
 ipaddress:depends("meshed", "true")
 ipaddress.datatype = "ipaddr"
 function ipaddress:validate(val)
@@ -92,7 +92,7 @@ function ipaddress:validate(val)
    return nil
 end
 
-netmask = p:option(TextValue, "netmask", translate("Net-Mask"), translate(""))
+netmask = p:option(TextValue, "netmask", translate("Netmask"), translate(""))
 netmask:depends("meshed", "true")
 netmask.datatype = "ipaddr"
 function netmask:validate(val)
@@ -108,7 +108,7 @@ end
 
 config = p:option(ListValue, "dhcp", translate("Gateway Configuration"))
 config:value("auto", translate("Automatically configure gateway on boot."))
-config:value("client", translate("This device should ALWAYS try and acquire a DHCP lease."))
+config:value("client", translate("This device should ALWAYS try to acquire a DHCP lease."))
 config:value("server", translate("This device should ALWAYS provide DHCP leases to clients."))
 config:value("none", translate("This device should not do anything with DHCP."))
 config:depends("meshed", "") --CBI checks on flags check for the self.enabled value if true and and empty string if false. This only applies to flags. So, you know.... don't think this will work other places.
