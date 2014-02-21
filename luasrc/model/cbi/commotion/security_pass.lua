@@ -148,7 +148,7 @@ if #mesh_ifaces > 1 then
 	  local meshPW = m:section(NamedSection, x.name, "wifi-iface", x.name, pw_text)
 	  meshPW = pw_sec_opt(meshPW, x, 'adhoc')
    end
-else
+elseif  #mesh_ifaces == 1 then
    local meshPW = m:section(NamedSection, mesh_ifaces[1].name, "wifi-iface", mesh_ifaces[1].name, pw_text)
    meshPW = pw_sec_opt(meshPW, mesh_ifaces[1], 'adhoc')
 end
