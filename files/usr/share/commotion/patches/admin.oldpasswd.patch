@@ -1,10 +1,10 @@
-diff --git a/admin.lua b/admin.lua
-index 61f0141..0d0827f 100644
---- a/admin.lua
-+++ b/admin.lua
-@@ -15,13 +15,33 @@ $Id: admin.lua 8153 2012-01-06 16:42:02Z jow $
+--- admin.lua	2014-02-21 16:33:40.760712034 -0500
++++ admin.new.lua	2014-02-21 16:38:31.456701514 -0500
+@@ -14,14 +14,35 @@
+ ]]--
  
  local fs = require "nixio.fs"
++local formvalue = require "luci.http".formvalue
  
 -m = Map("system", translate("Router Password"),
 -	translate("Changes the administrator password for accessing the device"))
@@ -40,26 +40,20 @@ index 61f0141..0d0827f 100644
  pw1 = s:option(Value, "pw1", translate("Password"))
  pw1.password = true
  
-@@ -32,24 +52,36 @@ function s.cfgsections()
+@@ -32,23 +53,38 @@
  	return { "_pass" }
  end
  
-+function m.on_before_commit(map)
-+	-- if existing password, make sure user has old password
-+	if s0 then
-+		v0 = luci.sys.user.checkpasswd("root", pw0:formvalue("_pass0"))
-+	end
-+
-+	if v0 == false then
-+		m.message = translate("Incorrect password. Changes rejected!")
-+		m.save=v0	
-+		m2.save=v0	
-+	end
-+end
-+
- function m.on_commit(map)
- 	local v1 = pw1:formvalue("_pass")
- 	local v2 = pw2:formvalue("_pass")
+-function m.on_commit(map)
+-	local v1 = pw1:formvalue("_pass")
+-	local v2 = pw2:formvalue("_pass")
++function m.on_save(map)
++	-- Distinguish between page load and form submission
++	if next(formvalue()) then
++		-- if existing password, make sure user has old password
++		if s0 then
++			v0 = luci.sys.user.checkpasswd("root", pw0:formvalue("_pass0"))
++		end
  
 -	if v1 and v2 and #v1 > 0 and #v2 > 0 then
 -		if v1 == v2 then
@@ -70,8 +64,18 @@ index 61f0141..0d0827f 100644
 -			end
 -		else
 -			m.message = translate("Given password confirmation did not match, password not changed!")
--		end
--	end
++		if v0 == false then
++			m.message = translate("Incorrect password. Changes rejected!")
++			m.save=v0	
++			m2.save=v0	
+ 		end
+ 	end
+ end
+ 
++function m.on_commit(map)
++	local v1 = pw1:formvalue("_pass")
++	local v2 = pw2:formvalue("_pass")
++
 +        if v0 == true and v1 and v2 and #v1 > 0 and #v2 > 0 then
 +                if v1 == v2 then
 +                        if luci.sys.user.setpasswd(luci.dispatcher.context.authuser, v1) == 0 then
@@ -83,9 +87,16 @@ index 61f0141..0d0827f 100644
 +                        m.message = translate("Given password confirmation did not match, password not changed!")
 +                end
 +        end
- end
++end
  
--
  if fs.access("/etc/config/dropbear") then
  
- m2 = Map("dropbear", translate("SSH Access"),
+@@ -120,7 +156,7 @@
+ end
+ 
+ function keys.write(self, section, value)
+-	if value then
++	if value and m2.save == true then
+ 		fs.writefile("/etc/dropbear/authorized_keys", value:gsub("\r\n", "\n"))
+ 	end
+ end
