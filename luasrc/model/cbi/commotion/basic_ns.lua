@@ -41,6 +41,7 @@ shn.addremove = false
 --Create a value field for hostname
 local hname = shn:option(Value, "hostname", translate("Node Name"), translate("The node name (hostname) is a unique name for this device, visible to other devices and users on the network. Name this device in the field provided."))
 hname.datatype = "rangelength(1, 63)"
+hname.rmempty = false
 
 function hname.validate(self,value)
    if validate.hostname(value) then
@@ -94,6 +95,10 @@ s.anonymous = true
 
 pw1 = s:option(Value, "_pw1", translate("Password"))
 pw1.password = true
+
+if SW.status() then
+   pw1.rmempty = false
+end
 
 pw2 = s:option(Value, "_pw2", translate("Confirmation"))
 pw2.password = true
