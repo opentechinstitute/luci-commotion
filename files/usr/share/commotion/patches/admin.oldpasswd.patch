@@ -1,13 +1,13 @@
---- admin.lua	2014-02-21 16:33:40.760712034 -0500
-+++ admin.new.lua	2014-02-21 16:38:31.456701514 -0500
-@@ -14,14 +14,35 @@
+diff --git a/admin.lua b/admin.lua
+index 61f0141..28f4b78 100644
+--- a/admin.lua
++++ b/admin.lua
+@@ -14,14 +14,35 @@ $Id: admin.lua 8153 2012-01-06 16:42:02Z jow $
  ]]--
  
  local fs = require "nixio.fs"
 +local formvalue = require "luci.http".formvalue
- 
--m = Map("system", translate("Router Password"),
--	translate("Changes the administrator password for accessing the device"))
++
 +m = Map("system", translate("System Access"),
 +	translate("System functions related to system access"))
 +local v0 = true -- track password success across maps
@@ -30,9 +30,11 @@
 +	end
 +end
  
--s = m:section(TypedSection, "_dummy", "")
+-m = Map("system", translate("Router Password"),
 +s = m:section(TypedSection, "_dummy", translate("Router Password"),
-+	translate("Changes the administrator password for accessing the device"))
+ 	translate("Changes the administrator password for accessing the device"))
+-
+-s = m:section(TypedSection, "_dummy", "")
  s.addremove = false
  s.anonymous = true
 -
@@ -40,7 +42,7 @@
  pw1 = s:option(Value, "pw1", translate("Password"))
  pw1.password = true
  
-@@ -32,23 +53,38 @@
+@@ -32,23 +53,38 @@ function s.cfgsections()
  	return { "_pass" }
  end
  
@@ -91,7 +93,7 @@
  
  if fs.access("/etc/config/dropbear") then
  
-@@ -120,7 +156,7 @@
+@@ -120,7 +156,7 @@ function keys.cfgvalue()
  end
  
  function keys.write(self, section, value)
