@@ -31,8 +31,7 @@ local db = require "luci.commotion.debugger"
 
 function index()
    local SW = require "luci.commotion.setup_wizard"
-
-   entry({"admin", "commotion"}, alias("admin", "commotion", "status"), translate("Commotion"), 20)
+   entry({"admin", "commotion"}, call("setup_wiz_close"), translate("Commotion"), 20)
 
    local page  = node()
    page.lock   = true
@@ -101,6 +100,22 @@ function index()
 	  entry({"admin", "commotion", "basic", "addtl_net_ifaces"}, cbi("commotion/basic_ani", {hideapplybtn=true, hideresetbtn=true}), translate("Additional Network Interfaces"), 60)
    end
 end
+
+function setup_wiz_close()
+   local SW = require "luci.commotion.setup_wizard"
+   local disp = require "luci.dispatcher"
+   local http = require "luci.http"
+   
+   if SW.status() then
+	  local uci = require "luci.model.uci".cursor()
+	  uci:set("setup_wizard", "settings", "enabled", "0")
+	  uci:save("setup_wizard")
+	  uci:commit("setup_wizard")
+   end
+   local stat = disp.build_url("admin", "commotion", "status")
+   http.redirect(stat)
+end
+
 
 function advanced()
    local uci = require "luci.model.uci".cursor()
