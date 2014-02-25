@@ -6,6 +6,7 @@ local uci = require "luci.model.uci"
 local util = require "luci.util"
 local tonumber = tonumber
 local type = type
+local pairs = pairs
 
 module "luci.commotion.validate"
 
