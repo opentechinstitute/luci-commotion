@@ -26,7 +26,7 @@ function validate.printable_ascii(val)
 end
 
 function validate.hostname(val)
-  if val and (#val < 64) and (
+  if val and (#val >= 1) and (#val < 64) and (
     val:match("^[a-zA-Z]$") or
     val:match("^[a-zA-Z][a-zA-Z0-9%-]*[a-zA-Z0-9]$")
   ) then
