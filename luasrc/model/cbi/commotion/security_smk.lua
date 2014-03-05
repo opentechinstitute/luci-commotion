@@ -46,6 +46,7 @@ end
 function s.create(self, section)
    sys.exec("rm /etc/commotion/keys.d/mdp/serval.keyring")
    set_commotion()
+   s.fields.sid.default = get_sid()
    return AbstractSection.create(self, section)
 end
 
@@ -89,6 +90,7 @@ function sp:parse(section)
 	  self:write(section, self.default)
    end
 end
+
 function sp.write(self, section, value)
    set_commotion()
    m.changed = true
@@ -162,7 +164,7 @@ function sid:parse(section)
    db.log("sid parse")
    local cvalue = self:cfgvalue(section)
    if not cvalue then
-	  self:write(section, self.default)
+	  self:write(section, get_sid())
    end
 end
 
