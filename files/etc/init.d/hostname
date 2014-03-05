@@ -8,9 +8,9 @@ START=19
 STOP=91
 
 reload() {
-	local host_name=$(uci_get system system hostname)
+	local host_name=$(uci_get system @system[0] hostname)
 	len=${#host_name}
-	if [[ $len > 0 ]]; then
+	if [[ "$len" -gt 0 ]]; then
 		echo $host_name > /proc/sys/kernel/hostname
 	fi
 	
