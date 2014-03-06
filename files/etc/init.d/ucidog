@@ -16,9 +16,9 @@ reload() {
 	local splash_time=$(uci_get nodogsplash settings splashtime)
 	local splash_unit=$(uci_get nodogsplash settings splashunit)
 	if [ "$splash_unit" == "days" ]; then
-		splash_time=$(($splash_time*60))
-	elif [ "$splash_unit" == "hours" ]; then
 		splash_time=$(($splash_time*24*60))
+	elif [ "$splash_unit" == "hours" ]; then
+		splash_time=$(($splash_time*60))
 	elif [ "$splash_unit" == "seconds" ]; then
 		splash_time=$(($splash_time/60))
 	fi
