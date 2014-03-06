@@ -16,7 +16,7 @@ module("luci.controller.commotion-dash.bigboard-conf", package.seeall)
 require "luci.model.uci"
 require "luci.fs"
 require "luci.sys"
-require "luci.commotion.debugger".log
+local log = require "luci.commotion.debugger".log
 
 local dashConfig = "/etc/config/commotion-dash"
 
