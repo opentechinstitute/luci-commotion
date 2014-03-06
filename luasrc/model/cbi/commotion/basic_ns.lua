@@ -86,7 +86,7 @@ end
 if SW.status() then
    pw_text = "This password will be used to make changes to this device after initial setup has been completed. The administration username is “root."
 else
-   pw_text = "This password is used to make changes to this device. The administration username is “root."
+   pw_text = 'This password is used to make changes to this device. The administration username is “root".'
 end
    
 s = m:section(TypedSection, "_dummy", translate("Administration Password"), translate(pw_text))
