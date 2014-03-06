@@ -42,6 +42,14 @@ function s.remove(self, section)
    return self.map:del(section)
 end
 
+--! @brief Preempts loadPlugin section creation with the deletion and re-creation of the serval keyring. Simply, when the add button is clicked the key is deleted and re-created.
+function s.create(self, section)
+   sys.exec("rm /etc/commotion/keys.d/mdp/serval.keyring")
+   set_commotion()
+   s.fields.sid.default = get_sid()
+   return AbstractSection.create(self, section)
+end
+
 function s.parse(self, novld)
    local changes = uci:changes("olsrd")
    if changes and changes.olsrd then
@@ -82,6 +90,7 @@ function sp:parse(section)
 	  self:write(section, self.default)
    end
 end
+
 function sp.write(self, section, value)
    set_commotion()
    m.changed = true
@@ -155,7 +164,7 @@ function sid:parse(section)
    db.log("sid parse")
    local cvalue = self:cfgvalue(section)
    if not cvalue then
-	  self:write(section, self.default)
+	  self:write(section, get_sid())
    end
 end
 
