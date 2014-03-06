@@ -59,7 +59,6 @@ function hname.write(self, section, value)
 	  return true
    else
 	  local new_hn = value.."-"..string.sub(node_id, 1, 10)
-	  luci.sys.hostname(new_hn)
 	  return self.map:set(section, self.option, new_hn)
    end
 end
