@@ -80,7 +80,7 @@ function ifprocess()
 	
 	if values['bbOnOff'] ~= nil then
 		--[[ validate destination address ]]--
-		if dt.host(values['gatherer_ip']) == true then
+		if dt.host(values['gatherer_ip']) ~= true then
                 	ERR = 'ERROR: invalid IP or site address ' .. values['gatherer_ip']
                 	debug.log("Error validating inputs " .. values['gatherer_ip'])
                 	main(ERR)
