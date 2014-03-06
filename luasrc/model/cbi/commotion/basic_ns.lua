@@ -71,7 +71,7 @@ local v0 = true -- track password success across maps
 -- Allow incorrect root password to prevent settings change
 -- Don't prompt for password if none has been set
 if luci.sys.user.getpasswd("root") then
-   s0 = m:section(TypedSection, "_dummy", translate("Current Node Administration Password"), translate("Current node administration password required to make changes on this page"))
+   s0 = m:section(TypedSection, "_dummy", translate("Current Node Administration Password"), translate("The current node administration password is required to change the administration password."))
    s0.addremove = false
    s0.anonymous = true
    pw0 = s0:option(Value, "_pw0")
@@ -86,7 +86,7 @@ end
 if SW.status() then
    pw_text = "This password will be used to make changes to this device after initial setup has been completed. The administration username is “root."
 else
-   pw_text = "This password is used to make changes to this device. The administration username is “root."
+   pw_text = 'This password is used to make changes to this device. The administration username is “root".'
 end
    
 s = m:section(TypedSection, "_dummy", translate("Administration Password"), translate(pw_text))
