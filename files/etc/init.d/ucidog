@@ -19,8 +19,6 @@ reload() {
 		splash_time=$(($splash_time*24*60))
 	elif [ "$splash_unit" == "hours" ]; then
 		splash_time=$(($splash_time*60))
-	elif [ "$splash_unit" == "seconds" ]; then
-		splash_time=$(($splash_time/60))
 	fi
 	#set splashpage time
 	sed -i "s/^\(ClientIdleTimeout \).*/\1  $splash_time/" $conffile ||  return 0
