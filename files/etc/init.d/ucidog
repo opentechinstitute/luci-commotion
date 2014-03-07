@@ -16,11 +16,9 @@ reload() {
 	local splash_time=$(uci_get nodogsplash settings splashtime)
 	local splash_unit=$(uci_get nodogsplash settings splashunit)
 	if [ "$splash_unit" == "days" ]; then
-		splash_time=$(($splash_time*60))
-	elif [ "$splash_unit" == "hours" ]; then
 		splash_time=$(($splash_time*24*60))
-	elif [ "$splash_unit" == "seconds" ]; then
-		splash_time=$(($splash_time/60))
+	elif [ "$splash_unit" == "hours" ]; then
+		splash_time=$(($splash_time*60))
 	fi
 	#set splashpage time
 	sed -i "s/^\(ClientIdleTimeout \).*/\1  $splash_time/" $conffile ||  return 0
@@ -35,10 +33,10 @@ reload() {
 	#disable/enable nodogsplash
 	local enable=$(uci_get nodogsplash settings enable)
 	echo "$enable"
-	if [ "$enable" == '1' ]; then #this might come back as a string and not as a intiger. Check and fix that.
-		/etc/init.d/nodogsplash enable  || return 0
-		/etc/init.d/nodogsplash start || return 0
+	if [ "$enable" == '1' ]; then #this might come back as a string and not as a integer. Check and fix that.
+		/etc/init.d/nodogsplash enable
+		/etc/init.d/nodogsplash start
 	else
-		/etc/init.d/nodogsplash disable  || return 0
+		/etc/init.d/nodogsplash disable
 	fi
 }
