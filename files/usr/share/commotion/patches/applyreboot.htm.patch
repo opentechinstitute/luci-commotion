@@ -1,0 +1,17 @@
+--- applyreboot.htm.orig	2014-03-07 11:39:00.949957653 -0500
++++ applyreboot.htm	2014-03-07 14:28:39.211013114 -0500
+@@ -24,11 +24,11 @@
+ 
+ 				img.onload = function() {
+ 					window.clearInterval(interval);
+-					location.href = 'http://<%=addr or luci.http.getenv("SERVER_NAME")%>/';
++					location.href = 'http://<% if addr then %>thisnode<% else %><%=luci.http.getenv("SERVER_NAME")%><% end %>/';
+ 				};
+ 
+-				img.src = 'http://<%=addr or luci.http.getenv("SERVER_NAME")%><%=resource%>/icons/loading.gif?' + Math.random();
+-			}, 5000);
++				img.src = 'http://<% if addr then %>thisnode<% else %><%=luci.http.getenv("SERVER_NAME")%><% end %><%=resource%>/icons/loading.gif?' + Math.random();
++			}, 15000);
+ 		//]]></script>
+ 	</head>
+ 	<body>
