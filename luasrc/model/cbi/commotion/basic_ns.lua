@@ -40,7 +40,7 @@ shn.addremove = false
 
 --Create a value field for hostname
 local hname = shn:option(Value, "hostname", translate("Node Name"), translate("The node name (hostname) is a unique name for this device, visible to other devices and users on the network. Name this device in the field provided."))
-hname.datatype = "rangelength(1, 63)"
+hname.datatype = "rangelength(1, 53)"
 hname.rmempty = false
 
 function hname.validate(self,value)
