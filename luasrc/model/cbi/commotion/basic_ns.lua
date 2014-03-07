@@ -52,14 +52,19 @@ function hname.validate(self,value)
 end
 
 function hname.write(self, section, value)
-   local node_id = cnet.nodeid()
-   --check if the nodeid is the same and don't write hostname if it is. This means that if a person changes the hostname, but appends the old nodeif to the end of it the hostname will not change. But who in their right mind would do that.
-   hn, nid = value:match("(.-)%-([%d]*)$")
-   if nid and nid == node_id then
-	  return true
+   hn = self:formvalue(section)
+   old_hn = self:cfgvalue(section)
+   if hn and hn == old_hn then
+          return true
    else
-	  local new_hn = value.."-"..string.sub(node_id, 1, 10)
-	  return self.map:set(section, self.option, new_hn)
+          local node_id = cnet.nodeid()
+          if string.match(hn, node_id) then
+                -- requested hn already has nodeid
+                return self.map:set(section, self.option, hn)
+          else
+                local new_hn = hn.."-"..string.sub(node_id, 1, 10)
+                return self.map:set(section, self.option, new_hn)
+          end
    end
 end
 
