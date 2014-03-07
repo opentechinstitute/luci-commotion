@@ -22,6 +22,9 @@ cp -f /usr/share/commotion/files/olsr-viz.js /www/luci-static/resources/olsr-viz
 
   cd /usr/lib/lua/luci/model/cbi/admin_system/
   patch -p1 < /usr/share/commotion/patches/admin.oldpasswd.patch
+
+  cd /usr/lib/lua/luci/view/admin_system/
+  patch -p0 < /usr/share/commotion/patches/applyreboot.htm.patch
 }
 
 rm -f /tmp/luci-indexcache
