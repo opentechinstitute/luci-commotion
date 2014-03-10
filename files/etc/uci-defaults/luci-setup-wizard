@@ -3,12 +3,6 @@
 . /etc/functions.sh
 
 #setup ucitrack
-uci add ucitrack nodogsplash
-uci set ucitrack.@nodogsplash[0].init=ucidog
-uci add_list ucitrack.@system[0].affects=avahi_daemon
-uci add ucitrack avahi_daemon
-uci set ucitrack.@avahi_daemon[0].init=avahi-daemon
-uci add_list ucitrack.@setup_wizard[0].affects=nodogsplash
 uci add ucitrack hostname
 uci set ucitrack.@hostname[0].init=hostname
 uci add_list ucitrack.@system[0].affects=hostname
