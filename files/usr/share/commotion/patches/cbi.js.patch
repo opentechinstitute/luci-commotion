@@ -1,0 +1,53 @@
+--- cbi.js	2014-03-17 20:48:16.330196722 +0530
++++ cbi-179.js	2014-03-18 02:37:05.911493465 +0530
+@@ -14,6 +14,7 @@
+ var cbi_d = [];
+ var cbi_t = [];
+ var cbi_c = [];
++var invalid_field = [];
+ 
+ var cbi_validators = {
+ 
+@@ -878,8 +879,25 @@
+ 		{
+ 			var validator = form.cbi_validators[i];
+ 			if( !validator() && errmsg )
+-			{
+-				alert(errmsg);
++			{	
++				var invalid_string = "";		// string that contains the names of invalid fields
++				var is_multiple_invalid_field = false;	// to track if there are multiple invalid fields
++				for (var j=0; j < invalid_field.length; j++){
++					if (invalid_string == ""){
++						invalid_string = invalid_field[j];		
++					}
++					else{
++						invalid_string = invalid_string + ", " + invalid_field[j];	//appending the output string
++						is_multiple_invalid_field = true;	
++					}
++				}	
++					if(is_multiple_invalid_field){
++						alert(invalid_string + " fields are invalid.")
++					}
++					else{
++						alert(invalid_string + " field is invalid."); 		//and create alert with its Value
++					}
++				
+ 				return false;
+ 			}
+ 		}
+@@ -993,6 +1011,14 @@
+ 				if (!(((value.length == 0) && optional) || vstack[0].apply(value, vstack[1])))
+ 				{
+ 					// invalid
++					invalid_field.length=0; 	//flushing the list of invalid fields to avoid duplicates
++					var errorId = field.id; //ID of invalid field
++					var allElements = document.getElementsByTagName('label');	//get all the labels,
++					for (var i = 0; i < allElements.length; i++){				//for all the labels
++						if (allElements[i].getAttribute('for') == errorId){			//get the label whose input is invalid
++							invalid_field.push(allElements[i].innerHTML);			//pushing to the array invalid_field
++						}
++					}
+ 					field.className += ' cbi-input-invalid';
+ 					return false;
+ 				}
