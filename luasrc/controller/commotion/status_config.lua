@@ -126,7 +126,14 @@ function status_builder(page, assets, active_tab)
 end
 
 function viz()
-   status_builder("commotion/viz", nil, "mesh_visualizer")
+	local uci = require "luci.model.uci".cursor()
+	local meshname = uci:get("wireless", "commotionMesh", "network")
+	local protocol = uci:get("network", meshname, "proto")
+	if protocol == "commotion" then
+		status_builder("commotion/viz", nil, "mesh_visualizer")
+	else
+		status_builder("commotion/warning_protocol", {proto=protocol}, "mesh_visualizer")
+	end
 end
 
 function conn_clnts()
@@ -217,12 +224,19 @@ function dbg_rpt()
 end
 
 function action_neigh(json)
-        local data = fetch_txtinfo("links")
-        if not data or not data.Links then
-                status_builder("commotion/error_olsr", nil, "nearby_devices")
-                return nil
-        end
-        status_builder("commotion/nearby_md", {links=data.Links}, "nearby_devices")
+	local uci = require "luci.model.uci".cursor()
+	local meshname = uci:get("wireless", "commotionMesh", "network")
+	local protocol = uci:get("network", meshname, "proto")
+	if protocol == "commotion" then
+		local data = fetch_txtinfo("links")
+       		if not data or not data.Links then
+               		status_builder("commotion/error_olsr", nil, "nearby_devices")
+			return nil
+		end
+		status_builder("commotion/nearby_md", {links=data.Links}, "nearby_devices")
+	else
+		status_builder("commotion/warning_protocol", {proto=protocol}, "nearby_devices")
+	end
 end
 
 local function compare_links(a, b)
