@@ -170,7 +170,7 @@ function nwk:parse(section)
          end
       else
          -- Network already set, only apply changes to protocol
-         local mesh_network_name = uci:get("wireless", "commotionMesh", "network")
+         local mesh_network_name = uci:get("wireless", section, "network")
          local protocol_name = encode.uci(protocol)
          uci:set("network", mesh_network_name, "proto", protocol_name)
          uci:save("network")
