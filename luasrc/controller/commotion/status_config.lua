@@ -225,8 +225,23 @@ end
 
 function action_neigh(json)
 	local uci = require "luci.model.uci".cursor()
-	local meshname = uci:get("wireless", "commotionMesh", "network")
-	local protocol = uci:get("network", meshname, "proto")
+	local meshnames = {}
+	--get all mesh interfaces
+	uci:foreach("wireless", "wifi-device", function(s)
+				   if s.mode = 'adhoc' then
+					  table.insert(meshnames, s.network)
+				   end
+	end)
+	local _, name, protocol
+	--Check if ANY are currently supported
+	for _,name in ipairs(meshnames) do 
+	   local current_proto = uci:get("network", meshname, "proto")
+	   if current_proto == 'commotion' then
+		  protocol = current_proto
+	   end
+	end
+	--if none supported, and protocols found then set first incompatable one as protocol
+	if protocol == nil and next(meshnames) then protocol = meshnames[1] end
 	if protocol == "commotion" then
 		local data = fetch_txtinfo("links")
        		if not data or not data.Links then
