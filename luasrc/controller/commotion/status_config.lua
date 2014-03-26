@@ -133,7 +133,7 @@ function viz()
 	elseif protocol then
 		status_builder("commotion/warning_protocol", {proto=protocol}, "mesh_visualizer")
 	else
-	   status_builder("commotion/warning_protocol", {proto="unknown"}, "nearby_devices")
+	   	status_builder("commotion/warning_protocol", {proto="unknown"}, "mesh_visualizer")
 	end
 end
 
@@ -228,21 +228,23 @@ function get_proto()
    local uci = require "luci.model.uci".cursor()
    local meshnames = {}
    --get all mesh interfaces
-   uci:foreach("wireless", "wifi-device", function(s)
-				  if s.mode = 'adhoc' then
+   uci:foreach("wireless", "wifi-iface", function(s)
+				  if s.mode == 'adhoc' then
 					 table.insert(meshnames, s.network)
 				  end
    end)
    local _, name, protocol
    --Check if ANY are currently supported
    for _,name in ipairs(meshnames) do 
-	  local current_proto = uci:get("network", meshname, "proto")
-	  if current_proto == 'commotion' then
+	  local current_proto = uci:get("network", name, "proto")
+	  if current_proto and current_proto == 'commotion' then
+		 -- supported protocols have priority and overwrite unsupported ones
+		 protocol = current_proto
+	  elseif protocol == nil and current_proto then
+		 -- if protocol has no value, use the unsupported proto
 		 protocol = current_proto
 	  end
    end
-   --if none supported, and protocols found then set first incompatable one as protocol
-   if protocol == nil and next(meshnames) then protocol = meshnames[1] end
    return protocol
 end
 
@@ -250,7 +252,7 @@ end
 function action_neigh(json)
 	local uci = require "luci.model.uci".cursor()
 	local protocol = get_proto()
-	if protcol and protocol == "commotion" then
+	if protocol and protocol == "commotion" then
 		local data = fetch_txtinfo("links")
        		if not data or not data.Links then
                		status_builder("commotion/error_olsr", nil, "nearby_devices")
