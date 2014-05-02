@@ -30,7 +30,7 @@ if not SW.status() then
    m.on_after_save = ccbi.conf_page
 end
 
-p = m:section(NamedSection, "wired")
+p = m:section(NamedSection, "wan")
 p.anonymous = true
 
 msh = p:option(Flag, "meshed", translate("Will you be meshing with other Commotion devices over the ethernet interface?"))
