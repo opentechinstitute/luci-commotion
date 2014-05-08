@@ -20,7 +20,7 @@ You may obtain a copy of the License at
    local disp = require "luci.dispatcher"
    local cdisp = require "luci.commotion.dispatch"
 
-   -- ensure that client is running https
+   -- ensure that client is running https 
    crypto.check_https("/admin/", luci.http.getenv())
    
    -- send as HTML5
@@ -32,11 +32,12 @@ You may obtain a copy of the License at
    request  = disp.context.path
    local request2 = disp.context.request
 
+   -- Node is where we are on the tree
    --ROOT NODE OF PATH (eg. admin on admin pages)
    category = request[1]
    section = request[2]
 
-   --SAME AGAIN
+   --SAME AGAIN // cattree indicates submenu item
    cattree  = category and disp.node(category)
    
    --leaf is length of request2
@@ -48,7 +49,7 @@ You may obtain a copy of the License at
    --Show the local node (current menu) on the tree
    node = disp.context.dispatched
    
-   --An Ordered table of node names of this tree's child nodes
+   --An Ordered table of node names of this tree s child nodes
    local categories = disp.node_childs(tree)
    
    local c = tree
@@ -70,6 +71,9 @@ You may obtain a copy of the License at
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=yes" />
+
+<!-- THIS IS THE LOGIC THAT WE SHOULD PULL OUT TO CUSTOMIZE BRANDING ON THEME -->
+<!-- PARSE THIS ELSEWHERE INSTEAD OF HERE -- SHOULD BE DEFINABLE -->
     <title><%=striptags( hostname .. ( (node and node.title) and ' - ' .. translate(node.title) or '')) %> - LuCI</title>
 
 <!-- Stylesheets for mobile and small tablets -->
@@ -86,10 +90,18 @@ You may obtain a copy of the License at
     <script src="<%=media%>/zepto.min.js"></script>
   </head>		
   <body class="lang_<%=luci.i18n.context.lang%> <%- if node then %><%= striptags( node.title ) %><%- end %>">
-	<header>
+	
+<!-- BEGIN <HEADER> SECTION -->
+<!-- SHOULD BE AN EXTERNAL HTML FILE THAT WE ARE PULLING IN -->
+
+  <header>
+  <!-- CHANGE TO CSS FOR LOGO -->
 	  <topbar><ul><li></li></ul></topbar>
     <a id="device" href="/"><img src="<%=media%>/commotion_tiny.png" alt="Commotion - toggle header" title="Commotion - toggle header" /></a>
-	<%uci = require "luci.model.uci".cursor()
+	<!-- IF/ELSE FOR SIDEBAR VS TOP MENU BAR -->
+
+<!--  GRABBING MESH IP HERE  -->
+  <%uci = require "luci.model.uci".cursor()
   ubus = require "ubus"
   conn = ubus.connect()
   if not conn then
@@ -98,6 +110,7 @@ You may obtain a copy of the License at
   mesh_ip = "None"
   uci:foreach("wireless", "wifi-iface",
 			  function(s)
+
 				 if s and s.mode and s.mode == "adhoc" and s.network then
 					local iface = conn:call("network.interface."..s.network, "status", {})
 					if iface ~= nil and iface["ipv4-address"] then
@@ -115,6 +128,7 @@ You may obtain a copy of the License at
   conn:close()
 	 -%>
 
+<!-- BASIC NODE INFO: NODENAME AND IP -->
 	<div class="collapsible">
 	 <table id="nodeinfo">
 	 <tr>
@@ -125,11 +139,16 @@ You may obtain a copy of the License at
 	 </table>
     </div>
 
+<!-- THIS FILE, PASS IT THESE VARIABLES, INCLUDE X FILE BUT PASS IT THE DATA OBJECT-->
+<!-- SO THIS PAGE WOULD JUST BE HEADER AND STYLESHEETS AND HTML INCLUDES -->
+<!-- WOULD LOOK A LOT LIKE MAIN CONTENT IN THIS FILE --> 
 	  <%include("themes/commotion/unsaved_changes", {tree=tree, controller=controller, category=category})%>
 
     <div class="navbar-inners"><div class="color0"></div><div class="color1"></div><div class="color2"></div><div class="color3"></div><div class="color4"></div></div>
 	</header>
 
+<!-- BEGIN MAIN CONTENT -->
+<!-- SIDEBAR CONTENT TO POP OUT TO sidebar.htm -->
     <section id="maincontent">
  	  <%if request[2] == "commotion" then%> <%# TODO Clean and combine these two menu templates after R1 push %>
 	  <%include("themes/commotion/basic_menu", {controller=controller, cattree=cattree, category=category, node=node, section=section})%>
@@ -138,3 +157,4 @@ You may obtain a copy of the License at
 		<%include("themes/commotion/adv_menu", {controller=controller, cattree=cattree, category=category, node=node, section=section})%>
 		<%include("themes/commotion/subtree", {controller=controller, category=category, cattree=cattree})%>
 	    <%end%>
+<!-- END SIDEBAR -->S
