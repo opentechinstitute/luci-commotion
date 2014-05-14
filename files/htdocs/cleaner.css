@@ -291,7 +291,7 @@ small {
   font-size: 0.9em;
 }
 code, pre {
-  font-family: Monaco,Andale Mono,Courier New,monospace;
+  font-family: Monaco,"Andale Mono","Courier New",monospace;
   font-size: 12px;
   padding: 0 3px 2px;
 }
@@ -661,11 +661,11 @@ footer a:active, footer a:hover {
   outline: 1px dotted #666666;
 }
 .cbi-button-up {
-  background-image: url("./resources/cbi/up.gif"), -moz-linear-gradient(center top , #FFFFFF, #FFFFFF 25%, #E6E6E6);
+  background-image: url('../resources/cbi/up.gif'), -moz-linear-gradient(center top , #FFFFFF, #FFFFFF 25%, #E6E6E6);
   background-position: center center;
 }
 .cbi-button-down {
-  background-image: url("./resources/cbi/down.gif"), -moz-linear-gradient(center top , #FFFFFF, #FFFFFF 25%, #E6E6E6);
+  background-image: url('../resources/cbi/down.gif'), -moz-linear-gradient(center top , #FFFFFF, #FFFFFF 25%, #E6E6E6);
   background-position: center center;
 }
 .btn.active, .btn:active {
@@ -704,11 +704,11 @@ footer a:active, footer a:hover {
 }
 
 .basic_menu .cbi-page-actions .cbi-button-save {
-	background: transparent url(approve_app_button.png) no-repeat top center;
+	background: transparent url('approve_app_button.png') no-repeat top center;
 	background-size: 48px 48px;
 }
 .basic_menu .cbi-page-actions .cbi-button-reset {
-	background: transparent url(commotion_delete_icon.png) no-repeat top center;	
+	background: transparent url('commotion_delete_icon.png') no-repeat top center;	
 	background-size: 48px 48px;
 }
 
@@ -749,7 +749,7 @@ text-align:left;
 
 
 .alerts, .errorbox {
-  background: #FFFFFF url(warning_icon.png) no-repeat left center;
+  background: #FFFFFF url('warning_icon.png') no-repeat left center;
   background-size: 40px 40px;
   color: #000000;
   font-weight: bold;
