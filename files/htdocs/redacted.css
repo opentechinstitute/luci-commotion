@@ -1,0 +1,333 @@
+
+
+UNUSEDh6, UNUSEDpre, UNUSEDacronym, UNUSEDdel, UNUSEDq, UNUSEDs, UNUSEDstrike, UNUSEDsub, UNUSEDsup, UNUSEDtt, UNUSEDdd, UNUSEDdl, UNUSEDdt,  UNUSEDol, UNUSEDcaption, UNUSEDtfoot {
+  border: 0 none;
+  font-family: inherit;
+  font-size: 100%;
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  margin: 5px 0;
+  padding: 0;
+}
+
+UNUSEDq:before, UNUSEDq:after, UNUSEDblockquote:before, UNUSEDblockquote:after {
+  content: "";
+}
+UNUSEDa:active {
+  outline: 0 none;
+}
+UNUSEDarticle, UNUSEDaside, UNUSEDdetails, UNUSEDfigcaption, UNUSEDfigure, footer, header, topbar, UNUSEDhgroup, nav, section {
+  display: block;
+}
+
+UNUSEDbutton::-moz-focus-inner, UNUSEDinput::-moz-focus-inner {
+  border: 0 none;
+  padding: 0;
+}
+
+UNUSEDheader nav ul,
+UNUSEDheader .brand {
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%;
+  text-align: center;
+}
+UNUSEDheader topbar ul:after,
+UNUSEDheader nav ul:after,
+UNUSEDheader:before, UNUSEDheader:after,
+UNUSEDfooter:before, UNUSEDfooter:after,
+UNUSEDsection:before, UNUSEDsection:after {
+  content: "";
+  display: table;
+}
+
+UNUSEDh1 small, UNUSEDh2 small, UNUSEDh3 small, UNUSEDh4 small, UNUSEDh5 small, UNUSEDh6 small {
+  color: #404040;
+}
+
+UNUSEDul ul, UNUSEDul ol, UNUSEDol ol, UNUSEDol ul {
+  margin-bottom: 0;
+}
+
+UNUSEDdl dt, UNUSEDdl dd {
+  line-height: 18px;
+}
+
+UNUSEDform .clearfix{
+  margin-bottom: 18px;
+  overflow: hidden;
+}
+UNUSEDform .clearfix:before, UNUSEDform .clearfix:after, UNUSEDform .cbi-value:before, UNUSEDform .cbi-value:after {
+  content: "";
+  display: table;
+}
+
+UNUSED.uneditable-input {
+  border: 1px solid #CCCCCC;
+  color: #808080;
+  display: inline-block;
+  font-size: 17px;
+  height: 18px;
+  line-height: 18px;
+  padding: 0.5em 0.5em;
+  margin: 10px 0 5px 0;
+  width: 97%;
+}
+
+UNUSEDform .clearfix.error > label, UNUSEDform .clearfix.error .help-block, UNUSEDform .clearfix.error .help-inline {
+  color: #B94A48;
+}
+UNUSEDform .clearfix.error input, UNUSEDform .clearfix.error textarea {
+  border-color: #EE5F5B;
+  color: #B94A48;
+}
+
+UNUSEDform .clearfix.error .input-prepend .add-on, UNUSEDform .clearfix.error .input-append .add-on {
+  background-color: #FCE6E6;
+  border-color: #B94A48;
+  color: #B94A48;
+}
+UNUSEDform .clearfix.warning > label, UNUSEDform .clearfix.warning .help-block, UNUSEDform .clearfix.warning .help-inline {
+  color: #C09853;
+}
+UNUSEDform .clearfix.warning input, UNUSEDform .clearfix.warning textarea {
+  border-color: #CCAE64;
+  color: #C09853;
+}
+
+UNUSEDform .clearfix.warning .input-prepend .add-on, UNUSEDform .clearfix.warning .input-append .add-on {
+  background-color: #D2B877;
+  border-color: #C09853;
+  color: #C09853;
+}
+UNUSEDform .clearfix.success > label, UNUSEDform .clearfix.success .help-block, UNUSEDform .clearfix.success .help-inline {
+  color: #468847;
+}
+UNUSEDform .clearfix.success input, UNUSEDform .clearfix.success textarea {
+  border-color: #57A957;
+  color: #468847;
+}
+
+UNUSEDform .clearfix.success .input-prepend .add-on, UNUSEDform .clearfix.success .input-append .add-on {
+  background-color: #BCDDBC;
+  border-color: #468847;
+  color: #468847;
+}
+
+UNUSED.actions {
+  background: none repeat scroll 0 0 #F5F5F5;
+  border-top: 1px solid #DDDDDD;
+  margin-bottom: 18px;
+  padding: 0.5em 0.5em 0.5em 1em;
+  text-align: right;
+}
+UNUSED.actions .secondary-action, UNUSED.cbi-page-actions .secondary-action {
+  float: right;
+}
+UNUSED.actions .secondary-action a, UNUSED.cbi-page-actions .secondary-action a {
+  line-height: 30px;
+}
+
+UNUSED.help-inline, UNUSED.help-block {
+  color: #BFBFBF;
+  font-size: 13px;
+  line-height: 18px;
+}
+
+UNUSEDheader nav {
+  background: black;
+  display: block;
+  margin: 0;
+  padding-top:1.5em;
+  list-style: none;
+}
+
+UNUSEDheader nav > ul > li, {
+  display: inline-block;
+}
+UNUSEDheader topbar > ul a,
+UNUSEDheader nav > ul a {
+  display: block;
+  float: none;
+  padding: 0;
+  margin: 4px;
+  text-decoration: none;
+  text-transform: uppercase;
+  font: 1.5em Helvetica, Arial, sans-serif;
+  color: #ffffff;
+}
+
+UNUSEDheader topbar > ul .active > a,
+UNUSEDheader nav > ul .active > a{
+  background-color: rgba(0, 0, 0, 0.5);
+}
+UNUSEDheader topbar > ul.secondary-nav,
+UNUSEDheader nav > ul.secondary-nav {
+  float: right;
+  margin-left: 10px;
+  margin-right: 0;
+}
+
+
+UNUSED.tabs:before, UNUSED.cbi-tabmenu:before, UNUSED.tabs:after, UNUSED.cbi-tabmenu:after {
+  content: "";
+  display: table;
+}
+
+UNUSED.tabs .active > a, UNUSED.cbi-tabmenu .active > a {
+  -moz-border-bottom-colors: none;
+  -moz-border-image: none;
+  -moz-border-left-colors: none;
+  -moz-border-right-colors: none;
+  -moz-border-top-colors: none;
+  border-color: #DDDDDD #DDDDDD white;
+  border-style: solid;
+  border-width: 3px;
+  cursor: default;
+  color: black;
+}
+UNUSED.tabs .dropdown-menu, UNUSED.cbi-tabmenu .dropdown-menu {
+  border-width: 3px;
+  top: 35px;
+}
+UNUSED.tabs a.menu:after, UNUSED.tabs .dropdown-toggle:after, UNUSED.cbi-tabmenu a.menu:after, UNUSED.cbi-tabmenu .dropdown-toggle:after {
+  border-top-color: #999999;
+  margin-left: 5px;
+  margin-top: 15px;
+}
+UNUSED.tabs li.open.menu .menu, UNUSED.tabs .open.dropdown .dropdown-toggle, UNUSED.cbi-tabmenu li.open.menu .menu, UNUSED.cbi-tabmenu .open.dropdown .dropdown-toggle {
+  border-color: #999999;
+}
+UNUSED.tabs li.open a.menu:after, UNUSED.tabs .dropdown.open .dropdown-toggle:after, UNUSED.cbi-tabmenu li.open a.menu:after, UNUSED.cbi-tabmenu .dropdown.open .dropdown-toggle:after {
+  border-top-color: #555555;
+}
+UNUSED.tab-content > .tab-pane, UNUSED.tab-content > div {
+  display: none;
+}
+
+UNUSEDfooter a:visited {
+  color: black;
+}
+UNUSEDfooter a:active, footer a:hover {
+  color: black;
+  text-decoration: underline;
+}
+
+
+UNUSED.btn.danger, UNUSED.alert.danger, UNUSED.btn.error, UNUSED.alert.error, UNUSED.btn.success, UNUSED.alert.success, UNUSED.btn.info, UNUSED.alert.info {
+  color: #FFFFFF;
+}
+UNUSED.btn .close, UNUSED.alert .close {
+  font-family: Arial,sans-serif;
+  line-height: 1.2em;
+}
+
+UNUSED.btn {
+}
+UNUSED.btn.active, UNUSED.btn:active {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+UNUSED.basic_menu .cbi-page-actions .cbi-button-apply, UNUSED.basic_menu .cbi-page-actions .cbi-fake-finish, UNUSED.basic_menu .cbi-page-actions  .cbi-button-finish {
+	background: transparent url(approve_app_button.png) no-repeat top center;
+	background-size: 48px 48px;
+}
+UNUSED.basic_menu .cbi-page-actions .inline .cbi-button-reset {
+	background: transparent url(commotion_delete_icon.png) no-repeat top center;	
+	background-size: 48px 48px;
+}
+UNUSED.basic_menu .cbi-page-actions  .cbi-button-next, UNUSED.basic_menu .cbi-page-actions .cbi-button-skip {
+	background: transparent url(right_arrow_button.png) no-repeat top center;
+	background-size: 48px 48px;
+}
+UNUSED.basic_menu .cbi-page-actions .cbi-button-back, UNUSED.basic_menu .cbi-page-actions .cbi-button-make-changes {
+	background: transparent url(left_arrow_button.png) no-repeat top center;
+	background-size: 48px 48px;
+}
+
+UNUSED.Startup .cbi-section-table input.cbi-input-apply, UNUSED.Startup .cbi-section-table input.cbi-button-apply {
+  background-image: url("./resources/cbi/apply.gif");
+  background-position: 7px 4px;
+}
+
+
+UNUSED.Processes .cbi-section-table input.cbi-input-reload, UNUSED.Startup .cbi-section-table input.cbi-input-reload {
+  background-image: url("./resources/cbi/reload.gif");
+  background-position: 7px 4px;
+}
+UNUSED.Processes .cbi-section-table input.cbi-input-remove, UNUSED.Processes .cbi-section-table div.cbi-section-remove input, UNUSED.Startup .cbi-section-table input.cbi-input-remove, UNUSED.Startup .cbi-section-table div.cbi-section-remove input {
+  background-image: url("./resources/cbi/remove.gif");
+  background-position: 7px 4px;
+}
+UNUSED.Processes .cbi-section-table input.cbi-input-reset, UNUSED.Processes .cbi-section-table input.cbi-button-reset, UNUSED.Startup .cbi-section-table input.cbi-input-reset, UNUSED.Startup .cbi-section-table input.cbi-button-reset {
+  background-image: url("./resources/cbi/reset.gif");
+  background-position: 7px 4px;
+}
+UNUSED.Startup .cbi-section-table input.cbi-input-save, UNUSED.Startup .cbi-section-table input.cbi-button-save {
+  background-image: url("./resources/cbi/save.gif");
+  background-position: 7px 4px;
+}
+UNUSED:root .alert, *:root .btn {
+}
+UNUSEDbutton.btn::-moz-focus-inner, input.btn[type="submit"]::-moz-focus-inner {
+  border: 0 none;
+  padding: 0;
+}
+
+
+UNUSED#memtotal > div, UNUSED#memfree > div, UNUSED#memcache > div, UNUSED#membuff > div, UNUSED#conns > div {
+  border: 1px solid #CCCCCC;
+  color: #808080;
+  display: inline-block;
+  font-size: 1em;
+  line-height: 1.25em;
+}
+UNUSED.cbi-value-field table td {
+  border: medium none;
+}
+
+UNUSEDdiv.cbi-value var, td.cbi-value-field var {
+  color: #0069D6;
+  font-style: italic;
+}
+UNUSED.uci-change-list ins, UNUSED.uci-change-legend-label ins {
+  background-color: #CCFFCC;
+  border: 1px solid #00FF00;
+  display: block;
+  padding: 2px;
+  text-decoration: none;
+}
+UNUSED.uci-change-list del, UNUSED.uci-change-legend-label del {
+  background-color: #FFCCCC;
+  border: 1px solid #FF0000;
+  display: block;
+  font-style: normal;
+  padding: 2px;
+  text-decoration: none;
+}
+UNUSED.uci-change-list var, UNUSED.uci-change-legend-label var {
+  background-color: #EEEEEE;
+  border: 1px solid #CCCCCC;
+  display: block;
+  font-style: normal;
+  padding: 2px;
+  text-decoration: none;
+}
+UNUSED.uci-change-list var ins, UNUSED.uci-change-list var del {
+  border: medium none;
+  font-style: normal;
+  padding: 0;
+  white-space: pre;
+}
+UNUSED.uci-change-legend-label > ins, UNUSED.uci-change-legend-label > del, UNUSED.uci-change-legend-label > var {
+  display: block;
+  float: left;
+  height: 10px;
+  margin-right: 4px;
+  width: 10px;
+}
+UNUSED.uci-change-legend-label var ins, UNUSED.uci-change-legend-label var del {
+  border: medium none;
+  line-height: 6px;
+}
