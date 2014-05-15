@@ -64,14 +64,14 @@ topbar * li {
   list-style-type: none;
 }
 
-/* cascade.css */
 
-/* If needed cleancss.com could strip ~7Kbytes from this file */
+
+
 html, body {
   margin: 0;
   padding: 0;
 }
-h1, h2, h3, h4, h5, h6, p, pre, a, abbr, acronym, code, del, em, img, q, s, small, strike, strong, sub, sup, tt, var, dd, dl, dt, li, ol, ul, fieldset, form, label, legend, button, table, caption, tbody, tfoot, thead, tr, th, td {
+h1, h2, h3, h4, h5, p, a, abbr, code, img, small, var, li, ul, fieldset, form, label, legend, button, table, tbody, thead, tr, th, td {
   border: 0 none;
   font-family: inherit;
   font-size: 100%;
@@ -92,9 +92,6 @@ table {
 ol, ul {
   list-style: none outside none;
 }
-q:before, q:after, blockquote:before, blockquote:after {
-  content: "";
-}
 html {
   font-size: 100%;
   overflow-y: scroll;
@@ -105,7 +102,7 @@ a:focus {
 a:hover, a:active {
   outline: 0 none;
 }
-article, aside, details, figcaption, figure, footer, header, topbar, hgroup, nav, section {
+footer, header, /*topbar,*/ nav, section {  /* is topbar an id? a class? this is not an element! */
   display: block;
 }
 #maincontent {
@@ -134,10 +131,7 @@ button, input, select, textarea {
 button, input {
   line-height: normal;
 }
-button::-moz-focus-inner, input::-moz-focus-inner {
-  border: 0 none;
-  padding: 0;
-}
+
 button, input[type="button"], input[type="reset"], input[type="submit"] {
   background-color: #cccccc;
   background-image: -moz-linear-gradient(center top , #FFFFFF, #FFFFFF 25%, #E6E6E6);
@@ -178,8 +172,6 @@ footer {
   width: 100%;
 }
 header topbar ul,
-header nav ul,
-header .brand,
 footer .credits,
 footer nav,
 section {
@@ -187,14 +179,6 @@ section {
   margin-right: auto;
   width: 80%;
   text-align: center;
-}
-header topbar ul:after,
-header nav ul:after,
-header:before, header:after,
-footer:before, footer:after,
-section:before, section:after {
-  content: "";
-  display: table;
 }
 header topbar ul:after,
 header nav ul:after,
@@ -227,30 +211,14 @@ a:hover {
 .body-content {
 	width:100%;
 }
-.pull-right {
-  float: right;
-}
-.pull-left {
-  float: left;
-}
 p, .cbi-map-descr, .cbi-section-descr {
   font: normal 1em/1.5em;
-}
-p small {
-  color: #BFBFBF;
-  font-size: 11px;
 }
 h1, h2, h3, h4, h5, h6 {
   color: black;
   font-weight: bold;
 }
-h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
-  color: #404040;
-}
-/* Source of 90% of my link colour errors -_-
- * h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
-  color: black;
-} */
+
 h1 {
   font-size: 30px;
   line-height: 36px;
@@ -289,9 +257,6 @@ h6 {
 ul, ol {
   margin: 0 0 10px 25px;
 }
-ul ul, ul ol, ol ol, ol ul {
-  margin-bottom: 0;
-}
 ul {
   list-style: disc outside none;
 }
@@ -302,32 +267,14 @@ li {
   color: #808080;
   line-height: 18px;
 }
-ul.unstyled {
-  list-style: none outside none;
-  margin-left: 0;
-}
 dl {
   margin-bottom: 18px;
-}
-dl dt, dl dd {
-  line-height: 18px;
 }
 dl dt {
   font-weight: bold;
 }
 dl dd {
   margin-left: 9px;
-}
-hr {
-  -moz-border-bottom-colors: none;
-  -moz-border-image: none;
-  -moz-border-left-colors: none;
-  -moz-border-right-colors: none;
-  -moz-border-top-colors: none;
-  border-color: -moz-use-text-color -moz-use-text-color #EEEEEE;
-  border-style: none none solid;
-  border-width: 0 0 1px;
-  margin: 20px 0 19px;
 }
 strong {
   font-style: inherit;
@@ -341,13 +288,8 @@ em {
 small {
   font-size: 0.9em;
 }
-address {
-  display: block;
-  line-height: 18px;
-  margin-bottom: 18px;
-}
 code, pre {
-  font-family: Monaco,Andale Mono,Courier New,monospace;
+  font-family: Monaco,"Andale Mono","Courier New",monospace;
   font-size: 12px;
   padding: 0 3px 2px;
 }

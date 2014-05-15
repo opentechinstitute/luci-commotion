@@ -1,6 +1,6 @@
 /* DESKTOP - cascade.css */
 
-/* (mobile starts at line 335) */
+/* (mobile starts at line 340) */
 
 h6, pre, acronym, del, q, s, strike, sub, sup, tt, dd, dl, dt,  ol, caption, tfoot {
   border: 0 none;
@@ -334,3 +334,101 @@ div.cbi-value var, td.cbi-value-field var {
   line-height: 6px;
 }
 
+
+
+
+/* MOBILE tinycombo.css */
+@media only screen and (max-width : 640px) {
+
+h6, pre, acronym, del, q, s, strike, sub, sup, tt, dd, dl, dt,  ol, caption, tfoot {
+  border: 0 none;
+  font-family: inherit;
+  font-size: 100%;
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  margin: 5px 0;
+  padding: 0;
+}
+
+q:before, q:after, blockquote:before, blockquote:after {
+  content: "";
+}
+button::-moz-focus-inner, input::-moz-focus-inner {
+  border: 0 none;
+  padding: 0;
+}
+header nav ul,
+header .brand {
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%;
+  text-align: center;
+}
+
+header topbar ul:after,
+header nav ul:after,
+header:before, header:after,
+footer:before, footer:after,
+section:before, section:after {
+  content: "";
+  display: table;
+}
+
+.pull-right {
+  float: right;
+}
+.pull-left {
+  float: left;
+}
+
+p small {
+  color: #BFBFBF;
+  font-size: 11px;
+}
+
+h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
+  color: #404040;
+}
+/* Source of 90% of my link colour errors -_-
+ * h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
+  color: black;
+} */
+ul ul, ul ol, ol ol, ol ul {
+  margin-bottom: 0;
+}
+
+ul.unstyled {
+  list-style: none outside none;
+  margin-left: 0;
+}
+
+dl dt, dl dd {
+  line-height: 18px;
+}
+
+hr { /* should be re-done in the next theme design, but for now is totally unused anyhow */
+  -moz-border-bottom-colors: none;
+  -moz-border-image: none;
+  -moz-border-left-colors: none;
+  -moz-border-right-colors: none;
+  -moz-border-top-colors: none;
+  border-color: -moz-use-text-color -moz-use-text-color #EEEEEE;
+  border-style: none none solid;
+  border-width: 0 0 1px;
+  margin: 20px 0 19px;
+}
+
+address {
+  display: block;
+  line-height: 18px;
+  margin-bottom: 18px;
+}
+
+
+
+
+
+
+/* this is required to close the media query */
+}
