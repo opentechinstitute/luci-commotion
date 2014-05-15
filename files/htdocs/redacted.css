@@ -1,4 +1,6 @@
+/* DESKTOP - cascade.css */
 
+/* (mobile starts at line 335) */
 
 h6, pre, acronym, del, q, s, strike, sub, sup, tt, dd, dl, dt,  ol, caption, tfoot {
   border: 0 none;
@@ -143,11 +145,11 @@ header nav {
   list-style: none;
 }
 
-header nav > ul > li, {
+header > nav > ul > li, {
   display: inline-block;
 }
 header topbar > ul a,
-header nav > ul a {
+header > nav > ul a {
   display: block;
   float: none;
   padding: 0;
@@ -159,11 +161,11 @@ header nav > ul a {
 }
 
 header topbar > ul .active > a,
-header nav > ul .active > a{
+header > nav > ul .active > a{
   background-color: rgba(0, 0, 0, 0.5);
 }
 header topbar > ul.secondary-nav,
-header nav > ul.secondary-nav {
+header > nav > ul.secondary-nav {
   float: right;
   margin-left: 10px;
   margin-right: 0;
@@ -331,3 +333,4 @@ div.cbi-value var, td.cbi-value-field var {
   border: medium none;
   line-height: 6px;
 }
+
