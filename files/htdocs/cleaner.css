@@ -500,7 +500,6 @@ header nav > ul a:hover, header nav > ul a:hover {
   border-bottom: 2px solid #e8ff00;
 }
 
-
 .tabs, .cbi-tabmenu {
   list-style: none outside none;
   margin: 0 0 18px;
@@ -612,8 +611,9 @@ footer a:active, footer a:hover {
 	font-weight: bold;
 }
 
-/* THESE MIGHT BE , BUT LEAVING THEM IN JUST IN CASE */
+/* THESE MIGHT BE  UNUSED, BUT LEAVING THEM IN JUST IN CASE */
 
+/* buttons, styles likely from Flat UI and heavily modified */
 .btn.danger, .alert.danger, .btn.danger:hover, .alert.danger:hover, .btn.error, .alert.error, .btn.error:hover, .alert.error:hover, .btn.success, .alert.success, .btn.success:hover, .alert.success:hover, .btn.info, .alert.info, .btn.info:hover, .alert.info:hover {
   color: #FFFFFF;
 }

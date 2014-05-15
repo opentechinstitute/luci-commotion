@@ -425,7 +425,227 @@ address {
   margin-bottom: 18px;
 }
 
+form .clearfix, form .cbi-value {
+  margin-bottom: 18px;
+  overflow: hidden;
+}
+form .clearfix:before, form .clearfix:after, form .cbi-value:before, form .cbi-value:after {
+  content: "";
+  display: table;
+}
 
+form .cbi-value label.cbi-value-title.tippable {
+  width: 100%;
+  background: url(help.png) no-repeat center right;
+}
+.tip {
+  position: relative;
+  background: #E6E6E6;
+  color: black;
+  font: italic 14px/16px Helvetica, Arial, sans-serif;
+  padding: 3px;
+  margin: 10px 0 0 0;
+  display: none;
+}
+.tip:after {
+  bottom: 100%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+
+.uneditable-input {
+  border: 1px solid #CCCCCC;
+  color: #808080;
+  display: inline-block;
+  font-size: 17px;
+  height: 18px;
+  line-height: 18px;
+  padding: 0.5em 0.5em;
+  margin: 10px 0 5px 0;
+  width: 97%;
+}
+
+:-moz-placeholder {
+  color: #BFBFBF;
+}
+
+form .clearfix.error > label, form .clearfix.error .help-block, form .clearfix.error .help-inline {
+  color: #B94A48;
+}
+form .clearfix.error input, form .clearfix.error textarea {
+  border-color: #EE5F5B;
+  color: #B94A48;
+}
+
+form .clearfix.error .input-prepend .add-on, form .clearfix.error .input-append .add-on {
+  background-color: #FCE6E6;
+  border-color: #B94A48;
+  color: #B94A48;
+}
+form .clearfix.warning > label, form .clearfix.warning .help-block, form .clearfix.warning .help-inline {
+  color: #C09853;
+}
+form .clearfix.warning input, form .clearfix.warning textarea {
+  border-color: #CCAE64;
+  color: #C09853;
+}
+
+form .clearfix.warning .input-prepend .add-on, form .clearfix.warning .input-append .add-on {
+  background-color: #D2B877;
+  border-color: #C09853;
+  color: #C09853;
+}
+form .clearfix.success > label, form .clearfix.success .help-block, form .clearfix.success .help-inline {
+  color: #468847;
+}
+form .clearfix.success input, form .clearfix.success textarea {
+  border-color: #57A957;
+  color: #468847;
+}
+
+form .clearfix.success .input-prepend .add-on, form .clearfix.success .input-append .add-on {
+  background-color: #BCDDBC;
+  border-color: #468847;
+  color: #468847;
+}
+
+.actions {
+  background: none repeat scroll 0 0 #F5F5F5;
+  border-top: 1px solid #DDDDDD;
+  margin-bottom: 18px;
+  padding: 0.5em 0.5em 0.5em 1em;
+  text-align: right;
+}
+
+.actions .secondary-action, .cbi-page-actions .secondary-action {
+  float: right;
+}
+.actions .secondary-action a, .cbi-page-actions .secondary-action a {
+  line-height: 30px;
+}
+
+.help-inline, .help-block {
+  color: #BFBFBF;
+  font-size: 13px;
+  line-height: 18px;
+}
+.help-alert {
+  color: #FF6699;
+  font-weight: bold;
+}
+
+header h1 {
+  text-align: center;
+  padding: 0;
+  margin: 0 auto;
+}
+header h1 a {
+  color: #4d4d4d;
+  font: 1.5em Helvetica, Arial, sans-serif;
+}
+
+header nav {
+  background: black;
+  display: block;
+  margin: 0;
+  padding-top:1.5em;
+  list-style: none;
+}
+
+header nav > ul > li, header nav > ul > li {
+  display: inline-block;
+}
+
+header topbar > ul a, header topbar > ul a,
+header nav > ul a, header nav > ul a {
+  display: block;
+  float: none;
+  padding: 0;
+  margin: 4px;
+  text-decoration: none;
+  text-transform: uppercase;
+  font: 1.5em Helvetica, Arial, sans-serif;
+  color: #ffffff;
+}
+
+header topbar > ul .active > a, header topbar > ul .active > a,
+header nav > ul .active > a, header nav > ul .active > a {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+header topbar > ul.secondary-nav, header topbar > ul.secondary-nav,
+header nav > ul.secondary-nav, header nav > ul.secondary-nav {
+  float: right;
+  margin-left: 10px;
+  margin-right: 0;
+}
+
+.tabs:before, .cbi-tabmenu:before, .tabs:after, .cbi-tabmenu:after {
+  content: "";
+  display: table;
+}
+
+.tabs .active > a, .tabs .active > a:hover, .cbi-tabmenu .active > a, .cbi-tabmenu .active > a:hover, .cbi-tab > a:link, .cbi-tab > a:hover {
+  -moz-border-bottom-colors: none;
+  -moz-border-image: none;
+  -moz-border-left-colors: none;
+  -moz-border-right-colors: none;
+  -moz-border-top-colors: none;
+  border-color: #DDDDDD #DDDDDD white;
+  border-style: solid;
+  border-width: 3px;
+  cursor: default;
+  color: black;
+}
+
+.tabs .dropdown-menu, .cbi-tabmenu .dropdown-menu {
+  border-width: 3px;
+  top: 35px;
+}
+.tabs a.menu:after, .tabs .dropdown-toggle:after, .cbi-tabmenu a.menu:after, .cbi-tabmenu .dropdown-toggle:after {
+  border-top-color: #999999;
+  margin-left: 5px;
+  margin-top: 15px;
+}
+.tabs li.open.menu .menu, .tabs .open.dropdown .dropdown-toggle, .cbi-tabmenu li.open.menu .menu, .cbi-tabmenu .open.dropdown .dropdown-toggle {
+  border-color: #999999;
+}
+.tabs li.open a.menu:after, .tabs .dropdown.open .dropdown-toggle:after, .cbi-tabmenu li.open a.menu:after, .cbi-tabmenu .dropdown.open .dropdown-toggle:after {
+  border-top-color: #555555;
+}
+.tab-content > .tab-pane, .tab-content > div {
+  display: none;
+}
+.tab-content > .active {
+  display: block;
+}
+
+#welcome li {
+  display: inline-block;
+  font-weight: bold;
+  box-shadow: none;
+}
+#welcome li.setup a {
+  display: inline-block;
+  padding: 6.5em 2em 3em 2em;
+  background: transparent url(setupwiz_button.png) no-repeat top center;
+  background-size: 96px 96px;
+}
+#welcome li.upload a {
+  background: transparent url(upload_config.png) no-repeat top center;
+  background-size: 96px 96px;
+  display: inline-block;
+  padding: 6.5em 2em 3em 2em;
+}
+#welcome li.advanced a {
+  background: transparent url(advanced_button.png) no-repeat top center;
+  background-size: 96px 96px;
+  display: inline-block;
+  padding: 6.5em 2em 3em 2em;
+}
 
 
 
