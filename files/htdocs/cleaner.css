@@ -675,7 +675,6 @@ footer a:active, footer a:hover {
   cursor: default;
   opacity: 0.65;
 }
-
 .basic_menu .btn:hover, .cbi-button:hover {
   color: #333333;
   text-decoration: none;
@@ -710,6 +709,8 @@ footer a:active, footer a:hover {
 	background-size: 48px 48px;
 }
 
+/* node name and mesh ip address */
+
 #nodeinfo {
 	overflow: auto;
 	padding: 0.5em;
@@ -739,13 +740,24 @@ text-align:left;
 	font-weight: bold;
 	font-size:1em;
 }
+
+/* end node name */
+
+.close {
+  color: #000000;
+  float: right;
+  font-size: 1.5em;
+  font-weight: bold;
+  line-height: 1.75em;
+  opacity: 0.25;
+}
 .close:hover {
   color: #000000;
   opacity: 0.4;
   text-decoration: none;
 }
 
-
+/* error 1 - check for ui color fail */
 .alerts, .errorbox {
   background: #FFFFFF url('warning_icon.png') no-repeat left center;
   background-size: 40px 40px;
@@ -765,11 +777,29 @@ text-align:left;
 .alert .close {
   margin-top: 1px;
 }
+.alert a {
+  color: #C43C35;
+  font-weight: bold;
+}
 .alert.danger p a, .alert.error p a, .alert.success p a, .alert.info p a {
   color: #FFFFFF;
 }
+.alert h5 {
+  line-height: 18px;
+}
+.alert p {
+  margin-bottom: 0;
+}
+.alert div {
+  line-height: 28px;
+  margin-bottom: 2px;
+  margin-top: 5px;
+}
+.alert .btn {
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.25);
+}
 
-
+/* end error/alert 1 */
 
 .label {
   background-color: #BFBFBF;
@@ -786,12 +816,17 @@ a.label:link, a.label:visited {
 a.label:hover {
   text-decoration: none;
 }
+.label.important {
+  background-color: #C43C35;
+}
+.label.warning {
+  background-color: #F89406;
+}
 .label.success {
   background-color: #00ffcc;
 
 }
 a.label.notice {
-  background-color: ;
   color: black;
   padding: 3px;
 }
@@ -873,6 +908,10 @@ table#neighbors.cbi-section-table td.cbi-section-table-cell {
   display: inline-block;
   margin: 5px;
 }
+.zonebadge input {
+  height: 1em;
+  width: 6em;
+}
 .zonebadge-empty {
   border: 1px dashed #AAAAAA;
   color: #AAAAAA;
@@ -883,6 +922,61 @@ td.cbi-value-field var {
   color: #0069D6;
   font-style: italic;
 }
+
+/* UCI Changes might not appear during automated testing, but should stay unless manually tested */
+.uci-change-list {
+  font-family: monospace;
+}
+.uci-change-list ins, .uci-change-legend-label ins {
+  background-color: #CCFFCC;
+  border: 1px solid #00FF00;
+  display: block;
+  padding: 2px;
+  text-decoration: none;
+}
+.uci-change-list del, .uci-change-legend-label del {
+  background-color: #FFCCCC;
+  border: 1px solid #FF0000;
+  display: block;
+  font-style: normal;
+  padding: 2px;
+  text-decoration: none;
+}
+.uci-change-list var, .uci-change-legend-label var {
+  background-color: #EEEEEE;
+  border: 1px solid #CCCCCC;
+  display: block;
+  font-style: normal;
+  padding: 2px;
+  text-decoration: none;
+}
+.uci-change-list var ins, .uci-change-list var del {
+  border: medium none;
+  font-style: normal;
+  padding: 0;
+  white-space: pre;
+}
+.uci-change-legend {
+  padding: 5px;
+}
+.uci-change-legend-label {
+  float: left;
+  width: 150px;
+}
+.uci-change-legend-label > ins, .uci-change-legend-label > del, .uci-change-legend-label > var {
+  display: block;
+  float: left;
+  height: 10px;
+  margin-right: 4px;
+  width: 10px;
+}
+.uci-change-legend-label var ins, .uci-change-legend-label var del {
+  border: medium none;
+  line-height: 6px;
+}
+
+/* end UCI changes */
+
 .navbar-inners {
   width: 100%;
   margin: 0;
@@ -943,11 +1037,26 @@ td.cbi-value-field var {
   padding: 5px;
 }
 
-
 .error {
   background: #FFFFFF url('warning_icon.png') no-repeat left center;
   background-size: 40px 40px;
   padding-left: 10px;
+  color: #000000;
+  font-weight: bold;
+  padding: 2.5em;
+  position: relative;
+  max-width: 100%;
+  border-color: #C43C35;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  min-height: 1.5em;
+  margin: 0 auto;                                        
+}
+
+.cbi-value-error {
+  background: #FFFFFF url(warning_icon.png) no-repeat left center;
+  background-size: 40px 40px;
   color: #000000;
   font-weight: bold;
   padding: 2.5em;

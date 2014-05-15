@@ -631,24 +631,172 @@ header nav > ul.secondary-nav, header nav > ul.secondary-nav {
 #welcome li.setup a {
   display: inline-block;
   padding: 6.5em 2em 3em 2em;
-  background: transparent url(setupwiz_button.png) no-repeat top center;
+  background: transparent url('setupwiz_button.png') no-repeat top center;
   background-size: 96px 96px;
 }
 #welcome li.upload a {
-  background: transparent url(upload_config.png) no-repeat top center;
+  background: transparent url('upload_config.png') no-repeat top center;
   background-size: 96px 96px;
   display: inline-block;
   padding: 6.5em 2em 3em 2em;
 }
 #welcome li.advanced a {
-  background: transparent url(advanced_button.png) no-repeat top center;
+  background: transparent url('advanced_button.png') no-repeat top center;
   background-size: 96px 96px;
   display: inline-block;
   padding: 6.5em 2em 3em 2em;
 }
 
+.btn.primary {
+  background-color: #00ffcf;
+  background-image: -moz-linear-gradient(center top , #00ffcf, #000000);
+  background-repeat: repeat-x;
+  color: black;
+}
+
+.btn.disabled {
+  background-image: none;
+  box-shadow: none;
+  cursor: default;
+  opacity: 0.65;
+}
+
+.btn.large {
+  font-size: 0.75em;
+  line-height: normal;
+  padding: 0.5em 0.75em;
+}
+.btn.small {
+  font-size: 0.5em;
+  padding: 0.5em;
+}
+
+.basic_menu .cbi-page-actions .cbi-button-apply, .basic_menu .cbi-page-actions .cbi-fake-finish, .basic_menu .cbi-page-actions  .cbi-button-finish {
+  background: transparent url(approve_app_button.png) no-repeat top center;
+  background-size: 48px 48px;
+}
+.basic_menu .cbi-page-actions .inline .cbi-button-reset {
+  background: transparent url(commotion_delete_icon.png) no-repeat top center;  
+  background-size: 48px 48px;
+}
+
+.basic_menu .cbi-page-actions  .cbi-button-next, .basic_menu .cbi-page-actions .cbi-button-skip {
+  background: transparent url(right_arrow_button.png) no-repeat top center;
+  background-size: 48px 48px;
+}
+.basic_menu .cbi-page-actions .cbi-button-back, .basic_menu .cbi-page-actions .cbi-button-make-changes {
+  background: transparent url(left_arrow_button.png) no-repeat top center;
+  background-size: 48px 48px;
+}
+.basic_menu .cbi-page-actions .cbi-button-admin {
+  background: transparent url(advanced_button.png) no-repeat top center;
+  background-size: 48px 48px;
+}
+
+.Startup .cbi-section-table input.cbi-input-apply, .Startup .cbi-section-table input.cbi-button-apply {
+  background-image: url("./resources/cbi/apply.gif");
+  background-position: 7px 4px;
+}
+
+/* this reload.gif appears when the cbi page should say something like "show password" */
+.Processes .cbi-section-table input.cbi-input-reload, .Startup .cbi-section-table input.cbi-input-reload {
+  background-image: url("./resources/cbi/reload.gif");
+  background-position: 7px 4px;
+}
+.Processes .cbi-section-table input.cbi-input-remove, .Processes .cbi-section-table div.cbi-section-remove input, .Startup .cbi-section-table input.cbi-input-remove, .Startup .cbi-section-table div.cbi-section-remove input {
+  background-image: url("./resources/cbi/remove.gif");
+  background-position: 7px 4px;
+}
+.Processes .cbi-section-table input.cbi-input-reset, .Processes .cbi-section-table input.cbi-button-reset, .Startup .cbi-section-table input.cbi-input-reset, .Startup .cbi-section-table input.cbi-button-reset {
+  background-image: url("./resources/cbi/reset.gif");
+  background-position: 7px 4px;
+}
+.Startup .cbi-section-table input.cbi-input-save, .Startup .cbi-section-table input.cbi-button-save {
+  background-image: url("./resources/cbi/save.gif");
+  background-position: 7px 4px;
+}
+:root .alert, *:root .btn {
+}
+button.btn::-moz-focus-inner, input.btn[type="submit"]::-moz-focus-inner {
+  border: 0 none;
+  padding: 0;
+}
+ 
+.status-bar {
+  overflow: auto;
+  padding: 0.5em;
+}
+
+.info-list {
+  margin-left: auto;
+  margin-right: auto;
+  width: 13em;
+}
+.iface-info {
+  width:100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+.status-bar td.key-item {
+  color:black;
+  font-weight: bold;
+  font-size:1em;
+}
+.status-bar td {
+  background-color:#FFFFFF;
+  color:#FF6699;
+  padding: 0.3em;
+  font-weight: bold;
+  font-size:1em;
+}
+
+#memtotal > div, #memfree > div, #memcache > div, #membuff > div, #conns > div {
+  border: 1px solid #CCCCCC;
+  color: #808080;
+  display: inline-block;
+  font-size: 1em;
+  line-height: 1.25em;
+}
+
+form.inline {
+  display: inline;
+}
+header .pull-right {
+  padding-top: 0.5em;
+}
+#modemenu li:last-child span.divider {
+  display: none;
+}
+
+.cbi-value-field table td {
+  border: medium none;
+}
+.ifacebadge-active {
+  border-color: #000000;
+  font-weight: bold;
+}
+div.cbi-value var {
+  color: #0069D6;
+  font-style: italic;
+}
+
+.selectnav {
+  display: none;
+  margin: 5px;
+}
 
 
 
 /* this is required to close the media query */
+}
+
+@media screen and (max-width: 1500px) {
+  .js #navtoselect {
+    display: none;
+  }
+  .js .selectnav {
+    display: block;
+  }
 }
