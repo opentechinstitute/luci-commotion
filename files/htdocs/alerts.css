@@ -11,6 +11,8 @@
 
 #alerts, #errorbox, 
 
+#notice, #cbi-value-error
+
 
 .btn .close, .alert .close {
   font-family: Arial,sans-serif;
@@ -85,3 +87,47 @@
 }
 
 /* end error/alert 1 */
+
+
+/* ln 955 */
+
+.notice {
+  background: none repeat scroll 0 0 #FFBDD3;
+  border: 2px solid #FF6699;
+  border-radius: 5px 5px 5px 5px;
+  margin: 5px 0;
+  padding: 5px;
+}
+
+.error {
+  background: #FFFFFF url('warning_icon.png') no-repeat left center;
+  background-size: 40px 40px;
+  padding-left: 10px;
+  color: #000000;
+  font-weight: bold;
+  padding: 2.5em;
+  position: relative;
+  max-width: 100%;
+  border-color: #C43C35;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  min-height: 1.5em;
+  margin: 0 auto;                                        
+}
+
+.cbi-value-error {
+  background: #FFFFFF url('warning_icon.png') no-repeat left center;
+  background-size: 40px 40px;
+  color: #000000;
+  font-weight: bold;
+  padding: 2.5em;
+  position: relative;
+  max-width: 100%;
+  border-color: #C43C35;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  min-height: 1.5em;
+  margin: 0 auto;                                        
+}
