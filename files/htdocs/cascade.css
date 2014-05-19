@@ -588,25 +588,25 @@ footer a:active, footer a:hover {
 }
 #footermenu li.admin a {
 	display: inline-block;
-	background: transparent url(advanced_point.png) no-repeat top center;
+	background: transparent url('advanced_point.png') no-repeat top center;
 	padding: 4em 0 0 0;
 	font-weight: bold;
 }
 #footermenu li.about a {
 	display: inline-block;
-	background: transparent url(about_point.png) no-repeat top center;
+	background: transparent url('about_point.png') no-repeat top center;
 	padding: 4em 1em 0 1em;
 	font-weight: bold;
 }
 #footermenu li.help a {
 	display: inline-block;
-	background: transparent url(help_point.png) no-repeat top center;
+	background: transparent url('help_point.png') no-repeat top center;
 	padding: 4em 1em 0 1em;
 	font-weight: bold;
 }
 #footermenu li.license a {
 	display: inline-block;
-	background: transparent url(license_point.png) no-repeat top center;
+	background: transparent url('license_point.png') no-repeat top center;
 	padding: 4em 1em 0 1em;
 	font-weight: bold;
 }

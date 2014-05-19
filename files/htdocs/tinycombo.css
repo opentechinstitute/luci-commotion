@@ -4,7 +4,6 @@
 	float:none;
 	background:#ffffff;
 	clear: both;
-	
 }
 
 .body-content {
@@ -14,7 +13,6 @@
 .login {
 	margin:10px 10% auto 10%;
 }
-
 
 .sb-btn {
 	-webkit-box-sizing:border-box;
@@ -63,9 +61,6 @@
 topbar * li {
   list-style-type: none;
 }
-
-
-
 
 html, body {
   margin: 0;
@@ -588,25 +583,25 @@ footer a:active, footer a:hover {
 }
 #footermenu li.admin a {
 	display: inline-block;
-	background: transparent url(advanced_point.png) no-repeat top center;
+	background: transparent url('advanced_point.png') no-repeat top center;
 	padding: 4em 0 0 0;
 	font-weight: bold;
 }
 #footermenu li.about a {
 	display: inline-block;
-	background: transparent url(about_point.png) no-repeat top center;
+	background: transparent url('about_point.png') no-repeat top center;
 	padding: 4em 1em 0 1em;
 	font-weight: bold;
 }
 #footermenu li.help a {
 	display: inline-block;
-	background: transparent url(help_point.png) no-repeat top center;
+	background: transparent url('help_point.png') no-repeat top center;
 	padding: 4em 1em 0 1em;
 	font-weight: bold;
 }
 #footermenu li.license a {
 	display: inline-block;
-	background: transparent url(license_point.png) no-repeat top center;
+	background: transparent url('license_point.png') no-repeat top center;
 	padding: 4em 1em 0 1em;
 	font-weight: bold;
 }
@@ -1055,7 +1050,7 @@ td.cbi-value-field var {
 }
 
 .cbi-value-error {
-  background: #FFFFFF url(warning_icon.png) no-repeat left center;
+  background: #FFFFFF url('warning_icon.png') no-repeat left center;
   background-size: 40px 40px;
   color: #000000;
   font-weight: bold;
