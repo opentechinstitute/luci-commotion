@@ -4,7 +4,6 @@
 	float:none;
 	background:#ffffff;
 	clear: both;
-	
 }
 
 .body-content {
@@ -70,6 +69,7 @@ topbar * li {
 html, body {
   margin: 0;
   padding: 0;
+  max-width: 97%;
 }
 h1, h2, h3, h4, h5, p, a, abbr, code, img, small, var, li, ul, fieldset, form, label, legend, button, table, tbody, thead, tr, th, td {
   border: 0 none;
@@ -88,6 +88,7 @@ abbr[title], acronym[title] {
 table {
   border-collapse: collapse;
   border-spacing: 0;
+  max-width: 98%;
 }
 ol, ul {
   list-style: none outside none;
@@ -128,6 +129,12 @@ button, input, select, textarea {
   margin: 0;
   vertical-align: baseline;
 }
+
+textarea {
+  max-width: 98%;
+  margin 10px 0 10px 0;
+}
+
 button, input {
   line-height: normal;
 }
@@ -153,6 +160,8 @@ button:hover, input[type="button"]:hover, input[type="reset"]:hover, input[type=
 }
 input[type="search"] {
   -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+  box-sizing: content-box;
 }
 textarea {
   overflow: auto;
@@ -626,11 +635,11 @@ footer a:active, footer a:hover {
   outline: 1px dotted #666666;
 }
 .cbi-button-up {
-  background-image: url('../resources/cbi/up.gif'), -moz-linear-gradient(center top , #FFFFFF, #FFFFFF 25%, #E6E6E6);
+  background-image: url('./resources/cbi/up.gif'), linear-gradient(center top , #FFFFFF, #FFFFFF 25%, #E6E6E6);
   background-position: center center;
 }
 .cbi-button-down {
-  background-image: url('../resources/cbi/down.gif'), -moz-linear-gradient(center top , #FFFFFF, #FFFFFF 25%, #E6E6E6);
+  background-image: url('./resources/cbi/down.gif'), linear-gradient(center top , #FFFFFF, #FFFFFF 25%, #E6E6E6);
   background-position: center center;
 }
 .btn.active, .btn:active {
@@ -642,6 +651,12 @@ footer a:active, footer a:hover {
   cursor: default;
   opacity: 0.65;
 }
+
+.cbi-map {
+  text-align:left;
+  max-width: 98%;
+}
+
 .basic_menu .btn:hover, .cbi-button:hover {
   color: #333333;
   text-decoration: none;
