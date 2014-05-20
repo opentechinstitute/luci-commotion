@@ -551,11 +551,6 @@ header nav > ul a:hover, header nav > ul a:hover {
   text-decoration: none;
 }
 .cbi-tab > a:link, .cbi-tab > a:hover {
-  -moz-border-bottom-colors: none;
-  -moz-border-image: none;
-  -moz-border-left-colors: none;
-  -moz-border-right-colors: none;
-  -moz-border-top-colors: none;
   border-color: #DDDDDD #DDDDDD white;
   border-style: solid;
   border-width: 3px;
