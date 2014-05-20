@@ -559,7 +559,7 @@ header nav > ul a:hover, header nav > ul a:hover {
 }
 footer {
   margin-top: 17px;
-  padding: 0 0 8px 0;
+  padding: 0 0 17px 0;
   background: #00ffcf;
 }
 footer .pointydown {
@@ -583,7 +583,7 @@ footer a:active, footer a:hover {
 }
 #footermenu {
   list-style: none;
-  margin: 2em auto;
+  margin: 20px auto 50px;
   text-align: center;
 }
 #footermenu li {
@@ -617,8 +617,7 @@ footer a:active, footer a:hover {
 
 /* THESE MIGHT BE  UNUSED, BUT LEAVING THEM IN JUST IN CASE */
 
-.btn, .cbi-button {
-}
+
 .cbi-button-remove {
   float: right;
 }
@@ -640,7 +639,8 @@ footer a:active, footer a:hover {
 .btn.active, .btn:active {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
 }
-.btn[disabled] {
+
+.btn.disabled {
   background-image: none;
   box-shadow: none;
   cursor: default;
