@@ -8,7 +8,7 @@
 
 .body-content {
 	overflow: auto;
-  width:100%;
+  width:auto;
 }
 
 .login {
