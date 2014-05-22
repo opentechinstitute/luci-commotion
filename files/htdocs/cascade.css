@@ -325,13 +325,18 @@ fieldset {
 fieldset legend {
   color: #8073cb;
   display: block;
-    text-transform: uppercase;
+  text-transform: uppercase;
   font-size: 15px;
   font-weight: bold;
   line-height: 1;
   padding: 4em 0 0 0;
   border-bottom: 3px solid #8073cb;
   width: 100%;
+}
+
+fieldset ul {
+  list-style: none;
+  text-align: left;
 }
 
 label, input, select, textarea {
