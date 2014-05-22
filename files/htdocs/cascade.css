@@ -8,6 +8,7 @@
 
 .body-content {
 	overflow: auto;
+  width:100%;
 }
 
 .login {
@@ -69,7 +70,7 @@ topbar * li {
 html, body {
   margin: 0;
   padding: 0;
-  max-width: 97%;
+  max-width: 100%;
 }
 h1, h2, h3, h4, h5, p, a, abbr, code, img, small, var, li, ul, fieldset, form, label, legend, button, table, tbody, thead, tr, th, td {
   border: 0 none;
@@ -216,9 +217,6 @@ a {
 a:hover {
   color: #66ccff;
   text-decoration: underline;
-}
-.body-content {
-	width:100%;
 }
 p, .cbi-map-descr, .cbi-section-descr {
   font: normal 1em/1.5em;
@@ -711,14 +709,14 @@ text-align:left;
 #nodeinfo td.key-item {
 	color:black;
 	font-weight: bold;
-	font-size:1em;
+	font-size:1.4em;
 }
 #nodeinfo td {
 	background-color:#FFFFFF;
 	color:#FF6699;
 	padding: 0.3em;
 	font-weight: bold;
-	font-size:1em;
+	font-size:1.4em;
 }
 
 /* end node name */
@@ -726,9 +724,9 @@ text-align:left;
 .close {
   color: #000000;
   float: right;
-  font-size: 1.5em;
+  font-size: 20px;
   font-weight: bold;
-  line-height: 1.75em;
+  line-height: 13.5px;
   opacity: 0.25;
 }
 .close:hover {
@@ -741,7 +739,7 @@ text-align:left;
 .label {
   background-color: #BFBFBF;
   color: #000000;
-  font-size: 0.75em;
+  font-size: 9.75px;
   font-weight: bold;
   padding: 1px 3px 2px;
   text-transform: uppercase;
@@ -761,9 +759,9 @@ a.label:hover {
 }
 .label.success {
   background-color: #00ffcc;
-
 }
 a.label.notice {
+  background-color: #66ccff;
   color: black;
   padding: 3px;
 }
