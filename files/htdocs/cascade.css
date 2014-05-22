@@ -60,7 +60,7 @@
 	font-weight: bold;
 }
 
-topbar * li {
+.topbar * li {
   list-style-type: none;
 }
 
@@ -104,7 +104,7 @@ a:focus {
 a:hover, a:active {
   outline: 0 none;
 }
-footer, header, /*topbar,*/ nav, section {  /* is topbar an id? a class? this is not an element! */
+footer, header, .topbar nav, section {
   display: block;
 }
 #maincontent {
@@ -181,7 +181,7 @@ footer {
   margin: 0;
   width: 100%;
 }
-header topbar ul,
+header .topbar ul,
 footer .credits,
 footer nav,
 section {
@@ -190,7 +190,7 @@ section {
   width: 80%;
   text-align: center;
 }
-header topbar ul:after,
+header .topbar ul:after,
 header nav ul:after,
 header:after,
 footer:after,
@@ -485,7 +485,7 @@ header {
 .collapsible {
   overflow: hidden;
 }
-header topbar { /* OMG TOPBAR IS NOT AN ELEMENT */
+header .topbar { 
   background: black;
   display: block;
   margin: 0;
@@ -497,10 +497,10 @@ header nav ul {
   text-align: center;
   padding-bottom: 1em;
 }
-header topbar > ul > li, header topbar > ul > li {
+header .topbar > ul > li, header .topbar > ul > li {
   display: inline-block;
 }
-header topbar > ul a:hover, header topbar > ul a:hover,
+header .topbar > ul a:hover, header .topbar > ul a:hover,
 header nav > ul a:hover, header nav > ul a:hover {
   text-decoration: none;
   color: #ffffff;
