@@ -9,6 +9,7 @@
 .body-content {
 	overflow: auto;
   width:auto;
+  max-width: 100%;
 }
 
 .login {
@@ -453,7 +454,7 @@ input[disabled], select[disabled], textarea[disabled], input[readonly], select[r
 table {
   border-collapse: collapse;
   font-size: 13px;
-  width: 100%;
+  max-width: 100%;
 }
 table th, table td {
   font: normal 1em Helvetica, Arial, sans-serif;
