@@ -1,0 +1,3 @@
+config dashboard
+        option gatherer 'x.x.x.x'
+        option enabled 'false'

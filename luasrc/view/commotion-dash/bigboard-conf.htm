@@ -1,0 +1,92 @@
+<%+header%>
+<!--
+Bigboard Configuration Interface
+
+Copyright 2013 Andrew Reynolds <andrew at opentechinstitute dot org>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+-->
+
+<%-
+uri = REQUEST_URI
+uri_prefix, num_post = string.gsub(uri, "bigboard%-conf_.*", "bigboard-conf")
+
+-%>                                 
+
+<script type="text/javascript" language="javascript">
+   function toggleVisibility(cb)
+    {
+     var x = document.getElementById("destination");
+     if(cb.checked==true)
+         x.style.display = "block";
+     else
+         x.style.display = "none";
+    }
+
+</script>
+
+<script type="text/javascript" language="javascript">
+  $(document).ready(function() {
+      $("input").each(function(){
+        if($(this).val()=="" &amp;&amp; $(this).attr("placeholder")!=""){
+          $(this).val($(this).attr("placeholder"));
+          $(this).focus(function(){
+            if($(this).val()==$(this).attr("placeholder")) $(this).val("");
+          });
+          $(this).blur(function(){
+            if($(this).val()=="") $(this).val($(this).attr("placeholder"));
+          });
+        }
+      });
+  });
+</script>
+
+<h1>Bigboard Configuration</h1>
+
+<h2 class="warning"><%=ERR%></h2>
+
+<p>Bigboard is a network administration tool designed to give
+network managers a quick view of network status. Use this page to
+turn Bigboard on or off, and to manage Bigboard settings.</p>
+
+<form method="post" action="<%=uri_prefix%>_submit" enctype="multipart/form-data" id="bb-power">
+	<% for db_name, char in pairs(jsonInfo) do %>
+	<input type="hidden" name="dashName" value="<%=jsonInfo[db_name]['name']%>" />
+<!-- To do: Poll for current settings -->
+<!-- To do: change toggleVisibility to use radio instead of checkbox -->
+	<legend>
+	<% 
+		local checked
+		local display
+		if jsonInfo[db_name]['enabled'] == 'true' then
+			checked='checked'
+			display='block'
+		else 
+			checked=''
+			display='none'
+		end
+	%>	
+	<input type="checkbox" name="bbOnOff" value="true" onClick="toggleVisibility(this)" <%=checked%> />
+	Enable/Disable BigBoard
+	</legend>	
+
+	<h2 class="warning"><%=destErr%></h2>
+
+	<div id="destination" style="display:<%=display%>;">
+		<legend>Identify Bigboard Gatherer</legend>
+
+<!-- to do: sanitize inputs -->
+		<p>Enter the destination IP address for network statistics</p>
+		<input type="text" placeholder="<%=jsonInfo[db_name]['gatherer']%>" name='gatherer_ip' />
+	</div>
+<!-- To do: Allow bigboard gatherer to display AP clients -->
+
+	<% end %>
+	<input type="submit" name="submit" value="Apply &amp; Save" />	
+</form>
+
+<%+footer%>

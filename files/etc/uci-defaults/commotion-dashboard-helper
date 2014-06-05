@@ -1,0 +1,4 @@
+#!/bin/sh
+test -f /etc/crontabs/root || touch /etc/crontabs/root
+grep -q "commotion-bigboard-send" /etc/crontabs/root || echo '* * * * * /usr/bin/commotion-bigboard-send' >> /etc/crontabs/root
+/etc/init.d/cron restart
