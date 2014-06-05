@@ -1,0 +1,61 @@
+<%- 
+  if this_app.fingerprint then
+   prints = {}
+   for color in this_app.fingerprint:gmatch(".....?.?") do
+     table.insert(prints, color)
+   end
+  end
+-%>
+<div class="app <%=this_app.uuid%>">
+  <div class="app-inner">
+	<img src="<% if not this_app.icon:match("^[a-z]+://") then %><% end %><%=this_app.icon%>"  align="Left" width="85" height="85">
+	<div class="name">
+	<h4><a href="<% if not this_app.uri:match("^[a-z]+://") then %>http://<% end %><%=this_app.uri%><% if this_app.port and (not this_app.uri:match("[:/]") or (this_app.uri:match("^[a-z]+://") and not this_app.uri:match("^[a-z]+://[^/:]*[/:]"))) then %>:<%=this_app.port%><% end %>"><%=this_app.name%></a></h4>
+	</div>
+	<p class="description"><%=this_app.description%></p>
+	<% if this_app.fingerprint then %>
+	<canvas class="app-canvas app-tippable" id="canvas_<%=this_app.uuid%>" data-tip="Fingerprint: <%=table.concat(prints,' ')%>"></canvas>
+	<script type="text/javascript">
+	Zepto(function($){
+	  document.getElementById('canvas_<%=this_app.uuid%>').patternizer({
+	    stripes : [
+	      {
+		color: '#<%=prints[1]%>',
+		rotation: <%= tonumber(prints[2],16) % 360 %>,
+		opacity: <%= (tonumber(prints[3],16) % 50) + 50 %>,
+		mode: 'normal',
+		width: <%= (tonumber(prints[4],16) % 60) + 10 %>,
+		gap: <%= (tonumber(prints[5],16) % 60) + 10 %>,
+		offset: 0
+	      },
+	      {
+		color: '#<%=prints[6]%>',
+		rotation: <%= tonumber(prints[7],16) % 360 %>,
+		opacity: <%= (tonumber(prints[8],16) % 50) + 50 %>,
+		mode: 'normal',
+		width: <%= (tonumber(prints[9],16) % 60) + 10 %>,
+		gap: <%= (tonumber(prints[10],16) % 60) + 10 %>,
+		offset: 0
+	      }
+	    ],
+	    bg : '#<%=prints[11]%>FF'
+	  });
+	});
+	</script>
+	<% end %>
+	<% if (admin_vars) then %>
+	  <button class="approve" onclick="return JudgeApp('<%=this_app.uuid%>',1)">Approve</button>
+	  <button class="banned" onclick="return JudgeApp('<%=this_app.uuid%>',0)">Banned</button>
+	    <% if (this_app.localapp) then%>
+		<button class="delete" onclick="return JudgeApp('<%=this_app.uuid%>','delete')">Delete</button>
+	        <a class="edit" href="<%=controller%>/admin/commotion/apps/edit?uuid=<%=this_app.uuid%>">Edit</a>
+	    <%end%>
+	<%end%>
+	<div class="app-type">
+	<%if this_app.type then
+	   for _,i in pairs(this_app.type) do %>
+	    <%=i.." "%>
+	<%end end%>
+	</div>
+  </div>
+</div>
