@@ -1,0 +1,26 @@
+#!/bin/sh /etc/rc.common
+
+#simple barely functional nodogsplash uci-track script to set nodogsplash uci values that were set.
+
+. /lib/config/uci.sh
+
+START=19
+STOP=91
+
+reload() {
+	#Stop nodogaplsh
+	/etc/init.d/nodogsplash stop && sleep 1
+
+	#run uci to nodogsplash translation
+	/usr/bin/uci2nds.lua
+	
+	#disable/enable nodogsplash
+	local enable=$(uci_get nodogsplash settings enable)
+	if [ "$enable" == '1' ]; then
+		/etc/init.d/nodogsplash enable
+		sleep 2
+		/etc/init.d/nodogsplash start
+	else
+		/etc/init.d/nodogsplash disable
+	fi
+}
