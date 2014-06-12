@@ -8,6 +8,7 @@
 
 .body-content {
 	overflow: auto;
+  max-width: 100%;
 }
 
 .login {
@@ -83,6 +84,7 @@ abbr[title], acronym[title] {
 table {
   border-collapse: collapse;
   border-spacing: 0;
+  max-width: 98%;
 }
 ol, ul {
   list-style: none outside none;
@@ -123,6 +125,12 @@ button, input, select, textarea {
   margin: 0;
   vertical-align: baseline;
 }
+
+textarea {
+  max-width: 98%;
+  margin 1em 0 1em 0;
+}
+
 button, input {
   line-height: normal;
 }
@@ -322,6 +330,11 @@ fieldset legend {
   width: 100%;
 }
 
+fieldset ul {
+  list-style: none;
+  text-align: left;
+}
+
 label, input, select, textarea {
   font-size: 0.6em;
   font-weight: normal;
@@ -416,7 +429,7 @@ input[disabled], select[disabled], textarea[disabled], input[readonly], select[r
   background-color: #F5F5F5;
   border-color: #DDDDDD;
 }
-.cbi-page-actions {
+.actions, .cbi-page-actions {
   background: none repeat scroll 0 0 #F5F5F5;
   border-top: 1px solid #DDDDDD;
   margin-bottom: 18px;
@@ -425,6 +438,15 @@ input[disabled], select[disabled], textarea[disabled], input[readonly], select[r
 }
 .actions .secondary-action a:hover, .cbi-page-actions .secondary-action a:hover {
   text-decoration: underline;
+}
+.help-inline, .help-block {
+  color: #BFBFBF;
+  font-size: 13px;
+  line-height: 18px;
+}
+.help-alert {
+  color: #FF6699;
+  font-weight: bold;
 }
 .help-inline {
   padding-left: 5px;
@@ -466,6 +488,10 @@ table tbody th {
   background: white;
   border: 0;
 }
+table#neighbors.cbi-section-table th.cbi-section-table-cell,
+table#neighbors.cbi-section-table td.cbi-section-table-cell {
+  text-align:center;
+}
 header {
   color: #BFBFBF;
   overflow: visible;
@@ -485,8 +511,10 @@ header nav ul {
   text-align: center;
   padding-bottom: 1em;
 }
+
+
 header topbar > ul > li, header topbar > ul > li {
-  display: inline-block;
+  display: none; /* testing this change - topbar seems totally unused */
 }
 header topbar > ul a:hover, header topbar > ul a:hover,
 header nav > ul a:hover, header nav > ul a:hover {
@@ -537,17 +565,13 @@ header nav > ul a:hover, header nav > ul a:hover {
   text-decoration: none;
 }
 .cbi-tab > a:link, .cbi-tab > a:hover {
-  -moz-border-bottom-colors: none;
-  -moz-border-image: none;
-  -moz-border-left-colors: none;
-  -moz-border-right-colors: none;
-  -moz-border-top-colors: none;
   border-color: #DDDDDD #DDDDDD white;
   border-style: solid;
   border-width: 3px;
   cursor: default;
   color: black;
 }
+
 footer {
   margin-top: 17px;
   padding: 0 0 8px 0;
@@ -605,8 +629,57 @@ footer a:active, footer a:hover {
 	padding: 4em 1em 0 1em;
 	font-weight: bold;
 }
-
 /* THESE MIGHT BE  UNUSED, BUT LEAVING THEM IN JUST IN CASE */
+
+
+.tabs .dropdown-menu, .cbi-tabmenu .dropdown-menu {
+  border-width: 3px;
+  top: 35px;
+}
+.tabs a.menu:after, .tabs .dropdown-toggle:after, .cbi-tabmenu a.menu:after, .cbi-tabmenu .dropdown-toggle:after {
+  border-top-color: #999999;
+  margin-left: 5px;
+  margin-top: 15px;
+}
+.tabs li.open.menu .menu, .tabs .open.dropdown .dropdown-toggle, .cbi-tabmenu li.open.menu .menu, .cbi-tabmenu .open.dropdown .dropdown-toggle {
+  border-color: #999999;
+}
+.tabs li.open a.menu:after, .tabs .dropdown.open .dropdown-toggle:after, .cbi-tabmenu li.open a.menu:after, .cbi-tabmenu .dropdown.open .dropdown-toggle:after {
+  border-top-color: #555555;
+}
+.tab-content > .tab-pane, .tab-content > div {
+  display: none;
+}
+.tab-content > .active {
+  display: block;
+}
+
+#welcome li {
+	display: inline-block;
+	font-weight: bold;
+	box-shadow: none;
+}
+#welcome li.setup a {
+	display: inline-block;
+	padding: 6.5em 2em 3em 2em;
+	background: transparent url(setupwiz_button.png) no-repeat top center;
+	background-size: 96px 96px;
+}
+#welcome li.upload a {
+	background: transparent url(upload_config.png) no-repeat top center;
+	background-size: 96px 96px;
+	display: inline-block;
+	padding: 6.5em 2em 3em 2em;
+}
+#welcome li.advanced a {
+	background: transparent url(advanced_button.png) no-repeat top center;
+	background-size: 96px 96px;
+	display: inline-block;
+	padding: 6.5em 2em 3em 2em;
+}
+.welcomepage {
+  text-align:center;
+}
 
 /* buttons, styles likely from Flat UI and heavily modified */
 .btn.danger, .alert.danger, .btn.danger:hover, .alert.danger:hover, .btn.error, .alert.error, .btn.error:hover, .alert.error:hover, .btn.success, .alert.success, .btn.success:hover, .alert.success:hover, .btn.info, .alert.info, .btn.info:hover, .alert.info:hover {
@@ -641,8 +714,6 @@ footer a:active, footer a:hover {
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 }
 
-.btn, .cbi-button {
-}
 .cbi-button-remove {
   float: right;
 }
@@ -670,6 +741,12 @@ footer a:active, footer a:hover {
   cursor: default;
   opacity: 0.65;
 }
+
+.cbi-map {
+  text-align:left;
+  max-width: 98%;
+}
+
 .basic_menu .btn:hover, .cbi-button:hover {
   color: #333333;
   text-decoration: none;
@@ -868,7 +945,7 @@ table#neighbors.cbi-section-table td.cbi-section-table-cell {
 }
 .ifacebox {
   background-color: #FFFFFF;
-  background-image: -moz-linear-gradient(center top , #FFFFFF, #FFFFFF 25%, #E6E6E6);
+  background-image: linear-gradient(center top , #FFFFFF, #FFFFFF 25%, #E6E6E6);
   border: 1px solid #CCCCCC;
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
   margin: 0 10px;
@@ -884,7 +961,7 @@ table#neighbors.cbi-section-table td.cbi-section-table-cell {
 }
 .ifacebadge {
   background-color: #FFFFFF;
-  background-image: -moz-linear-gradient(center top , #FFFFFF, #FFFFFF 25%, #E6E6E6);
+  background-image: linear-gradient(center top , #FFFFFF, #FFFFFF 25%, #E6E6E6);
   border: 1px solid #CCCCCC;
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
   display: inline-block;
@@ -913,7 +990,7 @@ table#neighbors.cbi-section-table td.cbi-section-table-cell {
   font-size: smaller;
   font-style: italic;
 }
-td.cbi-value-field var {
+div.cbi-value var, td.cbi-value-field var {
   color: #0069D6;
   font-style: italic;
 }
