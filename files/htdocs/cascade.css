@@ -73,7 +73,7 @@ html, body {
   padding: 0;
   max-width: 100%;
 }
-h1, h2, h3, h4, h5, p, a, abbr, code, img, small, var, li, ul, fieldset, form, label, legend, button, table, tbody, thead, tr, th, td {
+h1, h2, h3, h4, h5, h6, p, pre, a, abbr, acronym, code, del, em, img, q, s, small, strike, strong, sub, sup, tt, var, dd, dl, dt, li, ol, ul, fieldset, form, label, legend, button, table, caption, tbody, tfoot, thead, tr, th, td {
   border: 0 none;
   font-family: inherit;
   font-size: 100%;
@@ -105,11 +105,11 @@ a:focus {
 a:hover, a:active {
   outline: 0 none;
 }
-footer, header, .topbar nav, section {
+footer, header, .topbar nav, section, topbar {
   display: block;
 }
 #maincontent {
-	padding-top: 5px;
+	padding-top: 10px;
 }
 sub, sup {
   font-size: 75%;
@@ -153,7 +153,7 @@ button, input[type="button"], input[type="reset"], input[type="submit"] {
   font-size: 13px;
   font-weight: bold;
   line-height: normal;
-  padding: 2px 7px 3px;
+  padding: 5px 14px 6px;
   border: 0;
 }
 button:hover, input[type="button"]:hover, input[type="reset"]:hover, input[type="submit"]:hover {
@@ -172,7 +172,7 @@ textarea {
 body {
   background-color: #FFFFFF;
   color: #4d4d4d;
-  font: 1em/1.5em Helvetica, Arial, sans-serif;
+  font: 15px/18px Helvetica, Arial, sans-serif;
   margin: 0;
   padding: 0;
   max-width: 100%;
@@ -183,6 +183,7 @@ footer {
   width: 100%;
 }
 header .topbar ul,
+header topbar ul,
 footer .credits,
 footer nav,
 section {
@@ -220,7 +221,7 @@ a:hover {
   text-decoration: underline;
 }
 p, .cbi-map-descr, .cbi-section-descr {
-  font: normal 1em/1.5em;
+  font: 13px;
 }
 h1, h2, h3, h4, h5, h6 {
   color: black;
@@ -312,7 +313,7 @@ pre {
   font-size: 12px;
   line-height: 18px;
   margin: 0 0 18px;
-  padding: 4px;
+  padding: 8.5px;
   white-space: pre-wrap;
   word-wrap: break-word;
 }
@@ -320,8 +321,8 @@ form {
   margin-bottom: 18px;
 }
 fieldset {
-  margin-bottom: 4px;
-  padding-top: 4px;
+  margin-bottom: 9px;
+  padding-top: 9px;
 }
 fieldset legend {
   color: #8073cb;
@@ -330,7 +331,7 @@ fieldset legend {
   font-size: 15px;
   font-weight: bold;
   line-height: 1;
-  padding: 4em 0 0 0;
+  padding: 40px 0 0 0;
   border-bottom: 3px solid #8073cb;
   width: 100%;
 }
@@ -341,7 +342,7 @@ fieldset ul {
 }
 
 label, input, select, textarea {
-  font-size: 0.6em;
+  font-size: 13px;
   font-weight: normal;
   line-height: normal;
 }
