@@ -453,11 +453,11 @@ input[disabled], select[disabled], textarea[disabled], input[readonly], select[r
   background-color: #F5F5F5;
   border-color: #DDDDDD;
 }
-.cbi-page-actions {
+.actions, .cbi-page-actions {
   background: none repeat scroll 0 0 #F5F5F5;
   border-top: 1px solid #DDDDDD;
   margin-bottom: 18px;
-  padding: 0.5em 0.5em 0.5em 1em;
+  padding: 17px 20px 18px 150px;
   text-align: right;
 }
 .actions .secondary-action a:hover, .cbi-page-actions .secondary-action a:hover {
@@ -473,10 +473,13 @@ input[disabled], select[disabled], textarea[disabled], input[readonly], select[r
 table {
   border-collapse: collapse;
   font-size: 13px;
+  margin-bottom: 18px;
+  padding: 0;
   max-width: 100%;
 }
 table th, table td {
-  font: normal 1em Helvetica, Arial, sans-serif;
+  font: normal 13px/16px Helvetica, Arial, sans-serif;
+  padding: 15px 5px;
   text-align: left;
   background-color: #f7f7f7;
 }
@@ -489,6 +492,7 @@ table th, table td {
 table th {
   font-weight: bold;
   background-color: white;
+  padding: 5px;
   vertical-align: middle;
 }
 .cbi-section-table-titles th {
@@ -502,6 +506,10 @@ table tbody th {
   font-weight: bold;
   background: white;
   border: 0;
+}
+table#neighbors.cbi-section-table th.cbi-section-table-cell,
+table#neighbors.cbi-section-table td.cbi-section-table-cell {
+  text-align:center;
 }
 header {
   color: #BFBFBF;
@@ -520,10 +528,10 @@ header .topbar {
 header nav ul, 
 header nav ul {
   text-align: center;
-  padding-bottom: 1em;
+  padding-bottom: 28px;
 }
 header .topbar > ul > li, header .topbar > ul > li {
-  display: inline-block;
+  display: none; /* the topbar div appears to have no function; likely legacy */
 }
 header .topbar > ul a:hover, header .topbar > ul a:hover,
 header nav > ul a:hover, header nav > ul a:hover {
@@ -562,7 +570,7 @@ header nav > ul a:hover, header nav > ul a:hover {
   font: normal 15px/23px Helvetica, Arial, sans-serif;
   color: #6e6e6e;
   margin-right: 2px;
-  padding: 0 4px;
+  padding: 0 9px;
 }
 .cbi-tab > a:hover {
   text-decoration: none;
@@ -640,6 +648,65 @@ footer a:active, footer a:hover {
 
 /* THESE MIGHT BE  UNUSED, BUT LEAVING THEM IN JUST IN CASE */
 
+#welcome {
+	margin:auto;
+}
+
+#welcome li {
+	display: inline-block;
+	font-weight: bold;
+	box-shadow: none;
+}
+#welcome li.setup a {
+	display: inline-block;
+	padding: 100px 45px 0 45px;
+	background: transparent url(setupwiz_button.png) no-repeat top center;
+}
+#welcome li.upload a {
+	background: transparent url(upload_config.png) no-repeat top center;
+	display: inline-block;
+	padding: 100px 45px 0 45px;
+}
+#welcome li.advanced a {
+	background: transparent url(advanced_button.png) no-repeat top center;
+	display: inline-block;
+	padding: 100px 45px 0 45px;
+}
+.welcomepage {
+  text-align:center;
+}
+
+.btn.danger, .alert.danger, .btn.danger:hover, .alert.danger:hover, .btn.error, .alert.error, .btn.error:hover, .alert.error:hover, .btn.success, .alert.success, .btn.success:hover, .alert.success:hover, .btn.info, .alert.info, .btn.info:hover, .alert.info:hover {
+  color: #FFFFFF;
+}
+.btn .close, .alert .close {
+  font-family: Arial,sans-serif;
+  line-height: 18px;
+}
+.btn.danger, .alert.danger, .btn.error, .alert.error {
+  background-color: #C43C35;
+  background-image: -moz-linear-gradient(center top , #EE5F5B, #C43C35);
+  background-image: -webkit-linear-gradient(center top , #EE5F5B, #C43C35);
+  background-image: -ms-linear-gradient(center top , #EE5F5B, #C43C35);
+  background-repeat: repeat-x;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+}
+.btn.success, .alert.success {
+  background-color: #57A957;
+  background-image: -moz-linear-gradient(center top , #62C462, #57A957);
+  background-image: -webkit-linear-gradient(center top , #62C462, #57A957);
+  background-image: -ms-linear-gradient(center top , #62C462, #57A957);
+  background-repeat: repeat-x;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+}
+.btn.info, .alert.info {
+  background-color: #339BB9;
+  background-image: -moz-linear-gradient(center top , #5BC0DE, #339BB9);
+  background-image: -webkit-linear-gradient(center top , #5BC0DE, #339BB9);
+  background-image: -ms-linear-gradient(center top , #5BC0DE, #339BB9);
+  background-repeat: repeat-x;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+}
 
 .cbi-button-remove {
   float: right;
@@ -650,6 +717,14 @@ footer a:active, footer a:hover {
 }
 .btn:focus, .cbi-button:focus {
   outline: 1px dotted #666666;
+}
+.btn.primary {
+  background-color: #00ffcf;
+  background-image: -moz-linear-gradient(center top , #00ffcf, #000000);
+  background-image: -ms-linear-gradient(center top , #00ffcf, #000000);
+  background-image: -webkit-linear-gradient(center top , #00ffcf, #000000);
+  background-repeat: repeat-x;
+  color: black;
 }
 .cbi-button-up {
   background-image: url('./resources/cbi/up.gif'), linear-gradient(center top , #FFFFFF, #FFFFFF 25%, #E6E6E6);
@@ -825,7 +900,7 @@ table#neighbors.cbi-section-table td.cbi-section-table-cell {
 }
 .cbi-value-description {
   display: inline;
-  font: normal 1em Helvetica, Arial, sans-serif;
+  font: normal 14px/16px Helvetica, Arial, sans-serif;
   color: black;
 }
 .cbi-value-description img {
@@ -886,7 +961,7 @@ table#neighbors.cbi-section-table td.cbi-section-table-cell {
   font-size: smaller;
   font-style: italic;
 }
-td.cbi-value-field var {
+div.cbi-value var, td.cbi-value-field var {
   color: #0069D6;
   font-style: italic;
 }
