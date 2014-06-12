@@ -351,6 +351,24 @@ form .cbi-value label.cbi-value-title {
   font-size: 20px;
   line-height: 22px;
 }
+.tip {
+  position: relative;
+  background: #E6E6E6;
+  color: black;
+  font: italic 14px/16px Helvetica, Arial, sans-serif;
+  padding: 5px;
+  margin: 10px 0 0 0;
+  display: none;
+}
+.tip:after {
+  bottom: 100%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
 .tip:after {
   border-color: transparent;
   border-bottom-color: #E6E6E6;
@@ -368,7 +386,7 @@ input, textarea, select {
   font-size: 17px;
   height: 18px;
   line-height: 18px;
-  padding: 0.5em 0.5em;
+  padding: 10px 5px;
   margin: 10px 0 5px 0;
   width: 97%;
 }
