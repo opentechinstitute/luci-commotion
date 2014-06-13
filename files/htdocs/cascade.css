@@ -780,9 +780,52 @@ footer a:active, footer a:hover {
 	background: transparent url('approve_app_button.png') no-repeat top center;
 	background-size: 48px 48px;
 }
-.basic_menu .cbi-page-actions .cbi-button-reset {
+.basic_menu .cbi-page-actions .cbi-button-reset, .basic_menu .cbi-page-actions .inline .cbi-button-reset {
 	background: transparent url('commotion_delete_icon.png') no-repeat top center;	
-	background-size: 48px 48px;
+}
+.basic_menu .cbi-page-actions  .cbi-button-next, .basic_menu .cbi-page-actions .cbi-button-skip {
+	background: transparent url('right_arrow_button.png') no-repeat top center;
+}
+.basic_menu .cbi-page-actions .cbi-button-back, .basic_menu .cbi-page-actions .cbi-button-make-changes {
+	background: transparent url('left_arrow_button.png') no-repeat top center;
+}
+.basic_menu .cbi-page-actions .cbi-button-admin {
+	background: transparent url('advanced_button.png') no-repeat top center;
+}
+
+.Startup .cbi-section-table input.cbi-input-apply, .Startup .cbi-section-table input.cbi-button-apply {
+  background-image: url('./resources/cbi/apply.gif');
+  background-position: 7px 4px;
+  padding: 3px 9px 3px 27px;
+}
+.Processes .cbi-section-table input.cbi-input-reload, .Startup .cbi-section-table input.cbi-input-reload {
+  background-image: url('./resources/cbi/reload.gif');
+  background-position: 7px 4px;
+  padding: 3px 9px 3px 27px;
+}
+.Processes .cbi-section-table input.cbi-input-remove, .Processes .cbi-section-table div.cbi-section-remove input, .Startup .cbi-section-table input.cbi-input-remove, .Startup .cbi-section-table div.cbi-section-remove input {
+  background-image: url('./resources/cbi/remove.gif');
+  background-position: 7px 4px;
+  padding: 3px 9px 3px 27px;
+}
+.Processes .cbi-section-table input.cbi-input-reset, .Processes .cbi-section-table input.cbi-button-reset, .Startup .cbi-section-table input.cbi-input-reset, .Startup .cbi-section-table input.cbi-button-reset {
+  background-image: url('./resources/cbi/reset.gif');
+  background-position: 7px 4px;
+  padding: 3px 9px 3px 27px;
+}
+.Startup .cbi-section-table input.cbi-input-save, .Startup .cbi-section-table input.cbi-button-save {
+  background-image: url('./resources/cbi/save.gif');
+  background-position: 7px 4px;
+  padding: 3px 9px 3px 27px;
+}
+
+button.btn::-moz-focus-inner, input.btn[type="submit"]::-moz-focus-inner {
+  border: 0 none;
+  padding: 0;
+}
+
+.status-bar {
+	overflow: auto;
 }
 
 /* node name and mesh ip address */
