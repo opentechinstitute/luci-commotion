@@ -1,0 +1,54 @@
+<div class="sb-container">
+   <div class="">
+
+   <%-
+local util = require "luci.util"
+local http = require "luci.http"
+local disp = require "luci.dispatcher"
+
+local function submenu(prefix, node)
+   local childs = disp.node_childs(node)
+   if #childs > 0 then
+	  for i, r in ipairs(childs) do
+		 local nnode = node.nodes[r]
+		 local href  = controller .. prefix .. r ..
+			(nnode.query and http.build_querystring(nnode.query) or "")%>
+			<li class="sbmenutitle">
+			<a href="<%=util.pcdata(href)%>"><%=util.pcdata(striptags(translate(nnode.title)))%></a>
+        </li><%-
+	  end
+   end
+end
+
+childs = disp.node_childs(cattree)
+
+if #childs > 0 then
+   for i, r in ipairs(childs) do
+	  --Logic for choosing main menu to use for commotion will go here interacting with the r value which == commotion on commotion menu's and the value section
+      local nnode = cattree.nodes[r]
+	  -%><%=category%><%-
+	  for m1, m2 in pairs(nnode) do
+	  -%><p><%=m1%>, <%=m2%></p><%-
+	  end
+	  local href  = controller .. "/" .. category .. "/" .. r ..
+		 (nnode.query and http.build_querystring(k.query) or "")
+	  local grandchildren = disp.node_childs(nnode)
+	  if #grandchildren > 0 then%>
+			<div><h3 class="sb-btn">
+			<a href="<%=util.pcdata(href)%>"><%=util.pcdata(striptags(translate(nnode.title)))%></a>
+			</h3>
+			<ul>
+			<%- submenu("/" .. category .. "/" .. r .. "/", nnode) %>
+			</ul>
+			</div>
+		 <% else %>
+			   <div>
+			   <h3 class="sb-btn">
+			   <a href="<%=util.pcdata(href)%>"><%=util.pcdata(striptags(translate(nnode.title)))%></a>
+			   </h3>
+			   </div><%-
+		 end
+   end
+end%>
+   <div class="sb-btn"><h3><a href="<%=controller%>/admin/status/overview">Advanced</a></h3></div>
+   </div>

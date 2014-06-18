@@ -1,0 +1,22 @@
+<script>
+  function set_page(page){
+  $(".cbi-page-actions").append("<form type='hidden'  method='post' enctype='multipart/form-data'  id='sw_form'></form>")
+  
+  $("#sw_form").attr("action", "<%=disp.build_url('commotion', 'setup_wizard')%>")
+  $("#sw_form").submit()
+  }
+</script>
+<div class="sb-container">
+  <div class="sb-follow">
+	<% local sidebar = {"Start Over"}
+	   for _,x in ipairs(sidebar) do
+	   local title = translate(x)
+	   -%>
+	  <div class="sb-btn" onclick="set_page('<%=x%>')">
+		<h3>"<%=title%>"
+		</h3>
+	  </div>
+	  <% end %>
+	</div>
+  </div>
+<div class="body-content1">

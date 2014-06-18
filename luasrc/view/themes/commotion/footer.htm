@@ -1,0 +1,47 @@
+<%#
+LuCI - Lua Configuration Interface
+Copyright 2008 Steven Barth <steven@midlink.org>
+Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+Copyright 2012 David Menting <david@nut-bolt.nl>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+-%>
+</div>
+<%
+	local disp = require "luci.dispatcher"
+
+	local request  = disp.context.path
+
+	local category = request[1]
+
+	local tree = disp.node()
+
+	local categories = disp.node_childs(tree)
+%>
+    </section>
+    <footer>
+      <nav>
+        <div class="pointydown"></div>
+        <ul id="footermenu">
+          <li class="admin"><a href="<%=controller%>/admin/commotion"><%:Administration%></a></li>
+		  <li class="about"><a href="<%=controller%>/commotion/about/"><%:About%></a></li>
+		  <li class="help"><a href="<%=controller%>/commotion/help/"><%:Help%></a></li>
+		  <li class="license"><a href="<%=controller%>/commotion/license/"><%:License%></a></li>
+        </ul>
+      </nav>
+      <p class="credits">
+        <a href="http://luci.subsignal.org/">Powered by <%= luci.__appname__ .. " (" .. luci.__version__ .. ")" %></a>
+        <%=luci.version.distversion%>
+      </p>
+    </footer>
+  </body>
+  <script src="<%=media%>/respond.min.js"></script>
+  <script src="<%=media%>/selectnav.min.js"></script>
+  <script src="<%=media%>/theme.js"></script>
+</html>
+

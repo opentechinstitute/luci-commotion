@@ -1,0 +1,32 @@
+<fieldset>
+<div id="types">
+<%- for type_name, apps_of_type in pairs(categories) do
+  catType = type_name
+-%>
+  <div class="type" id="<%=catType%>">
+  <% include("themes/" .. theme .. "/apps_categories") %>
+  <div class="apps" id="<%=catType%>Apps">
+    <%-
+	this_app = {}
+	for i, app in pairs(apps_of_type) do
+		this_app = app
+	        if this_app.uuid then
+			this_app.description = this_app.description:gsub("&#13;&#10;","<br>")
+			if (this_app.approved) then
+	           		if (this_app.approved == '1') then
+	           			approved = "approved"
+	           		else
+	           			approved = "blacklisted"
+	           		end
+			else
+	           		approved = "new"
+			end
+    -%>
+			<% include("themes/" .. theme .. "/apps_apps") %>
+		<%end%>
+	<%end%>
+  </div>
+  </div>
+<%end%>
+</div>
+</fieldset>

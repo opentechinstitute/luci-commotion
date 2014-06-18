@@ -1,0 +1,35 @@
+<%+header%>
+<script type="text/javascript" src="<%=media%>/apps.js"></script>
+<script type="text/javascript" src="<%=media%>/patternizer.min.js"></script>
+<link rel="stylesheet" type="text/css" href="<%=media%>/apps.css" />
+<div class="cbi-map-descr apps-content">
+<h2 class="appsH2"><a id="content" name="content"><%:Applications%></a></h2>
+<% if admin_vars then %>
+<script type="text/javascript" src="<%=media%>/admin_apps.js"></script>
+<p><%:Publicly announced applications running on this network are listed below.%></p>
+<%else%>
+<p><%:Here you can view applications accessible from this node%>.</p>
+<% end %>
+<% 
+require "luci.http"
+if luci.http.formvalue("add") and luci.http.formvalue("add") == "success" then
+%>
+<div class="notice notice-success">Application added successfully!<% if not admin_vars then %> The node administrator may need to approve the application before it shows up on this list.<% end %></div>
+<% end %>
+</div>
+<div class="cbi-map">
+  <% if not admin_vars then
+	 uci = require "luci.model.uci".cursor()
+	 local unauth = uci:get("applications", "settings", "enable_unauth")
+	 if unauth == "1" then%>
+  <ul id="tabs" class="cbi-tabmenu">
+  	<li class="cbi-tab-disabled" style="float:right">
+		<a id="add_app" href="<%=controller%>/apps/add"><%:Add Application%></a>
+	</li>
+  </ul><%end%>
+	 <%	 include ("commotion/apps_display")
+		else
+	     include ("commotion/apps_admin_display")	     
+	 end%>
+</div>
+<%+footer%>

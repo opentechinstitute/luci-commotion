@@ -1,0 +1,292 @@
+* DIE DONE
+Original:
+DIE("STRING")
+
+replacement:
+local dispatch = require "luci.dispatcher"
+dispatch.error500("STRING")
+
+luci-commotion-apps/lua/luci/controller/commotion/apps_controller.lua:37:  	DIE("Application not found")
+luci-commotion-apps/lua/luci/controller/commotion/apps_controller.lua:49:  	DIE("Could not judge app")
+luci-commotion-apps/lua/luci/controller/commotion/apps_controller.lua:135:			DIE("No UUID given")
+luci-commotion-apps/lua/luci/controller/commotion/apps_controller.lua:147:			DIE("No application found for given UUID")
+luci-commotion-apps/lua/luci/controller/commotion/apps_controller.lua:200:			DIE("Invalid form values")
+luci-commotion-apps/lua/luci/controller/commotion/apps_controller.lua:283:			DIE("Invalid approved value") -- fail since this shouldn't happen with a dropdown form
+luci-commotion-apps/lua/luci/controller/commotion/apps_controller.lua:290:		DIE("Invalid permanent value")
+luci-commotion-apps/lua/luci/controller/commotion/apps_controller.lua:309:					DIE("Invalid application type value")
+luci-commotion-apps/lua/luci/controller/commotion/apps_controller.lua:315:				DIE("Invalid application type value")
+luci-commotion-apps/lua/luci/controller/commotion/apps_controller.lua:398:				DIE("Unable to remove old UCI entry")
+luci-commotion-apps/lua/luci/controller/commotion/apps_controller.lua:501:				DIE("Unable to remove old UCI entry")
+luci-commotion-apps/lua/luci/controller/commotion/apps_controller.lua:507:			DIE("Failed to sign service advertisement")
+luci-commotion-apps/lua/luci/controller/commotion/apps_controller.lua:529:			DIE("Failed to create avahi service file")
+luci-commotion-apps/lua/luci/controller/commotion/apps_controller.lua:541:			DIE("Error removing Avahi service file")
+
+luci-commotion-splash/luasrc/controller/commotion-splash/splash.lua:88:      DIE(translate("splash: invalid parameters"))
+luci-commotion-splash/luasrc/controller/commotion-splash/splash.lua:99:    DIE(translate("Invalid redirect"))
+luci-commotion-splash/luasrc/controller/commotion-splash/splash.lua:108:    DIE(translate("Invalid autoauth"))
+luci-commotion-splash/luasrc/controller/commotion-splash/splash.lua:114:      DIE(translate("Invalid submission...zone ") .. selected_zone .. translate(" doesn't exist"))
+luci-commotion-splash/luasrc/controller/commotion-splash/splash.lua:224:      DIE("splash: failed to write nodogsplash.conf")
+* check_https DONE \n
+
+luci-theme-commotion/files/templates/header.htm:4:   check_https("/admin/", luci.http.getenv())
+* ssl_cert_fingerprints DONE \n
+luci-commotion-quickstart/usr/lib/lua/luci/view/QS/module/cert.htm:20:	   md5, sha1 = ssl_cert_fingerprints()
+* uci_encode DONE \n
+ORIGINAL 
+uci_encode(...)
+
+REPLACEMENT
+local encode = require "luci.commotion.encode"
+encode.uci(...)
+
+luci-commotion-apps/lua/luci/controller/commotion/apps_controller.lua:352:			UUID = uci_encode(values.ipaddr .. values.port)
+luci-commotion-apps/lua/luci/controller/commotion/apps_controller.lua:396:		if (luci.http.formvalue("uuid") ~= uci_encode(values.ipaddr .. values.port)) then
+luci-commotion-apps/lua/luci/controller/commotion/apps_controller.lua:402:			UUID = uci_encode(values.ipaddr .. values.port)
+* html_encode DONE \n
+ORIGINAL 
+html_encode(..)
+
+REPLACEMENT
+local encode = require "luci.commotion.encode"
+encode.html(..)
+
+luci-commotion-apps/lua/luci/controller/commotion/apps_controller.lua:111:				types_string = types_string .. printf(type_tmpl, {type=type_category, type_escaped=html_encode(type_category), checked="checked "})
+luci-commotion-apps/lua/luci/controller/commotion/apps_controller.lua:113:				types_string = types_string .. printf(type_tmpl, {type=type_category, type_escaped=html_encode(type_category), checked=""})
+luci-commotion-apps/lua/luci/controller/commotion/apps_controller.lua:118:			types_string = types_string .. printf(type_tmpl, {type=type_category, type_escaped=html_encode(type_category), checked=""})
+luci-commotion-apps/lua/luci/controller/commotion/apps_controller.lua:164:			types_string = types_string .. printf(type_tmpl, {type=type_category, type_escaped=html_encode(type_category), checked="checked "})
+luci-commotion-apps/lua/luci/controller/commotion/apps_controller.lua:166:			types_string = types_string .. printf(type_tmpl, {type=type_category, type_escaped=html_encode(type_category), checked=""})
+luci-commotion-apps/lua/luci/controller/commotion/apps_controller.lua:220:				type_table[i] = html_encode(app_type)
+luci-commotion-apps/lua/luci/controller/commotion/apps_controller.lua:297:	                values[i] = html_encode(field)
+
+luci-commotion-splash/luasrc/controller/commotion-splash/splash.lua:36:    splash.redirecturl = html_encode(luci.sys.exec("grep -o -E '^RedirectURL .*' /etc/nodogsplash/nodogsplash.conf |cut -d ' ' -f 2"):sub(0,-2))
+luci-commotion-splash/luasrc/controller/commotion-splash/splash.lua:44:    splash.leasetime = html_encode(luci.sys.exec("grep -o -E '^ClientIdleTimeout [[:digit:]]+' /etc/nodogsplash/nodogsplash.conf |cut -d ' ' -f 2"):sub(0,-2))
+luci-commotion-splash/luasrc/controller/commotion-splash/splash.lua:49:      mac = html_encode(mac)
+luci-commotion-splash/luasrc/controller/commotion-splash/splash.lua:55:      mac = html_encode(mac)
+luci-commotion-splash/luasrc/controller/commotion-splash/splash.lua:62:      ipaddr = html_encode(ipaddr)
+process:76:function html_encode(str)
+* url_encode DONE \n
+ORIGINAL 
+url_encode(..)
+
+REPLACEMENT
+local encode = require "luci.commotion.encode"
+encode.url(..)
+
+
+commotion-dashboard-helper/luasrc/controller/commotion-dash/bigboard-conf.lua:75:		values[k] = url_encode(v)
+
+luci-commotion-apps/lua/luci/controller/commotion/apps_controller.lua:299:			values[i] = url_encode(field)
+
+luci-commotion-splash/luasrc/controller/commotion-splash/splash.lua:104:    settings.redirecturl = url_encode(settings.redirecturl)
+* printf DONE \n
+ORIGINAL 
+printf(...)
+
+REPLACEMENT
+local cutil = require "luci.commotion.util"
+cutil.tprintf(...)
+
+luci-commotion-apps/lua/luci/controller/commotion/apps_controller.lua:111:				types_string = types_string .. printf(type_tmpl, {type=type_category, type_escaped=html_encode(type_category), checked="checked "})
+luci-commotion-apps/lua/luci/controller/commotion/apps_controller.lua:113:				types_string = types_string .. printf(type_tmpl, {type=type_category, type_escaped=html_encode(type_category), checked=""})
+luci-commotion-apps/lua/luci/controller/commotion/apps_controller.lua:118:			types_string = types_string .. printf(type_tmpl, {type=type_category, type_escaped=html_encode(type_category), checked=""})
+luci-commotion-apps/lua/luci/controller/commotion/apps_controller.lua:164:			types_string = types_string .. printf(type_tmpl, {type=type_category, type_escaped=html_encode(type_category), checked="checked "})
+luci-commotion-apps/lua/luci/controller/commotion/apps_controller.lua:166:			types_string = types_string .. printf(type_tmpl, {type=type_category, type_escaped=html_encode(type_category), checked=""})
+luci-commotion-apps/lua/luci/controller/commotion/apps_controller.lua:448:			local command = "grep " .. values.port .. "/tcp /etc/services |awk '{ printf(\"%s\", $1) }'"
+luci-commotion-apps/lua/luci/controller/commotion/apps_controller.lua:467:				app_types = app_types .. printf(type_tmpl, {app_type = app_type})
+luci-commotion-apps/lua/luci/controller/commotion/apps_controller.lua:470:-- 				reverse_app_types = reverse_app_types .. printf(type_tmpl, {app_type = luci.http.formvalue("type")[i]})
+luci-commotion-apps/lua/luci/controller/commotion/apps_controller.lua:477:				app_types = printf(type_tmpl, {app_type = luci.http.formvalue("type")})
+luci-commotion-apps/lua/luci/controller/commotion/apps_controller.lua:496:		signing_msg = printf(signing_tmpl,fields)
+luci-commotion-apps/lua/luci/controller/commotion/apps_controller.lua:519:		service_string = printf(tmpl,fields)
+
+
+luci-commotion-splash/luasrc/controller/commotion-splash/splash.lua:196:        options.gw_ifaces = options.gw_ifaces .. printf(gw_iface, {iface=list.zone_to_iface[selected_zone]}) .. "\n"
+luci-commotion-splash/luasrc/controller/commotion-splash/splash.lua:202:	options.ipaddrs = options.ipaddrs .. printf(ipaddr, {ip_cidr=ip_cidr}) .. "\n"
+luci-commotion-splash/luasrc/controller/commotion-splash/splash.lua:222:    local new_conf = printf(new_conf_tmpl, options)
+* log DONE\n
+ORIGINAL
+log(...)
+
+REPLACEMENT
+local debug = require "luci.commotion.debugger"
+debug.log(..)
+
+commotion-dashboard-helper/luasrc/controller/commotion-dash/bigboard-conf.lua:44:			log("Can't run Commotion-Dashboard. Install olsrd jsoninfo plugin.")
+commotion-dashboard-helper/luasrc/controller/commotion-dash/bigboard-conf.lua:84:                	log("Error validating inputs " .. values['gatherer_ip'])
+commotion-dashboard-helper/luasrc/controller/commotion-dash/bigboard-conf.lua:89:		log("Commotion-Dashboard: Enabling network stats submission...")
+commotion-dashboard-helper/luasrc/controller/commotion-dash/bigboard-conf.lua:90:		log("Commotion-Dashboard: Setting " .. values['gatherer_ip'] .. "as network stats collector")
+commotion-dashboard-helper/luasrc/controller/commotion-dash/bigboard-conf.lua:99:		log("Disabling Commotion-Dashboard")
+
+
+luci-commotion/luasrc/controller/commotion/meshprofile.lua:33:   log("main started")
+luci-commotion/luasrc/controller/commotion/meshprofile.lua:45:					 --log(s['.name'] .. " uses " .. s.profile)
+luci-commotion/luasrc/controller/commotion/meshprofile.lua:60:	log("Processing profile application...")
+luci-commotion/luasrc/controller/commotion/meshprofile.lua:66:	log("Applying " .. p .. " to " .. tif)
+luci-commotion/luasrc/controller/commotion/meshprofile.lua:104:	  log("file check started")
+luci-commotion/luasrc/controller/commotion/meshprofile.lua:135:				  log("Field "..x.." is missing.")
+luci-commotion/luasrc/controller/commotion/meshprofile.lua:146:			log("Profile seems to be correctly formatted.")
+luci-commotion/luasrc/controller/commotion/meshprofile.lua:150:		 log("File is missing")
+luci-commotion/luasrc/controller/commotion/meshprofile.lua:171:   log("up started")
+luci-commotion/luasrc/controller/commotion/meshprofile.lua:199:   log("download started")
+luci-commotion/luasrc/controller/commotion/meshprofile.lua:260:				  log("starting download")
+luci-commotion/luasrc/controller/commotion/meshprofile.lua:263:				  log("starting download")
+luci-commotion/luasrc/controller/commotion/meshprofile.lua:267:			   log("file not of specified input type (input name variable)")
+luci-commotion/luasrc/controller/commotion/meshprofile.lua:275:			log("file downloaded")
+luci-commotion/luasrc/controller/commotion/meshprofile.lua:301:   --log(tostring(conflict).." is the conflict level")
+
+
+luci-commotion/luasrc/controller/commotion/serval_keyring.lua:39:	log("Creating New Keyring...")
+luci-commotion/luasrc/controller/commotion/serval_keyring.lua:52:	--log(luci.sys.exec(s_list_key))
+luci-commotion/luasrc/controller/commotion/serval_keyring.lua:73:   log("uploader started")
+luci-commotion/luasrc/controller/commotion/serval_keyring.lua:76:   --log(luci.sys.exec("md5sum /tmp/serval.keyring"))
+luci-commotion/luasrc/controller/commotion/serval_keyring.lua:80:	  log("checking file")
+luci-commotion/luasrc/controller/commotion/serval_keyring.lua:85:	  log("error found")
+luci-commotion/luasrc/controller/commotion/serval_keyring.lua:112:   log("download started")
+luci-commotion/luasrc/controller/commotion/serval_keyring.lua:116:	 log("File Does Not Exist")
+luci-commotion/luasrc/controller/commotion/serval_keyring.lua:143:				  log("starting download")
+luci-commotion/luasrc/controller/commotion/serval_keyring.lua:146:				  log("starting download")
+luci-commotion/luasrc/controller/commotion/serval_keyring.lua:150:			   log("file not of specified input type (input name variable)")
+luci-commotion/luasrc/controller/commotion/serval_keyring.lua:158:			log("file downloaded")
+
+
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/buttons.lua:9:   --QS:log(error)
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/buttons.lua:118:   --luci.controller.QS.QS.log(modules)
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/buttons.lua:130:   --luci.controller.QS.QS.log(modules)
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/buttons.lua:177:   --luci.controller.QS.QS.log(modules)
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/buttons.lua:183:   --luci.controller.QS.QS.log(mod)
+
+
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/modules.lua:30:   QS.log("nameParser running")
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/modules.lua:33:   --QS.log(val)
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/modules.lua:37:		 --luci.controller.QS.QS.log(val.nodeName)
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/modules.lua:39:		 --QS.log(name)
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/modules.lua:46:		 --QS.log("wrote hostname")
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/modules.lua:49:			--QS.log("passwords:"..val.pwd1.." & "..val.pwd2)
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/modules.lua:90:   QS.log("meshPassword rendered")
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/modules.lua:96:   QS.log("meshPasswordParser running")
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/modules.lua:99:   --QS.log(val)
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/modules.lua:100:   --QS.log("wrote hostname")
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/modules.lua:118:   QS.log("setMeshPassword started")
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/modules.lua:129:   QS.log("setAPPassword started")
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/modules.lua:144:   QS.log("setSecAccessPoint started")
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/modules.lua:174:   QS.log("setHostName started")
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/modules.lua:185:   QS.log("HostName was set correcty:"..tostring(hostnameWorks))
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/modules.lua:186:   QS.log("hostname set")
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/modules.lua:191:   QS.log("setAccessPoint started")
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/modules.lua:196:   QS.log("Access Point Set")
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/modules.lua:201:   QS.log("loadingPage started")
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/modules.lua:216:   QS.log("setValue started")
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/modules.lua:231:   QS.log("checkSetttings started")
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/modules.lua:238:   QS.log("quickstartSettings Completed")
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/modules.lua:245:   QS.log("commotion settting getter started")
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/modules.lua:259:   QS.log("completeParser started")
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/modules.lua:265:   QS.log("Wireless UCI Controller about to start")
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/modules.lua:267:   QS.log("Quickstart Final Countdown started")
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/modules.lua:433:			QS.log("Please enter a password")
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/modules.lua:436:			QS.log("Please enter a password that is more than 8 chars long")
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/modules.lua:439:			QS.log("Your password has spaces in it. You can't have spaces.")
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/modules.lua:561:   --log("=======================val==============================")
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/modules.lua:562:   --log(val)
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/modules.lua:572:		 --log(tostring(checkReplace).."=return on replace line")
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/modules.lua:573:		 --log(SSID)
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/modules.lua:657:		 --luci.controller.QS.QS.log('servald = '..servald)
+
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/QS.lua:77:	   -- log(pageValues.errorMsg)
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/QS.lua:94:   --log("pages command: " .. command)
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/QS.lua:98:   --log(page)
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/QS.lua:99:   --log("last="..lastPg)
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/QS.lua:172:   QS.log("commotion settting getter started: "..settingName)
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/QS.lua:185:   --log(returns)
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/QS.lua:187:   --log(errors)
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/QS.lua:192:   log("Running module parser functions")
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/QS.lua:233:	  --log("errors HERE")
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/QS.lua:234:	  --log(errors)
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/QS.lua:244:   --log(returns)
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/QS.lua:245:   --log(modules)
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/QS.lua:250:			   log(value)
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/QS.lua:254:				  log(errors)
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/QS.lua:268:   --log(errors)
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/QS.lua:277:   --log(string.len(confKeySum))
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/QS.lua:340:function log(msg)
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/QS.lua:344:			log('{')
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/QS.lua:345:			log(tostring(key))
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/QS.lua:346:			log(':')
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/QS.lua:347:			log(val)
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/QS.lua:348:			log('}')
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/QS.lua:350:			log('{')
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/QS.lua:351:			log(key)
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/QS.lua:352:			log(':')
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/QS.lua:353:			log(tostring(val))
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/QS.lua:354:			log('}')
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/QS.lua:356:			log('{')
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/QS.lua:357:			log(key)
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/QS.lua:358:			log(':')
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/QS.lua:359:			log(val)
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/QS.lua:360:			log('}')
+
+luci-commotion-splash/luasrc/controller/commotion-splash/splash.lua:61:      log(ipaddr)
+* is_ip4addr  DONE\n
+ORIGINAL 
+
+is_ip4addr(...)
+
+REPLACEMENT
+local id = require "luci.commotion.identify"
+id.is_ip4addr(...)
+
+luci-commotion-splash/luasrc/controller/commotion-splash/splash.lua:134:    elseif ipaddr and ipaddr ~= "" and not is_ip4addr(ipaddr) then
+
+commotion-dashboard-helper/luasrc/controller/commotion-dash/bigboard-conf.lua:80:		if is_ip4addr(values['gatherer_ip']) == true and
+
+luci-commotion-apps/lua/luci/controller/commotion/apps_controller.lua:324:		if (values.ipaddr ~= '' and not is_ip4addr(values.ipaddr)) then
+
+* is_ip4addr_cidr DONE\n
+ORIGINAL 
+
+is_ip4addr_cidr(...)
+
+REPLACEMENT
+local id = require "luci.commotion.identify"
+id.is_ip4addr_cidr(...)
+
+commotion-dashboard-helper/luasrc/controller/commotion-dash/bigboard-conf.lua:81:               	   is_ip4addr_cidr(values['gatherer_ip']) == true and
+
+luci-commotion-splash/luasrc/controller/commotion-splash/splash.lua:132:    if ipaddr and ipaddr ~= "" and is_ip4addr_cidr(ipaddr) then
+* is_ssid \n
+* is_mode \n
+* is_chan \n
+* is_bitRate \n
+* is_email \n
+* is_hostname DONE \n
+ORIGINAL 
+
+is_hostname(...)
+
+REPLACEMENT
+local id = require "luci.commotion.identify"
+id.is_hostname(...)
+
+luci-commotion-quickstart/usr/lib/lua/luci/controller/QS/modules.lua:35:	  if is_hostname(val.nodeName) then
+* is_fqdn DONE\n
+commotion-dashboard-helper/luasrc/controller/commotion-dash/bigboard-conf.lua:82:                   is_fqdn(values['gatherer_ip']) ~= nil then
+* is_macaddr DONE \n
+
+luci-commotion-splash/luasrc/controller/commotion-splash/splash.lua:120:    if mac and mac ~= "" and not is_macaddr(mac) then
+luci-commotion-splash/luasrc/controller/commotion-splash/splash.lua:126:    if mac and mac ~= "" and not is_macaddr(mac) then
+* is_uint DONE \n
+luci-commotion-apps/lua/luci/controller/commotion/apps_controller.lua:205:	if (not settings.expiration or settings.expiration == '' or not is_uint(settings.expiration) or tonumber(settings.expiration) <= 0) then
+luci-commotion-apps/lua/luci/controller/commotion/apps_controller.lua:277:	if (values.ttl ~= '' and not is_uint(values.ttl)) then
+
+luci-commotion-splash/luasrc/controller/commotion-splash/splash.lua:94:  if (not settings.leasetime or settings.leasetime == '' or not is_uint(settings.leasetime)) then
+* is_hex DONE \n
+
+luci-commotion-apps/lua/luci/controller/commotion/apps_controller.lua:497:		if (luci.http.formvalue("fingerprint") and is_hex(luci.http.formvalue("fingerprint")) and luci.http.formvalue("fingerprint"):len() == 64 and edit_app) then
+* is_port DONE\n
+luci-commotion-apps/lua/luci/controller/commotion/apps_controller.lua:273:	if (values.port ~= '' and not is_port(values.port)) then
+* contains DONE \n
+luci-commotion-apps/lua/luci/controller/commotion/apps_controller.lua:308:				if (not table.contains(app_types, type)) then
+luci-commotion-apps/lua/luci/controller/commotion/apps_controller.lua:314:			if (not table.contains(app_types, luci.http.formvalue("type"))) then
+* list_ifaces DONE\n
+
+luci-commotion-splash/luasrc/controller/commotion-splash/splash.lua:24:    local list = list_ifaces()
+luci-commotion-splash/luasrc/controller/commotion-splash/splash.lua:73:  local list = list_ifaces()
+luci-commotion-splash/luasrc/controller/commotion-splash/splash.lua:141:    local list = list_ifaces()

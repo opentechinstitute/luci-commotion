@@ -1,0 +1,28 @@
+config settings 'settings'
+	option splashunit 'hours'
+	option enable '1'
+	option splashtime '1'
+	option redirect '0'
+	option autoauth '0'
+	option MaxClients 100
+
+config interfaces 'interfaces'
+	option interface 'br-lan'
+
+config MACList whitelist
+
+config MACList blacklist
+
+config FirewallRuleSet preauthenticated_users
+	list FirewallRule 'allow tcp port 53'
+  list FirewallRule 'allow udp port 53'
+  list FirewallRule 'allow tcp port 443'
+  list FirewallRule 'allow to 10.0.0.0/8'
+  list FirewallRule 'allow to 169.254.0.0/16'
+  list FirewallRule 'allow to 100.64.0.0/10'
+
+config FirewallRuleSet authenticated_users
+	list FirewallRule 'allow all'
+
+config FirewallRuleSet users_to_router
+	list FirewallRule 'allow all'

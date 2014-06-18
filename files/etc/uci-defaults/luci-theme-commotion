@@ -1,0 +1,11 @@
+#!/bin/sh
+
+#use our help icon
+cp /www/luci-static/commotion/help.png /www/luci-static/resources/cbi/help.gif || exit 1
+
+#set theme
+uci set luci.themes.Commotion=/luci-static/commotion
+uci set luci.main.mediaurlbase=/luci-static/commotion
+uci commit luci
+
+exit 0

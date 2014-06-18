@@ -1,0 +1,61 @@
+<%+header%>
+
+<link rel="stylesheet" type="text/css" href="<%=media%>/apps.css" />
+<script type="text/javascript" src="/luci-static/resources/cbi.js"></script>
+
+<h2><%:Application Settings%></h2>
+<div class="cbi-map-descr"><%:Here you can change settings used on this node when creating or updating applications%>.</div>
+<% if err and err.notice ~= "" then %><div class="notice"><%=err.notice%></div><% end %>
+
+<form class="apps_form" method="post" action="<%=controller%>/admin/commotion/apps/settings_submit" autocomplete="off">
+  <fieldset>
+    <div class="cbi-value">
+      <label class="cbi-value-title tippable" data-tip="<%:Applications that are created on this node can be categorized and listed according to the categories here%>."><%:Application categories%>:</label>
+      <div class="cbi-value-field">
+	<% for i, app_type in pairs(types) do %>
+	  <input type="text" name="app_type" value="<%=app_type%>" class="cbi-input-text" /><br>
+	<% end %>
+	<% if not next(types) then %> 
+          <input type="text" name="app_type" value="" class="cbi-input-text" /><br>            
+        <% end %>
+	<script type="text/javascript">cbi_dynlist_init('app_type', '/luci-static/resources', '', true);</script>
+	<%if err then%><div class="error"><%=err.app_type%></div><%end%>
+      </div>
+    </div>
+    <div class="cbi-value">
+      <label class="cbi-value-title tippable" data-tip="<%:Applications that are not marked as 'permanent' will be automatically be removed from the application list after this amount of time%>."><%:Expiration period (seconds)%>:</label>
+      <div class="cbi-value-field">
+	  <input type="text" name="lifetime" value="<%=settings.lifetime%>" class="cbi-input-text" />
+	  <%if err then%><div class="error"><%=err.lifetime%></div><%end%>
+	  <div class="cbi-value-description"><%:For example, 24 hours = 86400 seconds%></div>
+      </div>
+    </div>
+    <div class="cbi-value">
+      <label class="cbi-value-title tippable" data-tip="<%:By default, all applications expire after a time period specified by you. If this option is checked, applications will have the option to not expire%>."><%:Allow local applications to not expire%>:</label>
+      <div class="cbi-value-field">
+	  <input type="checkbox" name="allowpermanent" value="1" <% if settings.allowpermanent == "1" then %>checked<% end %>/>
+	  <%if err then%><div class="error"><%=err.allowpermanent%></div><%end%>
+      </div>
+    </div>
+    <div class="cbi-value">
+      <label class="cbi-value-title tippable" data-tip="<%:If this is disabled, users will only be able to see local applications on the network that you manually approve%>."><%:Automatically approve all applications seen by this node%>:</label>
+      <div class="cbi-value-field">
+	  <input type="checkbox" name="autoapprove" value="1" <% if settings.autoapprove == "1" then %>checked<% end %>/>
+	  <%if err then%><div class="error"><%=err.autoapprove%></div><%end%>
+      </div>
+    </div>
+    <div class="cbi-value">
+      <label class="cbi-value-title tippable" data-tip="<%:By default, applications that don't appear responsive will be removed from the application list. If you have poor or intermittent connectivity, you should disable this option to skip checking application responsiveness%>."><%:Periodically check connectivity of applications%>:</label>
+      <div class="cbi-value-field">
+	  <input type="checkbox" name="checkconnect" value="1" <% if settings.checkconnect == "1" then %>checked<% end %>/>
+	  <%if err then%><div class="error"><%=err.checkconnect%></div><%end%>
+      </div>
+    </div>
+  </fieldset>
+  <div class="cbi-page-actions">
+	<input type="submit" value="Submit" class="cbi-button cbi-button-save">
+	<input type="reset" value="Reset" class="cbi-button cbi-button-reset">
+  </div>
+</form>
+
+<%+footer%>

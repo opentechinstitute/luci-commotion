@@ -1,0 +1,140 @@
+<%#
+LuCI - Lua Configuration Interface
+Copyright 2008 Steven Barth <steven@midlink.org>
+Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+Copyright 2012 David Menting <david@nut-bolt.nl>
+Copyright 2013 Griffin Boyce <griffin@opentechinstitute.org>
+Copyright 2013 Seamus Tuohy <s2e@opentechinstitute.org>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+-%>
+<%
+   local crypto = require "luci.commotion.crypto"
+   local http = require "luci.http"
+   local sys  = require "luci.sys"
+   local disp = require "luci.dispatcher"
+   local cdisp = require "luci.commotion.dispatch"
+
+   -- ensure that client is running https
+   crypto.check_https("/admin/", luci.http.getenv())
+   
+   -- send as HTML5
+   http.prepare_content("text/html")
+
+   hostname = sys.hostname()
+
+   --The request path (eg. http://ipaddress/cgi-bin/luci/;id-string/THIS/THIS/THIS/)
+   request  = disp.context.path
+   local request2 = disp.context.request
+
+   --ROOT NODE OF PATH (eg. admin on admin pages)
+   category = request[1]
+   section = request[2]
+
+   --SAME AGAIN
+   cattree  = category and disp.node(category)
+   
+   --leaf is length of request2
+   local leaf = request2[#request2] 
+
+   --Create a node of the local thread (the current context)
+   tree = disp.node()
+
+   --Show the local node (current menu) on the tree
+   node = disp.context.dispatched
+   
+   --An Ordered table of node names of this tree's child nodes
+   local categories = disp.node_childs(tree)
+   
+   local c = tree
+   local i, r
+
+	-- tag all nodes leading to this page
+   for i, r in ipairs(request) do
+		if c.nodes and c.nodes[r] then
+			c = c.nodes[r]
+			c._menu_selected = true
+		end
+	end
+   
+   --nodeurl was here 
+   --subtree was here 
+   -%>
+<!DOCTYPE html>
+<html lang="<%=luci.i18n.context.lang%>">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=yes" />
+    <title><%=striptags( hostname .. ( (node and node.title) and ' - ' .. translate(node.title) or '')) %> - LuCI</title>
+
+<!-- Stylesheets for mobile and small tablets -->
+    <link rel="stylesheet" href="<%=media%>/tinycombo.css">
+
+<!-- Stylesheets for desktop and large tablets -->
+    <link rel="stylesheet" href="<%=media%>/cascade.css" media="screen and (min-device-width:768px) and (min-width:768px), projection">
+	<link rel="stylesheet" href="<%=media%>/sidebar.css" media="screen and (min-device-width:768px) and (min-width:768px), projection">
+    <link rel="shortcut icon" href="<%=media%>/favicon.ico">
+    <% if node and node.css then %>
+    <link rel="stylesheet" href="<%=resource%>/<%=node.css%>">
+    <% end -%>
+    <script src="<%=resource%>/xhr.js"></script>
+    <script src="<%=media%>/zepto.min.js"></script>
+  </head>		
+  <body class="lang_<%=luci.i18n.context.lang%> <%- if node then %><%= striptags( node.title ) %><%- end %>">
+	<header>
+	  <topbar><ul><li></li></ul></topbar>
+    <a id="device" href="/"><img src="<%=media%>/commotion_tiny.png" alt="Commotion - toggle header" title="Commotion - toggle header" /></a>
+	<%uci = require "luci.model.uci".cursor()
+  ubus = require "ubus"
+  conn = ubus.connect()
+  if not conn then
+	 error("Failed to connect to ubusd")
+  end
+  mesh_ip = "None"
+  uci:foreach("wireless", "wifi-iface",
+			  function(s)
+				 if s and s.mode and s.mode == "adhoc" and s.network then
+					local iface = conn:call("network.interface."..s.network, "status", {})
+					if iface ~= nil and iface["ipv4-address"] then
+					   if iface["ipv4-address"][1] and iface["ipv4-address"][1].address then
+       						  mesh_ip = iface["ipv4-address"][1].address
+					   else
+						  mesh_ip = "Unknown"
+					   end
+					elseif mesh_ip == "None" then
+					   mesh_ip = "Unknown"
+					end
+				 end
+			  end
+  )
+  conn:close()
+	 -%>
+
+	<div class="collapsible">
+	 <table id="nodeinfo">
+	 <tr>
+      <td class="key-item hug-right">Node name:</td><td class="hug-left"><%=hostname%></td>
+      <td class="tdempty"></td>
+	  <td class="key-item hug-right">Mesh IP-Address:</td><td class="hug-left"><%=mesh_ip%></td>
+	 </tr>
+	 </table>
+    </div>
+
+	  <%include("themes/commotion/unsaved_changes", {tree=tree, controller=controller, category=category})%>
+
+    <div class="navbar-inners"><div class="color0"></div><div class="color1"></div><div class="color2"></div><div class="color3"></div><div class="color4"></div></div>
+	</header>
+
+    <section id="maincontent">
+ 	  <%if request[2] == "commotion" then%> <%# TODO Clean and combine these two menu templates after R1 push %>
+	  <%include("themes/commotion/basic_menu", {controller=controller, cattree=cattree, category=category, node=node, section=section})%>
+	  <div class="body-content basic_menu">
+		<%elseif request[1] ~= "commotion" then%>
+		<%include("themes/commotion/adv_menu", {controller=controller, cattree=cattree, category=category, node=node, section=section})%>
+		<%include("themes/commotion/subtree", {controller=controller, category=category, cattree=cattree})%>
+	    <%end%>

@@ -1,5 +1,16 @@
 #!/bin/sh
 
+. /etc/functions.sh
+
+#setup ucitrack
+uci add ucitrack hostname
+uci set ucitrack.@hostname[0].init=hostname
+uci add_list ucitrack.@system[0].affects=hostname
+uci commit ucitrack
+
+#setup sysupgrade saves
+echo /etc/config/setup_wizard >> /etc/sysupgrade.conf
+
 [ -f "/usr/share/commotion/files/node-mini.gif" ] && { \
 cp -f /usr/share/commotion/files/node-mini.gif /www/luci-static/resources/olsr-viz/node-mini.gif
 }
@@ -29,6 +40,11 @@ cp -f /usr/share/commotion/files/olsr-viz.js /www/luci-static/resources/olsr-viz
   cd /www/luci-static/resources/
   patch -p1 < /usr/share/commotion/patches/cbi.js.patch
 
+  cd /usr/lib/lua/luci/model/cbi/admin_network/
+  patch -p0 < /usr/share/commotion/patches/wifi.lua.patch
+
+  cd /usr/lib/lua/luci/
+  patch -p0 < /usr/share/commotion/patches/dispatcher-cookies.patch
 }
 
 rm -f /tmp/luci-indexcache

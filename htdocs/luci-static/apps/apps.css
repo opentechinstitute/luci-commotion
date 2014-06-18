@@ -1,0 +1,205 @@
+.apps {
+margin-top:8px;
+}
+
+.app {
+padding:10px;
+min-height:85px;
+}
+
+.app-inner {
+  position:relative;
+  min-height:85px;
+}
+
+.app img {
+padding-right:10px;
+}
+
+.app .name, .app .description {
+  margin-right:100px;
+}
+
+.div-bar {
+height:1px;
+background:#DDDDDD;
+width:100%;
+margin:10px 0;
+}
+
+h2.appsH2 {
+text-align:left;
+margin:0 0;
+}
+.apps-content {
+text-align:left;
+}
+
+a, a:focus { outline: 0; }
+
+.notice {
+border-radius:5px;
+padding:5px;
+margin:5px 0;
+}
+
+.notice-error {
+background:#ffbdd3;
+border:2px solid #FF6699;
+}
+
+.notice-success {
+border:2px solid #00FF00;
+background:#CCFFCC;
+}
+
+.error {
+color:#FF6699;
+font-weight:bold;
+}
+
+#maincontent .apps_form label { width:180px; }
+
+.apps_form #apps_advanced {
+width:180px;
+text-align:right;
+}
+
+.name h4 { display:inline-block; color:#000000; }
+.app-tooltip {
+	display:none; 
+	background:#ffffff; 
+	border: 1px #DDDDDD solid;
+	box-shadow: 2px 2px 8px #dddddd;
+	padding:10px;
+	bottom:9px;
+	left:20px;
+}
+.app-info { height:18px; position:relative; display:inline-block; }
+.info-button { position:absolute; top:0; left:0; }
+.app-info:hover .app-tooltip { display:block; position:absolute; }
+
+
+/* App Icon selection area in apps_form.html */
+
+
+.icon-choices {
+  max-width: 320px;
+}
+
+
+.icon-choices {
+	max-width: 400px; /* 4x80 + 4x20 padding */
+	margin-left: 25px;
+	margin-right: auto;
+    padding: 10px;
+}
+
+.icon-choices input {
+    margin: 5px;
+    width: 60px;
+    height: 60px;
+    background: transparent;
+    padding: 8px;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+	border: 1px #888888;
+	-webkit-box-shadow: 0px 0px 5px rgba(221, 221, 221, 1);
+	-moz-box-shadow:    0px 0px 5px rgba(221, 221, 221, 1);
+	box-shadow:         0px 0px 5px rgba(221, 221, 221, 1);
+}
+
+input#appcode { 
+   background-image: url(/luci-static/commotion/code.png);
+   background-size: cover;
+}
+
+input#appchat { 
+   background-image: url(/luci-static/commotion/chat.png);
+   background-size: cover;
+}
+
+input#appemail { 
+   background-image: url(/luci-static/commotion/email.png);
+   background-size: cover;
+}
+
+input#appdl { 
+   background-image: url(/luci-static/commotion/downloads.png);
+   background-size: cover;
+}
+
+input#appphoto { 
+   background-image: url(/luci-static/commotion/photo.png);
+   background-size: cover;
+}
+
+input#appnet { 
+   background-image: url(/luci-static/commotion/internet.png);
+   background-size: cover;
+}
+
+input#appwrite { 
+   background-image: url(/luci-static/commotion/write.png);
+   background-size: cover;
+}
+
+input#appaudio { 
+   background-image: url(/luci-static/commotion/audio.png);
+   background-size: cover;
+}
+
+input#appcal { 
+   background-image: url(/luci-static/commotion/calendar.png);
+   background-size: cover;
+}
+
+input#appfaded { 
+   background-image: url(/luci-static/commotion/commotion-faded2.png);
+   background-size: cover;
+}
+
+.icon-choices input[type="button"]:hover {
+  background: #ffadc6;
+}
+
+.signature, .colorprint { font-family: "Courier New"; font-weight:bold; font-size: 14px; }
+
+button.approve { background: url("check.png") no-repeat left center; }
+button.banned {background: url("bann.png") no-repeat left center; }
+a.edit {background: url("equals.png") no-repeat left center; padding:10px 0 10px 40px;}
+button.delete { background: url("x.png") no-repeat left center; }
+
+button.approve, button.delete, button.banned, a.edit {
+color:#FF6699;
+font-weight:bold;
+height:36px;
+margin-right:20px;
+padding-left:40px;
+box-shadow:none;
+}
+
+button:hover, a:hover {
+color:#66CCFF !important;
+text-decoration:underline;
+}
+
+fieldset legend { padding-top:0; }
+
+.app-canvas {
+  position: absolute;
+  width: 85px;
+  height: 100%;
+  top: 5px;
+  right: 5px;
+}
+
+.app-type {
+	text-align:right;
+	margin-right:95px;
+	color:#FF6699;
+	font-size:13px;
+	font-style:italic;
+}
+

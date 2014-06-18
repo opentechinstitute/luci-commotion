@@ -1,0 +1,65 @@
+#!/usr/bin/lua
+local uci = require "luci.model.uci".cursor()
+
+-- check if we're running at all, and exit if not
+if uci:get_first('commotion-dash', 'dashboard', 'enabled') == 'false' then -- setting is string, not boolean
+	do return end
+end
+
+local https = require "luci.httpclient"
+local log = require "luci.commotion.debugger".log
+local util = require "luci.util"
+local hostname = require "luci.sys".hostname
+
+-- Discover our own olsrd json_info plugin
+local plugins = uci:get_all("olsrd")
+local json_info_plugin, json_info_host, json_info_port
+uci:foreach('olsrd', 'LoadPlugin',
+	function(s)
+		if string.find(s.library, "olsrd_jsoninfo") then
+			json_info_plugin = s[".name"]
+			json_info_host = s.listen
+			json_info_port = s.port
+		end
+	end)
+
+if not json_info_plugin then
+	log("commotion-bigboard-send: Can't find jsoninfo plugin")
+	do return end
+end
+
+-- Request json info from localhost
+local json_info_url="http://" .. json_info_host .. ":" .. json_info_port .. "/all/"
+-- Should be possible to make this call without a cheater script
+local node_json = {}                                                       
+for i in util.execi('/usr/bin/request_json.sh '..json_info_host..' '..json_info_port) do
+    table.insert(node_json, i)                      
+end                                 
+node_json = table.concat(node_json, "\n")       
+
+-- this needs to get added to the luci config page, but until then
+-- go with a reasonable expected default.
+local bb_listener_script_path='bigboard-listener.py'
+local bb_host = uci:get_first('commotion-dash', 'dashboard', 'gatherer')
+
+if bb_host == 'x.x.x.x' then
+	log('Dashboard config error. No listener set.')
+end
+
+-- Check syntax against new config script
+local bb_listener_url="https://"..bb_host.."/"..bb_listener_script_path
+local options = {}
+options.headers =  {}
+options.headers["Connection"] = "keep-alive"
+options.headers["Content-Type"] = "application/x-www-form-urlencoded"
+options.sndtimeo = '100'
+options.rcvtimeo = '50'
+options.method = "POST"
+options.message= {}
+options.body = {}
+options.body.host = hostname()
+options.body.json = node_json
+
+https.request_raw(bb_listener_url, options)
+
+return 0
