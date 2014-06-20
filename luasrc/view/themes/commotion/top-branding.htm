@@ -1,0 +1,33 @@
+<%#
+    Generates top-of-page template branding. Called by header.htm
+    Copyright 2014 Seamus Tuohy <s2e@opentechinstitute.org>
+-%>
+            <topbar><ul><li></li></ul></topbar>
+            <a id="device" href="/"><img src="<%=media%>/commotion_tiny.png" alt="Commotion - toggle header" title="Commotion - toggle header" /></a>
+
+            <!-- BASIC NODE INFO: NODENAME AND IP -->
+            <div class="collapsible">
+                <table id="nodeinfo">
+                    <tr>
+                        <td class="key-item hug-right">Node name:</td><td class="hug-left"><%=hostname%></td>
+                        <td class="tdempty"></td>
+                        <td class="key-item hug-right">Mesh IP-Address:</td><td class="hug-left"><%=mesh_ip%></td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- 
+                Conditional include for unsaved change notification.
+                Uses ucichanges and menu position data generated in
+                header.htm
+            -->
+            <%include("themes/commotion/unsaved_changes", {ucichanges=ucichanges, tree=tree, controller=controller, category=category})%>
+
+
+            <div class="navbar-inners">
+                <div class="color0"></div>
+                <div class="color1"></div>
+                <div class="color2"></div>
+                <div class="color3"></div>
+                <div class="color4"></div>
+            </div>
