@@ -3,7 +3,7 @@
 -%>
 
 <div class="messages">
-    <% if ucichanges > 0 then %>
+    <% if ucichanges and ucichanges > 0 then %>
         <a class="label notice" href="<%=controller%>/<%=category%>/uci/changes"><%:Unsaved Changes%>: <%=ucichanges%></a>
     <% end %>
     <!-- extraneous end? Commenting out -->
