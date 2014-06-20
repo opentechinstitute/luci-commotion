@@ -140,13 +140,13 @@
     <body class="lang_<%=luci.i18n.context.lang%>" <%- if node then %> "<%= striptags( node.title ) %>"<%- end %>>
 
         <header>
-            <%include("themes/commotion/top-branding"),
-            {ucichanges=ucichanges, tree=tree, controller=controller, category=category}%>
+            <%include("themes/commotion/top-branding",
+            {ucichanges=ucichanges, tree=tree, controller=controller, category=category})%>
         </header>
         <!-- Begin maincontent -->
         <section id="maincontent">
             <div class="body-content basic_menu">
-                <%include("themes/commotion/sidenav"),
-                {controller=controller, cattree=cattree, category=category, node=node, section=section}%>
+                <%include("themes/commotion/sidenav",
+                {controller=controller, cattree=cattree, category=category, node=node, section=section})%>
             <!-- /div in footer.htm -->
         <!-- /section in footer.htm -->
