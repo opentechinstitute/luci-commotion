@@ -1,140 +1,152 @@
 <%#
-LuCI - Lua Configuration Interface
-Copyright 2008 Steven Barth <steven@midlink.org>
-Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
-Copyright 2012 David Menting <david@nut-bolt.nl>
-Copyright 2013 Griffin Boyce <griffin@opentechinstitute.org>
-Copyright 2013 Seamus Tuohy <s2e@opentechinstitute.org>
+    Header.htm is a LuCI theme template that builds the top portion 
+    of each web UI page. It refers to the LuCI header, not the HTML
+    header, although the HTML header is included in this file.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+    HTML begins after LuCI/Lua function definitions.
 
-	http://www.apache.org/licenses/LICENSE-2.0
+    LuCI - Lua Configuration Interface
+    Copyright 2008 Steven Barth <steven@midlink.org>
+    Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+    Copyright 2012 David Menting <david@nut-bolt.nl>
+    Copyright 2013 Griffin Boyce <griffin@opentechinstitute.org>
+    Copyright 2013 Seamus Tuohy <s2e@opentechinstitute.org>
+    Copyright 2014 Andrew Reynolds <andrew@opentechinstitute.org>
 
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
 -%>
+
+<%# Moving these functions to another template puts them out of scope
+    with no obvious way to pass variables to includes.
+    Keeping functions in header template for now.
+
+    Use this syntax:
+    include("themes/commotion/functions/header-prep",
+            {var=var, var=var})
+-%>
+
 <%
-   local crypto = require "luci.commotion.crypto"
-   local http = require "luci.http"
-   local sys  = require "luci.sys"
-   local disp = require "luci.dispatcher"
-   local cdisp = require "luci.commotion.dispatch"
+    local crypto = require "luci.commotion.crypto"
+    local http = require "luci.http"
+    local sys  = require "luci.sys"
+    local disp = require "luci.dispatcher"
+    local cdisp = require "luci.commotion.dispatch"
 
-   -- ensure that client is running https
-   crypto.check_https("/admin/", luci.http.getenv())
-   
-   -- send as HTML5
-   http.prepare_content("text/html")
+    -- ensure that client is running https 
+    crypto.check_https("/admin/", luci.http.getenv())
 
-   hostname = sys.hostname()
+    -- send as HTML5
+    http.prepare_content("text/html")
 
-   --The request path (eg. http://ipaddress/cgi-bin/luci/;id-string/THIS/THIS/THIS/)
-   request  = disp.context.path
-   local request2 = disp.context.request
 
-   --ROOT NODE OF PATH (eg. admin on admin pages)
-   category = request[1]
-   section = request[2]
+    -- Prepare variables for use in templates
+    hostname = sys.hostname()
 
-   --SAME AGAIN
-   cattree  = category and disp.node(category)
-   
-   --leaf is length of request2
-   local leaf = request2[#request2] 
+    -- BEGIN menu preparation
+    --The request path (eg. http://ipaddress/cgi-bin/luci/;id-string/THIS/THIS/THIS/)
+    request  = disp.context.path
+    local request2 = disp.context.request
 
-   --Create a node of the local thread (the current context)
-   tree = disp.node()
+    -- Node is our position on the menu tree
+    -- ROOT NODE OF PATH (e.g. admin on admin pages)
+    category = request[1]
+    section = request[2]
 
-   --Show the local node (current menu) on the tree
-   node = disp.context.dispatched
-   
-   --An Ordered table of node names of this tree's child nodes
-   local categories = disp.node_childs(tree)
-   
-   local c = tree
-   local i, r
+    -- SAME AGAIN // cattree indicates submenu item
+    cattree  = category and disp.node(category)
 
-	-- tag all nodes leading to this page
-   for i, r in ipairs(request) do
-		if c.nodes and c.nodes[r] then
-			c = c.nodes[r]
-			c._menu_selected = true
-		end
-	end
-   
-   --nodeurl was here 
-   --subtree was here 
-   -%>
+    -- leaf is length of request2
+    local leaf = request2[#request2] 
+
+    -- Create a node of the local thread (the current context)
+    tree = disp.node()
+
+    -- Show the local node (current menu) on the tree
+    node = disp.context.dispatched
+
+    -- An Ordered table of node names of this tree s child nodes
+    local categories = disp.node_childs(tree)
+
+    local c = tree
+    local i, r
+
+    -- tag all nodes leading to this page
+    for i, r in ipairs(request) do
+        if c.nodes and c.nodes[r] then
+            c = c.nodes[r]
+            c._menu_selected = true
+        end
+    end
+    -- END menu preparation
+
+    -- BEGIN mesh ip generation (mesh_ip)
+    uci = require "luci.model.uci".cursor()
+    ubus = require "ubus"
+    conn = ubus.connect()
+
+    if not conn then
+        error("Failed to connect to ubusd")
+    end
+
+    mesh_ip = "None"
+    uci:foreach("wireless", "wifi-iface", function(s)
+        if s and s.mode and s.mode == "adhoc" and s.network then
+            local iface = conn:call("network.interface."..s.network, "status", {})
+                if iface ~= nil and iface["ipv4-address"] then
+                    if iface["ipv4-address"][1] and iface["ipv4-address"][1].address then
+                        mesh_ip = iface["ipv4-address"][1].address
+                    else
+                        mesh_ip = "Unknown"
+                    end
+                elseif mesh_ip == "None" then
+                    mesh_ip = "Unknown"
+                end
+        end
+    end
+    )
+    conn:close()
+    -- END mesh ip generation
+
+    -- BEGIN check for unsaved changes (ucichanges)
+    -- ucichanges local. Will cause problems
+    if tree.nodes[category] and tree.nodes[category].ucidata then
+        local ucichanges = 0
+
+        for i, j in pairs(require("luci.model.uci").cursor():changes()) do
+            for k, l in pairs(j) do
+                for m, n in pairs(l) do
+                    ucichanges = ucichanges + 1;
+                end
+            end
+        end
+    end
+    -- END check for unsaved changes
+-%>
 <!DOCTYPE html>
 <html lang="<%=luci.i18n.context.lang%>">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=yes" />
-    <title><%=striptags( hostname .. ( (node and node.title) and ' - ' .. translate(node.title) or '')) %> - LuCI</title>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=yes" />
+        <title><%include("themes/commotion/functions/gen-title")%></title>
+        <%include("themes/commotion/stylesheets")%>
+        <%include("themes/commotion/javascript")%>
+    </head>
 
-<!-- Stylesheets for mobile and small tablets -->
-    <link rel="stylesheet" href="<%=media%>/tinycombo.css">
+    <!-- class ends up lang_enPage. Bug? -->
+    <body class="lang_<%=luci.i18n.context.lang%>" <%- if node then %> "<%= striptags( node.title ) %>"<%- end %>>
 
-<!-- Stylesheets for desktop and large tablets -->
-    <link rel="stylesheet" href="<%=media%>/cascade.css" media="screen and (min-device-width:768px) and (min-width:768px), projection">
-	<link rel="stylesheet" href="<%=media%>/sidebar.css" media="screen and (min-device-width:768px) and (min-width:768px), projection">
-    <link rel="shortcut icon" href="<%=media%>/favicon.ico">
-    <% if node and node.css then %>
-    <link rel="stylesheet" href="<%=resource%>/<%=node.css%>">
-    <% end -%>
-    <script src="<%=resource%>/xhr.js"></script>
-    <script src="<%=media%>/zepto.min.js"></script>
-  </head>		
-  <body class="lang_<%=luci.i18n.context.lang%> <%- if node then %><%= striptags( node.title ) %><%- end %>">
-	<header>
-	  <topbar><ul><li></li></ul></topbar>
-    <a id="device" href="/"><img src="<%=media%>/commotion_tiny.png" alt="Commotion - toggle header" title="Commotion - toggle header" /></a>
-	<%uci = require "luci.model.uci".cursor()
-  ubus = require "ubus"
-  conn = ubus.connect()
-  if not conn then
-	 error("Failed to connect to ubusd")
-  end
-  mesh_ip = "None"
-  uci:foreach("wireless", "wifi-iface",
-			  function(s)
-				 if s and s.mode and s.mode == "adhoc" and s.network then
-					local iface = conn:call("network.interface."..s.network, "status", {})
-					if iface ~= nil and iface["ipv4-address"] then
-					   if iface["ipv4-address"][1] and iface["ipv4-address"][1].address then
-       						  mesh_ip = iface["ipv4-address"][1].address
-					   else
-						  mesh_ip = "Unknown"
-					   end
-					elseif mesh_ip == "None" then
-					   mesh_ip = "Unknown"
-					end
-				 end
-			  end
-  )
-  conn:close()
-	 -%>
-
-	<div class="collapsible">
-	 <table id="nodeinfo">
-	 <tr>
-      <td class="key-item hug-right">Node name:</td><td class="hug-left"><%=hostname%></td>
-      <td class="tdempty"></td>
-	  <td class="key-item hug-right">Mesh IP-Address:</td><td class="hug-left"><%=mesh_ip%></td>
-	 </tr>
-	 </table>
-    </div>
-
-	  <%include("themes/commotion/unsaved_changes", {tree=tree, controller=controller, category=category})%>
-
-    <div class="navbar-inners"><div class="color0"></div><div class="color1"></div><div class="color2"></div><div class="color3"></div><div class="color4"></div></div>
-	</header>
-
-    <section id="maincontent">
- 	  <%if request[2] == "commotion" then%> <%# TODO Clean and combine these two menu templates after R1 push %>
-	  <%include("themes/commotion/basic_menu", {controller=controller, cattree=cattree, category=category, node=node, section=section})%>
-	  <div class="body-content basic_menu">
-		<%elseif request[1] ~= "commotion" then%>
-		<%include("themes/commotion/adv_menu", {controller=controller, cattree=cattree, category=category, node=node, section=section})%>
-		<%include("themes/commotion/subtree", {controller=controller, category=category, cattree=cattree})%>
-	    <%end%>
+        <header>
+            <%include("themes/commotion/top-branding"),
+            {ucichanges=ucichanges, tree=tree, controller=controller, category=category}%>
+        </header>
+        <!-- Begin maincontent -->
+        <section id="maincontent">
+            <div class="body-content basic_menu">
+                <%include("themes/commotion/sidenav"),
+                {controller=controller, cattree=cattree, category=category, node=node, section=section}%>
+            <!-- /div in footer.htm -->
+        <!-- /section in footer.htm -->
