@@ -140,7 +140,7 @@
     </head>
 
     <!-- node.title needs to be urlencoded -->
-    <body class="lang_<%=luci.i18n.context.lang%> <%- if node then %> <%= urlencode(striptags( node.title )) %>"<%- end %>>
+    <body class="lang_<%=luci.i18n.context.lang%> <%- if node then %> <%= urlencode(striptags( node.title )) %> <%- end %>">
 
         <header>
             <%include("themes/commotion/top-branding",
