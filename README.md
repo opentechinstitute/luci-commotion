@@ -1,3 +1,4 @@
+[![alt tag](http://img.shields.io/badge/maintainer-jheretic-red.svg)](https://github.com/jheretic)
 luci-commotion
 ==============
 
