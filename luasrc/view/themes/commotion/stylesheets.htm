@@ -1,0 +1,16 @@
+<%#
+    Import theme stylesheets. Include called by header.htm
+
+    Copyright 2014 Seamus Tuohy <s2e@opentechinstitute.org>
+-%>
+
+        <!-- Stylesheets for mobile and small tablets -->
+        <link rel="stylesheet" href="<%=media%>/tinycombo.css">
+
+        <!-- Stylesheets for desktop and large tablets -->
+        <link rel="stylesheet" href="<%=media%>/cascade.css" media="screen and (min-device-width:768px) and (min-width:768px), projection">
+        <link rel="stylesheet" href="<%=media%>/sidebar.css" media="screen and (min-device-width:768px) and (min-width:768px), projection">
+        <link rel="shortcut icon" href="<%=media%>/favicon.ico">
+        <% if node and node.css then %>
+            <link rel="stylesheet" href="<%=resource%>/<%=node.css%>">
+        <% end -%>
