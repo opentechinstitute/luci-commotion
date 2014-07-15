@@ -4,17 +4,16 @@
 	float:none;
 	background:#ffffff;
 	clear: both;
-	
 }
 
 .body-content {
 	overflow: auto;
+    max-width: 100%;
 }
 
 .login {
 	margin:10px 10% auto 10%;
 }
-
 
 .sb-btn {
 	-webkit-box-sizing:border-box;
@@ -64,14 +63,11 @@ topbar * li {
   list-style-type: none;
 }
 
-/* cascade.css */
-
-/* If needed cleancss.com could strip ~7Kbytes from this file */
 html, body {
   margin: 0;
   padding: 0;
 }
-h1, h2, h3, h4, h5, h6, p, pre, a, abbr, acronym, code, del, em, img, q, s, small, strike, strong, sub, sup, tt, var, dd, dl, dt, li, ol, ul, fieldset, form, label, legend, button, table, caption, tbody, tfoot, thead, tr, th, td {
+h1, h2, h3, h4, h5, p, a, abbr, code, img, small, var, li, ul, fieldset, form, label, legend, button, table, tbody, thead, tr, th, td {
   border: 0 none;
   font-family: inherit;
   font-size: 100%;
@@ -88,12 +84,10 @@ abbr[title], acronym[title] {
 table {
   border-collapse: collapse;
   border-spacing: 0;
+  max-width: 98%;
 }
 ol, ul {
   list-style: none outside none;
-}
-q:before, q:after, blockquote:before, blockquote:after {
-  content: "";
 }
 html {
   font-size: 100%;
@@ -105,7 +99,7 @@ a:focus {
 a:hover, a:active {
   outline: 0 none;
 }
-article, aside, details, figcaption, figure, footer, header, topbar, hgroup, nav, section {
+footer, header, /*topbar,*/ nav, section {  /* is topbar an id? a class? this is not an element! */
   display: block;
 }
 #maincontent {
@@ -131,13 +125,16 @@ button, input, select, textarea {
   margin: 0;
   vertical-align: baseline;
 }
+
+textarea {
+  max-width: 98%;
+  margin 1em 0 1em 0;
+}
+
 button, input {
   line-height: normal;
 }
-button::-moz-focus-inner, input::-moz-focus-inner {
-  border: 0 none;
-  padding: 0;
-}
+
 button, input[type="button"], input[type="reset"], input[type="submit"] {
   background-color: #cccccc;
   background-image: -moz-linear-gradient(center top , #FFFFFF, #FFFFFF 25%, #E6E6E6);
@@ -178,8 +175,6 @@ footer {
   width: 100%;
 }
 header topbar ul,
-header nav ul,
-header .brand,
 footer .credits,
 footer nav,
 section {
@@ -187,14 +182,6 @@ section {
   margin-right: auto;
   width: 80%;
   text-align: center;
-}
-header topbar ul:after,
-header nav ul:after,
-header:before, header:after,
-footer:before, footer:after,
-section:before, section:after {
-  content: "";
-  display: table;
 }
 header topbar ul:after,
 header nav ul:after,
@@ -227,30 +214,14 @@ a:hover {
 .body-content {
 	width:100%;
 }
-.pull-right {
-  float: right;
-}
-.pull-left {
-  float: left;
-}
 p, .cbi-map-descr, .cbi-section-descr {
   font: normal 1em/1.5em;
-}
-p small {
-  color: #BFBFBF;
-  font-size: 11px;
 }
 h1, h2, h3, h4, h5, h6 {
   color: black;
   font-weight: bold;
 }
-h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
-  color: #404040;
-}
-/* Source of 90% of my link colour errors -_-
- * h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
-  color: black;
-} */
+
 h1 {
   font-size: 30px;
   line-height: 36px;
@@ -289,9 +260,6 @@ h6 {
 ul, ol {
   margin: 0 0 10px 25px;
 }
-ul ul, ul ol, ol ol, ol ul {
-  margin-bottom: 0;
-}
 ul {
   list-style: disc outside none;
 }
@@ -302,32 +270,14 @@ li {
   color: #808080;
   line-height: 18px;
 }
-ul.unstyled {
-  list-style: none outside none;
-  margin-left: 0;
-}
 dl {
   margin-bottom: 18px;
-}
-dl dt, dl dd {
-  line-height: 18px;
 }
 dl dt {
   font-weight: bold;
 }
 dl dd {
   margin-left: 9px;
-}
-hr {
-  -moz-border-bottom-colors: none;
-  -moz-border-image: none;
-  -moz-border-left-colors: none;
-  -moz-border-right-colors: none;
-  -moz-border-top-colors: none;
-  border-color: -moz-use-text-color -moz-use-text-color #EEEEEE;
-  border-style: none none solid;
-  border-width: 0 0 1px;
-  margin: 20px 0 19px;
 }
 strong {
   font-style: inherit;
@@ -341,13 +291,8 @@ em {
 small {
   font-size: 0.9em;
 }
-address {
-  display: block;
-  line-height: 18px;
-  margin-bottom: 18px;
-}
 code, pre {
-  font-family: Monaco,Andale Mono,Courier New,monospace;
+  font-family: Monaco,"Andale Mono","Courier New",monospace;
   font-size: 12px;
   padding: 0 3px 2px;
 }
@@ -384,14 +329,12 @@ fieldset legend {
   border-bottom: 3px solid #8073cb;
   width: 100%;
 }
-form .clearfix, form .cbi-value {
-  margin-bottom: 18px;
-  overflow: hidden;
+
+fieldset ul {
+  list-style: none;
+  text-align: left;
 }
-form .clearfix:before, form .clearfix:after, form .cbi-value:before, form .cbi-value:after {
-  content: "";
-  display: table;
-}
+
 label, input, select, textarea {
   font-size: 0.6em;
   font-weight: normal;
@@ -401,28 +344,6 @@ form .cbi-value label.cbi-value-title {
   color: black;
   font-size: 20px;
   line-height: 22px;
-}
-form .cbi-value label.cbi-value-title.tippable {
-  width: 100%;
-  background: url(help.png) no-repeat center right;
-}
-.tip {
-  position: relative;
-  background: #E6E6E6;
-  color: black;
-  font: italic 14px/16px Helvetica, Arial, sans-serif;
-  padding: 3px;
-  margin: 10px 0 0 0;
-  display: none;
-}
-.tip:after {
-  bottom: 100%;
-  border: solid transparent;
-  content: " ";
-  height: 0;
-  width: 0;
-  position: absolute;
-  pointer-events: none;
 }
 .tip:after {
   border-color: transparent;
@@ -434,7 +355,7 @@ form .cbi-value label.cbi-value-title.tippable {
 input[type="checkbox"], input[type="radio"] {
   cursor: pointer;
 }
-input, textarea, select, .uneditable-input {
+input, textarea, select {
   border: 1px solid #CCCCCC;
   color: #808080;
   display: inline-block;
@@ -479,9 +400,6 @@ textarea {
   cursor: not-allowed;
   display: block;
 }
-:-moz-placeholder {
-  color: #BFBFBF;
-}
 input, textarea {
   -moz-transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset;
@@ -495,53 +413,17 @@ input[type="file"]:focus, input[type="checkbox"]:focus, select:focus {
   box-shadow: none;
   outline: 1px dotted #666666;
 }
-form .clearfix.error > label, form .clearfix.error .help-block, form .clearfix.error .help-inline {
-  color: #B94A48;
-}
-form .clearfix.error input, form .clearfix.error textarea {
-  border-color: #EE5F5B;
-  color: #B94A48;
-}
 form .clearfix.error input:focus, form .clearfix.error textarea:focus {
   border-color: #E9322D;
   box-shadow: 0 0 6px #F8B9B7;
-}
-form .clearfix.error .input-prepend .add-on, form .clearfix.error .input-append .add-on {
-  background-color: #FCE6E6;
-  border-color: #B94A48;
-  color: #B94A48;
-}
-form .clearfix.warning > label, form .clearfix.warning .help-block, form .clearfix.warning .help-inline {
-  color: #C09853;
-}
-form .clearfix.warning input, form .clearfix.warning textarea {
-  border-color: #CCAE64;
-  color: #C09853;
 }
 form .clearfix.warning input:focus, form .clearfix.warning textarea:focus {
   border-color: #BE9A3F;
   box-shadow: 0 0 6px #E5D6B1;
 }
-form .clearfix.warning .input-prepend .add-on, form .clearfix.warning .input-append .add-on {
-  background-color: #D2B877;
-  border-color: #C09853;
-  color: #C09853;
-}
-form .clearfix.success > label, form .clearfix.success .help-block, form .clearfix.success .help-inline {
-  color: #468847;
-}
-form .clearfix.success input, form .clearfix.success textarea {
-  border-color: #57A957;
-  color: #468847;
-}
 form .clearfix.success input:focus, form .clearfix.success textarea:focus {
   border-color: #458845;
   box-shadow: 0 0 6px #9ACC9A;
-}
-form .clearfix.success .input-prepend .add-on, form .clearfix.success .input-append .add-on {
-  background-color: #BCDDBC;
-  border-color: #468847;
-  color: #468847;
 }
 input[disabled], select[disabled], textarea[disabled], input[readonly], select[readonly], textarea[readonly] {
   background-color: #F5F5F5;
@@ -553,12 +435,6 @@ input[disabled], select[disabled], textarea[disabled], input[readonly], select[r
   margin-bottom: 18px;
   padding: 0.5em 0.5em 0.5em 1em;
   text-align: right;
-}
-.actions .secondary-action, .cbi-page-actions .secondary-action {
-  float: right;
-}
-.actions .secondary-action a, .cbi-page-actions .secondary-action a {
-  line-height: 30px;
 }
 .actions .secondary-action a:hover, .cbi-page-actions .secondary-action a:hover {
   text-decoration: underline;
@@ -612,6 +488,10 @@ table tbody th {
   background: white;
   border: 0;
 }
+table#neighbors.cbi-section-table th.cbi-section-table-cell,
+table#neighbors.cbi-section-table td.cbi-section-table-cell {
+  text-align:center;
+}
 header {
   color: #BFBFBF;
   overflow: visible;
@@ -619,16 +499,7 @@ header {
 .collapsible {
   overflow: hidden;
 }
-header h1 {
-  text-align: center;
-  padding: 0;
-  margin: 0 auto;
-}
-header h1 a {
-  color: #4d4d4d;
-  font: 1.5em Helvetica, Arial, sans-serif;
-}
-header topbar, header nav {
+header topbar { /* OMG TOPBAR IS NOT AN ELEMENT */
   background: black;
   display: block;
   margin: 0;
@@ -640,20 +511,10 @@ header nav ul {
   text-align: center;
   padding-bottom: 1em;
 }
-header topbar > ul > li, header topbar > ul > li,
-header nav > ul > li, header nav > ul > li {
-  display: inline-block;
-}
-header topbar > ul a, header topbar > ul a,
-header nav > ul a, header nav > ul a {
-  display: block;
-  float: none;
-  padding: 0;
-  margin: 4px;
-  text-decoration: none;
-  text-transform: uppercase;
-  font: 1.5em Helvetica, Arial, sans-serif;
-  color: #ffffff;
+
+
+header topbar > ul > li, header topbar > ul > li {
+  display: none; /* testing this change - topbar seems totally unused */
 }
 header topbar > ul a:hover, header topbar > ul a:hover,
 header nav > ul a:hover, header nav > ul a:hover {
@@ -661,27 +522,11 @@ header nav > ul a:hover, header nav > ul a:hover {
   color: #ffffff;
   border-bottom: 2px solid #e8ff00;
 }
-header topbar > ul .active > a, header topbar > ul .active > a,
-header nav > ul .active > a, header nav > ul .active > a {
-  background-color: rgba(0, 0, 0, 0.5);
-}
-header topbar > ul.secondary-nav, header topbar > ul.secondary-nav,
-header nav > ul.secondary-nav, header nav > ul.secondary-nav {
-  float: right;
-  margin-left: 10px;
-  margin-right: 0;
-}
-
-/* dropdown menu is deprecated in v1, removed excess styling */
 
 .tabs, .cbi-tabmenu {
   list-style: none outside none;
   margin: 0 0 18px;
   padding: 0;
-}
-.tabs:before, .cbi-tabmenu:before, .tabs:after, .cbi-tabmenu:after {
-  content: "";
-  display: table;
 }
 .tabs:after, .cbi-tabmenu:after {
   clear: both;
@@ -719,39 +564,14 @@ header nav > ul.secondary-nav, header nav > ul.secondary-nav {
   border-color: #EEEEEE #EEEEEE #DDDDDD;
   text-decoration: none;
 }
-.tabs .active > a, .tabs .active > a:hover, .cbi-tabmenu .active > a, .cbi-tabmenu .active > a:hover, .cbi-tab > a:link, .cbi-tab > a:hover {
-  -moz-border-bottom-colors: none;
-  -moz-border-image: none;
-  -moz-border-left-colors: none;
-  -moz-border-right-colors: none;
-  -moz-border-top-colors: none;
+.cbi-tab > a:link, .cbi-tab > a:hover {
   border-color: #DDDDDD #DDDDDD white;
   border-style: solid;
   border-width: 3px;
   cursor: default;
   color: black;
 }
-.tabs .dropdown-menu, .cbi-tabmenu .dropdown-menu {
-  border-width: 3px;
-  top: 35px;
-}
-.tabs a.menu:after, .tabs .dropdown-toggle:after, .cbi-tabmenu a.menu:after, .cbi-tabmenu .dropdown-toggle:after {
-  border-top-color: #999999;
-  margin-left: 5px;
-  margin-top: 15px;
-}
-.tabs li.open.menu .menu, .tabs .open.dropdown .dropdown-toggle, .cbi-tabmenu li.open.menu .menu, .cbi-tabmenu .open.dropdown .dropdown-toggle {
-  border-color: #999999;
-}
-.tabs li.open a.menu:after, .tabs .dropdown.open .dropdown-toggle:after, .cbi-tabmenu li.open a.menu:after, .cbi-tabmenu .dropdown.open .dropdown-toggle:after {
-  border-top-color: #555555;
-}
-.tab-content > .tab-pane, .tab-content > div {
-  display: none;
-}
-.tab-content > .active {
-  display: block;
-}
+
 footer {
   margin-top: 17px;
   padding: 0 0 8px 0;
@@ -787,27 +607,51 @@ footer a:active, footer a:hover {
 }
 #footermenu li.admin a {
 	display: inline-block;
-	background: transparent url(advanced_point.png) no-repeat top center;
+	background: transparent url('advanced_point.png') no-repeat top center;
 	padding: 4em 0 0 0;
 	font-weight: bold;
 }
 #footermenu li.about a {
 	display: inline-block;
-	background: transparent url(about_point.png) no-repeat top center;
+	background: transparent url('about_point.png') no-repeat top center;
 	padding: 4em 1em 0 1em;
 	font-weight: bold;
 }
 #footermenu li.help a {
 	display: inline-block;
-	background: transparent url(help_point.png) no-repeat top center;
+	background: transparent url('help_point.png') no-repeat top center;
 	padding: 4em 1em 0 1em;
 	font-weight: bold;
 }
 #footermenu li.license a {
 	display: inline-block;
-	background: transparent url(license_point.png) no-repeat top center;
+	background: transparent url('license_point.png') no-repeat top center;
 	padding: 4em 1em 0 1em;
 	font-weight: bold;
+}
+/* THESE MIGHT BE  UNUSED, BUT LEAVING THEM IN JUST IN CASE */
+
+
+.tabs .dropdown-menu, .cbi-tabmenu .dropdown-menu {
+  border-width: 3px;
+  top: 35px;
+}
+.tabs a.menu:after, .tabs .dropdown-toggle:after, .cbi-tabmenu a.menu:after, .cbi-tabmenu .dropdown-toggle:after {
+  border-top-color: #999999;
+  margin-left: 5px;
+  margin-top: 15px;
+}
+.tabs li.open.menu .menu, .tabs .open.dropdown .dropdown-toggle, .cbi-tabmenu li.open.menu .menu, .cbi-tabmenu .open.dropdown .dropdown-toggle {
+  border-color: #999999;
+}
+.tabs li.open a.menu:after, .tabs .dropdown.open .dropdown-toggle:after, .cbi-tabmenu li.open a.menu:after, .cbi-tabmenu .dropdown.open .dropdown-toggle:after {
+  border-top-color: #555555;
+}
+.tab-content > .tab-pane, .tab-content > div {
+  display: none;
+}
+.tab-content > .active {
+  display: block;
 }
 
 #welcome li {
@@ -832,6 +676,9 @@ footer a:active, footer a:hover {
 	background-size: 96px 96px;
 	display: inline-block;
 	padding: 6.5em 2em 3em 2em;
+}
+.welcomepage {
+  text-align:center;
 }
 
 /* buttons, styles likely from Flat UI and heavily modified */
@@ -867,8 +714,6 @@ footer a:active, footer a:hover {
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 }
 
-.btn, .cbi-button {
-}
 .cbi-button-remove {
   float: right;
 }
@@ -879,28 +724,16 @@ footer a:active, footer a:hover {
 .btn:focus, .cbi-button:focus {
   outline: 1px dotted #666666;
 }
-.btn.primary {
-  background-color: #00ffcf;
-  background-image: -moz-linear-gradient(center top , #00ffcf, #000000);
-  background-repeat: repeat-x;
-  color: black;
-}
 .cbi-button-up {
-  background-image: url("./resources/cbi/up.gif"), -moz-linear-gradient(center top , #FFFFFF, #FFFFFF 25%, #E6E6E6);
+  background-image: url('../resources/cbi/up.gif'), -moz-linear-gradient(center top , #FFFFFF, #FFFFFF 25%, #E6E6E6);
   background-position: center center;
 }
 .cbi-button-down {
-  background-image: url("./resources/cbi/down.gif"), -moz-linear-gradient(center top , #FFFFFF, #FFFFFF 25%, #E6E6E6);
+  background-image: url('../resources/cbi/down.gif'), -moz-linear-gradient(center top , #FFFFFF, #FFFFFF 25%, #E6E6E6);
   background-position: center center;
 }
 .btn.active, .btn:active {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
-}
-.btn.disabled {
-  background-image: none;
-  box-shadow: none;
-  cursor: default;
-  opacity: 0.65;
 }
 .btn[disabled] {
   background-image: none;
@@ -908,14 +741,10 @@ footer a:active, footer a:hover {
   cursor: default;
   opacity: 0.65;
 }
-.btn.large {
-  font-size: 0.75em;
-  line-height: normal;
-  padding: 0.5em 0.75em;
-}
-.btn.small {
-  font-size: 0.5em;
-  padding: 0.5em;
+
+.cbi-map {
+  text-align:left;
+  max-width: 98%;
 }
 
 .basic_menu .btn:hover, .cbi-button:hover {
@@ -943,85 +772,61 @@ footer a:active, footer a:hover {
 	color: #FF6699;
 }
 
-.basic_menu .cbi-page-actions .cbi-button-save, .basic_menu .cbi-page-actions .cbi-button-apply, .basic_menu .cbi-page-actions .cbi-fake-finish, .basic_menu .cbi-page-actions  .cbi-button-finish {
-	background: transparent url(approve_app_button.png) no-repeat top center;
+.basic_menu .cbi-page-actions .cbi-button-save {
+	background: transparent url('approve_app_button.png') no-repeat top center;
 	background-size: 48px 48px;
 }
+.basic_menu .cbi-page-actions .cbi-button-reset {
+	background: transparent url('commotion_delete_icon.png') no-repeat top center;	
+	background-size: 48px 48px;
+}
+
 .basic_menu .cbi-page-actions .cbi-button-reset, .basic_menu .cbi-page-actions .inline .cbi-button-reset {
 	background: transparent url(commotion_delete_icon.png) no-repeat top center;	
-	background-size: 48px 48px;
 }
 .basic_menu .cbi-page-actions  .cbi-button-next, .basic_menu .cbi-page-actions .cbi-button-skip {
 	background: transparent url(right_arrow_button.png) no-repeat top center;
-	background-size: 48px 48px;
 }
 .basic_menu .cbi-page-actions .cbi-button-back, .basic_menu .cbi-page-actions .cbi-button-make-changes {
 	background: transparent url(left_arrow_button.png) no-repeat top center;
-	background-size: 48px 48px;
 }
 .basic_menu .cbi-page-actions .cbi-button-admin {
 	background: transparent url(advanced_button.png) no-repeat top center;
-	background-size: 48px 48px;
 }
 
 .Startup .cbi-section-table input.cbi-input-apply, .Startup .cbi-section-table input.cbi-button-apply {
   background-image: url("./resources/cbi/apply.gif");
   background-position: 7px 4px;
+  padding: 3px 9px 3px 27px;
 }
-
-/* this reload.gif appears when the cbi page should say something like "show password" */
 .Processes .cbi-section-table input.cbi-input-reload, .Startup .cbi-section-table input.cbi-input-reload {
   background-image: url("./resources/cbi/reload.gif");
   background-position: 7px 4px;
+  padding: 3px 9px 3px 27px;
 }
 .Processes .cbi-section-table input.cbi-input-remove, .Processes .cbi-section-table div.cbi-section-remove input, .Startup .cbi-section-table input.cbi-input-remove, .Startup .cbi-section-table div.cbi-section-remove input {
   background-image: url("./resources/cbi/remove.gif");
   background-position: 7px 4px;
+  padding: 3px 9px 3px 27px;
 }
 .Processes .cbi-section-table input.cbi-input-reset, .Processes .cbi-section-table input.cbi-button-reset, .Startup .cbi-section-table input.cbi-input-reset, .Startup .cbi-section-table input.cbi-button-reset {
   background-image: url("./resources/cbi/reset.gif");
   background-position: 7px 4px;
+  padding: 3px 9px 3px 27px;
 }
 .Startup .cbi-section-table input.cbi-input-save, .Startup .cbi-section-table input.cbi-button-save {
   background-image: url("./resources/cbi/save.gif");
   background-position: 7px 4px;
+  padding: 3px 9px 3px 27px;
 }
-:root .alert, *:root .btn {
-}
+
 button.btn::-moz-focus-inner, input.btn[type="submit"]::-moz-focus-inner {
   border: 0 none;
   padding: 0;
 }
- 
+
 .status-bar {
 	overflow: auto;
-	padding: 0.5em;
-}
-
-.info-list {
-	margin-left: auto;
-	margin-right: auto;
-	width: 13em;
-}
-.iface-info {
-	width:100%;
-	margin-left: auto;
-	margin-right: auto;
-}
-
-
-.status-bar td.key-item {
-	color:black;
-	font-weight: bold;
-	font-size:1em;
-}
-.status-bar td {
-	background-color:#FFFFFF;
-	color:#FF6699;
-	padding: 0.3em;
-	font-weight: bold;
-	font-size:1em;
-}
 
 /* node name and mesh ip address */
 
@@ -1073,7 +878,7 @@ text-align:left;
 
 /* error 1 - check for ui color fail */
 .alerts, .errorbox {
-  background: #FFFFFF url(warning_icon.png) no-repeat left center;
+  background: #FFFFFF url('warning_icon.png') no-repeat left center;
   background-size: 40px 40px;
   color: #000000;
   font-weight: bold;
@@ -1141,31 +946,14 @@ a.label:hover {
 
 }
 a.label.notice {
-  background-color: /*#66ccff*/;
   color: black;
   padding: 3px;
 }
 .hidden {
   display: none;
 }
-#memtotal > div, #memfree > div, #memcache > div, #membuff > div, #conns > div {
-  border: 1px solid #CCCCCC;
-  color: #808080;
-  display: inline-block;
-  font-size: 1em;
-  line-height: 1.25em;
-}
 #xhr_poll_status {
   cursor: pointer;
-}
-form.inline {
-  display: inline;
-}
-header .pull-right {
-  padding-top: 0.5em;
-}
-#modemenu li:last-child span.divider {
-  display: none;
 }
 #syslog {
   width: 100%;
@@ -1180,7 +968,7 @@ header .pull-right {
   margin-right: 6px;
   margin-top: 8px;
 }
-table table td, .cbi-value-field table td {
+table table td {
   border: medium none;
 }
 table.cbi-section-table input, table.cbi-section-table textarea, table.cbi-section-table select {
@@ -1204,7 +992,7 @@ table#neighbors.cbi-section-table td.cbi-section-table-cell {
 }
 .ifacebox {
   background-color: #FFFFFF;
-  background-image: -moz-linear-gradient(center top , #FFFFFF, #FFFFFF 25%, #E6E6E6);
+  background-image: linear-gradient(center top , #FFFFFF, #FFFFFF 25%, #E6E6E6);
   border: 1px solid #CCCCCC;
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
   margin: 0 10px;
@@ -1220,17 +1008,13 @@ table#neighbors.cbi-section-table td.cbi-section-table-cell {
 }
 .ifacebadge {
   background-color: #FFFFFF;
-  background-image: -moz-linear-gradient(center top , #FFFFFF, #FFFFFF 25%, #E6E6E6);
+  background-image: linear-gradient(center top , #FFFFFF, #FFFFFF 25%, #E6E6E6);
   border: 1px solid #CCCCCC;
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
   display: inline-block;
   margin-left: 2px;
   padding: 2px;
   white-space: nowrap;
-}
-.ifacebadge-active {
-  border-color: #000000;
-  font-weight: bold;
 }
 .zonebadge {
   color: #666666;
@@ -1257,6 +1041,8 @@ div.cbi-value var, td.cbi-value-field var {
   color: #0069D6;
   font-style: italic;
 }
+
+/* UCI Changes might not appear during automated testing, but should stay unless manually tested */
 .uci-change-list {
   font-family: monospace;
 }
@@ -1307,6 +1093,9 @@ div.cbi-value var, td.cbi-value-field var {
   border: medium none;
   line-height: 6px;
 }
+
+/* end UCI changes */
+
 .navbar-inners {
   width: 100%;
   margin: 0;
@@ -1339,10 +1128,6 @@ div.cbi-value var, td.cbi-value-field var {
 .color4 {
   width: 5%;
 }
-.selectnav {
-  display: none;
-  margin: 5px;
-}
 .messages {
   text-align: center;
   margin-bottom: 5px;
@@ -1361,12 +1146,6 @@ div.cbi-value var, td.cbi-value-field var {
   input, textarea, select, .uneditable-input {
     width: 96%;
   }
-  .js #navtoselect {
-    display: none;
-  }
-  .js .selectnav {
-    display: block;
-  }
 }
 
 .notice {
@@ -1377,9 +1156,8 @@ div.cbi-value var, td.cbi-value-field var {
   padding: 5px;
 }
 
-/* error 2 - check for ui inconsistency */
 .error {
-  background: #FFFFFF url(warning_icon.png) no-repeat left center;
+  background: #FFFFFF url('warning_icon.png') no-repeat left center;
   background-size: 40px 40px;
   padding-left: 10px;
   color: #000000;
@@ -1396,7 +1174,7 @@ div.cbi-value var, td.cbi-value-field var {
 }
 
 .cbi-value-error {
-  background: #FFFFFF url(warning_icon.png) no-repeat left center;
+  background: #FFFFFF url('warning_icon.png') no-repeat left center;
   background-size: 40px 40px;
   color: #000000;
   font-weight: bold;
@@ -1411,4 +1189,4 @@ div.cbi-value var, td.cbi-value-field var {
   margin: 0 auto;                                        
 }
 
-/* end error 2 */
+

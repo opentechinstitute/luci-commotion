@@ -7,11 +7,6 @@
 	background:#ffffff;
 }
 
-.body-content {
-	margin:auto;
-	overflow: auto;
-}
-
 .login {
 	margin:10px 10% auto 10%;
 }
@@ -38,7 +33,7 @@
 	display: none;
 	width: 40px;
 	height: 40px;
-	background: #fff url(/luci-static/commotion/drop_menu.png) center;
+	background: #fff url('/luci-static/commotion/drop_menu.png') center;
 }
 
 .sb-btn h3 {
@@ -69,7 +64,7 @@ p.submenutitle a {
 	font-weight: bold;
 }
 
-/*MEDIA QUERY*/
+/*MOBILE AND TABLET*/
 @media only screen and (max-width : 640px) {
 
 	#menu-icon {
