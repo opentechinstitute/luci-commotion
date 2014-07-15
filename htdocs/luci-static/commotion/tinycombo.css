@@ -530,6 +530,10 @@ header nav > ul a:hover, header nav > ul a:hover {
   margin: 0 0 18px;
   padding: 0;
 }
+.tabs:before, .cbi-tabmenu:before, .tabs:after, .cbi-tabmenu:after {
+  content: "";
+  display: table;
+}
 .tabs:after, .cbi-tabmenu:after {
   clear: both;
   height: 0px;
