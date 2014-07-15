@@ -198,6 +198,9 @@ footer:after,
 section:after {
   clear: both;
 }
+header #topbar ul {
+    padding-bottom: 28px;
+}
 #device {
   display: block;
   position: relative;
