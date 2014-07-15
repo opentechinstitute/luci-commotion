@@ -134,7 +134,7 @@ button, input, select, textarea {
 
 textarea {
   max-width: 98%;
-  margin 10px 0 10px 0;
+  margin: 10px 0 10px 0;
 }
 
 button, input {
@@ -223,7 +223,7 @@ a:hover {
   text-decoration: underline;
 }
 p, .cbi-map-descr, .cbi-section-descr {
-  font: 13px;
+  font-size: 13px;
 }
 h1, h2, h3, h4, h5, h6 {
   color: black;
