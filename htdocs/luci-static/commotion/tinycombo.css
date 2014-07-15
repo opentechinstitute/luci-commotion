@@ -8,11 +8,6 @@
 
 .body-content {
   overflow: auto;
-  width:auto;
-  width: 65%;
-  margin: auto;
-  padding-left: 2em;
-  text-align: left;
 }
 
 .login {
