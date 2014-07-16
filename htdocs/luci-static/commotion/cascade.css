@@ -90,11 +90,7 @@ abbr[title], acronym[title] {
   border-bottom: 1px dotted;
   cursor: help;
 }
-table {
-  border-collapse: collapse;
-  border-spacing: 0;
-  max-width: 98%;
-}
+
 ol, ul {
   list-style: none outside none;
 }
@@ -480,10 +476,12 @@ input[disabled], select[disabled], textarea[disabled], input[readonly], select[r
 }
 table {
   border-collapse: collapse;
+  border-spacing: 0;
   font-size: 13px;
   margin-bottom: 18px;
   padding: 0;
-  max-width: 100%;
+  width: 98%;
+  max-width: 98%;
 }
 table th, table td {
   font: normal 13px/16px Helvetica, Arial, sans-serif;
