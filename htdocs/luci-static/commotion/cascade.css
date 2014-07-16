@@ -350,6 +350,12 @@ label, input, select, textarea {
   font-weight: normal;
   line-height: normal;
 }
+
+form .clearfix, form .cbi-value {
+  margin-bottom: 18px;
+  overflow: hidden;
+}
+
 form .cbi-value label.cbi-value-title {
   color: black;
   font-size: 20px;
@@ -788,7 +794,7 @@ footer a:active, footer a:hover {
 
 .basic_menu .cbi-page-actions .cbi-button-save {
 	background: transparent url('approve_app_button.png') no-repeat top center;
-	background-size: 48px 48px;
+/* 	background-size: 48px 48px; */
 }
 .basic_menu .cbi-page-actions .cbi-button-reset, .basic_menu .cbi-page-actions .inline .cbi-button-reset {
 	background: transparent url('commotion_delete_icon.png') no-repeat top center;	
