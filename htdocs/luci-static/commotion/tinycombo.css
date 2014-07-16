@@ -98,7 +98,7 @@ a:focus {
 a:hover, a:active {
   outline: 0 none;
 }
-footer, header, #topbar nav, section {
+footer, header, #topbar, nav, section {
   display: block;
 }
 #maincontent {
@@ -189,9 +189,7 @@ footer:after,
 section:after {
   clear: both;
 }
-header #topbar ul {
-    padding-bottom: 28px;
-}
+
 #device {
   display: block;
   position: relative;
@@ -788,16 +786,20 @@ footer a:active, footer a:hover {
 }
 
 .basic_menu .cbi-page-actions .cbi-button-reset, .basic_menu .cbi-page-actions .inline .cbi-button-reset {
-	background: transparent url(commotion_delete_icon.png) no-repeat top center;	
+	background: transparent url(commotion_delete_icon.png) no-repeat top center;
+        background-size: 48px 48px;
 }
 .basic_menu .cbi-page-actions  .cbi-button-next, .basic_menu .cbi-page-actions .cbi-button-skip {
 	background: transparent url(right_arrow_button.png) no-repeat top center;
+        background-size: 48px 48px;
 }
 .basic_menu .cbi-page-actions .cbi-button-back, .basic_menu .cbi-page-actions .cbi-button-make-changes {
 	background: transparent url(left_arrow_button.png) no-repeat top center;
+        background-size: 48px 48px;
 }
 .basic_menu .cbi-page-actions .cbi-button-admin {
 	background: transparent url(advanced_button.png) no-repeat top center;
+        background-size: 48px 48px;
 }
 
 .Startup .cbi-section-table input.cbi-input-apply, .Startup .cbi-section-table input.cbi-button-apply {
@@ -838,26 +840,6 @@ button.btn::-moz-focus-inner, input.btn[type="submit"]::-moz-focus-inner {
         background-color:#FFFFFF;
 }
 
-.status-info {
-        margin: 20px 0 20px 0;
-        color:#FF6699;
-        font-weight: bold;
-        font-size:1em;
-        display:block;
-        text-align:center;
-}
-
-.status-list {
-        display:inline-block;
-        margin: 10px 1em;
-        text-align:left;
-        width:80%
-}
-
-span.key-item {
-        color:black;
-        font-weight: bold;
-}
 /* node name and mesh ip address */
 
 #nodeinfo {
@@ -997,6 +979,10 @@ a.label.notice {
 .cbi-value-field input[type="checkbox"], .cbi-value-field input[type="radio"] {
   margin-right: 6px;
   margin-top: 8px;
+}
+form .cbi-clearfix, form .cbi-value {
+    margin-bottom: 18px;
+    overflow: hidden;
 }
 table table td {
   border: medium none;
