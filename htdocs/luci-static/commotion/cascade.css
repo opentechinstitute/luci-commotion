@@ -377,7 +377,7 @@ form .cbi-value label.cbi-value-title {
   height: 0;
   width: 0;
   position: absolute;
-  pointer-events: none;
+/*   pointer-events: none; Support postponed to CSS4 */
 }
 .tip:after {
   border-color: transparent;
