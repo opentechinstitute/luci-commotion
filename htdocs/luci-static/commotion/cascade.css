@@ -792,7 +792,7 @@ footer a:active, footer a:hover {
 	color: #FF6699;
 }
 
-.basic_menu .cbi-page-actions .cbi-button-save {
+.basic_menu .cbi-page-actions .cbi-button-save, .basic_menu .cbi-page-actions .cbi-button-apply, .basic_menu .cbi-page-actions .cbi-fake-finish, .basic_menu .cbi-page-actions  .cbi-button-finish {
 	background: transparent url('approve_app_button.png') no-repeat top center;
 /* 	background-size: 48px 48px; */
 }
