@@ -199,6 +199,8 @@ header nav ul:after,
 header:after,
 footer:after,
 section:after {
+  content: "";
+  display: table;
   clear: both;
 }
 header #topbar ul {
@@ -231,6 +233,7 @@ p, .cbi-map-descr, .cbi-section-descr {
 h1, h2, h3, h4, h5, h6 {
   color: black;
   font-weight: bold;
+  line-height: 36px;
 }
 
 h1 {
@@ -929,7 +932,8 @@ text-align:left;
   max-width: 455px;
   margin: 0 auto;
   padding: 10px 10px 10px 75px;
-  min-height: 50px;
+  min-height: 45px;
+  font-weight: bold;
 }
 
 .label {
