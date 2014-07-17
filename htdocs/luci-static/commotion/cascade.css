@@ -692,38 +692,6 @@ footer a:active, footer a:hover {
   text-align:center;
 }
 
-.btn.danger, .alert.danger, .btn.danger:hover, .alert.danger:hover, .btn.error, .alert.error, .btn.error:hover, .alert.error:hover, .btn.success, .alert.success, .btn.success:hover, .alert.success:hover, .btn.info, .alert.info, .btn.info:hover, .alert.info:hover {
-  color: #FFFFFF;
-}
-.btn .close, .alert .close {
-  font-family: Arial,sans-serif;
-  line-height: 18px;
-}
-.btn.danger, .alert.danger, .btn.error, .alert.error {
-  background-color: #C43C35;
-  background-image: -moz-linear-gradient(center top , #EE5F5B, #C43C35);
-  background-image: -webkit-linear-gradient(center top , #EE5F5B, #C43C35);
-  background-image: -ms-linear-gradient(center top , #EE5F5B, #C43C35);
-  background-repeat: repeat-x;
-  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-}
-.btn.success, .alert.success {
-  background-color: #57A957;
-  background-image: -moz-linear-gradient(center top , #62C462, #57A957);
-  background-image: -webkit-linear-gradient(center top , #62C462, #57A957);
-  background-image: -ms-linear-gradient(center top , #62C462, #57A957);
-  background-repeat: repeat-x;
-  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-}
-.btn.info, .alert.info {
-  background-color: #339BB9;
-  background-image: -moz-linear-gradient(center top , #5BC0DE, #339BB9);
-  background-image: -webkit-linear-gradient(center top , #5BC0DE, #339BB9);
-  background-image: -ms-linear-gradient(center top , #5BC0DE, #339BB9);
-  background-repeat: repeat-x;
-  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-}
-
 .cbi-button-remove {
   float: right;
 }
@@ -921,24 +889,6 @@ text-align:left;
   opacity: 0.4;
   text-decoration: none;
 }
-
-/*.alerts, .errorbox, .cbi-section-error {
-  background: #E8FF00;
-  color: black;
-  margin: 5px 0;
-  position: relative;
-  max-width: 100%;
-}
-
-.errorbox {
-  background: #00ffcf url(warning_icon.png) no-repeat 10px center;
-  background-size: 55px 55px;
-  max-width: 455px;
-  margin: 0 auto;
-  padding: 10px 10px 10px 75px;
-  min-height: 45px;
-  font-weight: bold;
-}*/
 
 .label {
   background-color: #BFBFBF;
