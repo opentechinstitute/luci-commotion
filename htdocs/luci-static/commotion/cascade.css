@@ -922,7 +922,7 @@ text-align:left;
   text-decoration: none;
 }
 
-.alerts, .errorbox, .cbi-section-error {
+/*.alerts, .errorbox, .cbi-section-error {
   background: #E8FF00;
   color: black;
   margin: 5px 0;
@@ -938,7 +938,7 @@ text-align:left;
   padding: 10px 10px 10px 75px;
   min-height: 45px;
   font-weight: bold;
-}
+}*/
 
 .label {
   background-color: #BFBFBF;

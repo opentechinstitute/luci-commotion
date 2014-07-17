@@ -46,22 +46,6 @@
 
 
 /* ln 727 - error 1 - check for ui color fail */
-.alerts, .errorbox {
-  background: #FFFFFF url('warning_icon.png') no-repeat left center;
-  background-size: 40px 40px;
-  color: #000000;
-  font-weight: bold;
-  padding: 3em;
-  position: relative;
-  max-width: 100%;
-  border-color: #C43C35;
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  border-radius: 5px;
-  min-height: 1.5em;
-  margin: 0 auto;
-}
-
 .alert .close {
   margin-top: 1px;
 }
@@ -89,6 +73,25 @@
 
 /* end error/alert 1 */
 
+.alerts, .errorbox {
+  color: black;
+  position: relative;
+  max-width: 100%;
+  font-weight: bold;
+}
+
+.alerts {
+  background: #E8FF00;
+  margin: 0 auto;
+}
+
+.errorbox {
+  background: #00ffcf url(warning_icon.png) no-repeat 10px center;
+  background-size: 55px 55px;
+  max-width: 455px;
+  margin: 0 auto;
+  padding: 10px 10px 10px 75px;
+} 
 
 /* ln 955 */
 
@@ -114,10 +117,10 @@
   -moz-border-radius: 5px;
   border-radius: 5px;
   min-height: 1.5em;
-  margin: 0 auto;                                        
+  margin: 0 auto;
 }
 
-.cbi-value-error {
+.cbi-value-error, .cbi-section-error {
   background: #FFFFFF url('warning_icon.png') no-repeat left center;
   background-size: 40px 40px;
   color: #000000;
@@ -130,5 +133,5 @@
   -moz-border-radius: 5px;
   border-radius: 5px;
   min-height: 1.5em;
-  margin: 0 auto;                                        
+  margin: 0 auto;
 }

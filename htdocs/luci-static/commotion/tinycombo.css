@@ -889,22 +889,6 @@ text-align:left;
 }
 
 /* error 1 - check for ui color fail */
-.alerts, .errorbox {
-  background: #FFFFFF url('warning_icon.png') no-repeat left center;
-  background-size: 40px 40px;
-  color: #000000;
-  font-weight: bold;
-  padding: 3em;
-  position: relative;
-  max-width: 100%;
-  border-color: #C43C35;
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  border-radius: 5px;
-  min-height: 1.5em;
-  margin: 0 auto;
-}
-
 .alert .close {
   margin-top: 1px;
 }
