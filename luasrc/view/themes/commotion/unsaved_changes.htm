@@ -1,28 +1,15 @@
-<div class="messages">
-  <%
-     -- calculate the number of unsaved changes
-     if tree.nodes[category] and tree.nodes[category].ucidata then
-     local ucichanges = 0
-	 
-     for i, j in pairs(require("luci.model.uci").cursor():changes()) do
-     for k, l in pairs(j) do
-     for m, n in pairs(l) do
-     ucichanges = ucichanges + 1;
-     end
-     end
-     end
-	 
-     if ucichanges > 0 then
-  %>
-  <a class="label notice" href="<%=controller%>/<%=category%>/uci/changes"><%:Unsaved Changes%>: <%=ucichanges%></a>
-  <%
-     end
-     %>
-  <%
-     end
-     %>
-  <span id="xhr_poll_status" style="display:none" onclick="XHR.running() ? XHR.halt() : XHR.run()">
-    <span class="label success" id="xhr_poll_status_on"><%:Auto Refresh%> <%:on%></span>
-    <span class="label" id="xhr_poll_status_off" style="display:none"><%:Auto Refresh%> <%:off%></span>
-  </span>
-</div>
+<%#
+    Notify user of unsaved changes. Called by top-branding.htm
+-%>
+
+            <div class="messages">
+                <% if ucichanges and ucichanges > 0 then %>
+                    <a class="label notice" href="<%=controller%>/<%=category%>/uci/changes"><%:Unsaved Changes%>: <%=ucichanges%></a>
+                <% end %>
+                <!-- extraneous end? Commenting out -->
+                <%# end -%>
+                <span id="xhr_poll_status" style="display:none" onclick="XHR.running() ? XHR.halt() : XHR.run()">
+                    <span class="label success" id="xhr_poll_status_on"><%:Auto Refresh%> <%:on%></span>
+                    <span class="label" id="xhr_poll_status_off" style="display:none"><%:Auto Refresh%> <%:off%></span>
+                </span>
+            </div>

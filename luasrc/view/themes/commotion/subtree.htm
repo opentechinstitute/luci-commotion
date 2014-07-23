@@ -3,46 +3,49 @@ local disp = require "luci.dispatcher"
 local cdisp = require "luci.commotion.dispatch"
 
 local function subtree(prefix, node, level)
-		if not level then
-			level = 1
-		end
+    if not level then
+        level = 1
+    end
 
-		local childs = disp.node_childs(node)
-		if #childs > 0 then
-        
-            if level > 2 then
+local childs = disp.node_childs(node)
+    if #childs > 0 then
+        if level > 2 then
 %>
-	<ul class="tabs">
-		<%  
+            <ul class="tabs">
+
+        <% 
+        end
+
+        local selected_node
+        local selected_name
+        local i, v
+
+        for i, v in ipairs(childs) do
+            local nnode = node.nodes[v]
+            if nnode._menu_selected then
+                selected_node = nnode
+                selected_name = v
             end
 
-			local selected_node
-			local selected_name
-			local i, v
-
-			for i, v in ipairs(childs) do
-				local nnode = node.nodes[v]
-				if nnode._menu_selected then
-					selected_node = nnode
-					selected_name = v
-				end
-                if level > 2 then
-		%>
-			<li class="tabmenu-item-<%=v%> <%- if nnode._menu_selected or (node.leaf and v == leaf) then -%> active<% end %>">
-			    <a href="<%=cdisp.nodeurl(controller, prefix, v, nnode.query)%>"><%=striptags(translate(nnode.title))%></a>
-			</li>
-		<%      end
-			end
-            
             if level > 2 then
-		%>
-	</ul>
-<%          end
+        %>
+                <li class="tabmenu-item-<%=v%><%- if nnode._menu_selected or (node.leaf and v == leaf) then -%> active <% end %>">
+                    <a href="<%=cdisp.nodeurl(controller, prefix, v, nnode.query)%>"><%=striptags(translate(nnode.title))%></a>
+                </li>
+            <%
+            end
+        end
 
-			if selected_node then
-				subtree(prefix .. selected_name .. "/", selected_node, level + 1)
-			end
-		end
-	end
+        if level > 2 then
+            %>
+            </ul>
+        <% end
+
+        if selected_node then
+            subtree(prefix .. selected_name .. "/", selected_node, level + 1)
+        end
+    end
+end
 -%>
+
 <% if category then subtree("/" .. category .. "/", cattree) end %>

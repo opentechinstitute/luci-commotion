@@ -1,0 +1,13 @@
+<%#
+    Commotion Sidenav. Include is called from header.htm
+
+    Copyright 2014 Seamus Tuohy <s2e@opentechinstitute.org>
+-%>
+                <%if request[2] == "commotion" then%> <%# TODO Clean and combine these two menu templates after R1 push %>
+                    <%include("themes/commotion/basic_menu", {controller=controller, cattree=cattree, category=category, node=node, section=section})%>
+                    <div class="body-content basic_menu">
+                    <!-- /div in footer.htm -->
+                <%elseif request[1] ~= "commotion" then%>
+                    <%include("themes/commotion/adv_menu", {controller=controller, cattree=cattree, category=category, node=node, section=section})%>
+                    <%include("themes/commotion/subtree", {controller=controller, category=category, cattree=cattree})%>
+                <%end%>
