@@ -92,7 +92,7 @@ end
 if #clients > 0 then
 --Actually create the table below here.
 %>
-  <h3><%:Connected Clients!%></h3>
+  <h3><%:Connected Clients%></h3>
    <p>A client is a device that has connected to this node. Information about clients is displayed below.</p>
    <% if warning then %>
    <p class="errorbox"><%:You are not using a welcome page (splash page/captive portal.) Without a splash page we can only show a clients ip-address and the status of their connection.%></p>
@@ -109,6 +109,6 @@ if #clients > 0 then
   </tbody>
 </table>
 <%else%>
-      <h3><%:Connected Clients!%></h3>
+      <h3><%:Connected Clients%></h3>
 	  <p class="errorbox"><%:No connected clients were found at this time. If a Welcome Page has been enabled, clients must click through it before being displayed here.%></p>
 <%end%>
