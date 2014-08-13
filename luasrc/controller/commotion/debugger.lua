@@ -73,7 +73,7 @@ function data()
 		 f:close()
 	  end
    end
-   old_uri = env.REQUEST_URI
+   old_uri = luci.http.getenv("REQUEST_URI")
    uri = string.gsub(old_uri, "debug/submit", "debug")
-   http.redirect("https://"..env.SERVER_NAME..uri)
+   http.redirect("https://"..luci.http.getenv("SERVER_NAME")..uri)
 end
