@@ -65,7 +65,7 @@ end
 s.valuefooter = "cbi/full_valuefooter"
 s.template_addremove = "cbi/commotion/addMesh" --This template controls the addremove form for adding a new access point so that it has better wording.
 
-name = s:option(Value, "ssid",  translate("Mesh Network Name"), translate("Commotion networks share a network-wide name. This must be the same across all devices on the same mesh. This name cannot be greater than 15 characters."))
+name = s:option(Value, "ssid",  translate("Mesh Network Name"), translate("Commotion networks share a network-wide name. This must be the same across all devices on the same mesh."))
 name.default = "commotionwireless.net"
 name.datatype = "maxlength(31)"
 function name.validate(self,val)
