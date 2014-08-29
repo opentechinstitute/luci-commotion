@@ -110,7 +110,7 @@
     end
     )
     uci:foreach("olsrd", "Interface", function(s)
-        if s and s.Mode and s.Mode == "ether" and s.interface then
+        if s and s.Mode and s.Mode == "ether" and s.interface and s.ignore == 0 then
            local iface = conn:call("network.interface."..s.interface, "status", {})
            if iface ~= nil and iface["ipv4-address"] then                                                                              
               if iface["ipv4-address"][1] and iface["ipv4-address"][1].address then
