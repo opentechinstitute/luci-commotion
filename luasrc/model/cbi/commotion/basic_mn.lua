@@ -75,16 +75,22 @@ function name.validate(self,val)
    return nil,"Invalid mesh network name; must be between 1 and 31 characters"
 end
 
+protocol = s:option(ListValue, "proto", translate("Mesh Routing Protocol"), translate("Commotion uses OLSR and provides more features. Babel is more lightweight and supports IPv6 but still experimental."))
+protocol:value("commotion", "Commotion (recommended)")
+protocol:value("babel", "Babel")
+protocol.default = "commotion"
+
 nwk = s:option(Value, "network")
 
 --! @brief creates a network section and same named commotion profile when creating a mesh interface and assigns it to that mesh interface
-function write_network(value)
-   local net_name = encode.uci(value)
-   network_name = uci:section("network", "interface", net_name, {proto="commotion", class='mesh'})
+function write_network(netname_value, protocol_value)
+   local net_name = encode.uci(netname_value)
+   local protocol_name = encode.uci(protocol_value)
+   network_name = uci:section("network", "interface", net_name, {proto=protocol_name, class="mesh"})
    cnw.commotion_set(network_name)
    uci:set("network", network_name, "profile", network_name)
    uci:save("network")
-   if value ~= nil then
+   if netname_value ~= nil then
 	  uci:foreach("firewall", "zone",
 				  function(s)
 					 if s.name and s.name == "mesh" then
@@ -148,19 +154,30 @@ end
 
 nwk.render = function() end
 function nwk:parse(section)
-   db.log("parsing network")
+   db.log("Parsing network")
    local cvalue = self:cfgvalue(section)
    local name = name:formvalue(section)
-   if name ~= nil and not cvalue then
-	  if check_name(self, section, name) ~= nil then
-		 local net_name = write_network(name)
-		 uci:set("wireless", section, "network", net_name)
-		 uci:save("wireless")
- 	  else
-		 db.log("failed to write the network.")
-	  end
+   local protocol = protocol:formvalue(section)
+   if name ~= nil and protocol ~= nil then
+      if not cvalue then
+         -- Network not set yet
+         if check_name(self, section, name) ~= nil then
+            local net_name = write_network(name, protocol)
+            uci:set("wireless", section, "network", net_name)
+            uci:save("wireless")
+         else
+            db.log("Failed to write the network")
+         end
+      else
+         -- Network already set, only apply changes to protocol
+         local mesh_network_name = uci:get("wireless", section, "network")
+         local protocol_name = encode.uci(protocol)
+         uci:set("network", mesh_network_name, "proto", protocol_name)
+         uci:save("network")
+         db.log("Mesh protocol changed")
+      end
    else
-	  db.log("Already set or a nil value.")
+      db.log("Either network name or protocol is a nil value")
    end
 end
 

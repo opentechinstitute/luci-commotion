@@ -1,0 +1,28 @@
+<%#
+LuCI - Lua Configuration Interface
+
+Copyright 2014 Team ReseauLibre Poly
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+$Id: warning_protocol.htm 5448 2014-02-20 15:45:11Z jow $
+
+-%>
+
+<%-
+if assets ~= nil then
+   for name,obj in pairs(assets) do
+      _G[name] = obj
+   end
+else
+   local proto = "unknown"
+end
+%>
+
+<h2>Sorry!</h2>
+<p class="error"><%="Currently used mesh protocol (" .. proto .. ") does not provide this functionality."%></p>
+

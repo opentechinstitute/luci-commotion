@@ -126,7 +126,15 @@ function status_builder(page, assets, active_tab)
 end
 
 function viz()
-   status_builder("commotion/viz", nil, "mesh_visualizer")
+	local uci = require "luci.model.uci".cursor()
+	local protocol = get_proto()
+	if protocol and protocol == "commotion" then
+		status_builder("commotion/viz", nil, "mesh_visualizer")
+	elseif protocol then
+		status_builder("commotion/warning_protocol", {proto=protocol}, "mesh_visualizer")
+	else
+	   	status_builder("commotion/warning_protocol", {proto="unknown"}, "mesh_visualizer")
+	end
 end
 
 function conn_clnts()
@@ -216,13 +224,46 @@ function dbg_rpt()
    status_builder("commotion/debug", nil, "debug_report")
 end
 
+function get_proto()
+   local uci = require "luci.model.uci".cursor()
+   local meshnames = {}
+   --get all mesh interfaces
+   uci:foreach("wireless", "wifi-iface", function(s)
+				  if s.mode == 'adhoc' then
+					 table.insert(meshnames, s.network)
+				  end
+   end)
+   local _, name, protocol
+   --Check if ANY are currently supported
+   for _,name in ipairs(meshnames) do 
+	  local current_proto = uci:get("network", name, "proto")
+	  if current_proto and current_proto == 'commotion' then
+		 -- supported protocols have priority and overwrite unsupported ones
+		 protocol = current_proto
+	  elseif protocol == nil and current_proto then
+		 -- if protocol has no value, use the unsupported proto
+		 protocol = current_proto
+	  end
+   end
+   return protocol
+end
+
+
 function action_neigh(json)
-        local data = fetch_txtinfo("links")
-        if not data or not data.Links then
-                status_builder("commotion/error_olsr", nil, "nearby_devices")
-                return nil
-        end
-        status_builder("commotion/nearby_md", {links=data.Links}, "nearby_devices")
+	local uci = require "luci.model.uci".cursor()
+	local protocol = get_proto()
+	if protocol and protocol == "commotion" then
+		local data = fetch_txtinfo("links")
+       		if not data or not data.Links then
+               		status_builder("commotion/error_olsr", nil, "nearby_devices")
+			return nil
+		end
+		status_builder("commotion/nearby_md", {links=data.Links}, "nearby_devices")
+	elseif protocol then
+	   status_builder("commotion/warning_protocol", {proto=protocol}, "nearby_devices")
+	else
+	   status_builder("commotion/warning_protocol", {proto="unknown"}, "nearby_devices")
+	end
 end
 
 local function compare_links(a, b)
