@@ -220,7 +220,7 @@ function admin_edit_app(error_info, bad_data)
 end
 
 function action_add(edit_app)
-   local UUID, values, tmpl, type_tmpl, service_type, app_types, service_string, service_file, signing_tmpl, signing_msg, resp, signature, fingerprint, deleted_uci, url
+   local UUID, values, tmpl, type_tmpl, service_type, app_types, service_string, service_file, signing_tmpl, signing_msg, resp, signature, deleted_uci, url
    local uci = luci.model.uci.cursor()
    local dispatch = require "luci.dispatcher"
    local encode = require "luci.commotion.encode"
@@ -232,6 +232,7 @@ function action_add(edit_app)
    local allowpermanent = uci:get("applications","settings","allowpermanent")
    local autoapprove = uci:get("applications","settings","autoapprove")
    local checkconnect = uci:get("applications","settings","checkconnect")
+   local fingerprint = uci:get("applications","settings","sid")
    local uri = require "uri"
    
    values = {
@@ -512,16 +513,16 @@ ${app_types}
 	  
 	  -- Create Serval identity keypair for service, then sign service advertisement with it
 	  signing_msg = cutil.tprintf(signing_tmpl,fields)
-	  fields.fingerprint = luci.sys.exec("serval-client id self"):match('^[A-F0-9]+')
 	  if (luci.http.formvalue("fingerprint") and validate.hex(luci.http.formvalue("fingerprint")) and luci.http.formvalue("fingerprint"):len() == 64 and edit_app) then
-		 resp = luci.sys.exec("commotion serval-crypto sign " .. luci.http.formvalue("fingerprint") .. " \"" .. cutil.pass_to_shell(signing_msg) .. "\"")
+		 fields.fingerprint = luci.http.formvalue("fingerprint")
 	  else
+		 fields.fingerprint = fingerprint
 		 if (not deleted_uci and edit_app and not uci:delete("applications",UUID)) then
 			dispatch.error500("Unable to remove old UCI entry")
 			return
 		 end
-		 resp = luci.sys.exec("commotion serval-crypto sign " .. fields.fingerprint .. " \"" .. cutil.pass_to_shell(signing_msg) .. "\"")
 	  end
+	  resp = luci.sys.exec("commotion serval-crypto sign " .. fields.fingerprint .. " \"" .. cutil.pass_to_shell(signing_msg) .. "\"")
 	  if (luci.sys.exec("echo $?") ~= '0\n' or resp == '') then
 		 dispatch.error500("Failed to sign service advertisement")
 		 return
