@@ -35,7 +35,9 @@ end
 
 
 ex_time_num = s:option(Value, "lifetime", translate("Time before applications expire"))
-
+function ex_time_num:validate(val)
+  return tonumber(val), "expiration period must be a valid integer"
+end
 --! ex_time_num.write
 --! @brief Multiple the lifetime by the unit chosen to modify it to seconds.
 function ex_time_num.write(self, section, value)
