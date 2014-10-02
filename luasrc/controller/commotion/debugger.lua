@@ -39,6 +39,12 @@ function debug()
    report.User_action = luci.http.formvalue("userAction")
    report.Expected_Behavior = luci.http.formvalue("expectedBehavior")
    report.Bad_Behavior = luci.http.formvalue("badBehavior")
+   
+   if not report.Bad_Behavior and not report.Expected_Behavior and not report.User_action then
+     luci.template.render("commotion/debugger", {err = {notice = "Must include at least some information about the problem that occurred."}})
+     return
+   end
+   
    if report ~= {} then
 	  local f = io.open("/tmp/debug.info", "w")
 	  for i,x in pairs(report) do
