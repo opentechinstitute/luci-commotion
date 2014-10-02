@@ -74,7 +74,6 @@ tfield.datatype = "uinteger"
 tfield.forcewrite = true
 
 timeopt = stime:option(ListValue, "splashunit")
-timeopt:value("seconds")
 timeopt:value("minutes")
 timeopt:value("hours")
 timeopt:value("days")
