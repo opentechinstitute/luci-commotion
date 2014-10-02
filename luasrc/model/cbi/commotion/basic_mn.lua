@@ -68,6 +68,7 @@ s.template_addremove = "cbi/commotion/addMesh" --This template controls the addr
 name = s:option(Value, "ssid",  translate("Mesh Network Name"), translate("Commotion networks share a network-wide name. This must be the same across all devices on the same mesh. This name cannot be greater than 15 characters."))
 name.default = "commotionwireless.net"
 name.datatype = "maxlength(31)"
+name.rmempty = false
 function name.validate(self,val)
    if val and validate.mesh_ssid(val) then
 	  return val
