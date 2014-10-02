@@ -123,7 +123,7 @@
         <div class="cbi-value-field">
           <input type="text" maxlength="3" name="ttl" <%- if app then -%>value="<%=app.ttl%>"<%- else -%>value="5"<%- end -%> />
           <%if err and err.ttl then%><div class="error"><%=err.ttl%></div><%end%>
-          <div class="cbi-value-description"><%:How many nodes away your application will be seen. Defaults to 5 hops away%>.</div>
+          <div class="cbi-value-description"><%:How many nodes away your application will be seen. Must be an integer between 0 and 255%>.</div>
         </div> 
       </div>
       <% if page.allowpermanent == "1" then %>
