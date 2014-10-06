@@ -69,7 +69,7 @@ name = s:option(Value, "ssid",  translate("Mesh Network Name"), translate("Commo
 name.default = "commotionwireless.net"
 name.datatype = "maxlength(31)"
 name.rmempty = false
-function name.validate(self,val)
+function name:validate(val)
    if val and validate.mesh_ssid(val) then
 	  return val
    end
