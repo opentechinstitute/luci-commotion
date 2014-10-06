@@ -36,6 +36,14 @@ function validate.hostname(val)
   return false
 end
 
+function validate.admin_pass(val)
+  if val and (#val >= 1) and (#val < 127)
+     then
+     return true
+  end
+  return false
+end
+
 function validate.mode(val)
    -- Modes are simple, but also match the "-" in Ad-Hoc
   if val and val:match("^[%w%-]+$") then
