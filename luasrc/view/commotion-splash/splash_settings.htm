@@ -17,7 +17,7 @@ table.cbi-section-table input, table.cbi-section-table textarea, table.cbi-secti
 	<div class="cbi-value" id="cbi-commotion-splash-general-leasetime">
 	  <label class="cbi-value-title" for="cbid.commotion-splash.leasetime"><%:Time until welcome page is shown again%></label>
 	  <div class="cbi-value-field">
-	    <input type="text" class="cbi-input-text" name="cbid.commotion-splash.leasetime" id="cbid.commotion-splash.leasetime" value="<%=splash.leasetime%>" /><br />
+	    <input type="text" class="cbi-input-text" name="cbid.commotion-splash.leasetime" id="cbid.commotion-splash.leasetime" value="<%=splash.leasetime%>" maxlength="16" /><br />
 	    <%if err then%><div class="error"><%=err.leasetime%></div><%end%>
 	    <div class="cbi-value-description">
 	      <span class="cbi-value-helpicon"><img src="/luci-static/resources/cbi/help.gif" alt="help" /></span>
