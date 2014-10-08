@@ -152,7 +152,7 @@ function nwk:parse(section)
    db.log("parsing network")
    local cvalue = self:cfgvalue(section)
    local name = name:formvalue(section)
-   if name ~= nil and not cvalue then
+   if name ~= nil and name ~= '' and not cvalue then
 	  if check_name(self, section, name) ~= nil then
 		 local net_name = write_network(name)
 		 uci:set("wireless", section, "network", net_name)
