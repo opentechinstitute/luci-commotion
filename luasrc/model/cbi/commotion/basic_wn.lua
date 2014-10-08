@@ -72,12 +72,12 @@ s.template_addremove = "cbi/commotion/addAP" --This template controls the addrem
 name = s:option(Value, "ssid", translate("Name"), translate("The access point name (SSID) is the name that people will look for when connecting to this device."))
 name.default = "CommotionWireless"
 name.datatype = "maxlength(32)"
-
+name.rmempty = false
 function name:validate(val)
    if val and validate.ap_ssid(val) then
 	   return val
    end
-   return nil
+   return nil,"Invalid access point name; must be between 1 and 32 characters"
 end
 
 local wifi_dev = {}

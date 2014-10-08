@@ -68,7 +68,8 @@ s.template_addremove = "cbi/commotion/addMesh" --This template controls the addr
 name = s:option(Value, "ssid",  translate("Mesh Network Name"), translate("Commotion networks share a network-wide name. This must be the same across all devices on the same mesh. This name cannot be greater than 31 characters."))
 name.default = "commotionwireless.net"
 name.datatype = "maxlength(31)"
-function name.validate(self,val)
+name.rmempty = false
+function name:validate(val)
    if val and validate.mesh_ssid(val) then
 	  return val
    end
@@ -151,7 +152,7 @@ function nwk:parse(section)
    db.log("parsing network")
    local cvalue = self:cfgvalue(section)
    local name = name:formvalue(section)
-   if name ~= nil and not cvalue then
+   if name ~= nil and name ~= '' and not cvalue then
 	  if check_name(self, section, name) ~= nil then
 		 local net_name = write_network(name)
 		 uci:set("wireless", section, "network", net_name)
