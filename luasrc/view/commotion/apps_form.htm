@@ -1,3 +1,10 @@
+<%
+if string.match(REQUEST_URI, "/admin/") then
+  admin = "/admin/commotion"
+else
+  admin = nil
+end
+%>
 <%+header%>
 
 <link rel="stylesheet" type="text/css" href="<%=media%>/apps.css" />
@@ -15,136 +22,115 @@
 	}
 </script>
 <div class="apps-content">
-<h2><a id="content" name="content">
-  <% if page.type == "add" then %>
-    <%:Add an Application%>
-  <% else %>
-    <%:Edit%> <%=app.name%>
-  <% end %>
-</a></h2>
-<% if err and err.notice ~= "" then %><div class="notice notice-error"><%=err.notice%></div><% end %>
-
-<%
-   if string.match(REQUEST_URI, "/admin/") then
-     admin = "/admin/commotion"
-   else
-     admin = nil
-   end
-%>
-
-<form class="apps_form" method="post" <% if page.type == "edit" then %>autocomplete="off"<% end %> action="<%=controller%><%=admin%><%=page.action%>">
-  <fieldset>
-    <div class="cbi-value">
-      <label class="cbi-value-title"><%:Application Name%>:</label>
-      <div class="cbi-value-field">
-  	<input type="text" maxlength="250" name="name" <% if app then %>value="<%=app.name%>"<% end %>/>
-  	<%if err and err.name then%><div class="error"><%=err.name%></div><%end%>
-  	<div class="cbi-value-description"><%:This is how your application will be displayed%>.</div>
-      </div>
-    </div>
-    <div class="cbi-value">
-      <label class="cbi-value-title"><%:Description%>:</label>
-      <div class="cbi-value-field">
-        <textarea rows="5" maxlength="243" name="description"><% if app then %><%=app.description%><% end %></textarea>
-        <%if err and err.description then%><div class="error"><%=err.description%></div><%end%>
-        <div class="cbi-value-description"><%:The description should include a one paragraph summary of the application and any other relevant information%>.</div>
-      </div>
-    </div>
-    <div class="cbi-value">
-      <label class="cbi-value-title" data-tip="<%:For non web-apps, this should point to an information page telling the user how to connect to the application%>."><%:IP Address or URL of Service%>:</label>
-      <div class="cbi-value-field">
-   	<input type="text" maxlength="251" name="uri" <% if app then %>value="<%=app.uri%>"<% end %>/>
-   	<%if err and err.uri then%><div class="error"><%=err.uri%></div><%end%>
-   	<div class="cbi-value-description"><%:An IP address or URL where the application can be reached%>.</div>
-      </div>
-    </div>
-    <div class="cbi-value">
-      <label class="cbi-value-title"><%:Type of Application%>:</label>
-      <div class="cbi-value-field">
-  	<%=types_string%>
-  	<div class="cbi-value-description"><%:Choose any relevant categories that describe your application%>.</div>
-      </div>
-    </div>
-
-
-    <div class="cbi-value">
-      <label class="cbi-value-title"><%:Application Icon%>:</label>
-      <div class="cbi-value-field">
-
-  	<input type="text" maxlength="250" name="icon" id="icon" <% if app then %>value="<%=app.icon%>" <% else %>value="<%=media%>/commotion-faded.png"<% end %>/>
-  	<%if err and err.icon then%><div class="error"><%=err.icon%></div><%end%>
-
-	<div class="cbi-value-description"><%:This should be a URL of an image file that will be displayed next to the listing of your application%>.</div>
-		<div class="icon-choices">
-			<noscript><%:Please enable javascript to select one of these icons%>.</noscript>
-			<!-- divided into segments of four, since that's how they appear on the site -->
-			<input type="button" id="appcode" onclick="appicon ('<%=media%>/code.png');" />
-			<input type="button" id="appchat" onclick="appicon ('<%=media%>/chat.png');" />
-			<input type="button" id="appemail" onclick="appicon ('<%=media%>/email.png');" />
-			<input type="button" id="appdl" onclick="appicon ('<%=media%>/downloads.png');" />
-
-			<input type="button" id="appphoto" onclick="appicon ('<%=media%>/photo.png');" />
-			<input type="button" id="appnet" onclick="appicon ('<%=media%>/internet.png');" />
-			<input type="button" id="appwrite" onclick="appicon ('<%=media%>/write.png');" />
-			<input type="button" id="appaudio" onclick="appicon ('<%=media%>/audio.png');" />
-
-			<input type="button" id="appcal" onclick="appicon ('<%=media%>/calendar.png');" />
-			<input type="button" id="appfaded" onclick="appicon ('<%=media%>/commotion-faded2.png');" />
-		</div>
-
-    </div>
-    <% if page.type == "edit" then %>
-      <div class="cbi-value">
-        <label class="cbi-value-title"><%:Approved%>:</label>
-	<div class="cbi-value-field">
-          <select size="1" name="approved" class="cbi-input-select">
-          <option value=""></option>
-          <option value="1"<% if (app.approved == "1") then %> selected<% end %>><%:approved%></option>
-          <option value="0"<% if (app.approved == "0") then %> selected<% end %>><%:blacklisted%></option>
-          </select>
-          <div class="cbi-value-description"><%:Approved applications are shown to users, while blacklisted applications are not. All applications are approved automatically%>.</div>
-        </div>
-      </div>
+  <h2><a id="content" name="content">
+    <% if page.type == "add" then %>
+      <%:Add an Application%>
+    <% else %>
+      <%:Edit%> <%=app.name%>
     <% end %>
-    </fieldset>
-    <h5 id="apps_advanced"><a href="javascript:void(0);"><%:Advanced Options%></a></h5>
+  </a></h2>
+  <% if err and err.notice ~= "" then %><div class="notice notice-error"><%=err.notice%></div><% end %>
+  <form class="apps_form" method="post" <% if page.type == "edit" then %>autocomplete="off"<% end %> action="<%=controller%><%=admin%><%=page.action%>">
     <fieldset>
-    <div id="advanced_options">
       <div class="cbi-value">
-        <label class="cbi-value-title" data-tip="<%:The port of the application or a web page describing how to connect to the application%>."><%:Port of Service (Optional)%>:</label>
-        <div class="cbi-value-field">
-  	  <input type="text" maxlength="5" name="port" <% if app then %>value="<%=app.port%>"<% end %>/>
-  	  <%if err and err.port then%><div class="error"><%=err.port%></div><%end%>
-  	  <div class="cbi-value-description"><%:If no port is given, it will default to port 80%>.</div>
-        </div>
+	<label class="cbi-value-title"><%:Application Name%>:</label>
+	<div class="cbi-value-field">
+	  <input type="text" maxlength="250" name="name" <% if app then %>value="<%=app.name%>"<% end %>/>
+	  <%if err and err.name then%><div class="error"><%=err.name%></div><%end%>
+	  <div class="cbi-value-description"><%:This is how your application will be displayed%>.</div>
+	</div>
       </div>
       <div class="cbi-value">
-        <label class="cbi-value-title" data-tip="<%:If the number of hops is greater than zero, the application will be visible from other Commotion nodes in the network. Otherwise, it will only be seen on this node %>."><%:Number of hops away this service should be seen (Optional)%>:</label>
-        <div class="cbi-value-field">
-          <input type="text" maxlength="3" name="ttl" <%- if app then -%>value="<%=app.ttl%>"<%- else -%>value="5"<%- end -%> />
-          <%if err and err.ttl then%><div class="error"><%=err.ttl%></div><%end%>
-          <div class="cbi-value-description"><%:How many nodes away your application will be seen. Must be an integer between 0 and 255%>.</div>
-        </div> 
+	<label class="cbi-value-title"><%:Description%>:</label>
+	<div class="cbi-value-field">
+	  <textarea rows="5" maxlength="243" name="description"><% if app then %><%=app.description%><% end %></textarea>
+	  <%if err and err.description then%><div class="error"><%=err.description%></div><%end%>
+	  <div class="cbi-value-description"><%:The description should include a one paragraph summary of the application and any other relevant information%>.</div>
+	</div>
       </div>
-      <% if page.allowpermanent == "1" then %>
       <div class="cbi-value">
-        <label class="cbi-value-title" data-tip="<%:If this is checked, the application will not be removed from the applications list after the default expiration period%>."><%:Is this application permanent?%></label>
-        <div class="cbi-value-field">
-          <input type="checkbox" name="permanent" value="1" <% if app and app.lifetime == "0" or not app then %>checked<% end %>/>
-          <div class="cbi-value-description"><%:If checked, application will not expire%>.</div>
+	<label class="cbi-value-title" data-tip="<%:For non web-apps, this should point to an information page telling the user how to connect to the application%>."><%:IP Address or URL of Service%>:</label>
+	<div class="cbi-value-field">
+	  <input type="text" maxlength="251" name="uri" <% if app then %>value="<%=app.uri%>"<% end %>/>
+	  <%if err and err.uri then%><div class="error"><%=err.uri%></div><%end%>
+	  <div class="cbi-value-description"><%:An IP address or URL where the application can be reached%>.</div>
+	</div>
+      </div>
+      <div class="cbi-value">
+	<label class="cbi-value-title"><%:Type of Application%>:</label>
+	<div class="cbi-value-field">
+	  <%=tags_string%>
+	  <div class="cbi-value-description"><%:Choose any relevant categories that describe your application%>.</div>
+	</div>
+      </div>
+      <div class="cbi-value">
+	<label class="cbi-value-title"><%:Application Icon%>:</label>
+	<div class="cbi-value-field">
+	  <input type="text" maxlength="250" name="icon" id="icon" <% if app then %>value="<%=app.icon%>" <% else %>value="<%=media%>/commotion-faded.png"<% end %>/>
+	  <%if err and err.icon then%><div class="error"><%=err.icon%></div><%end%>
+	  <div class="cbi-value-description"><%:This should be a URL of an image file that will be displayed next to the listing of your application%>.</div>
+	  <div class="icon-choices">
+	    <noscript><%:Please enable javascript to select one of these icons%>.</noscript>
+	    <!-- divided into segments of four, since that's how they appear on the site -->
+	    <input type="button" id="appcode" onclick="appicon ('<%=media%>/code.png');" />
+	    <input type="button" id="appchat" onclick="appicon ('<%=media%>/chat.png');" />
+	    <input type="button" id="appemail" onclick="appicon ('<%=media%>/email.png');" />
+	    <input type="button" id="appdl" onclick="appicon ('<%=media%>/downloads.png');" />
+
+	    <input type="button" id="appphoto" onclick="appicon ('<%=media%>/photo.png');" />
+	    <input type="button" id="appnet" onclick="appicon ('<%=media%>/internet.png');" />
+	    <input type="button" id="appwrite" onclick="appicon ('<%=media%>/write.png');" />
+	    <input type="button" id="appaudio" onclick="appicon ('<%=media%>/audio.png');" />
+
+	    <input type="button" id="appcal" onclick="appicon ('<%=media%>/calendar.png');" />
+	    <input type="button" id="appfaded" onclick="appicon ('<%=media%>/commotion-faded2.png');" />
+	  </div>
+	</div>
+      </div>
+      <% if page.type == "edit" then %>
+      <div class="cbi-value">
+	<label class="cbi-value-title"><%:Approved%>:</label>
+	<div class="cbi-value-field">
+	  <select size="1" name="approved" class="cbi-input-select">
+	  <option value=""></option>
+	  <option value="1"<% if (app.approved == "1") then %> selected<% end %>><%:Approved%></option>
+	  <option value="0"<% if (app.approved == "0") then %> selected<% end %>><%:Blacklisted%></option>
+	  </select>
+	  <div class="cbi-value-description"><%:Approved applications are shown to users, while blacklisted applications are not.%></div>
 	</div>
       </div>
       <% end %>
-    </div> <!-- advanced options -->
+    </fieldset>
+    <h5 id="apps_advanced"><a href="javascript:void(0);"><%:Advanced Options%></a></h5>
+    <fieldset>
+      <div id="advanced_options">
+	<div class="cbi-value">
+	  <label class="cbi-value-title" data-tip="<%:If the number of hops is greater than zero, the application will be visible from other Commotion nodes in the network. Otherwise, it will only be seen on this node %>."><%:Number of hops away this service should be seen (Optional)%>:</label>
+	  <div class="cbi-value-field">
+	    <input type="text" maxlength="3" name="ttl" <%- if app then -%>value="<%=app.ttl%>"<%- else -%>value="5"<%- end -%> />
+	    <%if err and err.ttl then%><div class="error"><%=err.ttl%></div><%end%>
+	    <div class="cbi-value-description"><%:How many nodes away your application will be seen. Must be an integer between 0 and 255%>.</div>
+	  </div> 
+	</div>
+	<% if page.allowpermanent == "1" then %>
+	<div class="cbi-value">
+	  <label class="cbi-value-title" data-tip="<%:If this is checked, the application will not be removed from the applications list after the default expiration period%>."><%:Is this application permanent?%></label>
+	  <div class="cbi-value-field">
+	    <input type="checkbox" name="permanent" value="1" <% if app and app.lifetime == "0" or not app then %>checked<% end %>/>
+	    <div class="cbi-value-description"><%:If checked, application will not expire%>.</div>
+	  </div>
+	</div>
+	<% end %>
+      </div> <!-- advanced options -->
     </fieldset>
     <% if page.type == "edit" then %>
-      <input type="hidden" name="uuid" value="<%=app.uuid%>" />
-      <% if app.fingerprint then %><input type="hidden" name="fingerprint" value="<%=app.fingerprint%>" /><% end %>
+    <input type="hidden" name="uuid" value="<%=app.uuid%>" />
+    <% if app.fingerprint then %><input type="hidden" name="fingerprint" value="<%=app.fingerprint%>" /><% end %>
     <% end %>
     <div class="cbi-page-actions">
-	<input type="submit" value="Submit" class="cbi-button cbi-button-save">
-	<input type="reset" value="Reset" class="cbi-button cbi-button-reset">
+      <input type="submit" value="Submit" class="cbi-button cbi-button-save">
+      <input type="reset" value="Reset" class="cbi-button cbi-button-reset">
     </div>
-</form>
+  </form>
 </div>
 <%+footer%>

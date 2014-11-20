@@ -1,35 +1,109 @@
+<%-
+require "luci.http"
+require "luci.model.uci"
+uci = luci.model.uci.cursor()
+unauth = uci:get("applications", "settings", "enable_unauth")
+-%>
 <%+header%>
 <script type="text/javascript" src="<%=media%>/apps.js"></script>
+<% if is_admin then %>
+<script type="text/javascript" src="<%=media%>/admin_apps.js"></script>
+<% end %>
 <script type="text/javascript" src="<%=media%>/patternizer.min.js"></script>
 <link rel="stylesheet" type="text/css" href="<%=media%>/apps.css" />
 <div class="cbi-map-descr apps-content">
-<h2 class="appsH2"><a id="content" name="content"><%:Applications%></a></h2>
-<% if admin_vars then %>
-<script type="text/javascript" src="<%=media%>/admin_apps.js"></script>
-<p><%:Publicly announced applications running on this network are listed below.%></p>
-<%else%>
-<p><%:Here you can view applications accessible from this node%>.</p>
-<% end %>
-<% 
-require "luci.http"
-if luci.http.formvalue("add") and luci.http.formvalue("add") == "success" then
-%>
-<div class="notice notice-success">Application added successfully!<% if not admin_vars then %> The node administrator may need to approve the application before it shows up on this list.<% end %></div>
-<% end %>
+  <h2 class="appsH2"><a id="content" name="content"><%:Applications%></a></h2>
+  <% if is_admin then %>
+    <p><%:Publicly announced applications running on this network are listed below.%></p>
+  <%else%>
+    <p><%:Here you can view applications accessible from this node.%></p>
+  <% end %>
+  <% if luci.http.formvalue("add") and luci.http.formvalue("add") == "success" then %>
+    <div class="notice notice-success"><%:Application added successfully!%><% if not is_admin then %> <%:The node administrator may need to approve the application before it shows up on this list.%><% end %></div>
+  <% end %>
 </div>
 <div class="cbi-map">
-  <% if not admin_vars then
-	 uci = require "luci.model.uci".cursor()
-	 local unauth = uci:get("applications", "settings", "enable_unauth")
-	 if unauth == "1" then%>
-  <ul id="tabs" class="cbi-tabmenu">
-  	<li class="cbi-tab-disabled" style="float:right">
-		<a id="add_app" href="<%=controller%>/apps/add"><%:Add Application%></a>
-	</li>
-  </ul><%end%>
-	 <%	 include ("commotion/apps_display")
-		else
-	     include ("commotion/apps_admin_display")	     
-	 end%>
+  <% if not is_admin and unauth == "1" then %>
+    <ul id="tabs" class="cbi-tabmenu">
+      <li class="cbi-tab-disabled" style="float:right">
+	<a id="add_app" href="<%=controller%>/apps/add"><%:Add Application%></a>
+      </li>
+    </ul>
+  <% end %>
+  <fieldset>
+    <div id="types">
+    <%- 
+    for type_name, apps_of_type in pairs(categories) do
+      catType = type_name
+    -%>
+      <div class="type" id="<%=catType%>">
+	<legend><a href="javascript:void(0);" onclick="ReverseDisplay('<%=catType%>Apps')"><%=catType%></a></legend>
+	<div class="apps" id="<%=catType%>Apps">
+	<%-
+	this_app = {}
+	for i, app in pairs(apps_of_type) do
+	  this_app = app
+	  this_app.description = this_app.description:gsub("&#13;&#10;","<br>")
+	  prints = {}
+	  for color in this_app.key:gmatch(".....?.?") do
+	    table.insert(prints, color)
+	  end
+	  if not this_app.uri:match("^[a-z]+://") then
+	    this_app.uri = "http://"..this_app.uri
+	  end
+	  this_app.uuid = this_app[".name"]
+	-%>
+	  <div class="app <%=this_app.uuid%>">
+	    <div class="app-inner">
+	      <img src="<%=this_app.icon%>" width="85" height="85">
+	      <div class="name">
+		<h4><a href="<%=this_app.uri%>"><%=this_app.name%></a></h4>
+	      </div>
+	      <p class="description"><%=this_app.description%></p>
+	      <canvas class="app-canvas app-tippable" id="canvas_<%=this_app.uuid%>" data-tip="Fingerprint: <%=table.concat(prints,' ')%>"></canvas>
+	      <script type="text/javascript">
+		Zepto(function($){
+		  document.getElementById('canvas_<%=this_app.uuid%>').patternizer({
+		    stripes : [
+		      {
+			color: '#<%=prints[1]%>',
+			rotation: <%= tonumber(prints[2],16) % 360 %>,
+			opacity: <%= (tonumber(prints[3],16) % 50) + 50 %>,
+			mode: 'normal',
+			width: <%= (tonumber(prints[4],16) % 60) + 10 %>,
+			gap: <%= (tonumber(prints[5],16) % 60) + 10 %>,
+			offset: 0
+		      },
+		      {
+			color: '#<%=prints[6]%>',
+			rotation: <%= tonumber(prints[7],16) % 360 %>,
+			opacity: <%= (tonumber(prints[8],16) % 50) + 50 %>,
+			mode: 'normal',
+			width: <%= (tonumber(prints[9],16) % 60) + 10 %>,
+			gap: <%= (tonumber(prints[10],16) % 60) + 10 %>,
+			offset: 0
+		      }
+		    ],
+		    bg : '#<%=prints[11]%>FF'
+		  });
+		});
+	      </script>
+	      <% if is_admin then %>
+		<button class="approve" onclick="return JudgeApp('<%=this_app.uuid%>',1)"><%:Approve%></button>
+		<button class="banned" onclick="return JudgeApp('<%=this_app.uuid%>',0)"><%:Ban%></button>
+		<% if (this_app.localapp) then%>
+		  <button class="delete" onclick="return JudgeApp('<%=this_app.uuid%>','delete')"><%:Delete%></button>
+		  <a class="edit" href="<%=controller%>/admin/commotion/apps/edit?uuid=<%=this_app.uuid%>"><%:Edit%></a>
+		<% end %>
+	      <% end %>
+	      <div class="app-type"><% print(table.concat(this_app.type," ")) %></div>
+	    </div>
+	  </div>
+	<% end %>
+	</div>
+      </div>
+    <% end %>
+    </div>
+  </fieldset>
 </div>
 <%+footer%>
