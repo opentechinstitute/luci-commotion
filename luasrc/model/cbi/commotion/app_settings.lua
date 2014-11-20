@@ -74,11 +74,6 @@ apprv.remove=ccbi.flag_off
 apprv.write=ccbi.flag_write
 apprv.optional = false
 
-chk_conn = s:option(Flag, "checkconnect", translate("Periodically check connection to announced applications on this network"), translate("If 'Yes' is selected here, applications are checked to see if they are still online. If they are not responsive, they will be removed from the application list. Select 'No' to disable this option If you have poor or intermittent connectivity."))
-chk_conn.remove=ccbi.flag_off
-chk_conn.write=ccbi.flag_write
-chk_conn.optional = false
-
 allow_anon = s:option(Flag, "enable_unauth", translate("Allow users to add application advertisements from your access point."), translate("If 'Yes' is selected here, any user on your device can add an application from the view apps mainpage. Select 'No' to disable this option If you would like to require administrator access to add advertisements."))
 allow_anon.remove=ccbi.flag_off
 allow_anon.write=ccbi.flag_write
