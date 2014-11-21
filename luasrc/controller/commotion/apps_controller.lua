@@ -76,7 +76,7 @@ function judge_app()
     dispatch.error500("Application not found")
     return
   end
-  if approved == "approved" or approved == "banned" then
+  if approved == "1" or approved == "0" then
     if (uci:set("applications", app_id, "approved", approved) and 
 	uci:set("applications", "known_apps", "known_apps") and
 	uci:set("applications", "known_apps", app_id, (approved == "1") and "approved" or "banned") and
@@ -92,6 +92,8 @@ function judge_app()
     local s = services[key]
     if not s or not s:remove() then
       dispatch.error500("Could not delete app")
+    else
+      luci.http.status(200, "OK")
     end
     services:free()
     csm.shutdown()
@@ -187,6 +189,7 @@ function admin_edit_app(error_info, bad_data)
       function(app)
 	if (uuid == app[".name"]) then
 	  app_data = app
+	  app_data.uuid = uuid
 	end
       end
     )
@@ -228,7 +231,6 @@ function action_add(edit_app)
   local error_info = {}
   local lifetime = uci:get("applications","settings","lifetime") or 86400
   local allowpermanent = uci:get("applications","settings","allowpermanent")
-  local autoapprove = uci:get("applications","settings","autoapprove")
    
   local values = {
     name =  luci.http.formvalue("name"),
@@ -267,22 +269,27 @@ function action_add(edit_app)
     error_info.ttl = "Invalid TTL value; must be integer greater than zero"
   end
   
+  if luci.http.formvalue("permanent") and (luci.http.formvalue("permanent") ~= '1' or allowpermanent == '0') then
+    dispatch.error500("Invalid permanent value")
+    return
+  end
+  
   if edit_app then
     if luci.http.formvalue("approved") and luci.http.formvalue("approved") ~= '' and tonumber(luci.http.formvalue("approved")) ~= 0 and tonumber(luci.http.formvalue("approved")) ~= 1 then
       dispatch.error500("Invalid approved value")
       return
     end
     values.approved = luci.http.formvalue("approved")
-  end
-  
-  if luci.http.formvalue("permanent") and (luci.http.formvalue("permanent") ~= '1' or allowpermanent == '0') then
-    dispatch.error500("Invalid permanent value")
-    return
-  end
-  
-  if luci.http.formvalue("uuid") and not dt.uciname(luci.http.formvalue("uuid")) then
-    dispatch.error500("Invalid UUID value")
-    return
+    if not luci.http.formvalue("key") or luci.http.formvalue("key"):len() ~= 64 or not validate.hex(luci.http.formvalue("key")) then
+      dispatch.error500("Invalid key value")
+      return
+    end
+    values.key = luci.http.formvalue("key")
+    if not luci.http.formvalue("uuid") or luci.http.formvalue("uuid"):len() ~= 52 then
+      dispatch.error500("Invalid UUID value")
+      return
+    end
+    values.uuid = luci.http.formvalue("uuid")
   end
   
   -- escape input strings
@@ -320,7 +327,6 @@ function action_add(edit_app)
   -- if error, send back bad data
   if (next(error_info)) then
     if (edit_app) then
-      values.key = luci.http.formvalue("key")
       admin_edit_app(error_info, values)
       return
     else
@@ -329,9 +335,6 @@ function action_add(edit_app)
     end
   end
   
-  if (autoapprove == "1" and not values.approved) then
-	values.approved = "1"
-  end
   if ((allowpermanent == '1' and luci.http.formvalue("permanent") == nil) or allowpermanent == '0') then
     values.lifetime = lifetime
   elseif (allowpermanent == '1' and luci.http.formvalue("permanent") and luci.http.formvalue("permanent") == '1') then
@@ -347,8 +350,11 @@ function action_add(edit_app)
   s.icon = values.icon
   s.description = values.description
   s.ttl = tonumber(values.ttl)
-  s.lifetime = values.lifetime
+  s.lifetime = tonumber(values.lifetime)
   s.tag = values.tag
+  if edit_app then
+    s.key = values.key
+  end
   if not s:commit() then
     s:free()
     csm.shutdown()
@@ -360,11 +366,8 @@ function action_add(edit_app)
   
   -- Add application to known apps list in UCI
   if (values.approved == "1" or values.approved == "0") then
-      uci:set("applications", "known_apps", "known_apps")
-      uci:set("applications", "known_apps", values.uuid, (values.approved == "1") and "approved" or "blacklisted")
+    judge_app()
   end
-  uci:save('applications')
-  uci:commit('applications')
   
   if (edit_app) then
     luci.http.redirect("../apps?add=success")

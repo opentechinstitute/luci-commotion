@@ -125,7 +125,7 @@ end
     </fieldset>
     <% if page.type == "edit" then %>
     <input type="hidden" name="uuid" value="<%=app.uuid%>" />
-    <% if app.fingerprint then %><input type="hidden" name="fingerprint" value="<%=app.fingerprint%>" /><% end %>
+    <input type="hidden" name="key" value="<%=app.key%>" />
     <% end %>
     <div class="cbi-page-actions">
       <input type="submit" value="Submit" class="cbi-button cbi-button-save">

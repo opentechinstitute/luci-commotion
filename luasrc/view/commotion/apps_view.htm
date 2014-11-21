@@ -91,12 +91,12 @@ unauth = uci:get("applications", "settings", "enable_unauth")
 	      <% if is_admin then %>
 		<button class="approve" onclick="return JudgeApp('<%=this_app.uuid%>',1)"><%:Approve%></button>
 		<button class="banned" onclick="return JudgeApp('<%=this_app.uuid%>',0)"><%:Ban%></button>
-		<% if (this_app.localapp) then%>
+		<% if this_app["local"] then %>
 		  <button class="delete" onclick="return JudgeApp('<%=this_app.uuid%>','delete')"><%:Delete%></button>
 		  <a class="edit" href="<%=controller%>/admin/commotion/apps/edit?uuid=<%=this_app.uuid%>"><%:Edit%></a>
 		<% end %>
 	      <% end %>
-	      <div class="app-type"><% print(table.concat(this_app.type," ")) %></div>
+	      <div class="app-type"><% if this_app.tag then print(table.concat(this_app.tag," ")) end %></div>
 	    </div>
 	  </div>
 	<% end %>
