@@ -310,7 +310,11 @@ function action_add(edit_app)
       dispatch.error500("Invalid application category value")
       return
     end
-    values.tag = luci.http.formvalue("tag")
+    if type(luci.http.formvalue("tag")) == "table" then
+      values.tag = luci.http.formvalue("tag")
+    else
+      values.tag = {luci.http.formvalue("tag")}
+    end
   end
   
   -- if invalid input was found, set error notice at top of page
