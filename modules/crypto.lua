@@ -40,7 +40,7 @@ end
 --! @example crypto_check_https.htm
 function crypto.check_https(node, env)
    if string.match(env.REQUEST_URI, node) then
-	  if env.HTTPS ~= "on" then
+	  if env.SERVER_PORT ~= "443" then
 		 http.redirect("https://"..env.SERVER_NAME..env.REQUEST_URI)
 		 return true
 	  end
