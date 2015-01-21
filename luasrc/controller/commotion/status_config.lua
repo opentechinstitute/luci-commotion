@@ -217,11 +217,39 @@ function dbg_rpt()
 end
 
 function action_neigh(json)
+	local olsrtools = require "luci.tools.olsr"
+	
         local data = fetch_txtinfo("links")
         if not data or not data.Links then
                 status_builder("commotion/error_olsr", nil, "nearby_devices")
                 return nil
         end
+	if luci.http.formvalue("status") == "1" then
+	  local rv = {}
+	  for k, link in ipairs(data.Links) do
+	    link.Cost = tonumber(link.Cost) or 0
+	    local color = olsrtools.etx_color(link.Cost)
+	    defaultgw_color = ""
+	    if link.defaultgw == 1 then
+	      defaultgw_color = "#ffff99"
+	    end
+	    
+	    rv[#rv+1] = {
+	      rip = link["Remote IP"],
+	      hn = link["Hostname"],
+	      --lip = link["Local IP"],
+	      --dev = link["Local Device"],
+	      --lq = link.LQ,
+	      --nlq = link.NLQ,
+	      cost = string.format("%.3f", link.Cost),
+	      color = color,
+	      dfgcolor = defaultgw_color
+	    }
+	  end
+	  luci.http.prepare_content("application/json")
+	  luci.http.write_json(rv)
+	  return
+	end
         status_builder("commotion/nearby_md", {links=data.Links}, "nearby_devices")
 end
 
