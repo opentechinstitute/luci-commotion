@@ -217,15 +217,17 @@ function dbg_rpt()
 end
 
 function action_neigh(json)
+	local sys = require "luci.sys"
 	local olsrtools = require "luci.tools.olsr"
 	
-        local data = fetch_txtinfo("links")
-        if not data or not data.Links then
+        local data = fetch_txtinfo()
+        if not data or not data.Links or not data.Routes then
                 status_builder("commotion/error_olsr", nil, "nearby_devices")
                 return nil
         end
 	if luci.http.formvalue("status") == "1" then
 	  local rv = {}
+	  local signal = ""
 	  for k, link in ipairs(data.Links) do
 	    link.Cost = tonumber(link.Cost) or 0
 	    local color = olsrtools.etx_color(link.Cost)
@@ -234,17 +236,24 @@ function action_neigh(json)
 	      defaultgw_color = "#ffff99"
 	    end
 	    
+	    for _,route in pairs(data.Routes) do
+	      if route["Destination IP"] == link["Remote IP"] then
+		local mac = sys.exec("cat /proc/net/arp |grep "..route["Destination IP"]):match("[a-f0-9]+:[a-f0-9]+:[a-f0-9]+:[a-f0-9]+:[a-f0-9]+:[a-f0-9]+")
+		if mac and mac ~= "" then
+		  signal = sys.exec("iw dev "..route.Interface.." station dump |grep "..mac.." -A20 |grep signal: |cut -d' ' -f3 |grep -o '[-0-9]*'")
+		end
+	      end
+	    end
+	    
 	    rv[#rv+1] = {
 	      rip = link["Remote IP"],
 	      hn = link["Hostname"],
-	      --lip = link["Local IP"],
-	      --dev = link["Local Device"],
-	      --lq = link.LQ,
-	      --nlq = link.NLQ,
 	      cost = string.format("%.3f", link.Cost),
 	      color = color,
-	      dfgcolor = defaultgw_color
+	      dfgcolor = defaultgw_color,
+	      signal = signal
 	    }
+	    
 	  end
 	  luci.http.prepare_content("application/json")
 	  luci.http.write_json(rv)
@@ -276,17 +285,18 @@ function fetch_txtinfo(otable)
  	local rawdata = luci.sys.httpget("http://127.0.0.1:2006/"..otable)
  	local rawdatav6 = luci.sys.httpget("http://[::1]:2006/"..otable)
 	local data = {}
-	local dataindex = 0
 	local name = ""
 	local defaultgw
 
 	if #rawdata ~= 0 then
 		local tables = luci.util.split(luci.util.trim(rawdata), "\r?\n\r?\n", nil, true)
 
-		if otable == "links" then
-			local route = {}
-			luci.sys.net.routes(function(r) if r.dest:prefix() == 0 then defaultgw = r.gateway:string() end end)
-		end
+		luci.sys.net.routes(
+		  function(r) 
+		    if r.dest:prefix() == 0 then 
+		      defaultgw = r.gateway:string() 
+		    end 
+		  end)
 
 		for i, tbl in ipairs(tables) do
 			local lines = luci.util.split(tbl, "\r?\n", nil, true)
@@ -297,14 +307,15 @@ function fetch_txtinfo(otable)
 				data[name] = {}
 			end
 
+			local dataindex = 0
 			for j, line in ipairs(lines) do
 				dataindex = ( dataindex + 1 )
 				di = dataindex
 				local fields = luci.util.split(line, "\t", split)
 				data[name][di] = {}
 				for k, key in pairs(keys) do
+					data[name][di][key] = fields[k]
 					if key == "Remote IP" or key == "Dest. IP" or key == "Gateway IP" or key == "Gateway" then
-						data[name][di][key] = fields[k]
 						if resolve == "1" then
 							hostname = nixio.getnameinfo(fields[k], "inet")
 							if hostname then
@@ -317,7 +328,6 @@ function fetch_txtinfo(otable)
 							end
 						end
 					elseif key == "Local IP" then
-						data[name][di][key] = fields[k]
 						data[name][di]['Local Device'] = fields[k]
 						uci:foreach("network", "interface",
 							function(s)
@@ -327,17 +337,17 @@ function fetch_txtinfo(otable)
 								end
 							end)
 					elseif key == "Interface" then
-						data[name][di][key] = fields[k]
 						uci:foreach("network", "interface",
 						function(s)
 							interface = string.gsub(fields[k], '	', '')
 							if s.ifname == interface then
-								data[name][di][key] = s['.name'] or interface
+								data[name][di]['ifname'] = s['.name'] or interface
 							end
 						end)
-					else
-					    data[name][di][key] = fields[k]
-			        end
+					elseif key == "Destination" then
+						data[name][di]["Destination IP"] = fields[k]:match("^[^/]*")
+						data[name][di]["Destination netmask"] = fields[k]:match("[^/]*$")
+					end
 				end
 				if data[name][di].Linkcost then
 					data[name][di].LinkQuality,
