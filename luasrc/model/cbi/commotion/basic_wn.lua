@@ -106,6 +106,22 @@ if #wifi_dev > 1 then
 		 local enable = self.map:set(dev[1], "disabled", "0") -- enable the radio
 		 return self.map:set(dev[1], "channel", value)
 	  end
+	  local cc = s:option(ListValue, "country_"..dev[1], translate("Country Code"), translate("Use ISO/IEC 3166 alpha2 country codes."))
+	  local iw = luci.sys.wifi.getiwinfo(dev[1])
+	  local cl = iw and iw.countrylist
+	  cc:depends("device", dev[1])
+	  if cl and #cl > 0 then
+		 cc.default = uci:get("wireless", dev[1], "country")
+		 for _, c in ipairs(cl) do
+		      cc:value(c.alpha2, "%s - %s" %{ c.alpha2, c.name })
+		 end
+	  else
+		 s:option(Value, "country", translate("Country Code"), translate("Use ISO/IEC 3166 alpha2 country codes."))
+	  end
+	  function cc:write(section, value)
+		 local set_cc = self.map:set(dev[1], "country", value)
+		 return set_cc or false
+	  end
    end
 else
 
@@ -119,6 +135,20 @@ else
    for _,x in pairs(cnw.get_channels(wifi_dev[1][2])) do
 	  channels:value(x[1], x[2])
    end
+   local iw = luci.sys.wifi.getiwinfo(wifi_dev[1][1])
+   local cl = iw and iw.countrylist
+   if cl and #cl > 0 then
+	  local cc = s:option(ListValue, "country", translate("Country Code"), translate("Use ISO/IEC 3166 alpha2 country codes."))
+	  cc.default = uci:get("wireless", wifi_dev[1][1], "country")
+	  function cc.write(self, section, value)
+		return self.map:set(wifi_dev[1][1], "country", value)
+	  end  
+	  for _, c in ipairs(cl) do
+                cc:value(c.alpha2, "%s - %s" %{ c.alpha2, c.name })
+	  end
+   else
+          s:option(Value, "country", translate("Country Code"), translate("Use ISO/IEC 3166 alpha2 country codes."))
+   end   
 end
 
 enc = s:option(Flag, "encryption", translate("Require a Password?"), translate("When people connect to this access point, should a password be required?"))
