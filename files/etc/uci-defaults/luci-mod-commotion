@@ -3,10 +3,12 @@
 . /etc/functions.sh
 
 #setup ucitrack
-uci add ucitrack hostname
-uci set ucitrack.@hostname[0].init=hostname
-uci add_list ucitrack.@system[0].affects=hostname
-uci commit ucitrack
+[ -z $(uci_get ucitrack @hostname[0]) ] && { \
+  uci_add ucitrack hostname
+  uci_set ucitrack @hostname[0] init hostname
+  uci add_list ucitrack.@system[0].affects=hostname
+  uci_commit ucitrack
+}
 
 #setup sysupgrade saves
 echo /etc/config/setup_wizard >> /etc/sysupgrade.conf

@@ -1,6 +1,5 @@
 #!/bin/sh
 
-
 . /etc/functions.sh
 
 [ -f "/usr/share/commotion/files/splash.html" ] && { \
@@ -8,12 +7,13 @@ mv -f /usr/share/commotion/files/splash.html /etc/nodogsplash/htdocs/splash.html
 }
 
 #setup ucitrack
-uci add ucitrack nodogsplash
-uci set ucitrack.@nodogsplash[0].init=ucidog
-uci add_list ucitrack.@system[0].affects=avahi_daemon
-uci add ucitrack avahi_daemon
-uci set ucitrack.@avahi_daemon[0].init=avahi-daemon
-uci add_list ucitrack.@setup_wizard[0].affects=nodogsplash
-
+[ -z $(uci_get ucitrack @nodogsplash[0]) ] && { \
+  uci_add ucitrack nodogsplash
+}
+[ -z $(uci_get ucitrack @nodogsplash[0] init) ] && { \
+  uci_set ucitrack @nodogsplash[0] init ucidog
+  uci add_list ucitrack.@setup_wizard[0].affects=nodogsplash
+  uci_commit ucitrack
+}
 
 exit 0

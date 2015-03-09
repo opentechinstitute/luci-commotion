@@ -39,6 +39,12 @@ function debug()
    report.User_action = luci.http.formvalue("userAction")
    report.Expected_Behavior = luci.http.formvalue("expectedBehavior")
    report.Bad_Behavior = luci.http.formvalue("badBehavior")
+   
+   if report.Bad_Behavior == '' and report.Expected_Behavior == '' and report.User_action == '' then
+     luci.template.render("commotion/debugger", {err = {notice = "Must include at least some information about the problem that occurred."}})
+     return
+   end
+   
    if report ~= {} then
 	  local f = io.open("/tmp/debug.info", "w")
 	  for i,x in pairs(report) do
@@ -73,7 +79,7 @@ function data()
 		 f:close()
 	  end
    end
-   old_uri = env.REQUEST_URI
+   old_uri = luci.http.getenv("REQUEST_URI")
    uri = string.gsub(old_uri, "debug/submit", "debug")
-   http.redirect("https://"..env.SERVER_NAME..uri)
+   http.redirect("https://"..luci.http.getenv("SERVER_NAME")..uri)
 end

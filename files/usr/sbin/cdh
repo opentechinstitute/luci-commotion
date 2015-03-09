@@ -119,7 +119,8 @@ network()
 	echo -e "---------------Smart Gateway Default Route---------------------" >> $FILE
 	ip route ls table 224 >> $FILE
 
-	radio scan
+	dev scan
+	dev station dump
 }
 
 rules()
@@ -139,11 +140,8 @@ rules()
 	flair "UCI Firewall Current State: (uci show -p /var/state firewall)"
 	uci show -p /var/state firewall  >> $FILE
 	
-	flair "UCI Splash Info:(uci show luci_splash)"
-	uci show luci_splash >> $FILE
-	
-	flair "UCI Splash Current State:(uci show -p /var/state luci_splash)" 
-	uci show -p /var/state luci_splash >> $FILE	
+	flair "Nodogsplash Info:(ndsctl status)"
+	ndsctl status >> $FILE
 }
 
 state()
@@ -166,23 +164,45 @@ state()
 	flair "Router uptime and Load: (uptime)"
 	uptime >> $FILE
 
-	radio info
-	
+	phy info
+	dev info
+	dev link
 }
 
 #======================================================
 # radio identifier and Scanner
 #=======================================================
-radio()
+dev()
 {
-	i=1
+	local i=0
+	local DEV=
 	while [ $? -eq 0 ]
 	do
-		RADIO=`uci -q get wireless.@wifi-iface[$i].device`
+		DEV=`uci -P /var/state -q get wireless.@wifi-iface[$i].ifname`
 		if [ $? -eq 0 ]
 		then
-			flair "$RADIO $1"
-			iwinfo $RADIO $1 >> $FILE
+			flair "$DEV $1"
+			iw dev $DEV $@ >> $FILE
+			i=$(($i+1))
+		elif [ $? -eq 1 ]
+		then
+			break
+			exit 0
+		fi
+	done
+}
+
+phy()
+{
+	local i=0
+	local PHY=
+	while [ $? -eq 0 ]
+	do
+		PHY=`uci -q get wireless.@wifi-device[$i]`
+		if [ $? -eq 0 ]
+		then
+			flair "phy$i $1"
+			iw phy phy$i $@ >> $FILE
 			i=$(($i+1))
 		elif [ $? -eq 1 ]
 		then

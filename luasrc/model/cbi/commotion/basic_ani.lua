@@ -34,9 +34,9 @@ p = m:section(NamedSection, "wan")
 p.anonymous = true
 
 msh = p:option(Flag, "meshed", translate("Will you be meshing with other Commotion devices over the ethernet interface?"))
-msh.enabled = "true"
-msh.disabled = "false"
-msh.default = "false"
+msh.enabled = "1"
+msh.disabled = "0"
+msh.default = "0"
 msh.addremove = false
 function msh.write(self, section, fvalue)
    if ccbi.flag_write(self, section, fvalue) then
@@ -50,7 +50,7 @@ function msh.remove(self, section)
    value = self.map:get(section, self.option)
    if value ~= self.disabled then
 	  self.section.changed = true
-	  if self.map:set(section, self.option, 'false') then
+	  if self.map:set(section, self.option, '0') then
 		 return write_firewall(section, true)
 	  end
    end
@@ -79,7 +79,7 @@ function write_firewall(section, remove)
 end
 
 ipaddress = p:option(TextValue, "ipaddr", translate("IP Address"), translate(""))
-ipaddress:depends("meshed", "true")
+ipaddress:depends("meshed", "1")
 ipaddress.datatype = "ipaddr"
 function ipaddress:validate(val)
    if val then
@@ -93,7 +93,7 @@ function ipaddress:validate(val)
 end
 
 netmask = p:option(TextValue, "netmask", translate("Netmask"), translate(""))
-netmask:depends("meshed", "true")
+netmask:depends("meshed", "1")
 netmask.datatype = "ipaddr"
 function netmask:validate(val)
    if val then

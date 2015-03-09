@@ -65,10 +65,11 @@ end
 s.valuefooter = "cbi/full_valuefooter"
 s.template_addremove = "cbi/commotion/addMesh" --This template controls the addremove form for adding a new access point so that it has better wording.
 
-name = s:option(Value, "ssid",  translate("Mesh Network Name"), translate("Commotion networks share a network-wide name. This must be the same across all devices on the same mesh. This name cannot be greater than 15 characters."))
+name = s:option(Value, "ssid",  translate("Mesh Network Name"), translate("Commotion networks share a network-wide name. This must be the same across all devices on the same mesh. This name cannot be greater than 31 characters."))
 name.default = "commotionwireless.net"
 name.datatype = "maxlength(31)"
-function name.validate(self,val)
+name.rmempty = false
+function name:validate(val)
    if val and validate.mesh_ssid(val) then
 	  return val
    end
@@ -151,7 +152,7 @@ function nwk:parse(section)
    db.log("parsing network")
    local cvalue = self:cfgvalue(section)
    local name = name:formvalue(section)
-   if name ~= nil and not cvalue then
+   if name ~= nil and name ~= '' and not cvalue then
 	  if check_name(self, section, name) ~= nil then
 		 local net_name = write_network(name)
 		 uci:set("wireless", section, "network", net_name)
@@ -191,9 +192,24 @@ if #wifi_dev > 1 then
 		 local set_chan = self.map:set(dev[1], "channel", value)
 		 return set_chan and enable or false
 	  end
+	  local cc = s:option(ListValue, "country_"..dev[1], translate("Country Code"), translate("Use ISO/IEC 3166 alpha2 country codes."))
+	  local iw = luci.sys.wifi.getiwinfo(dev[1])
+	  local cl = iw and iw.countrylist
+	  cc:depends("device", dev[1])
+	  if cl and #cl > 0 then
+		 cc.default = uci:get("wireless", dev[1], "country")
+		 for _, c in ipairs(cl) do
+		      cc:value(c.alpha2, "%s - %s" %{ c.alpha2, c.name })
+		 end
+	  else
+		 s:option(Value, "country", translate("Country Code"), translate("Use ISO/IEC 3166 alpha2 country codes."))
+	  end
+	  function cc:write(section, value)
+		 local set_cc = self.map:set(dev[1], "country", value)
+		 return set_cc or false
+	  end
    end
 else
-
    local channels = s:option(ListValue, "channel", translate("Channel"), translate("The channel of your wireless interface."))
    channels.default = uci:get("wireless", wifi_dev[1][1], "channel")
    function channels.write(self, section, value)
@@ -203,6 +219,20 @@ else
    end
    for _,x in pairs(cnw.get_channels(wifi_dev[1][2])) do
 	  channels:value(x[1], x[2])
+   end 
+   local iw = luci.sys.wifi.getiwinfo(wifi_dev[1][1])
+   local cl = iw and iw.countrylist
+   if cl and #cl > 0 then
+	  local cc = s:option(ListValue, "country", translate("Country Code"), translate("Use ISO/IEC 3166 alpha2 country codes."))
+	  cc.default = uci:get("wireless", wifi_dev[1][1], "country")
+	  function cc.write(self, section, value)
+		return self.map:set(wifi_dev[1][1], "country", value)
+	  end  
+	  for _, c in ipairs(cl) do
+                cc:value(c.alpha2, "%s - %s" %{ c.alpha2, c.name })
+	  end
+   else
+          s:option(Value, "country", translate("Country Code"), translate("Use ISO/IEC 3166 alpha2 country codes."))
    end
 end
 

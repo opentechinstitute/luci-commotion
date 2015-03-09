@@ -139,7 +139,7 @@ function get_sid(path)
 	  sys.exec("SERVALINSTANCE_PATH=/etc/commotion/keys.d/mdp/ serval-client keyring create")
 	  sys.exec("SERVALINSTANCE_PATH=/etc/commotion/keys.d/mdp/ serval-client keyring add")
    end
-   local sid = sys.exec("SERVALINSTANCE_PATH="..path.." serval-client keyring list")
+   local sid = sys.exec("SERVALINSTANCE_PATH="..path.." serval-client keyring list |tail -1")
    local key = string.match(sid, "^(%w*):%w*:?")
    if key == nil or string.len(key) ~= 64 then
 	  m.message = translate("The file supplied is not a proper keyring, or is password protected. Please upload another key.")

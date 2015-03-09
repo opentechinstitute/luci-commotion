@@ -17,7 +17,7 @@ table.cbi-section-table input, table.cbi-section-table textarea, table.cbi-secti
 	<div class="cbi-value" id="cbi-commotion-splash-general-leasetime">
 	  <label class="cbi-value-title" for="cbid.commotion-splash.leasetime"><%:Time until welcome page is shown again%></label>
 	  <div class="cbi-value-field">
-	    <input type="text" class="cbi-input-text" name="cbid.commotion-splash.leasetime" id="cbid.commotion-splash.leasetime" value="<%=splash.leasetime%>" /><br />
+	    <input type="text" class="cbi-input-text" name="cbid.commotion-splash.leasetime" id="cbid.commotion-splash.leasetime" value="<%=splash.leasetime%>" maxlength="16" /><br />
 	    <%if err then%><div class="error"><%=err.leasetime%></div><%end%>
 	    <div class="cbi-value-description">
 	      <span class="cbi-value-helpicon"><img src="/luci-static/resources/cbi/help.gif" alt="help" /></span>
@@ -143,35 +143,6 @@ table.cbi-section-table input, table.cbi-section-table textarea, table.cbi-secti
 	    <script type="text/javascript">cbi_dynlist_init('cbid.commotion-splash.blacklist', '/luci-static/resources', '', true);</script>
 	    <%if err then%><div class="error"><%=err.blacklist%></div><%end%>
 	  </div>
-        </td>
-      </tr>
-    </table>
-  </div>
-</fieldset>
-<!-- /tblsection --><!-- tblsection -->
-<fieldset class="cbi-section" id="cbi-commotion-splash-ipaddrs">
-  <legend><%:Allowed hosts/subnets%></legend>
-  <div class="cbi-section-descr"><%:Hosts and Networks that are listed here are excluded from splashing, i.e. they are always allowed.%></div>
-  <div class="cbi-section-node">
-    <table class="cbi-section-table">
-      <tr class="cbi-section-table-titles">
-        <th class="cbi-section-table-cell"><%:IP Address%></th>
-      </tr>
-      <tr class="cbi-section-table-descr">
-	<th class="cbi-section-table-cell"><%:CIDR notation optional (e.g. 192.168.1.0/24)%></th>
-      </tr>
-      <tr class="cbi-section-table-row">
-        <td class="cbi-value-field">
-          <div id="cbi-commotion-splash-ipaddrs">
-            <% for _, ipaddr in pairs(splash.ipaddrs) do %>
-              <input type="text" class="cbi-input-text" name="cbid.commotion-splash.ipaddrs" id="cbid.commotion-splash.ipaddrs" value="<%=ipaddr%>" />
-	    <% end %>
-	    <% if not next(splash.ipaddrs) then %>
-              <input type="text" class="cbi-input-text" name="cbid.commotion-splash.ipaddrs" id="cbid.commotion-splash.ipaddrs" value="" />
-            <% end %>
-	    <script type="text/javascript">cbi_dynlist_init('cbid.commotion-splash.ipaddrs', '/luci-static/resources', '', true);</script>
-	    <%if err then%><div class="error"><%=err.ipaddrs%></div><%end%>
-          </div>
         </td>
       </tr>
     </table>
