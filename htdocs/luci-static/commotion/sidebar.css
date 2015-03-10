@@ -7,11 +7,6 @@
 	background:#ffffff;
 }
 
-.body-content {
-	margin:auto;
-	overflow: auto;
-}
-
 .login {
 	margin:10px 10% auto 10%;
 }
@@ -20,6 +15,7 @@
 	-webkit-box-sizing:border-box;
 	-moz-box-sizing:border-box;
 	-o-box-sizing:border-box;
+        box-sizing:border-box;
 	width:100%;
 	margin:0 auto;
 	padding:.5em .5em;
@@ -28,6 +24,8 @@
 	border-right:5px solid #ffffff;
 	border-left:5px solid #ffffff;
 	background:#00ffcf;
+        color: #000000;
+
 }
 
 #selected {
@@ -38,7 +36,7 @@
 	display: none;
 	width: 40px;
 	height: 40px;
-	background: #fff url(/luci-static/commotion/drop_menu.png) center;
+	background: #fff url('/luci-static/commotion/drop_menu.png') center;
 }
 
 .sb-btn h3 {
@@ -47,6 +45,10 @@
 	font-weight: bold;
 	text-align: center;
 	line-height: 2em;
+}
+
+.sb-btn h3 a {
+        color: #000;
 }
 
 p.submenutitle {
@@ -69,7 +71,7 @@ p.submenutitle a {
 	font-weight: bold;
 }
 
-/*MEDIA QUERY*/
+/*MOBILE AND TABLET*/
 @media only screen and (max-width : 640px) {
 
 	#menu-icon {
