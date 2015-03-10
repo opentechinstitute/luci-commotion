@@ -71,10 +71,25 @@ stime.anonymous = true
 
 tfield = stime:option(Value, "splashtime")
 tfield.datatype = "uinteger"
+tfield.optional = false
+tfield.maxlength = 16
+tfield.rmempty = false
 tfield.forcewrite = true
+function tfield:validate(val)
+  if val then
+    if #val > 16 then
+      return nil, translate("Welcome page lease time too long.")
+    elseif #val == 0 then
+      return nil, translate("Must include a welcome page lease time.")
+    elseif val == "0" then
+      return nil, translate("Value must be greater than zero.")
+    end
+    return val
+  end
+  return nil, "Empty value."
+end
 
 timeopt = stime:option(ListValue, "splashunit")
-timeopt:value("seconds")
 timeopt:value("minutes")
 timeopt:value("hours")
 timeopt:value("days")

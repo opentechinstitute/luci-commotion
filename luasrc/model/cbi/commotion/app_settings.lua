@@ -35,7 +35,14 @@ end
 
 
 ex_time_num = s:option(Value, "lifetime", translate("Time before applications expire"))
-
+function ex_time_num:validate(val)
+  local dt = require "luci.cbi.datatypes"
+  if dt.uinteger(val) and tonumber(val) > 0 then
+    return val
+  else
+    return nil, "expiration period must be a valid integer"
+  end
+end
 --! ex_time_num.write
 --! @brief Multiple the lifetime by the unit chosen to modify it to seconds.
 function ex_time_num.write(self, section, value)
@@ -70,11 +77,6 @@ apprv = s:option(Flag, "autoapprove", translate("Automatically approve all publi
 apprv.remove=ccbi.flag_off
 apprv.write=ccbi.flag_write
 apprv.optional = false
-
-chk_conn = s:option(Flag, "checkconnect", translate("Periodically check connection to announced applications on this network"), translate("If 'Yes' is selected here, applications are checked to see if they are still online. If they are not responsive, they will be removed from the application list. Select 'No' to disable this option If you have poor or intermittent connectivity."))
-chk_conn.remove=ccbi.flag_off
-chk_conn.write=ccbi.flag_write
-chk_conn.optional = false
 
 allow_anon = s:option(Flag, "enable_unauth", translate("Allow users to add application advertisements from your access point."), translate("If 'Yes' is selected here, any user on your device can add an application from the view apps mainpage. Select 'No' to disable this option If you would like to require administrator access to add advertisements."))
 allow_anon.remove=ccbi.flag_off

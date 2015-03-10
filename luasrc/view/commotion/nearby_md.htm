@@ -19,38 +19,6 @@ You may obtain a copy of the License at
    end
 -%>
 
-<%
-local olsrtools = require "luci.tools.olsr"
-local i = 1
-
-if luci.http.formvalue("status") == "1" then
-	local rv = {}
-	for k, link in ipairs(links) do
-		link.Cost = tonumber(link.Cost) or 0
-		local color = olsrtools.etx_color(link.Cost)
-		defaultgw_color = ""
-		if link.defaultgw == 1 then
-			defaultgw_color = "#ffff99"
-		end
-
-		rv[#rv+1] = {
-			rip = link["Remote IP"],
-			hn = link["Hostname"],
-			lip = link["Local IP"],
-			dev = link["Local Device"],
-			lq = link.LQ,
-			nlq = link.NLQ,
-			cost = string.format("%.3f", link.Cost),
-			color = color,
-			dfgcolor = defaultgw_color
-			}
-	end
-	luci.http.prepare_content("application/json")
-	luci.http.write_json(rv)
-	return
-end
-%>
-
 <script type="text/javascript" src="<%=resource%>/cbi.js"></script>
 <script type="text/javascript">//<![CDATA[
 
@@ -66,7 +34,7 @@ end
 					var neigh = info[idx];
 
 					s += String.format(
-						'<tr class="cbi-section-table-row cbi-rowstyle-'+(1 + (idx % 2))+'">' +	'<td class="cbi-section-table-cell" style="background-color:%s"><a href="http://%s/cgi-bin/admin/commotion/status.html">%s</a></td>',
+						'<tr class="cbi-section-table-row"><td class="cbi-section-table-cell" style="background-color:%s"><a href="http://%s/cgi-bin/admin/commotion/status.html">%s</a></td>',
 						neigh.dfgcolor, neigh.rip, neigh.rip
 						);
 					if (neigh.hn) {
@@ -82,14 +50,11 @@ end
 							);
 						}
 					s += String.format(
-							'<td class="cbi-section-table-cell" style="background-color:%s">%s</td>' +
-							'<td class="cbi-section-table-cell" style="background-color:%s">%s</td>' +
-							'<td class="cbi-section-table-cell" style="background-color:%s">%s</td>' +
-							'<td class="cbi-section-table-cell" style="background-color:%s">%s</td>' +
+						        '<td class="cbi-section-table-cell" style="background-color:%s">%s</td>' +
 							'<td class="cbi-section-table-cell" style="background-color:%s">%s</td>' +
 						'</tr>',
-							
-							neigh.dfgcolor, neigh.lip, neigh.dfgcolor, neigh.dev, neigh.dfgcolor, neigh.lq, neigh.dfgcolor, neigh.nlq, neigh.color, neigh.cost || '?'
+							neigh.dfgcolor, (neigh.signal) ? neigh.signal + " dBm" : 'N/A',
+							neigh.color, neigh.cost || '?'
 						);
 				}
 
@@ -108,8 +73,9 @@ end
 	<table class="cbi-section-table" id="neighbors">
 		<thead>
 			<tr class="cbi-section-table-titles">
-				<th class="cbi-section-table-cell"><%:Hostname%></th>
 				<th class="cbi-section-table-cell"><%:IP Address%></th>
+				<th class="cbi-section-table-cell"><%:Hostname%></th>
+				<th class="cbi-section-table-cell"><%:Signal%></th>
 				<th class="cbi-section-table-cell"><%:ETX Value%>
 					<span class="cbi-value-helpicon">
 						<img alt="help" src="/luci-static/resources/cbi/help.gif" title="<%:ETX shows the average link quality. Lower indicate better connectivity over time.%>" />
@@ -118,25 +84,9 @@ end
 			</tr>
 		</thead>
 		<tbody id="olsr_neigh_table">
-		<% 	local i = 1
-			for k, link in ipairs(links) do
-			link.Cost = tonumber(link.Cost) or 0
-			color = olsrtools.etx_color(link.Cost)
-
-			defaultgw_color = ""
-			if link.defaultgw == 1 then
-				defaultgw_color = "#ffff99"
-			end
-		%>
 		<tr class="cbi-section-table-row cbi-rowstyle-<%=i%>">
-			<td class="cbi-section-table-cell" style="background-color:<%=defaultgw_color%>"><% if link["Hostname"] then %><%=link["Hostname"]%><% else %>?<% end %></td>
-			<td class="cbi-section-table-cell" style="background-color:<%=defaultgw_color%>"><%=link["Remote IP"]%></td>
-
-			<td class="cbi-section-table-cell" style="background-color:<%=color%>"><%=string.format("%.3f", link.Cost)%></td>
+			<td colspan="4"><em><br /><%:Collecting data...%></em></td>
 		</tr>
-		<% 
-			i = ((i % 2) + 1)
-		end %>
 		</tbody>
 	</table>
 <br />

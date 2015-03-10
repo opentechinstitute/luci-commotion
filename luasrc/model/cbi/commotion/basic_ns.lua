@@ -109,11 +109,18 @@ pw2.password = true
 
 --make sure passwords are equal
 function pw1.validate(self, value, section)
-   local v1 = value
-   local v2 = pw2:formvalue(section)
-   if root_pass_check() == true then
-	  if v1 and v2 and #v1 > 0 and #v2 > 0 then
-		 if v1 == v2 then
+    local v1 = value
+    local v2 = pw2:formvalue(section)
+   
+    if validate.admin_pass(value) == false then
+        m.message = translate("Error, no changes saved. See below.")
+        self:add_error(section, translate("Password must be between 1 and 127 characters."))
+        m.save = false
+        return nil
+    else    
+        if root_pass_check() == true then
+            if v1 and v2 and #v1 > 0 and #v2 > 0 then
+                    if v1 == v2 then
 			if luci.sys.user.setpasswd('root', v1) == 0 then
 			   uci:set("setup_wizard", "passwords", "admin_pass", 'changed')
 			   uci:save("setup_wizard")
@@ -122,19 +129,20 @@ function pw1.validate(self, value, section)
 			   m.message = translate("Password successfully changed!")
 			end
 			return value
-		 else
+                    else
 			m.message = translate("Error, no changes saved. See below.")
 			self:add_error(section, translate("Given confirmation password did not match, password not changed!"))
 			m.save = false
 			return nil
-		 end
-	  else
-		 m.message = translate("Error, no changes saved. See below.")
-		 self:add_error(section, translate("Unknown Error, password not changed!"))
-		 m.save = false
-		 return nil
-	  end
-   end
+                    end
+            else
+                    m.message = translate("Error, no changes saved. See below.")
+                    self:add_error(section, translate("Unknown Error, password not changed!"))
+                    m.save = false
+                    return nil
+            end
+        end
+    end
 end
 
 function s.cfgsections()

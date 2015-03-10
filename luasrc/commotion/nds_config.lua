@@ -93,7 +93,7 @@ function NDSConfig:getUci(uciConfig)
 	  uciConfig = "nodogsplash"
    end
    table.insert(config, "#======================================================================")
-   table.insert(config, "#This config AUTOMATICALLY written. Please edit /etc/config/nodogsplash")
+   table.insert(config, "#This config AUTOMATICALLY GENERATED. Please edit /etc/config/nodogsplash")
    table.insert(config, "#======================================================================")
    table.insert(config, "\n")
    -- get Firewall Rule Sets

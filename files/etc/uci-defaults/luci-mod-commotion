@@ -1,52 +1,16 @@
 #!/bin/sh
 
-. /etc/functions.sh
+. /lib/config/uci.sh
 
 #setup ucitrack
-uci add ucitrack hostname
-uci set ucitrack.@hostname[0].init=hostname
-uci add_list ucitrack.@system[0].affects=hostname
-uci commit ucitrack
+[ -z $(uci_get ucitrack @hostname[0]) ] && { \
+  uci_add ucitrack hostname
+  uci_set ucitrack @hostname[0] init hostname
+  uci add_list ucitrack.@system[0].affects=hostname
+  uci_commit ucitrack
+}
 
 #setup sysupgrade saves
 echo /etc/config/setup_wizard >> /etc/sysupgrade.conf
-
-[ -f "/usr/share/commotion/files/node-mini.gif" ] && { \
-cp -f /usr/share/commotion/files/node-mini.gif /www/luci-static/resources/olsr-viz/node-mini.gif
-}
-
-[ -f "/usr/share/commotion/files/node-hna-mini.gif" ] && { \
-cp -f /usr/share/commotion/files/node-hna-mini.gif /www/luci-static/resources/olsr-viz/node-hna-mini.gif
-}
-
-[ -f "/usr/share/commotion/files/olsr-viz.sh" ] && { \
-cp -f /usr/share/commotion/files/olsr-viz.sh /www/cgi-bin/olsr-viz.sh
-}
-
-[ -f "/usr/share/commotion/files/olsr-viz.js" ] && { \
-cp -f /usr/share/commotion/files/olsr-viz.js /www/luci-static/resources/olsr-viz.js
-}
-
-[ -f "/usr/bin/patch" ] && { \
-  cd /usr/lib/lua/luci/controller/admin/
-  patch -p1 < /usr/share/commotion/patches/system.oldpasswd.patch
-
-  cd /usr/lib/lua/luci/model/cbi/admin_system/
-  patch -p1 < /usr/share/commotion/patches/admin.oldpasswd.patch
-
-  cd /usr/lib/lua/luci/view/admin_system/
-  patch -p0 < /usr/share/commotion/patches/applyreboot.htm.patch
-  
-  cd /www/luci-static/resources/
-  patch -p1 < /usr/share/commotion/patches/cbi.js.patch
-
-  cd /usr/lib/lua/luci/model/cbi/admin_network/
-  patch -p0 < /usr/share/commotion/patches/wifi.lua.patch
-
-  cd /usr/lib/lua/luci/
-  patch -p0 < /usr/share/commotion/patches/dispatcher-cookies.patch
-}
-
-rm -f /tmp/luci-indexcache
 
 exit 0

@@ -2,7 +2,7 @@
 
 #simple script to set hostname in the system when it is applied in UCI
 
-. /lib/config/uci.sh
+. $IPKG_INSTROOT/lib/config/uci.sh
 
 START=19
 STOP=91

@@ -96,25 +96,6 @@ function blMacs:validate(val)
    return {}
 end
 
---maps to FirewallRuleSet preauthenticated-users
-firewallRules = m:section(NamedSection, "preauthenticated_users", "FirewallRuleSet",  translate("ALLOWED HOSTS/SUBNETS"), translate("Hosts and Networks that are listed here are excluded from splashing, i.e. they are always allowed."))
-fwOn = firewallRules:option(Flag, "fwOn")
-rules = firewallRules:option(DynamicList, "UsrFirewallRule", translate("IP Address"), translate("CIDR notation optional (e.g. 192.168.1.0/24)"))
-rules:depends("fwOn", 1)
-rules.datatype = "ipaddr"
-rules.placeholder = "192.0.2.1"
-function rules:validate(val)
-   if val then
-	  for _,ip in ipairs(val) do 
-		 if dt.ipaddr(tostring(ip)) then
-			return val
-		 else
-			return nil
-		 end
-	  end
-   end
-end
-
 function toggle.write(self, section, fvalue)
    value = self.map:get(section, self.option)
    if value ~= fvalue then
@@ -137,7 +118,23 @@ stime.anonymous = true
 
 tfield = stime:option(Value, "splashtime")
 tfield.datatype = "uinteger"
+tfield.optional = false
+tfield.maxlength = 16
+tfield.rmempty = false
 tfield.forcewrite = true
+function tfield:validate(val)
+  if val then
+    if #val > 16 then
+      return nil, translate("Welcome page lease time too long.")
+    elseif #val == 0 then
+      return nil, translate("Must include a welcome page lease time.")
+    elseif val == "0" then
+      return nil, translate("Value must be greater than zero.")
+    end
+    return val
+  end
+  return nil, "Empty value."
+end
 
 timeopt = stime:option(ListValue, "splashunit")
 timeopt:value("minutes")

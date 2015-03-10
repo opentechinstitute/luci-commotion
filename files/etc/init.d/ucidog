@@ -2,7 +2,7 @@
 
 #simple barely functional nodogsplash uci-track script to set nodogsplash uci values that were set.
 
-. /lib/config/uci.sh
+. $IPKG_INSTROOT/lib/config/uci.sh
 
 START=19
 STOP=91

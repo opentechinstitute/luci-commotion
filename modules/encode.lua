@@ -28,9 +28,9 @@ local url_replacements = {
    }
 
 --! @name uci
---! @brief takes a string with multiple uci values and translates them into internal numerical codes of the characters with an underscore in front of them
+--! @brief replaces non alphanumeric characters in a string with an underscore followed by a numerical representation of the character
 --! @param str a string to be translated to be uci compliant.
---! @return the string with all words translated into bytecode and seperated with underscores
+--! @return the string formatted to be uci compliant.
 function encode.uci(str)
   if (str) then
     str = string.gsub (str, "([^%w])", function(c) return '_' .. tostring(string.byte(c)) end)

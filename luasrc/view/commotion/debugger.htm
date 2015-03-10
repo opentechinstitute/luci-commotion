@@ -29,14 +29,16 @@
 
 <body>
   
+  <% if err and err.notice ~= "" then %><div class="notice notice-error"><%=err.notice%></div><% end %>
+  
   <form id="debug" method="post" action="<%=debugurl%>" enctype="multipart/form-data">
 	<!-- enctype required for sending vales to server-->
 	  <h2><a id="content" name="content"><%:Commotion Bug Info%></a></h2>	  
 
 	  <div style="float:left; text-align:left;">
-		<p><strong><%:Name%>:</strong><br />
+		<p><strong><%:Name (optional)%>:</strong><br />
 		<input type="text" name="name"></p>
-		<p><strong><%:Contact Info%>:</strong><br />
+		<p><strong><%:Contact Info (optional)%>:</strong><br />
 		<input type="text" name="contact"></p>
 
 		<p><strong><%:What were you doing on the device when the error occurred?%></strong><br />

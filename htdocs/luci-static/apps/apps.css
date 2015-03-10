@@ -14,6 +14,7 @@ min-height:85px;
 
 .app img {
 padding-right:10px;
+float:left;
 }
 
 .app .name, .app .description {
