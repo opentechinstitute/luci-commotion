@@ -1,0 +1,151 @@
+#!/bin/sh
+
+. /lib/functions.sh
+
+SCRIPTS_TAR=/tmp/commotion-upgrade-scripts
+SCRIPTS_DIR=/tmp/commotion-upgrade
+UPGRADE_PARSER=/lib/upgrade/commotion/upgrade.awk
+ERR_SUCCESS=0
+ERR_GENERAL=1
+ERR_BADIMAGE=2
+ERR_NOKEY=3
+ERR_BADSIG=4
+ERR_NOSIG=5
+ERR_SCRIPTFAIL=6
+
+print_usage() {
+  cat << EOF
+Commotion Upgrade Utility
+https://commotionwireless.net
+
+Usage:
+      commotion-upgrade [-i|--interactive] [-g|--ignore-versions] [-v|--verify-sig] [-d|--descriptions] <image file>
+EOF
+}
+
+die() { # <exit code>
+  cd /tmp
+  [ -d "$SCRIPTS_DIR" ] && rm -rf "$SCRIPTS_DIR"
+  [ -f "$SCRIPTS_TAR" ] && rm -f "$SCRIPTS_TAR"
+  exit $1
+}
+
+# Last 4 bytes of our image packages should be magic code
+get_magic_long() {
+  (tail -c 4 "$1" | hexdump -n 4 -e '1/1 "%02x"') 2>/dev/null
+}
+
+# 4 bytes before the magic code indicate the size of the appended tarball
+get_scripts_len() {
+  (printf "%d" 0x$(tail -c 8 "$1" |head -c 4 |hexdump -n 4 -e '2/1 "%02x"')) 2>/dev/null
+}
+
+check_commotion_image() { # image
+  local image="$1"
+  local magic=$(get_magic_long "$image")
+  case "$magic" in
+    c0febabe) return 0;;
+    *) return 1;;
+  esac
+}
+
+# parse options
+[ $# -eq 0 -o $# -gt 3 ] && {
+  print_usage
+  exit $ERR_GENERAL
+}
+while [ -n "$1" ]; do
+  case "$1" in
+    -i|--interactive) interactive=1;;
+    -v|--verify-sig) verify=1;;
+    -d|--descriptions) descriptions=1;;
+    -g|--ignore-versions) ignore_versions=1;;
+    *) IMAGE="$1";;
+  esac
+  shift;
+done
+
+([ -f "$IMAGE" ] && check_commotion_image "$IMAGE") || {
+  echo "Not a Commotion upgrade bundle"
+  exit $ERR_SUCCESS
+}
+
+# read length of scripts tarball
+scripts_len=$(get_scripts_len "$IMAGE")
+[ $scripts_len -eq 0 ] && {
+  echo "No upgrade scripts attached to image"
+  exit $ERR_SUCCESS
+}
+
+# extract scripts from image
+tail -c-$((scripts_len + 8)) "$IMAGE" |dd bs=$scripts_len count=1 2>/dev/null > "$SCRIPTS_TAR"
+cd /tmp
+[ -d "$SCRIPTS_DIR" ] && rm -rf "$SCRIPTS_DIR"
+mkdir -p "$SCRIPTS_DIR"
+cd "$SCRIPTS_DIR"
+tar zxvf "$SCRIPTS_TAR" &>/dev/null
+
+[ -f "$SCRIPTS_DIR/manifest" ] || {
+  echo "Image is missing manifest" # TODO is this okay if the upgrade bundle doesn't have any upgrade scripts?
+  die $ERR_BADIMAGE
+}
+
+[ -n "$descriptions" ] && {
+  awk -v SCRIPTS_DIR="$SCRIPTS_DIR" \
+    -v ERR_PARSE=$ERR_BADIMAGE \
+    -v ERR_RUN=$ERR_SCRIPTFAIL \
+    -v BACKUPS="$SCRIPTS_DIR/changed" \
+    -v LOG="$SCRIPTS_DIR/log" \
+    -v IGNORE_VERSIONS=$ignore_versions \
+    -v INFO="1" \
+    -f "$UPGRADE_PARSER" "$SCRIPTS_DIR/manifest"
+  die $?
+}
+
+# verify signature of manifest (if not signed w/ Commotion pub key, give warning to user)
+invalid=$ERR_SUCCESS
+if [ -f "$SCRIPTS_DIR/manifest.asc" ]; then
+  config_load serval
+  config_get signing_key settings signing_key
+  if [ -z "$signing_key" ]; then
+    echo "Serval signing key not available, skipping check..."
+    invalid=$ERR_NOKEY
+  else
+    commotion serval-crypto verify $signing_key "$(cat "$SCRIPTS_DIR/manifest.asc")" "$(cat "$SCRIPTS_DIR/manifest")" |grep true
+    if [ $? -eq 1 ]; then
+      invalid=$ERR_BADSIG
+      if [ -n "$interactive" ]; then
+	read -p "WARNING: This image was not signed by the Commotion development team's signing key or has an invalid signature. If you did not custom build this image from source, you should abort this upgrade. Continue? [y/N] " cont
+	[ "$cont" != "y" ] && die 0
+      else
+	echo "WARNING: This image was not signed by the Commotion development team's signing key or has an invalid signature."
+      fi
+    else
+      echo "Image signature successfully verified"
+    fi
+  fi
+else
+  invalid=$ERR_NOSIG
+  if [ -n "$interactive" ]; then
+    read -p "WARNING: This image was not cryptographically signed. If you downloaded this image from the Commotion Wireless website (commotionwireless.net), you should abort this upgrade. Continue? [y/N] " cont
+    [ "$cont" != "y" ] && die 0
+  else
+    echo "WARNING: This image was not cryptographically signed."
+  fi
+fi
+
+[ -n "$verify" ] && die $invalid
+
+# run scripts
+awk -v SCRIPTS_DIR="$SCRIPTS_DIR" \
+  -v ERR_PARSE=$ERR_BADIMAGE \
+  -v ERR_RUN=$ERR_SCRIPTFAIL \
+  -v BACKUPS="$SCRIPTS_DIR/changed" \
+  -v LOG="$SCRIPTS_DIR/log" \
+  -v IGNORE_VERSIONS=$ignore_versions \
+  -f "$UPGRADE_PARSER" "$SCRIPTS_DIR/manifest"
+
+SUCCESS=$?
+[ $SUCCESS != 0 ] && exit $SUCCESS  # don't remove $SCRIPTS_DIR so log is preserved
+
+die $SUCCESS
