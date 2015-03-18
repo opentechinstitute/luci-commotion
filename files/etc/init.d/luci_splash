@@ -202,6 +202,14 @@ start() {
 	scan_interfaces
 	config_load luci_splash
 
+	### Commotion addition: global On/Off ###
+	config_get_bool ENABLE general enable 0
+	if [ "$ENABLE" = 0 ]; then
+		logger -s -p info -t splash "Splash screen disabled, set enable = 1 to enable."
+		lock -u $LOCK	
+		return 0
+	fi
+
 	### Find QoS limits
 	config_get LIMIT_UP general limit_up
 	config_get LIMIT_DOWN general limit_down
