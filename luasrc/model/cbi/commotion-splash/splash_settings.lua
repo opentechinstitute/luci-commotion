@@ -63,10 +63,10 @@ general:option(DummyValue, "_tmp", "",
 
 
 whitelist = m:section(TypedSection, "whitelist", translate("WHITELIST"), translate("MAC addresses of whitelisted clients. These do not need to be shown the Welcome Page and are not bandwidth limited."))
+whitelist.template = "cbi/tblsection"
 whitelist.anonymous = true
-wlOn = whitelist:option(Flag, "wlOn")
+whitelist.addremove = true
 wlMacs = whitelist:option(DynamicList, "mac", translate("MAC Address"))
-wlMacs:depends("wlOn", 1)
 wlMacs.placeholder = "00:00:00:00:00:00"
 function wlMacs:validate(val)
    if val and next(val) then
@@ -83,10 +83,10 @@ end
 
 
 blacklist = m:section(TypedSection, "blacklist", translate("BANNED"), translate("MAC addresses in this list are blocked."))
+blacklist.template = "cbi/tblsection"
 blacklist.anonymous = true
-blOn = blacklist:option(Flag, "blOn")
+blacklist.addremove = true
 blMacs = blacklist:option(DynamicList, "mac", translate("MAC Address"))
-blMacs:depends("blOn", 1)
 blMacs.placeholder = "00:00:00:00:00:00"
 blMacs.default = "00:00:00:00:00:00"
 function blMacs:validate(val)
