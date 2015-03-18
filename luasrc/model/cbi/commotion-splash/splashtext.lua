@@ -14,7 +14,7 @@ You may obtain a copy of the License at
 
 local fs = require "nixio.fs"
 
-local splashtextfile = "/usr/lib/lua/luci/view/commotion-splash/splashtext.htm"
+local splashtextfile = "/usr/lib/luci-splash/splashtext.htm"
 
 f = SimpleForm("splashtext", translate("Edit Splash text"),
         translate("You can enter your own text that is displayed to clients here.<br /><br />" ..

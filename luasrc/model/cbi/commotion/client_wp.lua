@@ -22,54 +22,17 @@ local fs = require "nixio.fs"
 local ccbi = require "luci.commotion.ccbi"
 local lfs = require "luci.fs"
 
-m = Map("nodogsplash", translate("Welcome Page"))
+m = Map("luci_splash", translate("Welcome Page"))
 
 --redirect on saved and changed to check changes.
 m.on_after_save = ccbi.conf_page
 
-enable = m:section(TypedSection, "settings", translate("On/Off"), translate("Users can be redirected to a “welcome page” when they first connect to this node."))
-enable.anonymous = true
+general = m:section(NamedSection, "general", "core", translate("General Settings"))
+general.anonymous = true
 
-toggle = enable:option(Flag, "enable")
+toggle = general:option(Flag, "enable", translate("On/Off"), translate("Users can be redirected to a “welcome page” when they first connect to this node."))
 
-function toggle.write(self, section, fvalue)
-   value = self.map:get(section, self.option)
-   if value ~= fvalue then
-	  self.section.changed = true
-	  self.map:set("interfaces", "interface", "br-lan")
-	  return self.map:set(section, self.option, fvalue)
-   end
-end
-
-function toggle.remove(self, section)
-   value = self.map:get(section, self.option)
-   if value ~= self.disabled then
-	  self.section.changed = true
-	  return self.map:del(section, self.option)
-   end
-end
-
---[[ifaces = m:section(TypedSection, "interfaces", translate("For which network connection should this welcome page be active?"), translate("Select list of Aps and /or defined networks on this node's interfaces Auto select the first AP interface if configured."))
-ifaces.anonymous = true
-
-iflist = ifaces:option(ListValue, "interface")
-current = uci:get("nodogsplash", "interfaces", "interface")
-iflist:value(current)
-iflist.default = current
-uci.foreach("wireless", "wifi-iface",
-			function(s)
-			   local name = s[".name"]
-			   if not utils.contains(iflist.vallist, name) then
-				  iflist:value(name)
-			   end
-			end
-   )
-]]--
-
-stime = m:section(TypedSection, "settings", translate("Time until welcome page is shown again"))
-stime.anonymous = true
-
-tfield = stime:option(Value, "splashtime")
+tfield = general:option(Value, "leasetime", translate("Lease time"), translate("Time in hours until welcome page is shown again"))
 tfield.datatype = "uinteger"
 tfield.optional = false
 tfield.maxlength = 16
@@ -89,11 +52,6 @@ function tfield:validate(val)
   return nil, "Empty value."
 end
 
-timeopt = stime:option(ListValue, "splashunit")
-timeopt:value("minutes")
-timeopt:value("hours")
-timeopt:value("days")
-
 splshtxt = m:section(TypedSection, "_page", translate("Edit Welcome Page Text"), translate("The welcome page can include terms of service, advertisements, or other information. Edit the welcome page text here or upload an HTML file."))
 splshtxt.cfgsections = function() return { "_page" } end
 splshtxt.anonymous = true
@@ -101,9 +59,11 @@ splshtxt.anonymous = true
 edit2 = splshtxt:option(Flag, "edit", translate("Edit Welcome Page Text"))
 upload2 = splshtxt:option(Flag, "upload", translate("Upload Welcome Page Text"))
 
-local splashtextfile = "/usr/lib/lua/luci/view/commotion-splash/splashtext.htm"
+local splashtextfile = "/usr/lib/luci-splash/splashtext.htm"
 
-local help_text = translate("You can enter text and HTML that will be displayed on the welcome page.").."<br /><br />"..translate("These variables can be used to provide custom values from this node on the welcome page :").."<br />"..translate("$gatewayname: The value of GatewayName as set in the Welcome Page configuration file (/path/nodogsplash.conf).").."<br />"..translate("$authtarget: The URL of the user's original web request.").."<br />"..translate("$imagesdir: The directory in on this node where images to be displayed in the splash page must be located.").."<br />"..translate("The welcome page might include terms of service, advertisements, or other information. Edit the welcome page text here or upload an HTML file.").."<br />"
+local help_text = translate("You can enter text and HTML that will be displayed on the welcome page.<br /><br />" ..
+  "These variables can be used to provide custom values from this node on the welcome page :<br />" ..
+	"###HOMEPAGE###, ###LEASETIME###, ###LIMIT### and ###ACCEPT###.<br />")
 
 help = splshtxt:option(DummyValue, "_dummy", nil, help_text)
 --help.template = "cbi/nullsection"
