@@ -62,7 +62,7 @@ function action_activate(is_immediate)
 	local mac = luci.sys.net.ip4mac(ip:match("^[\[::ffff:]*(%d+.%d+%.%d+%.%d+)\]*$"))
 	local uci_state = require "luci.model.uci".cursor_state()
 	local blacklisted = false
-	if mac and (luci.http.formvalue("internet") or luci.http.formvalue("apps") or is_immediate) then
+	if mac and (luci.http.formvalue("internet.x") or luci.http.formvalue("apps.x") or is_immediate) then
 		uci:foreach("luci_splash", "blacklist",
         	        function(s) if s.mac:lower() == mac or s.mac == mac then blacklisted = true end
 	        end)
@@ -71,7 +71,7 @@ function action_activate(is_immediate)
 		else
 			local redirect_url = uci:get("luci_splash", "general", "redirect_url")
 			if luci.http.formvalue("apps") then
-				redirect_url = luci.dispatcher.build_url("apps")
+				redirect_url = luci.dispatcher.build_url("apps.x")
 			end
 			if not redirect_url then
 				redirect_url = uci_state:get("luci_splash_locations", mac:gsub(':', ''):lower(), "location")
