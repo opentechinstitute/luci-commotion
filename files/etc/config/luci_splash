@@ -3,3 +3,7 @@ config core general
 	option leasetime 1
 	option limit_up 0
 	option limit_down 0
+
+config iface
+	option zone 'lan'
+	option network 'lan'
