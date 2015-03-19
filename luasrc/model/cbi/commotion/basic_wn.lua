@@ -82,36 +82,51 @@ end
 
 local wifi_dev = {}
 uci.foreach("wireless", "wifi-device",
-			function(s)
-			   local name = s[".name"]
-			   local mode = s.hwmode
-			   table.insert(wifi_dev, {name, mode})
-			end
+  function(s)
+    table.insert(wifi_dev, {name=s[".name"], mode=s.hwmode})
+  end
 )
 
 --Check for more than one radio, and if not don't offer to change radio's.
 if #wifi_dev > 1 then
    radios = s:option(ListValue, "device",  translate("wifi-device"), translate("Select the wireless network interface to use for your access point."))
    for _,dev in ipairs(wifi_dev) do
-	  local freq = cnw.get_channels(dev[2], true)
-	  radios:value(dev[1], dev[1].." "..freq)
-	  local channels = s:option(ListValue, "channel_"..dev[1], translate("Channel"), translate("The channel of this wireless interface."))
-	  channels:depends("device", dev[1])
-	  --adds the values to the list based on frequency
-	  for _,x in pairs((cnw.get_channels(dev[2]))) do
-		 channels:value(x[1], x[2])
-	  end
-	  channels.default = uci:get("wireless", dev[1], "channel")
-	  function channels.write(self, section, value)
-		 local enable = self.map:set(dev[1], "disabled", "0") -- enable the radio
-		 return self.map:set(dev[1], "channel", value)
-	  end
-	  local cc = s:option(ListValue, "country_"..dev[1], translate("Country Code"), translate("Use ISO/IEC 3166 alpha2 country codes."))
-	  local iw = luci.sys.wifi.getiwinfo(dev[1])
+          local iw = luci.sys.wifi.getiwinfo(dev.name)
+	  local hw_modes = iw.hwmodelist or { }
 	  local cl = iw and iw.countrylist
-	  cc:depends("device", dev[1])
+	  
+	  if hw_modes.a and hw_modes.g then
+	    radios:value(dev.name, dev.name.." 2.4GHz/5GHz")
+	  elseif hw_modes.a then
+	    radios:value(dev.name, dev.name.." 5GHz")
+	  elseif hw_modes.g then
+	    radios:value(dev.name, dev.name.." 2.4GHz")
+	  else
+	    radios:value(dev.name, dev.name)
+	  end
+	  
+	  local channels = s:option(ListValue, "channel_"..dev.name, translate("Channel"), translate("The channel of this wireless interface."))
+	  channels:depends("device", dev.name)
+	  for _, f in ipairs(iw and iw.freqlist or { }) do
+	    if not f.restricted then
+	      channels:value(f.channel, "%i (%.3f GHz)" %{ f.channel, f.mhz / 1000 })
+	    end
+	  end
+	  channels.default = uci:get("wireless", dev.name, "channel")
+	  function channels.write(self, section, value)
+	    local enable = self.map:set(dev.name, "disabled", "0") -- enable the radio
+	    if hw_modes.n then
+	      self.map:set(dev.name, "hwmode", tonumber(value) <= 14 and "11ng" or "11na")
+	    else
+	      self.map:set(dev.name, "hwmode", tonumber(value) <= 14 and "11g" or "11a")
+	    end
+	    return self.map:set(dev.name, "channel", value)
+	  end
+	  
+	  local cc = s:option(ListValue, "country_"..dev.name, translate("Country Code"), translate("Use ISO/IEC 3166 alpha2 country codes."))
+	  cc:depends("device", dev.name)
 	  if cl and #cl > 0 then
-		 cc.default = uci:get("wireless", dev[1], "country")
+		 cc.default = uci:get("wireless", dev.name, "country")
 		 for _, c in ipairs(cl) do
 		      cc:value(c.alpha2, "%s - %s" %{ c.alpha2, c.name })
 		 end
@@ -119,29 +134,39 @@ if #wifi_dev > 1 then
 		 s:option(Value, "country", translate("Country Code"), translate("Use ISO/IEC 3166 alpha2 country codes."))
 	  end
 	  function cc:write(section, value)
-		 local set_cc = self.map:set(dev[1], "country", value)
+		 local set_cc = self.map:set(dev.name, "country", value)
 		 return set_cc or false
 	  end
    end
 else
-
-   local channels = s:option(ListValue, "channel", translate("Channel"), translate("The channel of your wireless interface."))
-   channels.default = uci:get("wireless", wifi_dev[1][1], "channel")
-   function channels.write(self, section, value)
-	  local enable = self.map:set(wifi_dev[1][1], "disabled", "0") -- enable the radio
-	  self.map:set(section, "device", wifi_dev[1][1]) --set iface to use this device.
-	  return self.map:set(wifi_dev[1][1], "channel", value)
-   end
-   for _,x in pairs(cnw.get_channels(wifi_dev[1][2])) do
-	  channels:value(x[1], x[2])
-   end
-   local iw = luci.sys.wifi.getiwinfo(wifi_dev[1][1])
+   local dev = wifi_dev[1]
+   local iw = luci.sys.wifi.getiwinfo(dev.name)
+   local hw_modes = iw.hwmodelist or { }
    local cl = iw and iw.countrylist
+   
+   local channels = s:option(ListValue, "channel", translate("Channel"), translate("The channel of your wireless interface."))
+   channels.default = uci:get("wireless", dev.name, "channel")
+   for _, f in ipairs(iw and iw.freqlist or { }) do
+     if not f.restricted then
+       channels:value(f.channel, "%i (%.3f GHz)" %{ f.channel, f.mhz / 1000 })
+     end
+   end
+   function channels.write(self, section, value)
+	  local enable = self.map:set(dev.name, "disabled", "0") -- enable the radio
+	  self.map:set(section, "device", dev.name) --set iface to use this device.
+	  if hw_modes.n then
+	    self.map:set(dev.name, "hwmode", tonumber(value) <= 14 and "11ng" or "11na")
+	  else
+	    self.map:set(dev.name, "hwmode", tonumber(value) <= 14 and "11g" or "11a")
+	  end
+	  return self.map:set(dev.name, "channel", value)
+   end
+   
    if cl and #cl > 0 then
 	  local cc = s:option(ListValue, "country", translate("Country Code"), translate("Use ISO/IEC 3166 alpha2 country codes."))
-	  cc.default = uci:get("wireless", wifi_dev[1][1], "country")
+	  cc.default = uci:get("wireless", dev.name, "country")
 	  function cc.write(self, section, value)
-		return self.map:set(wifi_dev[1][1], "country", value)
+		return self.map:set(dev.name, "country", value)
 	  end  
 	  for _, c in ipairs(cl) do
                 cc:value(c.alpha2, "%s - %s" %{ c.alpha2, c.name })
