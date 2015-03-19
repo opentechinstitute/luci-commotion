@@ -615,6 +615,20 @@ footer a:active, footer a:hover {
 	font-weight: bold;
 }
 
+.login h1, h2, h3, h4, h5{
+	padding: 0.5em 0 0 0em;
+}
+
+#local button {
+	background-color: #FFF;
+	background-image: none;
+}
+
+#internet button {
+	background-color: #FFF;
+	background-image: none;
+}
+
 /* THESE MIGHT BE  UNUSED, BUT LEAVING THEM IN JUST IN CASE */
 
 #welcome {

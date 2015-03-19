@@ -9,14 +9,20 @@
 <% require "luci.model.ipkg"
 if luci.model.ipkg.installed("luci-commotion-apps") then   %>
 <div id="local">
-  <input type="image" src="<%=media%>/apps.128.png" alt="<%:Local Applications%>" value="<%:Local Applications%>" name="apps" />
+  <button type="submit" alt="<%:Local Applications%>" value="<%:Local Applications%>" name="apps">
+  <img src="<%=media%>/apps.128.png" alt="<%:Local Applications%>"/>
+  <div><a>Local Applications</a></div>
+  </button>
 </div>
 
 <% end %>
 
 
 <div id="internet">
-  <input type="image" src="<%=media%>/internet.128.png" alt="<%:Internet%>" value="<%:Internet%>" name="internet" />
+  <button type="submit" alt="<%:Internet%>" value="<%:Internet%>" name="internet" />
+  <img src="<%=media%>/internet.128.png" alt="<%:Internet%>"/>
+  <div><a>Internet</a></div>
+  </button>
 </div>
 
 </div>
