@@ -18,6 +18,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 local util = require "luci.util"
 local db = require "luci.commotion.debugger"
 local i18n = require "luci.i18n"
+local wat = require "luci.tools.webadmin"
 
 module ("luci.controller.commotion.status_config", package.seeall)
 
@@ -175,40 +176,133 @@ function dhcp_lease_fallback()
    return clients, true
 end
 
+function get_client_lucisplash_info()
+	local utl = require "luci.util"
+	local ipt = require "luci.sys.iptparser".IptParser()
+	local uci = require "luci.model.uci".cursor_state()
+	local wat = require "luci.tools.webadmin"
+	local fs  = require "nixio.fs"
+	
+	local clients = { }
+	local leasetime = tonumber(uci:get("luci_splash", "general", "leasetime") or 1) * 60 * 60
+	local leasefile = "/tmp/dhcp.leases"
+	
+	uci:foreach("dhcp", "dnsmasq",
+		function(s)
+			if s.leasefile then leasefile = s.leasefile end
+		end)
+	
+	
+	uci:foreach("luci_splash_leases", "lease",
+		function(s)
+			if s.start and s.mac then
+				clients[s.mac:lower()] = {
+					start   = tonumber(s.start),
+					limit   = ( tonumber(s.start) + leasetime ),
+					mac     = s.mac:upper(),
+					ipaddr  = s.ipaddr,
+					policy  = "normal",
+					packets = 0,
+					bytes   = 0,
+				}
+			end
+		end)
+	
+	for _, r in ipairs(ipt:find({table="nat", chain="luci_splash_leases"})) do
+		if r.options and #r.options >= 2 and r.options[1] == "MAC" then
+			if not clients[r.options[2]:lower()] then
+				clients[r.options[2]:lower()] = {
+					start  = 0,
+					limit  = 0,
+					mac    = r.options[2]:upper(),
+					policy = ( r.target == "RETURN" ) and "whitelist" or "blacklist",
+					packets = 0,
+					bytes   = 0
+				}
+			end
+		end
+	end
+	
+	for mac, client in pairs(clients) do
+		client.bytes_in    = 0
+		client.bytes_out   = 0
+		client.packets_in  = 0
+		client.packets_out = 0
+	
+		if client.ipaddr then
+			local rin  = ipt:find({table="mangle", chain="luci_splash_mark_in", destination=client.ipaddr})
+			local rout = ipt:find({table="mangle", chain="luci_splash_mark_out", options={"MAC", client.mac:upper()}})
+	
+			if rin and #rin > 0 then
+				client.bytes_in   = rin[1].bytes
+				client.packets_in = rin[1].packets
+			end
+	
+			if rout and #rout > 0 then
+				client.bytes_out   = rout[1].bytes
+				client.packets_out = rout[1].packets
+			end
+		end
+	end
+	
+	uci:foreach("luci_splash", "whitelist",
+		function(s)
+			if s.mac and clients[s.mac:lower()] then
+				clients[s.mac:lower()].policy="whitelist"
+			end
+		end)
+	
+	uci:foreach("luci_splash", "blacklist",
+		function(s)
+			if s.mac and clients[s.mac:lower()] then
+				clients[s.mac:lower()].policy=(s.kicked and "kicked" or "blacklist")
+			end
+		end)		
+	
+	if fs.access(leasefile) then
+		for l in io.lines(leasefile) do
+			local time, mac, ip, name = l:match("^(%d+) (%S+) (%S+) (%S+)")
+			if time and mac and ip then
+				local c = clients[mac:lower()]
+				if c then
+					c.ip = ip
+					c.hostname = ( name ~= "*" ) and name or nil
+				end
+			end
+		end
+	end
+	
+	for i, a in ipairs(luci.sys.net.arptable()) do
+		local c = clients[a["HW address"]:lower()]
+		if c and not c.ip then
+			c.ip = a["IP address"]
+		end
+	end
+
+	for _, c in utl.spairs(clients,
+		function(a,b) if clients[a].policy == clients[b].policy then
+			return (clients[a].start > clients[b].start)
+		else
+			return (clients[a].policy > clients[b].policy)
+		end
+	end)
+	do
+		if c.ip then
+				c.timeleft = (c.limit >= os.time()) and wat.date_format(c.limit-os.time()) or (c.policy ~= "normal") and "-" or "expired"
+				c.traffic = wat.byte_format(c.bytes_in) .. "/" .. wat.byte_format(c.bytes_out)
+				c.trafficout = wat.byte_format(c.bytes_out) or "?"
+		end
+	end
+	return clients, false
+end
+	
+
 function get_client_splash_info()
    local sys = require "luci.sys"
-   if sys.call("/etc/init.d/nodogsplash enabled") ~= 0 then
+   if sys.call("/etc/init.d/luci_splash enabled") ~= 0 then
 	  return dhcp_lease_fallback()
    end
-   local convert = function(x)
-	  return tostring(math.floor(tonumber(x)/60)).." "..i18n.translate("minutes")
-   end
-   local function total_kB(a, b) return tostring(math.floor(a+b)).." kByte" end
-   local function total_kb(a, b) return tostring(math.floor(a+b)).." kbit/s" end
-   local clients = {}
-   i = 0
-   for line in util.execi("ndsctl clients") do
-	  if string.match(line, "^client_id.*$") then
-		 i = i + 1
-		 clients[i] = {}
-	  end
-	  string.gsub(line, "^(.+=.+)$",
-			   function(str)
-				  local sstr = util.split(str, "=")
-				  local key = sstr[1]
-				  local val = sstr[2]
-				  clients[i][key] = val
-			   end)
-   end
-   for i,x in ipairs(clients) do
-	  if clients[i] ~= nil then
-		 clients[i].curr_conn = "No"
-		 clients[i].duration = convert(clients[i].duration)
-		 clients[i].bnd_wdth = total_kB(clients[i].downloaded, clients[i].uploaded)
-		 clients[i].avg_spd = total_kb(clients[i].avg_down_speed, clients[i].avg_up_speed)
-	  end
-   end
-   return clients
+	 return get_client_lucisplash_info()
 end
 
 

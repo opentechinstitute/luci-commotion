@@ -30,20 +30,22 @@ end
 
 colors = {default="", grn="#00cc00", yellow="#ffcb05", orange="#ff6600", red="#bb3333" }
 
-headers = {{title="IP-Address", var="ip"},
-		   {title="Time Connected", var="duration"},
-		   {title="Bandwidth Used", var="bnd_wdth"},
-		   {title="Average Speed", var="avg_spd"},
+headers = {{title="Hostname", var="hostname"},
+			{title="IP-Address", var="ipaddr"},
+			{title="MAC Address", var="mac"},
+		   {title="Time Remaining", var="timeleft"},
+		   {title="Traffic In/Out", var="traffic"},
 		   {title="Currently Active", var="curr_conn"}}
-if #clients > 0 then
+local clients_len = 0
+for _ in pairs(clients) do clients_len = clients_len + 1 end
+if clients_len > 0 then
    for _,iface in ipairs(ifaces) do
 	  for i in util.execi("iw dev "..iface.." station dump") do
 		 string.gsub(i, "^Station%s(.-)%s%(",
 					 function(mac)
-						for client,dossier in ipairs(clients) do
-						   local c_idx = util.contains(dossier, mac)
-						   if c_idx then
-							  clients[client].curr_conn = "Yes"
+						for cmac,client in pairs(clients) do
+						   if cmac == mac then
+							  client.curr_conn = "Yes"
 						   end
 						end
 					 end)
@@ -69,7 +71,7 @@ end
 
 function create_table(values, data, colors)
    i = 1
-   for _,curr in ipairs(data) do
+   for _,curr in pairs(data) do
 	  i = ((i % 2) + 1)
 		 -%><tr class="cbi-section-table-row cbi-rowstyle-<%=i%>"><%-
 	  for _,val in pairs(values) do
@@ -89,10 +91,10 @@ function create_table(values, data, colors)
 end
 
 
-if #clients > 0 then
+if clients_len > 0 then
 --Actually create the table below here.
 %>
-  <h3><%:Connected Clients!%></h3>
+  <h3><%:Connected Clients%></h3>
    <p>A client is a device that has connected to this node. Information about clients is displayed below.</p>
    <% if warning then %>
    <p class="errorbox"><%:You are not using a welcome page (splash page/captive portal.) Without a splash page we can only show a clients ip-address and the status of their connection.%></p>
@@ -109,6 +111,6 @@ if #clients > 0 then
   </tbody>
 </table>
 <%else%>
-      <h3><%:Connected Clients!%></h3>
+      <h3><%:Connected Clients%></h3>
 	  <p class="errorbox"><%:No connected clients were found at this time. If a Welcome Page has been enabled, clients must click through it before being displayed here.%></p>
 <%end%>

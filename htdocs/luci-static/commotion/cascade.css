@@ -912,7 +912,7 @@ table.cbi-section-table input, table.cbi-section-table textarea, table.cbi-secti
   width: auto;
 }
 table.cbi-section-table td.cbi-section-table-cell {
-  text-align: right;
+  text-align: left;
   white-space: nowrap;
 }
 table#neighbors.cbi-section-table th.cbi-section-table-cell,
