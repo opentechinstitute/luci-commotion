@@ -188,7 +188,6 @@ uci batch <<EOF
 	set uhttpd.splash.http_keepalive='0'
         commit uhttpd
 EOF
-/etc/init.d/uhttpd restart
 	}
 
 	### We are started by the firewall include
