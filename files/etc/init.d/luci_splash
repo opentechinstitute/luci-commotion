@@ -68,6 +68,10 @@ iface_add() {
 	ipt_log "prerouting_${zone}_rule" -i "${ifname%:*}" -s "$NETWORK/$PREFIX" -j luci_splash_prerouting -t nat
 	ipt_log "forwarding_${zone}_rule"    -i "${ifname%:*}" -s "$NETWORK/$PREFIX" -j luci_splash_forwarding -t filter
 
+  ### Commotion addition: only splash on wireless interfaces
+  $IPT -t nat    -I luci_splash_prerouting -m physdev --physdev-in eth+ -j RETURN
+  $IPT -t filter -I luci_splash_forwarding -m physdev --physdev-in eth+ -j RETURN
+
 	if [ "$HAS_IPV6" = 1 ] && [ -n "$ip6addr" ]; then
 		ipt6_log "forwarding_${zone}_rule"    -i "${ifname%:*}" -s "$ip6addr" -j luci_splash_forwarding -t filter
 	fi
