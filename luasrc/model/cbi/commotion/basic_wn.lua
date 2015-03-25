@@ -24,7 +24,7 @@ local SW = require "luci.commotion.setup_wizard"
 local ccbi = require "luci.commotion.ccbi"
 local validate = require "luci.commotion.validate"
 
-local m = Map("wireless", translate("Wireless Network"), translate("Turning on an Access Point provides a wireless network for people to connect to using a laptop or other wireless devices."))
+local m = Map("wireless", translate("Wireless Network"), translate("Turning on an Access Point provides a wireless network for people to connect to using a laptop or other wireless devices. WARNING: using the same radio for both a mesh interface and an access point can result in poor performance."))
 
 --redirect on saved and changed to check changes.
 if not SW.status() then
@@ -91,7 +91,7 @@ uci.foreach("wireless", "wifi-device",
 
 --Check for more than one radio, and if not don't offer to change radio's.
 if #wifi_dev > 1 then
-   radios = s:option(ListValue, "device",  translate("wifi-device"), translate("Select the wireless network interface to use for your access point."))
+   radios = s:option(ListValue, "device",  translate("Radio"), translate("Select the wireless network interface to use for your access point. WARNING: using the same radio for both a mesh interface and an access point can result in poor performance."))
    for _,dev in ipairs(wifi_dev) do
 	  local freq = cnw.get_channels(dev[2], true)
 	  radios:value(dev[1], dev[1].." "..freq)
