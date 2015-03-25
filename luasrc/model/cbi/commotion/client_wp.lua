@@ -59,11 +59,11 @@ splshtxt.anonymous = true
 edit2 = splshtxt:option(Flag, "edit", translate("Edit Welcome Page Text"))
 upload2 = splshtxt:option(Flag, "upload", translate("Upload Welcome Page Text"))
 
-local splashtextfile = "/usr/lib/luci-splash/splashtext.htm"
+local splashtextfile = "/usr/lib/commotion-splash/custom_splash.htm"
 
 local help_text = translate("You can enter text and HTML that will be displayed on the welcome page.<br /><br />" ..
   "These variables can be used to provide custom values from this node on the welcome page :<br />" ..
-	"###HOMEPAGE###, ###LEASETIME###, ###LIMIT### and ###ACCEPT###.<br />")
+	"###HOMEPAGE###, ###LEASETIME###.<br />")
 
 help = splshtxt:option(DummyValue, "_dummy", nil, help_text)
 --help.template = "cbi/nullsection"
@@ -83,8 +83,8 @@ uploader = splshtxt:option(FileUpload, "_upload")
 uploader:depends("upload", "1")
 
 function m.on_parse(self)
-   local b_press = luci.http.formvalue("cbid.nodogsplash._page._page")
-   uploaded = "cbid.nodogsplash._page._upload"
+   local b_press = luci.http.formvalue("cbid.luci_splash._page._page")
+   uploaded = "cbid.luci_splash._page._upload"
    if lfs.isfile("/lib/uci/upload/"..uploaded) then
 	  if fs.move("/lib/uci/upload/"..uploaded, splashtextfile) then
 		 m.proceed = true
@@ -97,7 +97,7 @@ function m.on_parse(self)
 	  m.proceed = true
 	  m.message = "Sorry! There was a problem updating your welcome page text. Please try again."
    end
-   text = luci.http.formvalue("cbid.nodogsplash._page.text")
+   text = luci.http.formvalue("cbid.luci_splash._page.text")
    if text then
 	  if text ~= "" then
 		 fs.writefile(splashtextfile, text:gsub("\r\n", "\n"))

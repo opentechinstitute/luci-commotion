@@ -53,12 +53,14 @@ end
 --AuthenticateImmediately
 autoauth = general:option(Flag, "autoauth", translate("Immediately Authenticate"), translate(" If this is checked, clients will be immediately directed to their original request or your homepage (if set above), instead of being shown the Welcome Page."))
 
+--[[
 general:option(Value, "limit_up", translate("Upload limit"), translate("Clients upload speed is limited to this value (kbyte/s)"))
 general:option(Value, "limit_down", translate("Download limit"), translate("Clients download speed is limited to this value (kbyte/s)"))
 
 general:option(DummyValue, "_tmp", "",
 	translate("Bandwidth limit for clients is only activated when both up- and download limit are set. " ..
 	"Use a value of 0 here to completely disable this limitation. Whitelisted clients are not limited."))
+--]]
 
 
 
@@ -123,25 +125,6 @@ function tfield:validate(val)
   return nil, "Empty value."
 end
 
---[[
-function toggle.write(self, section, fvalue)
-   value = self.map:get(section, self.option)
-   if value ~= fvalue then
-	  self.section.changed = true
-	  self.map:set("interfaces", "interface", "br-lan")
-	  return self.map:set(section, self.option, fvalue)
-   end
-end
-
-function toggle.remove(self, section)
-   value = self.map:get(section, self.option)
-   if value ~= self.disabled then
-	  self.section.changed = true
-	  return self.map:del(section, self.option)
-   end
-end
-]]--
-
 s = m:section(TypedSection, "iface", translate("Interfaces"), translate("Interfaces that are used for Splash."))
 s.template = "cbi/tblsection"
 s.addremove = true
@@ -172,23 +155,6 @@ uci:foreach("network", "alias",
 		iface:value(section[".name"])
 	end)
 
---[[
-ifaces = m:section(TypedSection, "interfaces", translate("For which network connection should this welcome page be active?"), translate("Select list of Aps and /or defined networks on this node's interfaces Auto select the first AP interface if configured."))
-ifaces.anonymous = true
-
-iflist = ifaces:option(ListValue, "interface")
-current = uci:get("nodogsplash", "interfaces", "interface")
-iflist:value(current)
-iflist.default = current
-uci.foreach("wireless", "wifi-iface",
-			function(s)
-			   local name = s[".name"]
-			   if not utils.contains(iflist.vallist, name) then
-				  iflist:value(name)
-			   end
-			end
-   )
-   ]]--
 splshtxt = m:section(TypedSection, "_page", translate("Edit Welcome Page Text"), translate("The welcome page can include terms of service, advertisements, or other information. Edit the welcome page text here or upload an HTML file."))
 splshtxt.cfgsections = function() return { "_page" } end
 splshtxt.anonymous = true
@@ -196,11 +162,11 @@ splshtxt.anonymous = true
 edit2 = splshtxt:option(Flag, "edit", translate("Edit Welcome Page Text"))
 upload2 = splshtxt:option(Flag, "upload", translate("Upload Welcome Page Text"))
 
-local splashtextfile = "/usr/lib/luci-splash/splashtext.htm"
+local splashtextfile = "/usr/lib/commotion-splash/custom_splash.htm"
 
 local help_text = translate("You can enter text and HTML that will be displayed on the welcome page.<br /><br />" ..
   "These variables can be used to provide custom values from this node on the welcome page :<br />" ..
-	"###HOMEPAGE###, ###LEASETIME###, ###LIMIT### and ###ACCEPT###.<br />")
+	"###HOMEPAGE###, ###LEASETIME###.<br />")
 
 help = splshtxt:option(DummyValue, "_dummy", nil, help_text)
 --help.template = "cbi/nullsection"
@@ -220,8 +186,8 @@ uploader = splshtxt:option(FileUpload, "_upload")
 uploader:depends("upload", "1")
 
 function m.on_parse(self)
-   local b_press = luci.http.formvalue("cbid.nodogsplash._page._page")
-   uploaded = "cbid.nodogsplash._page._upload"
+   local b_press = luci.http.formvalue("cbid.luci_splash._page._page")
+   uploaded = "cbid.luci_splash._page._upload"
    if lfs.isfile("/lib/uci/upload/"..uploaded) then
 	  if fs.move("/lib/uci/upload/"..uploaded, splashtextfile) then
 		 m.proceed = true
@@ -234,7 +200,7 @@ function m.on_parse(self)
 	  m.proceed = true
 	  m.message = "Sorry! There was a problem updating your welcome page text. Please try again."
    end
-   text = luci.http.formvalue("cbid.nodogsplash._page.text")
+   text = luci.http.formvalue("cbid.luci_splash._page.text")
    if text then
 	  if text ~= "" then
 		 fs.writefile(splashtextfile, text:gsub("\r\n", "\n"))
