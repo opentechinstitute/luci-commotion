@@ -33,11 +33,51 @@ end
 p = m:section(NamedSection, "wan")
 p.anonymous = true
 
-msh = p:option(Flag, "meshed", translate("Will you be meshing with other Commotion devices over the ethernet interface?"))
+config = p:option(ListValue, "dhcp", translate("Gateway Configuration"))
+config:value("auto", translate("Automatically configure gateway on boot."))
+config:value("client", translate("This device should ALWAYS try to acquire a DHCP lease."))
+config:value("server", translate("This device should ALWAYS provide DHCP leases to clients."))
+config:value("none", translate("This device should not do anything with DHCP."))
+--config:depends("meshed", "") --CBI checks on flags check for the self.enabled value if true and and empty string if false. This only applies to flags. So, you know.... don't think this will work other places.
+function config:remove(section, value)
+	return self.map:set(section, self.option, "none")
+end
+
+ipaddress = p:option(TextValue, "ipaddr", translate("(Optional): Specify a static IP Address for this interface"), translate(""))
+ipaddress:depends("dhcp", "none")
+ipaddress.datatype = "ipaddr"
+function ipaddress:validate(val)
+   if val then
+	  if ip.IPv4(val) or ip.IPv6(val) then
+		 return val
+	  else
+		 return nil
+	  end
+   end
+   return nil
+end
+
+netmask = p:option(TextValue, "netmask", translate("(Optional): Specify a static Netmask for this interface"), translate(""))
+netmask:depends("dhcp", "none")
+netmask.datatype = "ipaddr"
+function netmask:validate(val)
+   if val then
+	  if ip.IPv4(val) or ip.IPv6(val) then
+		 return val
+	  else
+		 return nil
+	  end
+   end
+   return nil
+end
+
+msh = p:option(Flag, "meshed", translate("Will you be meshing with other Commotion devices over the ethernet interface?"), translate("WARNING: meshing over ethernet may expose traffic to upstream networks."))
 msh.enabled = "1"
 msh.disabled = "0"
 msh.default = "0"
 msh.addremove = false
+msh:depends("dhcp", "client")
+msh:depends("dhcp", "none")
 function msh.write(self, section, fvalue)
    if ccbi.flag_write(self, section, fvalue) then
 	  return write_firewall(section)
@@ -78,48 +118,9 @@ function write_firewall(section, remove)
    end
 end
 
-ipaddress = p:option(TextValue, "ipaddr", translate("IP Address"), translate(""))
-ipaddress:depends("meshed", "1")
-ipaddress.datatype = "ipaddr"
-function ipaddress:validate(val)
-   if val then
-	  if ip.IPv4(val) or ip.IPv6(val) then
-		 return val
-	  else
-		 return nil
-	  end
-   end
-   return nil
-end
-
-netmask = p:option(TextValue, "netmask", translate("Netmask"), translate(""))
-netmask:depends("meshed", "1")
-netmask.datatype = "ipaddr"
-function netmask:validate(val)
-   if val then
-	  if ip.IPv4(val) or ip.IPv6(val) then
-		 return val
-	  else
-		 return nil
-	  end
-   end
-   return nil
-end
-
-config = p:option(ListValue, "dhcp", translate("Gateway Configuration"))
-config:value("auto", translate("Automatically configure gateway on boot."))
-config:value("client", translate("This device should ALWAYS try to acquire a DHCP lease."))
-config:value("server", translate("This device should ALWAYS provide DHCP leases to clients."))
-config:value("none", translate("This device should not do anything with DHCP."))
-config:depends("meshed", "") --CBI checks on flags check for the self.enabled value if true and and empty string if false. This only applies to flags. So, you know.... don't think this will work other places.
-function config:remove(section, value)
-	return self.map:set(section, self.option, "none")
-end
-
 
 ance = p:option(Flag, "_gateway", translate("Advertise your gateway to the mesh."))
 ance.addremove = true
-ance:depends("meshed", "")
 function dyn_exists()
    local cvalue = nil
    uci:foreach("olsrd", "LoadPlugin",
