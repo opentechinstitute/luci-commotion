@@ -1,3 +1,34 @@
+<%
+local fs = require "luci.fs"
+local has_custom_splash = fs.access("/usr/lib/commotion-splash/custom_splash.htm")
+
+function expand (e, R)        
+	return (string.gsub(e, "###([A-Z_]+)###", R))
+end
+
+local homepage, leasetime, limit_up, limit_down
+
+local s = luci.model.uci.cursor():get_all("luci_splash", "general")
+if s then
+	leasetime = s.leasetime or ""
+	limit_up = s.limit_up or nil
+	limit_down = s.limit_down or nil
+  homepage = s.redirect_url or "https://commotionwireless.net"
+end
+
+if has_custom_splash then
+	local R = {
+		HOMEPAGE = homepage,
+		LEASETIME = leasetime,
+		LIMITUP = limit_up,
+		LIMITDOWN = limit_down
+	}
+	local splashtext = expand(fs.readfile("/usr/lib/commotion-splash/custom_splash.htm"), R)
+	%>
+	<%=splashtext%>
+
+<% else %>
+
 <h2> <a id="content" name="content"><%:Welcome!%></a> </h2>
 <p>
 <%:You are now connected to a%> <a href="https://commotionwireless.net">Commotion</a> <%:community wireless network.%>
@@ -12,3 +43,5 @@
 </p>
 
 <p><%:If you like the network, please consider contributing!%></p>
+
+<% end %>

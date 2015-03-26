@@ -25,20 +25,16 @@ local dt = require "luci.cbi.datatypes"
 local cvd = require "luci.commotion.validate"
 local uri = require "uri"
 
-m = Map("nodogsplash", translate("Welcome Page"))
-
-enable = m:section(TypedSection, "settings", translate("On/Off"), translate("Users can be redirected to a “welcome page” when they first connect to this node."))
-enable.anonymous = true
-
-toggle = enable:option(Flag, "enable")
-
-general = m:section(TypedSection, "settings", translate("General"))
+m = Map("luci_splash", translate("Welcome Page"))
+general = m:section(NamedSection, "general", "core", translate("General Settings"))
 general.anonymous = true
+
+toggle = general:option(Flag, "enable", translate("On/Off"), translate("Users can be redirected to a “welcome page” when they first connect to this node."))
 
 redirect = general:option(Flag, "redirect", translate("Redirect to Homepage?"), translate("If this is checked, clients will be redirected to your homepage, instead of to their original request."))
 
 --Maps to nodogsplash RedirectURL
-homepage = general:option(Value, "redirecturl", translate("Homepage"), translate("After authentication, clients will be redirected to this URL instead of to their original request."))
+homepage = general:option(Value, "redirect_url", translate("Homepage"), translate("After authentication, clients will be redirected to this URL instead of to their original request."))
 homepage:depends("redirect", 1) --Flags return "" if unchecked and self.enabled if true
 function homepage:validate(val)
    if val then
@@ -57,11 +53,22 @@ end
 --AuthenticateImmediately
 autoauth = general:option(Flag, "autoauth", translate("Immediately Authenticate"), translate(" If this is checked, clients will be immediately directed to their original request or your homepage (if set above), instead of being shown the Welcome Page."))
 
+--[[
+general:option(Value, "limit_up", translate("Upload limit"), translate("Clients upload speed is limited to this value (kbyte/s)"))
+general:option(Value, "limit_down", translate("Download limit"), translate("Clients download speed is limited to this value (kbyte/s)"))
 
-whitelist = m:section(NamedSection, "whitelist", "MACList", translate("WHITELIST"), translate("MAC addresses of whitelisted clients. These do not need to be shown the Welcome Page and are not bandwidth limited."))
-wlOn = whitelist:option(Flag, "wlOn")
+general:option(DummyValue, "_tmp", "",
+	translate("Bandwidth limit for clients is only activated when both up- and download limit are set. " ..
+	"Use a value of 0 here to completely disable this limitation. Whitelisted clients are not limited."))
+--]]
+
+
+
+whitelist = m:section(TypedSection, "whitelist", translate("WHITELIST"), translate("MAC addresses of whitelisted clients. These do not need to be shown the Welcome Page and are not bandwidth limited."))
+whitelist.template = "cbi/tblsection"
+whitelist.anonymous = true
+whitelist.addremove = true
 wlMacs = whitelist:option(DynamicList, "mac", translate("MAC Address"))
-wlMacs:depends("wlOn", 1)
 wlMacs.placeholder = "00:00:00:00:00:00"
 function wlMacs:validate(val)
    if val and next(val) then
@@ -77,10 +84,11 @@ function wlMacs:validate(val)
 end
 
 
-blacklist = m:section(NamedSection, "blacklist", "MACList", translate("BANNED"), translate("MAC addresses in this list are blocked."))
-blOn = blacklist:option(Flag, "blOn")
+blacklist = m:section(TypedSection, "blacklist", translate("BANNED"), translate("MAC addresses in this list are blocked."))
+blacklist.template = "cbi/tblsection"
+blacklist.anonymous = true
+blacklist.addremove = true
 blMacs = blacklist:option(DynamicList, "mac", translate("MAC Address"))
-blMacs:depends("blOn", 1)
 blMacs.placeholder = "00:00:00:00:00:00"
 blMacs.default = "00:00:00:00:00:00"
 function blMacs:validate(val)
@@ -96,27 +104,8 @@ function blMacs:validate(val)
    return {}
 end
 
-function toggle.write(self, section, fvalue)
-   value = self.map:get(section, self.option)
-   if value ~= fvalue then
-	  self.section.changed = true
-	  self.map:set("interfaces", "interface", "br-lan")
-	  return self.map:set(section, self.option, fvalue)
-   end
-end
-
-function toggle.remove(self, section)
-   value = self.map:get(section, self.option)
-   if value ~= self.disabled then
-	  self.section.changed = true
-	  return self.map:del(section, self.option)
-   end
-end
-
-stime = m:section(TypedSection, "settings", translate("Time until welcome page is shown again"))
-stime.anonymous = true
-
-tfield = stime:option(Value, "splashtime")
+tfield = general:option(Value, "leasetime", translate("Lease time"), translate("Time in hours until welcome page is shown again"))
+tfield.anonymous = true
 tfield.datatype = "uinteger"
 tfield.optional = false
 tfield.maxlength = 16
@@ -136,10 +125,35 @@ function tfield:validate(val)
   return nil, "Empty value."
 end
 
-timeopt = stime:option(ListValue, "splashunit")
-timeopt:value("minutes")
-timeopt:value("hours")
-timeopt:value("days")
+s = m:section(TypedSection, "iface", translate("Interfaces"), translate("Interfaces that are used for Splash."))
+s.template = "cbi/tblsection"
+s.addremove = true
+s.anonymous = true
+
+local uci = luci.model.uci.cursor()
+
+zone = s:option(ListValue, "zone", translate("Firewall zone"),
+	translate("Splash rules are integrated in this firewall zone"))
+
+uci:foreach("firewall", "zone",
+	function (section)
+		zone:value(section.name)
+	end)
+	
+iface = s:option(ListValue, "network", translate("Network"),
+	translate("Intercept client traffic on this Interface"))
+
+uci:foreach("network", "interface",
+	function (section)
+		if section[".name"] ~= "loopback" then
+			iface:value(section[".name"])
+		end
+	end)
+	
+uci:foreach("network", "alias",
+	function (section)
+		iface:value(section[".name"])
+	end)
 
 splshtxt = m:section(TypedSection, "_page", translate("Edit Welcome Page Text"), translate("The welcome page can include terms of service, advertisements, or other information. Edit the welcome page text here or upload an HTML file."))
 splshtxt.cfgsections = function() return { "_page" } end
@@ -148,9 +162,11 @@ splshtxt.anonymous = true
 edit2 = splshtxt:option(Flag, "edit", translate("Edit Welcome Page Text"))
 upload2 = splshtxt:option(Flag, "upload", translate("Upload Welcome Page Text"))
 
-local splashtextfile = "/usr/lib/lua/luci/view/commotion-splash/splashtext.htm"
+local splashtextfile = "/usr/lib/commotion-splash/custom_splash.htm"
 
-local help_text = translate("You can enter text and HTML that will be displayed on the welcome page.").."<br /><br />"..translate("These variables can be used to provide custom values from this node on the welcome page :").."<br />"..translate("$gatewayname: The value of GatewayName as set in the Welcome Page configuration file (/path/nodogsplash.conf).").."<br />"..translate("$authtarget: The URL of the user's original web request.").."<br />"..translate("$imagesdir: The directory in on this node where images to be displayed in the splash page must be located.").."<br />"..translate("The welcome page might include terms of service, advertisements, or other information. Edit the welcome page text here or upload an HTML file.").."<br />"
+local help_text = translate("You can enter text and HTML that will be displayed on the welcome page.<br /><br />" ..
+  "These variables can be used to provide custom values from this node on the welcome page :<br />" ..
+	"###HOMEPAGE###, ###LEASETIME###.<br />")
 
 help = splshtxt:option(DummyValue, "_dummy", nil, help_text)
 --help.template = "cbi/nullsection"
@@ -170,8 +186,8 @@ uploader = splshtxt:option(FileUpload, "_upload")
 uploader:depends("upload", "1")
 
 function m.on_parse(self)
-   local b_press = luci.http.formvalue("cbid.nodogsplash._page._page")
-   uploaded = "cbid.nodogsplash._page._upload"
+   local b_press = luci.http.formvalue("cbid.luci_splash._page._page")
+   uploaded = "cbid.luci_splash._page._upload"
    if lfs.isfile("/lib/uci/upload/"..uploaded) then
 	  if fs.move("/lib/uci/upload/"..uploaded, splashtextfile) then
 		 m.proceed = true
@@ -184,7 +200,7 @@ function m.on_parse(self)
 	  m.proceed = true
 	  m.message = "Sorry! There was a problem updating your welcome page text. Please try again."
    end
-   text = luci.http.formvalue("cbid.nodogsplash._page.text")
+   text = luci.http.formvalue("cbid.luci_splash._page.text")
    if text then
 	  if text ~= "" then
 		 fs.writefile(splashtextfile, text:gsub("\r\n", "\n"))
