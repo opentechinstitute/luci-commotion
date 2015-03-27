@@ -200,7 +200,7 @@ if #wifi_dev > 1 then
 	  channels.default = uci:get("wireless", dev.name, "channel")
 	  function channels.write(self, section, value)
 	    local enable = self.map:set(dev.name, "disabled", "0") -- enable the radio
-	    local set_chan = self.map:set(dev[1], "channel", value)
+	    local set_chan = self.map:set(dev.name, "channel", value)
 	    if hw_modes.n then
 	      self.map:set(dev.name, "hwmode", tonumber(value) <= 14 and "11ng" or "11na")
 	    else
