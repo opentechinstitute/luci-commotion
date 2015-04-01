@@ -6,7 +6,8 @@
 
 if [ -x /etc/init.d/luci_splash ]; then
 	restart_splash() {
-	        local net="$1"
+		local config="$1"
+		config_get net "$config" network
 		if [ "$INTERFACE" = "$net" ]; then
 			logger -t splash "Reloading splash firewall rules due to ifup of $INTERFACE ($DEVICE)"
 			/etc/init.d/luci_splash restart
