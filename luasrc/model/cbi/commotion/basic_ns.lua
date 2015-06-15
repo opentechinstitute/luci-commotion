@@ -51,6 +51,17 @@ function hname.validate(self,value)
    end
 end
 
+nid = shn:option(Flag, "_dummy", nil, translate("Append unique identifier to hostname to help prevent hostname collision. Duplicate hostnames may have unintended effects."))
+nid.disabled = false
+nid.enabled = true
+nid.default = true --default must == disabled value for rmempty to work
+
+--Don't actually write this value, just return success
+function nid.write(self, section, value)
+   return true
+end
+
+
 function hname.write(self, section, value)
    hn = self:formvalue(section)
    old_hn = self:cfgvalue(section)
@@ -58,7 +69,8 @@ function hname.write(self, section, value)
           return true
    else
           local node_id = cnet.nodeid()
-          if string.match(hn, node_id) then
+          local n = nid:formvalue(section)
+          if string.match(hn, node_id) or n == nil then
                 -- requested hn already has nodeid
                 return self.map:set(section, self.option, hn)
           else
