@@ -34,31 +34,28 @@ end
 s = m:section(TypedSection, "wifi-iface", translate("Access Point"), translate("Turning on an Access Point provides a wireless network for people to connect to using a laptop or other wireless devices."))
 s.optional = false
 s.anonymous = true
- --if not setup wizard then allow for adding and removal and default addition
-if not SW.status() then
-   s.addremove = true
+s.addremove = true
 
-   md = s:option(Value, "mode")
-   md.default = 'ap'
-   md.render = function() end
-   md.parse = function(self, section, novld)
-	  if self:cfgvalue(section) ~= md.default then
-		 return self.map:set(section, self.option, value)
-	  end
-   end
-   
-   nwk = s:option(Value, "network")
-   nwk.default = "lan"
-   nwk.render = function() end
-   nwk.parse = function(self, section, novld)
-	  if self:cfgvalue(section) ~= nwk.default then
-		 return self.map:set(section, self.option, value)
-	  end
-   end
-   function s.remove(self, section)
-	  m.changed = true
-	  return self.map:del(section)
-   end
+md = s:option(Value, "mode")
+md.default = 'ap'
+md.render = function() end
+md.parse = function(self, section, novld)
+ if self:cfgvalue(section) ~= md.default then
+  return self.map:set(section, self.option, value)
+ end
+end
+
+nwk = s:option(Value, "network")
+nwk.default = "lan"
+nwk.render = function() end
+nwk.parse = function(self, section, novld)
+ if self:cfgvalue(section) ~= nwk.default then
+  return self.map:set(section, self.option, value)
+ end
+end
+function s.remove(self, section)
+ m.changed = true
+ return self.map:del(section)
 end
 
 function s:filter(section)
